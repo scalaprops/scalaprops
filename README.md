@@ -9,7 +9,7 @@ property based testing library for Scala
 - flexible parameter settings for each tests
 - timeout
 - flexible law checking like [discipline](https://github.com/typelevel/discipline)
- - discipline uses only `String` for test id. but scalaprops can use other then `String`
+ - discipline uses only `String` for test id. but scalaprops can use other than `String`
 - scalaz integration
  - laws for scalaz typeclasses
  - [`Gen`](core/src/main/scala/scalaprops/Gen.scala) and [`Cogen`](core/src/main/scala/scalaprops/Cogen.scala) instances of scalaz datatypes
