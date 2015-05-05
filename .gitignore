@@ -1,0 +1,6 @@
+target
+..sxr
+*.jar
+*.swp
+*.class
+.DS_Store
