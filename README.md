@@ -33,3 +33,5 @@ libraryDependencies += "com.github.xuwei-k" %% "scalaprops-scalazlaws" % "0.1.0"
 
 - [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.0/scalaprops-all_2.11-0.1.0-javadoc.jar/!/index.html)
 - [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.0/scalaprops-all_2.11-0.1.0-sxr.jar/!/index.html)
+
+![screencast](https://raw.githubusercontent.com/xuwei-k/scalaprops/master/screencast.gif)
