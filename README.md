@@ -34,4 +34,26 @@ libraryDependencies += "com.github.xuwei-k" %% "scalaprops-scalazlaws" % "0.1.0"
 - [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.0/scalaprops-all_2.11-0.1.0-javadoc.jar/!/index.html)
 - [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.0/scalaprops-all_2.11-0.1.0-sxr.jar/!/index.html)
 
+
+### snapshot version
+
+```scala
+resolvers += Opts.resolver.sonatypeSnapshots
+
+testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
+
+parallelExecution in Test := false
+
+libraryDependencies += "com.github.xuwei-k" %% "scalaprops" % "0.1.1-SNAPSHOT" % "test"
+```
+
+```scala
+libraryDependencies += "com.github.xuwei-k" %% "scalaprops-scalazlaws" % "0.1.1-SNAPSHOT" % "test"
+```
+
+
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.1-SNAPSHOT/scalaprops-all_2.11-0.1.1-SNAPSHOT-javadoc.jar/!/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.1-SNAPSHOT/scalaprops-all_2.11-0.1.1-SNAPSHOT-sxr.jar/!/index.html)
+
+
 ![screencast](https://raw.githubusercontent.com/xuwei-k/scalaprops/master/screencast.gif)
