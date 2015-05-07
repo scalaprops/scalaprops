@@ -172,7 +172,7 @@ final class ScalapropsRunner(
                   cancel.set(true)
                 }
                 eventHandler.handle(r._1)
-                r._2
+                r
               }
               case Maybe.Empty() =>
                 LazyOption.lazyNone

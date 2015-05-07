@@ -9,7 +9,7 @@ abstract class ScalapropsListener {
 
   def onFinish(obj: Scalaprops, name: String, check: Check, result: CheckResult, logger: Logger): Unit = {}
 
-  def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[Throwable \/ (Property, CheckResult)])], logger: Logger): Unit = {}
+  def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(ScalapropsEvent, Throwable \/ (Property, CheckResult))])], logger: Logger): Unit = {}
 
   def onError(obj: Scalaprops, name: String, e: Throwable, logger: Logger): Unit = {}
 
@@ -43,7 +43,7 @@ object ScalapropsListener {
 
   class Default extends ScalapropsListener {
 
-    override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[Throwable \/ (Property, CheckResult)])], logger: Logger): Unit = {
+    override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(ScalapropsEvent, Throwable \/ (Property, CheckResult))])], logger: Logger): Unit = {
       // TODO improve, more generalize
       def toShow(a: Any) = a match {
         case \/-(l: ScalazLaw) => l.simpleName
@@ -57,10 +57,10 @@ object ScalapropsListener {
       val tree = drawTree(result.map {
         case (name, x) =>
           toShow(name) -> x.map{
-            case \/-((_, r)) =>
-              r.toString
-            case -\/(e) =>
-              e.toString
+            case (a, \/-((_, r))) =>
+              r.toString + " " + a.duration
+            case (a, -\/(e)) =>
+              e.toString + " " + a.duration
           }
       })
       // TODO ugly. use scalaz-stream?
