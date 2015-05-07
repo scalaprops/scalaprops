@@ -111,6 +111,8 @@ object Common {
       case (Some(user), Some(pass)) =>
         Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
     }.toList
+  ) ++ Seq(Compile, Test).flatMap(c =>
+    scalacOptions in (c, console) ~= {_.filterNot(unusedWarnings.toSet)}
   )
 
 }
