@@ -6,7 +6,8 @@ import scalaz.std.tuple._
 
 object IndexedStoreTTest extends Scalaprops {
 
-  import FunctionEqual._
+  private[this] val e = new FunctionEqual(10)
+  import e._
 
   implicit def indexedStoreTEqual[F[_], I: Equal, A, B](implicit F: Equal[F[A => B]]): Equal[IndexedStoreT[F, I, A, B]] =
     Equal[(F[A => B], I)].contramap(_.run)
