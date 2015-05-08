@@ -5,7 +5,8 @@ import scalaz.std.anyVal._
 import scalaz.std.tuple._
 
 object IndexedReaderWriterStateTTest extends Scalaprops {
-  import FunctionEqual._
+  private[this] val e = new FunctionEqual(10)
+  import e._
 
   private[this] implicit def equal[F[_], R, W, S1, S2, A](
     implicit F: Equal[(R, S1) => F[(W, A, S2)]]
