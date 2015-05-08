@@ -68,11 +68,15 @@ object ScalapropsListener {
               }
           }
       })
+      println()
+      val start = System.currentTimeMillis()
       // TODO ugly. use scalaz-stream?
       tree.foreach{ case (treeLabel, (name, r)) =>
         print(treeLabel + name + " ")
         println(r.map(" " + _).getOrElse(""))
       }
+      val name = tree.head._1 + tree.head._2._1
+      logger.info(name + " " + (System.currentTimeMillis() - start) + " ms")
     }
 
     override def onFinish(obj: Scalaprops, name: String, property: Property, param: Param, result: CheckResult, logger: Logger): Unit = {
