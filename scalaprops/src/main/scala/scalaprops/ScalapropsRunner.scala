@@ -98,7 +98,6 @@ final class ScalapropsRunner(
   private[this] val errorCount = new AtomicInteger
   private[this] val ignoredCount = new AtomicInteger
   private[this] val testCount = new AtomicInteger
-  private[this] val canceledCount = new AtomicInteger
 
   private[this] val taskdef2task: TaskDef => sbt.testing.Task = { taskdef =>
     val testClassName = taskdef.fullyQualifiedName()
@@ -182,8 +181,8 @@ final class ScalapropsRunner(
                     val duration = System.currentTimeMillis() - start
                     log.trace(e)
                     obj.listener.onError(obj, name, e, log)
-                    canceledCount.incrementAndGet()
-                    event(Status.Canceled, duration, \&/.This(e))
+                    errorCount.incrementAndGet()
+                    event(Status.Error, duration, \&/.This(e))
                   case NonFatal(e) =>
                     val duration = System.currentTimeMillis() - start
                     log.trace(e)
@@ -217,7 +216,7 @@ final class ScalapropsRunner(
   override def done() =
     s"""done
 Total test count: $testCount
-Failed $failureCount, Errors $errorCount, Passed $successCount, Ignored $ignoredCount, Canceled $canceledCount
+Failed $failureCount, Errors $errorCount, Passed $successCount, Ignored $ignoredCount
 """
 
 }
