@@ -99,6 +99,8 @@ final case class Property(f: (Int, Rand) => (Result, Rand)) {
           CheckResult.Falsified(s, discarded, args)
         case \/-((Result.Exception(args, ex), _)) =>
           CheckResult.PropException(s, discarded, args, ex)
+        case \/-((Result.Ignored(reason), _)) =>
+          CheckResult.Ignored(s, discarded, reason)
         case -\/(e) =>
           CheckResult.GenException(s, discarded, e)
       }
@@ -109,6 +111,9 @@ final case class Property(f: (Int, Rand) => (Result, Rand)) {
 
   def toProperties[A](id: A): Properties[A] =
     Properties.single(id, this)
+
+  def ignore(reason: String): Property =
+    Property((_, rand) => (Result.Ignored(reason), rand))
 }
 
 object Property {

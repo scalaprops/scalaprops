@@ -7,6 +7,7 @@ sealed abstract class Result extends Product with Serializable {
   def isFalsified = this.isInstanceOf[Result.Falsified]
   def isProven = this.isInstanceOf[Result.Proven]
   def isException = this.isInstanceOf[Result.Exception]
+  def isIgnored = this.isInstanceOf[Result.Ignored]
   def isNoResult = this.isInstanceOf[Result.NoResult.type]
 
   def toMaybe: Maybe[Result] =
@@ -36,6 +37,9 @@ object Result {
   }
   final case class Exception(args: IList[Arg], exception: Throwable) extends Result {
     override def addArg(a: Arg): Result = copy(a :: args)
+  }
+  final case class Ignored(reason: String) extends Result { self =>
+    override def addArg(a: Arg): Result = self
   }
   case object NoResult extends Result {
     override def addArg(a: Arg): Result = this // TODO error ?
