@@ -127,52 +127,57 @@ final class ScalapropsRunner(
               case Maybe.Just(check) => LazyOption.lazySome{
                 val cancel = new AtomicBoolean(false)
                 val selector = new TestSelector(name)
-                def event(status: Status, e: OptionalThrowable, duration: Long) =
-                  ScalapropsEvent(testClassName, taskdef.fingerprint(), selector, status, e, duration)
+                def event(status: Status, duration: Long, result0: Throwable \&/ CheckResult) = {
+                  val err = result0.a match {
+                    case Some(e) => new OptionalThrowable(e)
+                    case None => emptyThrowable
+                  }
+                  ScalapropsEvent(testClassName, taskdef.fingerprint(), selector, status, err, duration, result0)
+                }
 
+                val param = check.paramEndo(obj.param)
                 val start = System.currentTimeMillis()
                 val r = try {
-                  obj.listener.onStart(obj, name, check, log)
+                  obj.listener.onStart(obj, name, check.prop, param, log)
                   val r = scalaz.concurrent.Task(
                     check.prop.check(
-                      check.paramEndo(obj.param),
+                      param,
                       cancel,
                       count => obj.listener.onCheck(obj, name, check, log, count)
                     )
                   )(executorService).runFor(obj.param.timeout)
                   val duration = System.currentTimeMillis() - start
-                  obj.listener.onFinish(obj, name, check, r, log)
-                  val e = r match {
+                  obj.listener.onFinish(obj, name, check.prop, param, r, log)
+                  r match {
                     case _: CheckResult.Proven | _: CheckResult.Passed =>
-                      event(Status.Success, emptyThrowable, duration)
+                      event(Status.Success, duration, \&/.That(r))
                     case _: CheckResult.Exhausted | _: CheckResult.Falsified =>
-                      event(Status.Failure, emptyThrowable, duration)
+                      event(Status.Failure, duration, \&/.That(r))
                     case e: CheckResult.GenException =>
                       log.trace(e.exception)
-                      event(Status.Error, new OptionalThrowable(e.exception), duration)
+                      event(Status.Error, duration, \&/.Both(e.exception, r))
                     case e: CheckResult.PropException =>
                       log.trace(e.exception)
-                      event(Status.Error, new OptionalThrowable(e.exception), duration)
+                      event(Status.Error, duration, \&/.Both(e.exception, r))
                     case e: CheckResult.Timeout =>
-                      event(Status.Error, emptyThrowable, duration)
+                      event(Status.Error, duration, \&/.That(r))
                   }
-                  e -> \/-((check.prop, r))
                 } catch {
                   case e: TimeoutException =>
                     val duration = System.currentTimeMillis() - start
                     log.trace(e)
                     obj.listener.onError(obj, name, e, log)
-                    event(Status.Canceled, new OptionalThrowable(e), duration) -> -\/(e)
+                    event(Status.Canceled, duration, \&/.This(e))
                   case NonFatal(e) =>
                     val duration = System.currentTimeMillis() - start
                     log.trace(e)
                     obj.listener.onError(obj, name, e, log)
-                    event(Status.Error, new OptionalThrowable(e), duration) -> -\/(e)
+                    event(Status.Error, duration, \&/.This(e))
                 } finally {
                   cancel.set(true)
                 }
-                eventHandler.handle(r._1)
-                r
+                eventHandler.handle(r)
+                (check.prop, param, r)
               }
               case Maybe.Empty() =>
                 LazyOption.lazyNone

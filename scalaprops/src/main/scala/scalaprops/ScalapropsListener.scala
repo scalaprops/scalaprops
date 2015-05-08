@@ -5,11 +5,11 @@ import scalaz._
 
 abstract class ScalapropsListener {
 
-  def onStart(obj: Scalaprops, name: String, check: Check, logger: Logger): Unit = {}
+  def onStart(obj: Scalaprops, name: String, property: Property, param: Param, logger: Logger): Unit = {}
 
-  def onFinish(obj: Scalaprops, name: String, check: Check, result: CheckResult, logger: Logger): Unit = {}
+  def onFinish(obj: Scalaprops, name: String, property: Property, param: Param, result: CheckResult, logger: Logger): Unit = {}
 
-  def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(ScalapropsEvent, Throwable \/ (Property, CheckResult))])], logger: Logger): Unit = {}
+  def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {}
 
   def onError(obj: Scalaprops, name: String, e: Throwable, logger: Logger): Unit = {}
 
@@ -43,7 +43,7 @@ object ScalapropsListener {
 
   class Default extends ScalapropsListener {
 
-    override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(ScalapropsEvent, Throwable \/ (Property, CheckResult))])], logger: Logger): Unit = {
+    override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {
       // TODO improve, more generalize
       def toShow(a: Any) = a match {
         case \/-(l: ScalazLaw) => l.simpleName
@@ -57,10 +57,15 @@ object ScalapropsListener {
       val tree = drawTree(result.map {
         case (name, x) =>
           toShow(name) -> x.map{
-            case (a, \/-((_, r))) =>
-              r.toString + " " + a.duration
-            case (a, -\/(e)) =>
-              e.toString + " " + a.duration
+            case (prop, param, event) =>
+              event.result match {
+                case \&/.That(r) =>
+                  r.toString + " " + event.duration
+                case \&/.Both(_, r) =>
+                  r.toString + " " + event.duration
+                case \&/.This(e) =>
+                  e.toString + " " + event.duration
+              }
           }
       })
       // TODO ugly. use scalaz-stream?
@@ -70,7 +75,7 @@ object ScalapropsListener {
       }
     }
 
-    override def onFinish(obj: Scalaprops, name: String, check: Check, result: CheckResult, logger: Logger): Unit = {
+    override def onFinish(obj: Scalaprops, name: String, property: Property, param: Param, result: CheckResult, logger: Logger): Unit = {
       result match {
         case e: CheckResult.GenException =>
           e.exception.printStackTrace()

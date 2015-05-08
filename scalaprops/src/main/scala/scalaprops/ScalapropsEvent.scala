@@ -1,6 +1,7 @@
 package scalaprops
 
 import sbt.testing._
+import scalaz.\&/
 
 final case class ScalapropsEvent(
   fullyQualifiedName: String,
@@ -8,5 +9,6 @@ final case class ScalapropsEvent(
   selector: Selector,
   status: Status,
   throwable: OptionalThrowable,
-  duration: Long
+  duration: Long,
+  result: Throwable \&/ CheckResult
 ) extends Event
