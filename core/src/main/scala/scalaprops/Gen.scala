@@ -438,4 +438,7 @@ object Gen extends GenInstances {
 
   implicit def futureGen[A](implicit A: Gen[A]): Gen[Future[A]] =
     A.map(Future.successful(_))
+
+  implicit def endoGen[A: Gen: Cogen]: Gen[Endo[A]] =
+    Gen[A => A].map(Endo(_))
 }
