@@ -2,7 +2,7 @@ package scalaprops
 
 import java.lang.Thread.UncaughtExceptionHandler
 import java.util.concurrent.{TimeoutException, ForkJoinPool}
-import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
 import sbt.testing._
 import scala.util.control.NonFatal
 import scalaz._
@@ -93,6 +93,13 @@ final class ScalapropsRunner(
   testClassLoader: ClassLoader
 ) extends Runner {
 
+  private[this] val successCount = new AtomicInteger
+  private[this] val failureCount = new AtomicInteger
+  private[this] val errorCount = new AtomicInteger
+  private[this] val ignoredCount = new AtomicInteger
+  private[this] val testCount = new AtomicInteger
+  private[this] val canceledCount = new AtomicInteger
+
   private[this] val taskdef2task: TaskDef => sbt.testing.Task = { taskdef =>
     val testClassName = taskdef.fullyQualifiedName()
     val emptyThrowable = new OptionalThrowable
@@ -150,18 +157,24 @@ final class ScalapropsRunner(
                   obj.listener.onFinish(obj, name, check.prop, param, r, log)
                   r match {
                     case _: CheckResult.Proven | _: CheckResult.Passed =>
+                      successCount.incrementAndGet()
                       event(Status.Success, duration, \&/.That(r))
                     case _: CheckResult.Exhausted | _: CheckResult.Falsified =>
+                      failureCount.incrementAndGet()
                       event(Status.Failure, duration, \&/.That(r))
                     case e: CheckResult.GenException =>
                       log.trace(e.exception)
+                      errorCount.incrementAndGet()
                       event(Status.Error, duration, \&/.Both(e.exception, r))
                     case e: CheckResult.PropException =>
                       log.trace(e.exception)
+                      errorCount.incrementAndGet()
                       event(Status.Error, duration, \&/.Both(e.exception, r))
                     case e: CheckResult.Timeout =>
+                      errorCount.incrementAndGet()
                       event(Status.Error, duration, \&/.That(r))
                     case e: CheckResult.Ignored =>
+                      ignoredCount.incrementAndGet()
                       event(Status.Ignored, duration, \&/.That(r))
                   }
                 } catch {
@@ -169,14 +182,17 @@ final class ScalapropsRunner(
                     val duration = System.currentTimeMillis() - start
                     log.trace(e)
                     obj.listener.onError(obj, name, e, log)
+                    canceledCount.incrementAndGet()
                     event(Status.Canceled, duration, \&/.This(e))
                   case NonFatal(e) =>
                     val duration = System.currentTimeMillis() - start
                     log.trace(e)
                     obj.listener.onError(obj, name, e, log)
+                    errorCount.incrementAndGet()
                     event(Status.Error, duration, \&/.This(e))
                 } finally {
                   cancel.set(true)
+                  testCount.incrementAndGet()
                 }
                 eventHandler.handle(r)
                 (check.prop, param, r)
@@ -198,6 +214,10 @@ final class ScalapropsRunner(
 
   override def tasks(taskDefs: Array[TaskDef]) = taskDefs.map(taskdef2task)
 
-  override def done() = "done"
+  override def done() =
+    s"""done
+Total test count: $testCount
+Failed $failureCount, Errors $errorCount, Passed $successCount, Ignored $ignoredCount, Canceled $canceledCount
+"""
 
 }
