@@ -441,4 +441,12 @@ object Gen extends GenInstances {
 
   implicit def endoGen[A: Gen: Cogen]: Gen[Endo[A]] =
     Gen[A => A].map(Endo(_))
+
+  implicit def fingerGen[V, A](implicit A: Gen[A], R: Reducer[A, V]): Gen[Finger[V, A]] =
+    Gen.oneOf(
+      A.map(FingerTree.one[V, A]),
+      Apply[Gen].apply2(A, A)(FingerTree.two[V, A]),
+      Apply[Gen].apply3(A, A, A)(FingerTree.three[V, A]),
+      Apply[Gen].apply4(A, A, A, A)(FingerTree.four[V, A])
+    )
 }
