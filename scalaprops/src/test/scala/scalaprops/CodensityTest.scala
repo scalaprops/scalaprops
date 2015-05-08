@@ -5,8 +5,10 @@ import scalaz.std.anyVal._
 
 object CodensityTest extends Scalaprops {
 
+  private[this] val e = new FunctionEqual(10)
+
   private[this] final class CodensityEqual[B] {
-    import FunctionEqual._
+    import e._
     implicit def equal[F[_], A](implicit F: Gen[A => F[B]], E: Equal[F[B]]): Equal[Codensity[F, A]] =
       Equal[(A => F[B]) => F[B]].contramap(f => f.apply[B] _)
   }

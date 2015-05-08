@@ -6,7 +6,8 @@ import scalaz.std.tuple._
 import scalaz.std.anyVal._
 
 object StateTTest extends Scalaprops {
-  import FunctionEqual._
+  private[this] val e = new FunctionEqual(10)
+  import e._
 
   implicit def stateTEqual[F[_], A, B](implicit F: Equal[A => F[(A, B)]]): Equal[StateT[F, A, B]] =
     F.contramap(_.apply _)

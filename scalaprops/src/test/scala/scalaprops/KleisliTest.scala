@@ -7,8 +7,9 @@ import scalaz.std.anyVal._
 
 object KleisliTest extends Scalaprops {
 
+  private[this] val e = new FunctionEqual(3)
+
   implicit def equal[F[_], A: Gen, B](implicit E: Equal[F[B]]): Equal[Kleisli[F, A, B]] = {
-    val e = new FunctionEqual(3)
     import e._
     Equal[A => F[B]].contramap(_.run)
   }
