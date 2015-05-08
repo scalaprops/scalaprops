@@ -379,6 +379,9 @@ object Gen extends GenInstances {
   implicit def dlistGen[A: Gen]: Gen[DList[A]] =
     Gen[List[A]].map(DList.fromList(_))
 
+  implicit def heapGen[A: Gen: Order]: Gen[Heap[A]] =
+    Gen[IList[A]].map(Heap.fromCodata(_))
+
   implicit def monoidCoproduct[A: Gen, B: Gen]: Gen[A :+: B] =
     Gen[Vector[A \/ B]].map(new :+:(_))
 
