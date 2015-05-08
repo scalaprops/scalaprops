@@ -15,4 +15,5 @@ object CheckResult {
   final case class PropException(override val succeeded: Int, override val discarded: Int, args: IList[Arg], exception: Throwable) extends CheckResult
   final case class GenException(override val succeeded: Int, override val discarded: Int, exception: Throwable) extends CheckResult
   final case class Timeout(override val succeeded: Int, override val discarded: Int) extends CheckResult
+  final case class Ignored(override val succeeded: Int, override val discarded: Int, reason: String) extends CheckResult
 }

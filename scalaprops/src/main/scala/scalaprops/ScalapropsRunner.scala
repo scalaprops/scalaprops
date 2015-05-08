@@ -161,6 +161,8 @@ final class ScalapropsRunner(
                       event(Status.Error, duration, \&/.Both(e.exception, r))
                     case e: CheckResult.Timeout =>
                       event(Status.Error, duration, \&/.That(r))
+                    case e: CheckResult.Ignored =>
+                      event(Status.Ignored, duration, \&/.That(r))
                   }
                 } catch {
                   case e: TimeoutException =>

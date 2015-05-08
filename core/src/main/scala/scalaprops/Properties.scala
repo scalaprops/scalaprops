@@ -29,6 +29,9 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
 
   def mapCheck(f: Maybe[Check] => Maybe[Check]): Properties[A] =
     map((i, m) => (i, f(m)))
+
+  def ignore(reason: String): Properties[A] =
+    mapCheck(_.map(_.ignore(reason)))
 }
 
 object Properties {
