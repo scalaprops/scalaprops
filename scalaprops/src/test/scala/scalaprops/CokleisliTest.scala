@@ -9,7 +9,8 @@ object CokleisliTest extends Scalaprops {
 
   override val param: Param = Param.withCurrentTimeSeed().copy(maxSize = 30)
 
-  import FunctionEqual._
+  private[this] val e = new FunctionEqual(10)
+  import e._
 
   private implicit def cokleisliEqual[F[_], A, B](implicit F: Equal[F[A] => B]): Equal[Cokleisli[F, A, B]] =
     F.contramap(_.run)
