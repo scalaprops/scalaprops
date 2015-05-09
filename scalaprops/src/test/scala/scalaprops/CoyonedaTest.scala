@@ -27,7 +27,7 @@ object CoyonedaTest extends Scalaprops {
     Properties.either(
       "Coyoneda[Maybe, _]",
       scalazlaws.traverse.all[F],
-      scalazlaws.monadPlus.all[F],
+      scalazlaws.monadPlusStrong.all[F],
       scalazlaws.cobind.all[F]
     )
   }
@@ -38,7 +38,7 @@ object CoyonedaTest extends Scalaprops {
     Properties.either(
       "Coyoneda[IList, _]",
       scalazlaws.traverse.all[F],
-      scalazlaws.monadPlus.all[F],
+      scalazlaws.monadPlusStrong.all[F],
       scalazlaws.cobind.all[F]
     )
   }

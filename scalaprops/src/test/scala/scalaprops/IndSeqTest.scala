@@ -9,7 +9,7 @@ object IndSeqTest extends Scalaprops {
   val testLaw =
     Properties.either(
       "IndSeq",
-      scalazlaws.monadPlus.all[IndSeq],
+      scalazlaws.monadPlusStrong.all[IndSeq],
       scalazlaws.traverse.all[IndSeq],
       scalazlaws.isEmpty.all[IndSeq]
     )

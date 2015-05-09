@@ -17,8 +17,8 @@ object CodensityTest extends Scalaprops {
   import E._
 
   val testMaybe =
-    scalazlaws.monadPlus.all[({type l[a] = Codensity[Maybe, a]})#l]
+    scalazlaws.monadPlusStrong.all[({type l[a] = Codensity[Maybe, a]})#l]
 
   val testIList =
-    scalazlaws.monadPlus.all[({type l[a] = Codensity[IList, a]})#l].andThenParam(Param.maxSize(10))
+    scalazlaws.monadPlusStrong.all[({type l[a] = Codensity[IList, a]})#l].andThenParam(Param.maxSize(10))
 }

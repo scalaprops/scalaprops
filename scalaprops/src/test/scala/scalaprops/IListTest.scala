@@ -8,7 +8,7 @@ object IListTest extends Scalaprops {
 
   val testLaws = Properties.either(
     "IList",
-    scalazlaws.monadPlus.all[IList],
+    scalazlaws.monadPlusStrong.all[IList],
     scalazlaws.traverse.all[IList],
     scalazlaws.cobind.all[IList],
     scalazlaws.isEmpty.all[IList],

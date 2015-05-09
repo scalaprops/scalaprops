@@ -8,7 +8,7 @@ object MaybeTest extends Scalaprops {
 
   val testLaws = Properties.either(
     "Maybe laws",
-    scalazlaws.monadPlus.all[Maybe],
+    scalazlaws.monadPlusStrong.all[Maybe],
     scalazlaws.traverse.all[Maybe],
     scalazlaws.zip.all[Maybe]
   )

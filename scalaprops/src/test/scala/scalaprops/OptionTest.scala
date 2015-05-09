@@ -9,7 +9,7 @@ object OptionTest extends Scalaprops {
   val testLaws =
     Properties.either(
       "Option",
-      scalazlaws.monadPlus.all[Option],
+      scalazlaws.monadPlusStrong.all[Option],
       scalazlaws.traverse.all[Option],
       scalazlaws.zip.all[Option],
       scalazlaws.align.all[Option],

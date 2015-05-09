@@ -9,7 +9,7 @@ object VectorTest extends Scalaprops {
   val testLaws =
     Properties.either(
       "Vector",
-      scalazlaws.monadPlus.all[Vector],
+      scalazlaws.monadPlusStrong.all[Vector],
       scalazlaws.traverse.all[Vector],
       scalazlaws.zip.all[Vector],
       scalazlaws.isEmpty.all[Vector],
