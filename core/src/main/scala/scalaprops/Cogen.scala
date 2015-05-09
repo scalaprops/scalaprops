@@ -128,6 +128,9 @@ object Cogen extends CogenInstances {
       )
     )
 
+  implicit def cogenIMap[A: Cogen, B: Cogen]: Cogen[A ==>> B] =
+    Cogen[List[(A, B)]].contramap(_.toList)
+
   implicit def cogenDList[A: Cogen]: Cogen[DList[A]] =
     Cogen[List[A]].contramap(_.toList)
 
