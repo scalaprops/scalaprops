@@ -119,6 +119,9 @@ object ScalazLaw {
   val monadPlusLeftZero = law0(monadPlus, "left zero")
   val monadPlusRightZero = law0(monadPlus, "right zero")
 
+  val monadPlusStrong = law("monadPlusStrong")
+  val monadPlusStrongAll = all(monadPlusStrong)
+
   val align = law("align")
   val alignAll = all(align)
   val alignCollapse = law0(align, "collapse")
