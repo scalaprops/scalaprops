@@ -236,6 +236,24 @@ object Cogen extends CogenInstances {
         \/-(a)
     }
 
+  implicit def cogenLazyTuple2[A1, A2](implicit A1: Cogen[A1], A2: Cogen[A2]): Cogen[LazyTuple2[A1, A2]] =
+    new Cogen[LazyTuple2[A1, A2]] {
+      def cogen[X](t: LazyTuple2[A1, A2], g: Gen[X]) =
+        A1.cogen(t._1, A2.cogen(t._2, g))
+    }
+
+  implicit def cogenLazyTuple3[A1, A2, A3](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3]): Cogen[LazyTuple3[A1, A2, A3]] =
+    new Cogen[LazyTuple3[A1, A2, A3]] {
+      def cogen[X](t: LazyTuple3[A1, A2, A3], g: Gen[X]) =
+        A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, g)))
+    }
+
+  implicit def cogenLazyTuple4[A1, A2, A3, A4](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4]): Cogen[LazyTuple4[A1, A2, A3, A4]] =
+    new Cogen[LazyTuple4[A1, A2, A3, A4]] {
+      def cogen[X](t: LazyTuple4[A1, A2, A3, A4], g: Gen[X]) =
+        A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, A4.cogen(t._4, g))))
+    }
+
   implicit val instance: Contravariant[Cogen] =
     new Contravariant[Cogen] {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
