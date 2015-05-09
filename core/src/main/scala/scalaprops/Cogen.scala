@@ -226,6 +226,16 @@ object Cogen extends CogenInstances {
   implicit def cogenImmutableArray[A: Cogen]: Cogen[ImmutableArray[A]] =
     Cogen[List[A]].contramap(_.toList)
 
+  implicit def cogenEither3[A1: Cogen, A2: Cogen, A3: Cogen]: Cogen[Either3[A1, A2, A3]] =
+    Cogen[A1 \/ A2 \/ A3].contramap{
+      case Left3(a) =>
+        -\/(-\/(a))
+      case Middle3(a) =>
+        -\/(\/-(a))
+      case Right3(a) =>
+        \/-(a)
+    }
+
   implicit val instance: Contravariant[Cogen] =
     new Contravariant[Cogen] {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
