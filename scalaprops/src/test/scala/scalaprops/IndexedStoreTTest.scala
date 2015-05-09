@@ -21,6 +21,6 @@ object IndexedStoreTTest extends Scalaprops {
 
   val testNel = scalazlaws.comonad.all[({type l[A] = StoreT[NonEmptyList, Int, A]})#l]
   val testMaybe3 = scalazlaws.cobind.all[({type l[A] = StoreT[Maybe, Int, A]})#l]
-  val testILIst3 = scalazlaws.cobind.all[({type l[A] = StoreT[IList, Int, A]})#l]
+  val testIList3 = scalazlaws.cobind.all[({type l[A] = StoreT[IList, Int, A]})#l]
 
 }
