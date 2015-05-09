@@ -214,6 +214,15 @@ object Cogen extends CogenInstances {
     F.contramap(f => Await.result(f, 5.seconds))
   }
 
+  implicit def cogenNeed[A](implicit A: Cogen[A]): Cogen[Need[A]] =
+    A.contramap(_.value)
+
+  implicit def cogenValue[A](implicit A: Cogen[A]): Cogen[Value[A]] =
+    A.contramap(_.value)
+
+  implicit def cogenName[A](implicit A: Cogen[A]): Cogen[Name[A]] =
+    A.contramap(_.value)
+
   implicit val instance: Contravariant[Cogen] =
     new Contravariant[Cogen] {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
