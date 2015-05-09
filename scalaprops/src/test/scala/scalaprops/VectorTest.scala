@@ -10,6 +10,7 @@ object VectorTest extends Scalaprops {
     Properties.either(
       "Vector",
       scalazlaws.monadPlus.all[Vector],
+      scalazlaws.traverse.all[Vector],
       scalazlaws.zip.all[Vector],
       scalazlaws.isEmpty.all[Vector],
       scalazlaws.align.all[Vector]
