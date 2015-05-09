@@ -20,7 +20,7 @@ object compose {
     implicit val s = C.semigroup[Int]
 
     Properties.fromProps(
-      ScalazLaw.comonadAll,
+      ScalazLaw.composeAll,
       compose.laws[=>:],
       plus.all[({type l[a] = a =>: a})#l],
       semigroup.all[Int =>: Int]
