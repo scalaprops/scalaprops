@@ -11,23 +11,24 @@ object ScalapropsRunner {
 
   private[this] final val prefix = "test"
 
+  private[this] def stripPrefix(name: String): String =
+    if(name.startsWith(prefix)) name.drop(prefix.length) else name
+
   private[this] def invokeProperty(clazz: Class[_], obj: Scalaprops): List[(String, Property)] =
     clazz.getMethods.filter(method =>
       method.getParameterTypes.length == 0 &&
-      method.getName.startsWith(prefix) &&
       method.getReturnType == classOf[Property]
     ).map{ method =>
       val p = method.invoke(obj).asInstanceOf[Property]
-      convertMethodName(method.getName.drop(prefix.length)) -> p
+      convertMethodName(stripPrefix(method.getName)) -> p
     }.toList
 
   private[this] def invokeProperties(clazz: Class[_], obj: Scalaprops): List[Properties[Any]] =
     clazz.getMethods.withFilter(method =>
       method.getParameterTypes.length == 0 &&
-      method.getName.startsWith(prefix) &&
       method.getReturnType == classOf[Properties[_]]
     ).map{ method =>
-      val methodName = convertMethodName(method.getName.drop(prefix.length))
+      val methodName = convertMethodName(stripPrefix(method.getName))
       val props = method.invoke(obj).asInstanceOf[Properties[Any]].props
       Properties.noSort[Any](
         Tree.node(
