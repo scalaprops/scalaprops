@@ -111,6 +111,11 @@ object Cogen extends CogenInstances {
   implicit def cogenList[A: Cogen]: Cogen[List[A]] =
     Cogen[IList[A]].contramap(IList.fromList)
 
+  implicit def cogenVector[A: Cogen]: Cogen[Vector[A]] = {
+    import std.vector._
+    Cogen[IList[A]].contramap(IList.fromFoldable(_))
+  }
+
   implicit def cogenStream[A: Cogen]: Cogen[Stream[A]] = {
     import std.stream._
     Cogen[IList[A]].contramap(IList.fromFoldable(_))
