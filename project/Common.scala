@@ -33,6 +33,7 @@ object Common {
     scalaVersion := "2.11.6",
     crossScalaVersions := scalaVersion.value :: "2.10.5" :: Nil,
     organization := "com.github.xuwei-k",
+    description := "property based testing library for Scala",
     homepage := Some(url("https://github.com/xuwei-k/scalaprops")),
     licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
     commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
