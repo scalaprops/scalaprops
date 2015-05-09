@@ -223,6 +223,9 @@ object Cogen extends CogenInstances {
   implicit def cogenName[A](implicit A: Cogen[A]): Cogen[Name[A]] =
     A.contramap(_.value)
 
+  implicit def cogenImmutableArray[A: Cogen]: Cogen[ImmutableArray[A]] =
+    Cogen[List[A]].contramap(_.toList)
+
   implicit val instance: Contravariant[Cogen] =
     new Contravariant[Cogen] {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
