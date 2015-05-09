@@ -121,6 +121,13 @@ object Cogen extends CogenInstances {
     Cogen[IList[A]].contramap(IList.fromFoldable(_))
   }
 
+  implicit def cogenMap[A: Cogen, B: Cogen]: Cogen[Map[A, B]] =
+    Cogen[IList[(A, B)]].contramap(
+      _.iterator.foldLeft(IList.empty[(A, B)])(
+        (list, keyValue) => keyValue :: list
+      )
+    )
+
   implicit def cogenDList[A: Cogen]: Cogen[DList[A]] =
     Cogen[List[A]].contramap(_.toList)
 
