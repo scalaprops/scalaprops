@@ -128,6 +128,9 @@ object Cogen extends CogenInstances {
       )
     )
 
+  implicit def cogenSet[A: Cogen]: Cogen[Set[A]] =
+    Cogen[List[A]].contramap(_.toList)
+
   implicit def cogenISet[A: Cogen]: Cogen[ISet[A]] =
     Cogen[List[A]].contramap(_.toList)
 
