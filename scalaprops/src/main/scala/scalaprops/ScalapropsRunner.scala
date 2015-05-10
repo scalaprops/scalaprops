@@ -6,28 +6,25 @@ import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
 import sbt.testing._
 import scala.util.control.NonFatal
 import scalaz._
+import scala.reflect.NameTransformer
 
 object ScalapropsRunner {
-
-  private[this] final val prefix = "test"
 
   private[this] def invokeProperty(clazz: Class[_], obj: Scalaprops): List[(String, Property)] =
     clazz.getMethods.filter(method =>
       method.getParameterTypes.length == 0 &&
-      method.getName.startsWith(prefix) &&
       method.getReturnType == classOf[Property]
     ).map{ method =>
       val p = method.invoke(obj).asInstanceOf[Property]
-      convertMethodName(method.getName.drop(prefix.length)) -> p
+      NameTransformer.decode(method.getName) -> p
     }.toList
 
   private[this] def invokeProperties(clazz: Class[_], obj: Scalaprops): List[Properties[Any]] =
     clazz.getMethods.withFilter(method =>
       method.getParameterTypes.length == 0 &&
-      method.getName.startsWith(prefix) &&
       method.getReturnType == classOf[Properties[_]]
     ).map{ method =>
-      val methodName = convertMethodName(method.getName.drop(prefix.length))
+      val methodName = NameTransformer.decode(method.getName)
       val props = method.invoke(obj).asInstanceOf[Properties[Any]].props
       Properties.noSort[Any](
         Tree.node(
@@ -65,26 +62,6 @@ object ScalapropsRunner {
       loggers.foreach(_.info(msg))
   }
 
-  private[this] val EscapedUnicode = """\$u([0-9A-F]{4})""".r
-
-  def convertMethodName(name: String): String = {
-    val N = 6
-    @annotation.tailrec
-    def loop(i: Int, src: List[Char]): String =
-      if(i <= (src.length - N)) {
-        val (a, b) = src.splitAt(i)
-        val (c, d) = b.splitAt(N)
-        c.mkString match {
-          case EscapedUnicode(u) =>
-            loop(i + 1, a ::: Integer.decode("0x" + u).toChar :: d)
-          case _ =>
-            loop(i + 1, src)
-        }
-      }else{
-        src.mkString
-      }
-    loop(0, name.toList)
-  }
 }
 
 final class ScalapropsRunner(
