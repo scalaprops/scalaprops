@@ -12,7 +12,7 @@ object CoproductTest extends Scalaprops {
     Properties.either(
       "Coproduct[NonEmptyList, NonEmptyList, ?]",
       scalazlaws.comonad.all[F],
-      scalazlaws.traverse.all[F],
+      scalazlaws.traverse1.all[F],
       scalazlaws.equal.all[F[Int]]
     )
   }
