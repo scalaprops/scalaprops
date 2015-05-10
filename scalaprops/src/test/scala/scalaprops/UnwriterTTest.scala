@@ -7,6 +7,18 @@ import scalaz.std.tuple._
 
 object UnwriterTTest extends Scalaprops {
 
+  val id = {
+    type F[A] = Unwriter[Int, A]
+
+    Properties.either(
+      "Unwriter[Int, _]",
+      scalazlaws.bind.all[F],
+      scalazlaws.traverse.all[F],
+      scalazlaws.comonad.all[F],
+      scalazlaws.equal.all[F[Int]]
+    )
+  }
+
   val testMaybe1 = {
     type F[A] = UnwriterT[Maybe, Int, A]
 
