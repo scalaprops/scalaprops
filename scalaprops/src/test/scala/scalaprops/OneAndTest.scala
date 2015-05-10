@@ -13,6 +13,7 @@ object OneAndTest extends Scalaprops {
       "OneAnd[IList, A]",
       scalazlaws.order.all[F[Int]],
       scalazlaws.monad.all[F],
+      scalazlaws.zip.all[F],
       scalazlaws.traverse1.all[F],
       scalazlaws.align.all[F]
     )
@@ -25,6 +26,7 @@ object OneAndTest extends Scalaprops {
       "OneAnd[Maybe, A]",
       scalazlaws.order.all[F[Int]],
       scalazlaws.monad.all[F],
+      scalazlaws.zip.all[F],
       scalazlaws.traverse1.all[F],
       scalazlaws.align.all[F],
       scalazlaws.plus.all[F]
@@ -38,6 +40,7 @@ object OneAndTest extends Scalaprops {
       "OneAnd[NonEmptyList, A]",
       scalazlaws.order.all[F[Int]],
       scalazlaws.bind.all[F],
+      scalazlaws.zip.all[F],
       scalazlaws.traverse1.all[F],
       scalazlaws.align.all[F],
       scalazlaws.plus.all[F]
