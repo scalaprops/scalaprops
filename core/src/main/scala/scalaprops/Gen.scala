@@ -459,6 +459,9 @@ object Gen extends GenInstances0 {
   implicit def kleisliLikeEndoGen[G[_[_], _, _], F[_], A](implicit F: Gen[G[F, A, A]]): Gen[Endomorphic[({type l[a, b] = G[F, a, b]})#l, A]] =
     endomorphicGen[({type l[a, b] = G[F, a, b]})#l, A]
 
+  implicit def contravariantCoyonedaGen[F[_], A](implicit F: Gen[F[A]]): Gen[ContravariantCoyoneda[F, A]] =
+    F.map(ContravariantCoyoneda.lift)
+
   implicit def fingerGen[V, A](implicit A: Gen[A], R: Reducer[A, V]): Gen[Finger[V, A]] =
     Gen.oneOf(
       A.map(FingerTree.one[V, A]),
