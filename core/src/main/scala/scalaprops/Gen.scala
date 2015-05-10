@@ -297,6 +297,12 @@ object Gen extends GenInstances0 {
   implicit def lazyTuple4[A1, A2, A3, A4](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4]): Gen[LazyTuple4[A1, A2, A3, A4]] =
     Apply[Gen].apply4(A1, A2, A3, A4)(LazyTuple4(_, _, _, _))
 
+  implicit def lazyOptionGen[A: Gen]: Gen[LazyOption[A]] =
+    Gen[Maybe[A]].map{
+      case Maybe.Just(a) => LazyOption.lazySome(a)
+      case Maybe.Empty() => LazyOption.lazyNone[A]
+    }
+
   implicit def lazyEitherGen[A1, A2](implicit A1: Gen[A1], A2: Gen[A2]): Gen[LazyEither[A1, A2]] =
     oneOf(
       A1.map(LazyEither.lazyLeft[A2].apply(_)),
