@@ -30,7 +30,15 @@ final case class Gen[A] private(f: (Int, Rand) => (A, Rand)) {
     Gen.sequenceNList(size, this).f(size, Rand.fromSeed(seed))._1
 }
 
-object Gen extends GenInstances {
+
+sealed abstract class GenInstances0 extends GenInstances {
+
+  implicit final def endomorphicGen[F[_, _], A](implicit F: Gen[F[A, A]]): Gen[Endomorphic[F, A]] =
+    F.map(Endomorphic.apply)
+
+}
+
+object Gen extends GenInstances0 {
   def gen[A](f: (Int, Rand) => (A, Rand)): Gen[A] =
     new Gen(f)
 
@@ -447,6 +455,9 @@ object Gen extends GenInstances {
 
   implicit def endoGen[A: Gen: Cogen]: Gen[Endo[A]] =
     Gen[A => A].map(Endo(_))
+
+  implicit def kleisliLikeEndoGen[G[_[_], _, _], F[_], A](implicit F: Gen[G[F, A, A]]): Gen[Endomorphic[({type l[a, b] = G[F, a, b]})#l, A]] =
+    endomorphicGen[({type l[a, b] = G[F, a, b]})#l, A]
 
   implicit def fingerGen[V, A](implicit A: Gen[A], R: Reducer[A, V]): Gen[Finger[V, A]] =
     Gen.oneOf(
