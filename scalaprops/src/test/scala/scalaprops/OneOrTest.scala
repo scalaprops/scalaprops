@@ -24,6 +24,7 @@ object OneOrTest extends Scalaprops {
     Properties.either(
       "OneOr[NonEmptyList, A]",
       scalazlaws.order.all[F[Int]],
+      scalazlaws.applicative.all[F],
       scalazlaws.traverse1.all[F],
       scalazlaws.comonad.all[F]
     )
