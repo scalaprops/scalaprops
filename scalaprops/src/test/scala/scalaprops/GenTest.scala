@@ -92,4 +92,10 @@ object GenTest extends Scalaprops {
     (values.size == size) && (just > (size / 2)) && (just < size)
   }(Gen.choose(100, 10000), Gen[Int])
 
+  val choose = Property.forAll{ (a: Int, b: Int, size: Int, seed: Int) =>
+    val x = Gen.choose(a, b).f(size, Rand.fromSeed(seed))._1
+    val max = math.max(a, b)
+    val min = math.min(a, b)
+    (min <= x) && (x <= max)
+  }
 }
