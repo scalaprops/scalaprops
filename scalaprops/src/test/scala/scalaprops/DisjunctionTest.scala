@@ -6,10 +6,11 @@ import scalaz.std.string._
 
 object DisjunctionTest extends Scalaprops {
 
-  val testBifunctor = scalazlaws.bifunctor.all[\/]
-  val testBifoldable = scalazlaws.bifoldable.all[\/]
+  val bitraverse = scalazlaws.bitraverse.all[\/]
+  val associative = scalazlaws.associative.all[\/]
+  val order = scalazlaws.order.all[Int \/ Int]
 
-  val testLaws1 = Properties.either(
+  val laws1 = Properties.either(
     """\/""",
     scalazlaws.monadError.all[\/, Int],
     scalazlaws.traverse.all[({type l[a] = Int \/ a})#l],
