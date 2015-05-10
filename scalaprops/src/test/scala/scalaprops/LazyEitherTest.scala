@@ -7,7 +7,7 @@ import scalaz.std.either._
 
 object LazyEitherTest extends Scalaprops {
 
-  private[this] implicit def lazyEitherEqual[A: Equal, B: Equal]: Equal[LazyEither[A, B]] =
+  implicit def lazyEitherEqual[A: Equal, B: Equal]: Equal[LazyEither[A, B]] =
     Equal[A Either B].contramap(_.toEither)
 
   val testLaws1 = Properties.either(
