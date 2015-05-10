@@ -351,6 +351,9 @@ object Gen extends GenInstances0 {
   implicit def disjunction[A, B](implicit A: Gen[A], B: Gen[B]): Gen[A \/ B] =
     oneOf(A.map(\/.left), B.map(\/.right))
 
+  implicit def lazyEitherTGen[F[_], A, B](implicit F: Gen[F[LazyEither[A, B]]]): Gen[LazyEitherT[F, A, B]] =
+    F.map(LazyEitherT(_))
+
   implicit def eitherTGen[F[_], A, B](implicit F: Gen[F[A \/ B]]): Gen[EitherT[F, A, B]] =
     F.map(EitherT(_))
 
