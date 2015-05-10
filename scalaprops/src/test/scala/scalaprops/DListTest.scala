@@ -10,6 +10,7 @@ object DListTest extends Scalaprops {
     "DList laws",
     scalazlaws.monadPlusStrong.all[DList],
     scalazlaws.zip.all[DList],
+    scalazlaws.isEmpty.all[DList],
     scalazlaws.equal.all[DList[Int]],
     scalazlaws.traverse.all[DList]
   )
