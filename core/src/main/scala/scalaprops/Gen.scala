@@ -403,6 +403,9 @@ object Gen extends GenInstances0 {
   implicit def heapGen[A: Gen: Order]: Gen[Heap[A]] =
     Gen[IList[A]].map(Heap.fromCodata(_))
 
+  implicit def ephemeralStreamGen[A: Gen]: Gen[EphemeralStream[A]] =
+    Gen[Stream[A]].map(EphemeralStream.fromStream(_))
+
   implicit def monoidCoproduct[A: Gen, B: Gen]: Gen[A :+: B] =
     Gen[Vector[A \/ B]].map(new :+:(_))
 
