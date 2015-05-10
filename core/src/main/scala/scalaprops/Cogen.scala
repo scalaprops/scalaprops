@@ -71,6 +71,9 @@ object Cogen extends CogenInstances {
   implicit def cogenMaybe[A: Cogen]: Cogen[Maybe[A]] =
     Cogen[Option[A]].contramap(_.toOption)
 
+  implicit def cogenLazyOption[A: Cogen]: Cogen[LazyOption[A]] =
+    Cogen[Option[A]].contramap(_.toOption)
+
   implicit def cogenThese[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[A \&/ B] =
     Cogen[(A \/ B) \/ (A, B)].contramap{
       case x @ \&/.Both(a, b) =>
