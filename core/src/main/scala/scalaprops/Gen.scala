@@ -238,12 +238,10 @@ object Gen extends GenInstances0 {
     value(())
 
   implicit def maybe[A](implicit A: Gen[A]): Gen[Maybe[A]] =
-    sized{
-      case 0 =>
-        Gen.value(Maybe.empty[A])
-      case i =>
-        A.map(Maybe.just).resize(i - 1)
-    }
+    Gen.frequency(
+      1 -> Gen.value(Maybe.empty[A]),
+      20 -> A.map(Maybe.just)
+    )
 
   implicit def option[A](implicit A: Gen[A]): Gen[Option[A]] =
     maybe[A].map(_.toOption)
