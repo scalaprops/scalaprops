@@ -17,7 +17,7 @@ object StateTTest extends Scalaprops {
 
     Properties.either(
       "StateT[IList, Int, _]",
-      scalazlaws.monad.all[F],
+      scalazlaws.monadPlusStrong.all[F],
       scalazlaws.equal.all[F[Int]]
     )
   }
@@ -27,7 +27,7 @@ object StateTTest extends Scalaprops {
 
     Properties.either(
       "StateT[Maybe, Int, _]",
-      scalazlaws.monad.all[F],
+      scalazlaws.monadPlusStrong.all[F],
       scalazlaws.equal.all[F[Int]]
     )
   }
