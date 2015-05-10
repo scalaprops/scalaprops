@@ -27,4 +27,27 @@ object WriterTTest extends Scalaprops {
     )
   }
 
+  val iList1 = {
+    type F[A] = WriterT[IList, Int, A]
+
+    Properties.either(
+      "WriterT[IList, Int, _]",
+      scalazlaws.monad.all[F],
+      scalazlaws.traverse.all[F],
+      scalazlaws.equal.all[F[Int]]
+    )
+  }
+
+  val id = {
+    type F[A] = Writer[Int, A]
+
+    Properties.either(
+      "Writer[Int, _]",
+      scalazlaws.monad.all[F],
+      scalazlaws.comonad.all[F],
+      scalazlaws.traverse.all[F],
+      scalazlaws.equal.all[F[Int]]
+    )
+  }
+
 }
