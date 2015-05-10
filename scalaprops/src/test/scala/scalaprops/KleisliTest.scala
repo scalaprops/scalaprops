@@ -9,7 +9,7 @@ object KleisliTest extends Scalaprops {
 
   private[this] val e = new FunctionEqual(3)
 
-  implicit def equal[F[_], A: Gen, B](implicit E: Equal[F[B]]): Equal[Kleisli[F, A, B]] = {
+  implicit def kleisliEqual[F[_], A: Gen, B](implicit E: Equal[F[B]]): Equal[Kleisli[F, A, B]] = {
     import e._
     Equal[A => F[B]].contramap(_.run)
   }

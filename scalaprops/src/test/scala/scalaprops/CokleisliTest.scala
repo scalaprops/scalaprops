@@ -9,11 +9,12 @@ object CokleisliTest extends Scalaprops {
 
   override val param: Param = Param.withCurrentTimeSeed().copy(maxSize = 30)
 
-  private[this] val e = new FunctionEqual(10)
-  import e._
+  private[this] val e = new FunctionEqual(5)
 
-  private implicit def cokleisliEqual[F[_], A, B](implicit F: Equal[F[A] => B]): Equal[Cokleisli[F, A, B]] =
-    F.contramap(_.run)
+  implicit def cokleisliEqual[F[_], A, B: Equal](implicit F: Gen[F[A]]): Equal[Cokleisli[F, A, B]] = {
+    import e._
+    Equal[F[A] => B].contramap(_.run)
+  }
 
   val testLaws = {
     type C1[A] = Cokleisli[Maybe, Int, A]
