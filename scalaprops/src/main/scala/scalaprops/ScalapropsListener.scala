@@ -43,6 +43,16 @@ object ScalapropsListener {
 
   class Default extends ScalapropsListener {
 
+    private[this] def event2string(event: ScalapropsEvent) =
+      event.result match {
+        case \&/.That(r) =>
+          r.toString + " " + event.duration
+        case \&/.Both(_, r) =>
+          r.toString + " " + event.duration
+        case \&/.This(e) =>
+          e.toString + " " + event.duration
+      }
+
     override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {
       // TODO improve, more generalize
       def toShow(a: Any) = a match {
@@ -56,16 +66,20 @@ object ScalapropsListener {
 
       val tree = drawTree(result.map {
         case (name, x) =>
-          toShow(name) -> x.map{
-            case (prop, param, event) =>
-              event.result match {
-                case \&/.That(r) =>
-                  r.toString + " " + event.duration
-                case \&/.Both(_, r) =>
-                  r.toString + " " + event.duration
-                case \&/.This(e) =>
-                  e.toString + " " + event.duration
+          toShow(name) -> x.map{ case (prop, param, event) =>
+            val str = event2string(event)
+            if(logger.ansiCodesSupported()){
+              event.result.b match {
+                case Some(_: CheckResult.Proven | _: CheckResult.Passed) =>
+                  Console.GREEN + str + Console.RESET
+                case Some(_: CheckResult.Ignored) =>
+                  Console.BLUE + str + Console.RESET
+                case _ =>
+                  Console.RED + str + Console.RESET
               }
+            }else{
+              str
+            }
           }
       })
       println()
