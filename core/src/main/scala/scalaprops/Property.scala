@@ -86,8 +86,8 @@ final case class Property(f: (Int, Rand) => (Result, Rand)) {
           } else {
             loop(s, discarded + 1, size, nextRand)
           }
-        case \/-((Result.Proven(args), _)) =>
-          CheckResult.Proven(s + 1, discarded, args)
+        case \/-((Result.Proven, _)) =>
+          CheckResult.Proven(s + 1, discarded)
         case \/-((Result.Unfalsified(args), nextRand)) =>
           if (s + 1 >= minSuccessful) {
             CheckResult.Passed(s + 1, discarded)
@@ -134,7 +134,7 @@ object Property {
     Property((_, rand) => (r, rand))
 
   val prop: Boolean => Property = b => propFromResult{
-    if(b) Result.Proven(IList.empty)
+    if(b) Result.Proven
     else Result.Falsified(IList.empty)
   }
 
@@ -145,7 +145,7 @@ object Property {
         as.map{ case (a, rr) =>
           val x = exception(f(a)).f(i, rr)
           x._1.toMaybe.map(result =>
-            (a, result.provenAsUnfalsified.addArg(Arg(a, shrinks)), x._2)
+            (a, result.provenAsUnfalsified.addArg(Arg(a, shrinks)): Result, x._2)
           )
         } match {
           case Stream() =>

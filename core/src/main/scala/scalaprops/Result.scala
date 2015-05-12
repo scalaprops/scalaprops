@@ -5,44 +5,45 @@ import scalaz.{IList, Maybe}
 sealed abstract class Result extends Product with Serializable {
   def isUnfalsified = this.isInstanceOf[Result.Unfalsified]
   def isFalsified = this.isInstanceOf[Result.Falsified]
-  def isProven = this.isInstanceOf[Result.Proven]
+  def isProven = this eq Result.Proven
   def isException = this.isInstanceOf[Result.Exception]
   def isIgnored = this.isInstanceOf[Result.Ignored]
   def isNoResult = this.isInstanceOf[Result.NoResult.type]
 
-  def toMaybe: Maybe[Result] =
-    if(isNoResult) Maybe.Empty() else Maybe.just(this)
-
-  def provenAsUnfalsified: Result = this match {
-    case Result.Proven(args) =>
-      Result.Unfalsified(args)
-    case _ =>
-      this
+  final def toMaybe: Maybe[HasResult] = this match {
+    case r: HasResult => Maybe.just(r)
+    case Result.NoResult => Maybe.empty[HasResult]
   }
 
-  def addArg(a: Arg): Result
+  final def failed: Boolean = isFalsified || isException
+}
 
-  def failed: Boolean = isFalsified || isException
+sealed abstract class HasResult extends Result {
+  final def provenAsUnfalsified: AddArgs = this match {
+    case Result.Proven =>
+      Result.Unfalsified(IList.empty)
+    case a: AddArgs =>
+      a
+  }
+}
+
+sealed abstract class AddArgs extends HasResult {
+  def addArg(a: Arg): AddArgs
 }
 
 object Result {
-  final case class Unfalsified(args: IList[Arg]) extends Result {
-    override def addArg(a: Arg): Result = copy(a :: args)
+  final case class Unfalsified(args: IList[Arg]) extends AddArgs{
+    override def addArg(a: Arg): AddArgs = copy(a :: args)
   }
-  final case class Falsified(args: IList[Arg]) extends Result {
-    override def addArg(a: Arg): Result = copy(a :: args)
+  final case class Falsified(args: IList[Arg]) extends AddArgs{
+    override def addArg(a: Arg): AddArgs = copy(a :: args)
   }
-  final case class Proven(args: IList[Arg]) extends Result {
-    override def addArg(a: Arg): Result = copy(a :: args)
+  case object Proven extends HasResult
+  final case class Exception(args: IList[Arg], exception: Throwable) extends AddArgs{
+    override def addArg(a: Arg): AddArgs = copy(a :: args)
   }
-  final case class Exception(args: IList[Arg], exception: Throwable) extends Result {
-    override def addArg(a: Arg): Result = copy(a :: args)
+  final case class Ignored(reason: String) extends AddArgs{ self =>
+    override def addArg(a: Arg): AddArgs = self
   }
-  final case class Ignored(reason: String) extends Result { self =>
-    override def addArg(a: Arg): Result = self
-  }
-  case object NoResult extends Result {
-    override def addArg(a: Arg): Result = this // TODO error ?
-  }
-
+  case object NoResult extends Result
 }
