@@ -479,4 +479,48 @@ object Gen extends GenInstances0 {
       Apply[Gen].apply3(A, A, A)(FingerTree.three[V, A]),
       Apply[Gen].apply4(A, A, A, A)(FingerTree.four[V, A])
     )
+
+  implicit def treeGen[A](implicit A: Gen[A]): Gen[Tree[A]] = {
+    def loop(size: Int): Gen[Tree[A]] = size match {
+      case n if n <= 1 =>
+        A.map(a => Tree.leaf(a))
+      case 2 =>
+        Gen[(A, A)].map{case (a1, a2) =>
+          Tree.node(a1, Stream(Tree.leaf(a2)))
+        }
+      case 3 =>
+        Gen[(A, A, A)].flatMap{case (a1, a2, a3) =>
+          Gen.elements(
+            Tree.node(a1, Stream(Tree.leaf(a2), Tree.leaf(a3))),
+            Tree.node(a1, Stream(Tree.node(a2, Stream(Tree.leaf(a3)))))
+          )
+        }
+      case _ =>
+        val max = size - 1
+        import scalaz.std.stream._
+        Applicative[Gen].sequence(
+          Stream.fill(max)(Gen.choose(1, max - 1))
+        ).flatMap{s =>
+          val ns = Traverse[Stream].traverseS(s){ n =>
+            for{
+              sum <- State.get[Int]
+              r <- if(sum >= max){
+                State.state[Int, Option[Int]](Option.empty[Int])
+              }else if((sum + n) > max){
+                State((s: Int) => (s + n) -> Option(max - sum))
+              }else{
+                State((s: Int) => (s + n) -> Option(n))
+              }
+            } yield r
+          }.eval(0).flatten
+
+          Applicative[Gen].sequence(ns.map(loop)).flatMap(as =>
+            A.map(a => Tree.node(a, as))
+          )
+        }
+    }
+    Gen.sized(n =>
+      Gen.choose(0, n).flatMap(loop)
+    )
+  }
 }
