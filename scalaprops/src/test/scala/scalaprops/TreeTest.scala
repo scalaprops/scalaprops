@@ -25,8 +25,8 @@ object TreeTest extends Scalaprops {
 
     Properties.fromProps(
       "Gen[Tree]",
-      p(10),
-      List.iterate(100, 2)(_ * 10).map(p): _*
+      p(100),
+      p(1000)
     )
   }
 
