@@ -48,14 +48,14 @@ object GenTest extends Scalaprops {
   val `test Gen.elements` = {
     val N = 5
 
-    Property.forAll[List[Rand], List[Int]]{ (rs, xs) =>
+    Property.forAllG(
+      Gen.sequenceNList(1000, Gen[Rand]),
+      Gen.sequenceNList(5, Gen[Int])
+    ){ (rs, xs) =>
       val g = Gen.elements(xs.head, xs.tail: _*)
       val r = rs.map(r => g.f(Int.MaxValue, r)._1)
       (r.toSet == xs.toSet) && (xs.toSet.size == N)
-    }(
-      Gen.sequenceNList(1000, Gen[Rand]),
-      Gen.sequenceNList(5, Gen[Int])
-    ).toCheckWith(Param.rand(Rand.fromSeed())).toProperties("test Gen.element")
+    }.toCheckWith(Param.rand(Rand.fromSeed())).toProperties("test Gen.element")
   }
 
   val `test Gen.sequenceNList` = {
@@ -64,33 +64,35 @@ object GenTest extends Scalaprops {
     val a = - 500
     val b = 20000
 
-    Property.forAll[(Int, List[Int])]{ case (size, values) =>
-      (values.length == size) && (min <= size && size <= max) && values.forall{
-        x => a <= x && x <= b
-      }
-    }(
+    Property.forAllG(
       Gen.choose(min, max).flatMap{ size =>
         Gen.sequenceNList(size, Gen.choose(a, b)).map(size -> _)
       }
-    )
+    ){ case (size, values) =>
+      (values.length == size) && (min <= size && size <= max) && values.forall{
+        x => a <= x && x <= b
+      }
+    }
   }
 
   val `test Gen.frequencey` =
-    Property.forAll[List[Boolean]] { list =>
-      val (t, f) = list.partition(identity)
-      (t.size < f.size) && t.nonEmpty
-    }(
+    Property.forAllG(
       Gen.sequenceNList(100, Gen.frequency(
         1 -> Gen.value(true),
         5 -> Gen.value(false)
       ))
-    )
+    ){ list =>
+      val (t, f) = list.partition(identity)
+      (t.size < f.size) && t.nonEmpty
+    }
 
-  val maybeGen = Property.forAll[Int, Int, Int]{ (size, listSize, seed) =>
+  val maybeGen = Property.forAllG(
+    Gen[Int], Gen.choose(100, 10000), Gen[Int]
+  ){ (size, listSize, seed) =>
     val values = Gen[Maybe[Int]].samples(size = size, listSize = listSize, seed = seed)
     val just = values.count(_.isJust)
     (values.size == listSize) && (just > (listSize / 2)) && (just < listSize)
-  }(Gen[Int], Gen.choose(100, 10000), Gen[Int])
+  }
 
   val choose = Property.forAll{ (a: Int, b: Int, size: Int, seed: Int) =>
     val x = Gen.choose(a, b).f(size, Rand.fromSeed(seed))._1
