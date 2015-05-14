@@ -86,11 +86,11 @@ object GenTest extends Scalaprops {
       ))
     )
 
-  val maybeGen = Property.forAll[Int, Int]{ (size, seed) =>
-    val values = Gen[Maybe[Int]].samples(size = size, seed = seed)
+  val maybeGen = Property.forAll[Int, Int, Int]{ (size, listSize, seed) =>
+    val values = Gen[Maybe[Int]].samples(size = size, listSize = listSize, seed = seed)
     val just = values.count(_.isJust)
-    (values.size == size) && (just > (size / 2)) && (just < size)
-  }(Gen.choose(100, 10000), Gen[Int])
+    (values.size == listSize) && (just > (listSize / 2)) && (just < listSize)
+  }(Gen[Int], Gen.choose(100, 10000), Gen[Int])
 
   val choose = Property.forAll{ (a: Int, b: Int, size: Int, seed: Int) =>
     val x = Gen.choose(a, b).f(size, Rand.fromSeed(seed))._1

@@ -26,8 +26,8 @@ final case class Gen[A] private(f: (Int, Rand) => (A, Rand)) {
     gen((s, r) => f(g(s), r))
 
   /** convenience method for get sample values */
-  def samples(size: Int = 100, seed: Int = Rand.defaultSeed): List[A] =
-    Gen.sequenceNList(size, this).f(size, Rand.fromSeed(seed))._1
+  def samples(size: Int = 100, listSize: Int = 100, seed: Int = Rand.defaultSeed): List[A] =
+    Gen.sequenceNList(listSize, this).f(size, Rand.fromSeed(seed))._1
 }
 
 
