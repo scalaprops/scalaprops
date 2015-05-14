@@ -3,6 +3,7 @@ package scalazlaws
 
 import scalaz._
 import scalaz.std.tuple._
+import scalaz.std.anyVal._
 
 object bitraverse {
 
@@ -12,10 +13,10 @@ object bitraverse {
     EF: Equal[F[Int, Int]],
     G1: Gen[F[Int, Maybe[Int]]],
     G2: Gen[F[Maybe[Int], Int]]
-  ) = Properties.fromProps(
-    ScalazLaw.bitraverse -> Maybe.empty[*^*->*],
-    traverse.all[({type l[a] = F[a, Int]})#l](F.leftTraverse[Int], implicitly, implicitly, implicitly).mapId((_, Maybe.just(*^*->*.left))),
-    traverse.all[({type l[a] = F[Int, a]})#l](F.rightTraverse[Int], implicitly, implicitly, implicitly).mapId((_, Maybe.just(*^*->*.right))),
+  ): Properties[(ScalazLaw, *^*->*.T)] = Properties.fromProps(
+    ScalazLaw.bitraverse -> *^*->*.Empty,
+    traverse.all[({type l[a] = F[a, Int]})#l](F.leftTraverse[Int], implicitly, implicitly, implicitly).mapId((_, *^*->*.L)),
+    traverse.all[({type l[a] = F[Int, a]})#l](F.rightTraverse[Int], implicitly, implicitly, implicitly).mapId((_, *^*->*.R)),
     bifoldable.all[F],
     bifunctor.laws[F]
   )

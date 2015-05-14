@@ -47,11 +47,11 @@ object KleisliTest extends Scalaprops {
   val testMaybe = kleisliTest[Maybe]
 
   val testIList = kleisliTest[IList].andThenParamPF{
-    case \/-(p) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
+    case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
   val testNonEmptyList = kleisliTest[NonEmptyList].andThenParamPF{
-    case \/-(p) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
+    case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
 }

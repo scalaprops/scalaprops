@@ -19,11 +19,11 @@ object bifoldable {
       ScalazLaw.bifoldableRightFMConsistent -> rightFMConsistent[F, Int, Int]
     )
 
-  def all[F[_, _]](implicit fa: Gen[F[Int, Int]], F: Bifoldable[F]) =
-    Properties.fromProps(
-      ScalazLaw.bifoldableAll -> Maybe.empty[*^*->*],
-      bifoldable.laws[F].mapId((_, Maybe.empty[*^*->*])),
-      scalazlaws.foldable.laws[({type l[a] = F[a, Int]})#l](implicitly, F.leftFoldable[Int]).mapId((_, Maybe.just(*^*->*.left))),
-      scalazlaws.foldable.laws[({type l[a] = F[Int, a]})#l](implicitly, F.rightFoldable[Int]).mapId((_, Maybe.just(*^*->*.right)))
+  def all[F[_, _]](implicit fa: Gen[F[Int, Int]], F: Bifoldable[F]): Properties[(ScalazLaw, *^*->*.T)] =
+    Properties.fromProps[(ScalazLaw, *^*->*.T)](
+      ScalazLaw.bifoldableAll -> *^*->*.Empty,
+      bifoldable.laws[F].mapId((_, *^*->*.Empty)),
+      scalazlaws.foldable.laws[({type l[a] = F[a, Int]})#l](implicitly, F.leftFoldable[Int]).mapId((_, *^*->*.L)),
+      scalazlaws.foldable.laws[({type l[a] = F[Int, a]})#l](implicitly, F.rightFoldable[Int]).mapId((_, *^*->*.R))
     )
 }

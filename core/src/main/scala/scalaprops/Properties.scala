@@ -35,12 +35,14 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
 }
 
 object Properties {
-  def either[A: Order, B: Order](id: A, prop0: Properties[B], props: Properties[B] *): Properties[A \/ B] =
-    fromProps(
-      -\/(id),
-      prop0.mapId(\/.right[A, B]),
-      props.map(_.mapId(\/.right[A, B])): _*
+  def either[A: Order, B: Order](id: A, prop0: Properties[B], props: Properties[B] *): Properties[A :-: B :-: Or.Empty] = {
+    type T = A :-: B :-: Or.Empty
+    fromProps[T](
+      Or[T](id),
+      prop0.mapId(Or[T].apply(_)),
+      props.map(_.mapId(Or[T].apply(_))): _*
     )
+  }
 
   private[this] def ord1[A, B](implicit A: Order[A]): Order[(A, B)] =
     Order.orderBy(_._1)

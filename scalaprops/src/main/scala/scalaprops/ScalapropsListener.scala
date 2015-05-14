@@ -54,19 +54,9 @@ object ScalapropsListener {
       }
 
     override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {
-      // TODO improve, more generalize
-      def toShow(a: Any) = a match {
-        case \/-(l: ScalazLaw) => l.simpleName
-        case -\/(l: ScalazLaw) => l.simpleName
-        case n : ScalazLaw => n.simpleName
-        case \/-(id) => id
-        case -\/(id) => id
-        case _ => a.toString
-      }
-
       val tree = drawTree(result.map {
         case (name, x) =>
-          toShow(name) -> x.map{ case (prop, param, event) =>
+          name.toString -> x.map{ case (prop, param, event) =>
             val str = event2string(event)
             if(logger.ansiCodesSupported()){
               event.result.b match {
