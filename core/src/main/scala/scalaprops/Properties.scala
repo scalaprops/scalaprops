@@ -44,6 +44,11 @@ object Properties {
     )
   }
 
+  def list[A: Order](prop0: Properties[A], props: Properties[A]*): Properties[Unit :-: A :-: Or.Empty] = {
+    import scalaz.std.anyVal._
+    either((), prop0, props: _*)
+  }
+
   private[this] def ord1[A, B](implicit A: Order[A]): Order[(A, B)] =
     Order.orderBy(_._1)
 
