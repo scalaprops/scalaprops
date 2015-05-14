@@ -523,4 +523,7 @@ object Gen extends GenInstances0 {
       Gen.choose(0, n).flatMap(loop)
     )
   }
+
+  implicit def shrinkGen[A: Cogen: Gen]: Gen[Shrink[A]] =
+    Gen[A => Stream[A]].map(new Shrink(_))
 }
