@@ -6,7 +6,7 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
   def id: A = props.rootLabel._1
 
   private[this] def map[B](f: (A, Maybe[Check]) => (B, Maybe[Check])): Properties[B] =
-    Properties(props.map{case (i, m) => f(i, m)})
+    Properties(props.map(f.tupled))
 
   def andThenParam(f: Endo[Param]): Properties[A] =
     mapCheck(_.map(p => p.copy(paramEndo = p.paramEndo andThen f)))
