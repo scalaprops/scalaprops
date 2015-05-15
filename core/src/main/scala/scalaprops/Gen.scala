@@ -526,4 +526,18 @@ object Gen extends GenInstances0 {
 
   implicit def shrinkGen[A: Cogen: Gen]: Gen[Shrink[A]] =
     Gen[A => Stream[A]].map(new Shrink(_))
+
+  implicit val orEmptyGen: Gen[Or.Empty] =
+    Gen.oneOfLazy(Need(???))
+
+  implicit def orGen[A, B <: Or](implicit A: Gen[A], B: Gen[B]): Gen[A :-: B] = {
+    if(B eq orEmptyGen){
+      A.map[A :-: B](Or.L(_))
+    }else {
+      Gen.frequency(
+        1 -> A.map[A :-: B](Or.L(_)),
+        3 -> B.map[A :-: B](Or.R(_))
+      )
+    }
+  }
 }
