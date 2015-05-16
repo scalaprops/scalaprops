@@ -38,7 +38,7 @@ object build extends Build {
     shapelessDependency("test"),
     testFrameworks += new TestFramework("scalaprops.ScalapropsFramework"),
     parallelExecution in Test := false
-  ).dependsOn(scalazlaws)
+  ).dependsOn(core, scalazlaws % "test")
 
   val sxr = TaskKey[File]("packageSxr")
 
