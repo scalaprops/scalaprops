@@ -101,6 +101,9 @@ object Cogen extends CogenInstances {
   implicit def cogenOneOr[F[_], A: Cogen](implicit F: Cogen[F[A]]): Cogen[OneOr[F, A]] =
     Cogen[F[A] \/ A].contramap(_.run)
 
+  implicit def cogenOneAnd[F[_], A: Cogen](implicit F: Cogen[F[A]]): Cogen[OneAnd[F, A]] =
+    Cogen[(A, F[A])].contramap(a => (a.head, a.tail))
+
   implicit def cogenIList[A](implicit A: Cogen[A]): Cogen[IList[A]] =
     new Cogen[IList[A]] {
       def cogen[B](a: IList[A], g: Gen[B]): Gen[B] = a match {
