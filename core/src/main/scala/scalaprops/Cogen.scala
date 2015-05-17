@@ -193,6 +193,9 @@ object Cogen extends CogenInstances {
   implicit def cogenIndexedContsT[W[_], M[_], R, O, A](implicit F: Cogen[W[A => M[O]] => M[R]]): Cogen[IndexedContsT[W, M, R, O, A]] =
     F.contramap(_.run)
 
+  implicit def cogenEndo[A: Gen: Cogen]: Cogen[Endo[A]] =
+    Cogen[A => A].contramap(_.run)
+
   implicit def cogenKleisli[F[_], A, B](implicit F: Cogen[A => F[B]]): Cogen[Kleisli[F, A, B]] =
     F.contramap(_.run)
 
