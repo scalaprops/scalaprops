@@ -25,7 +25,6 @@ object TreeTest extends Scalaprops {
 
     Properties.fromProps(
       "Gen[Tree]",
-      p(100),
       p(1000)
     )
   }
