@@ -14,7 +14,14 @@ abstract class Cogen[A] { self =>
     }
 }
 
-object Cogen extends CogenInstances {
+sealed abstract class CogenInstances0 extends CogenInstances {
+
+  implicit final def cogenEndomorphic[F[_, _], A](implicit F: Cogen[F[A, A]]): Cogen[Endomorphic[F, A]] =
+    F.contramap(_.run)
+
+}
+
+object Cogen extends CogenInstances0 {
 
   implicit val cogenBoolean: Cogen[Boolean] =
     new Cogen[Boolean] {
@@ -198,6 +205,9 @@ object Cogen extends CogenInstances {
 
   implicit def cogenEndo[A: Gen: Cogen]: Cogen[Endo[A]] =
     Cogen[A => A].contramap(_.run)
+
+  implicit def cogenEndomorphicKleisliLike[G[_[_], _, _], F[_], A](implicit F: Cogen[G[F, A, A]]): Cogen[Endomorphic[({type l[a, b] = G[F, a, b]})#l, A]] =
+    F.contramap(_.run)
 
   implicit def cogenKleisli[F[_], A, B](implicit F: Cogen[A => F[B]]): Cogen[Kleisli[F, A, B]] =
     F.contramap(_.run)
