@@ -98,7 +98,7 @@ object Shrink {
   }
 
   implicit def list[A: Shrink]: Shrink[List[A]] =
-    Shrink[IList[A]].xmap(_.toList, IList.fromList)
+    Shrink[IList[A]].xmap(_.toList, Gen.IListFromList)
 
   implicit def stream[A: Shrink]: Shrink[Stream[A]] = {
     Shrink[IList[A]].xmap(_.toStream, IList.fromFoldable(_))

@@ -39,6 +39,11 @@ sealed abstract class GenInstances0 extends GenInstances {
 }
 
 object Gen extends GenInstances0 {
+
+  private[this] val iListFromList = IList.fromList[Any] _
+  private[scalaprops] def IListFromList[A]: List[A] => IList[A] =
+    iListFromList.asInstanceOf[List[A] => IList[A]]
+
   def gen[A](f: (Int, Rand) => (A, Rand)): Gen[A] =
     new Gen(f)
 
@@ -61,7 +66,7 @@ object Gen extends GenInstances0 {
     sequenceNList(n, g).map(f)
 
   private[this] def sequenceNIList[F[_], A](n: Int, g: Gen[A]): Gen[IList[A]] =
-    sequenceN[IList, A](n, g, IList.fromList)
+    sequenceN[IList, A](n, g, IListFromList)
 
   def sequenceNList[F[_], A](n: Int, g: Gen[A]): Gen[List[A]] = {
     @annotation.tailrec
@@ -134,7 +139,7 @@ object Gen extends GenInstances0 {
     listOfCBF[F, A](g, 0)
 
   def listOf[A](g: Gen[A], x: Int = 0): Gen[IList[A]] =
-    listOf_[IList, A](g, x, IList.fromList)
+    listOf_[IList, A](g, x, IListFromList)
 
   implicit def ilist[A](implicit A: Gen[A]): Gen[IList[A]] =
     listOf(A)

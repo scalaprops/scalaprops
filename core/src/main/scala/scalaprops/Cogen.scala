@@ -133,7 +133,7 @@ object Cogen extends CogenInstances0 {
     }
 
   implicit def cogenList[A: Cogen]: Cogen[List[A]] =
-    Cogen[IList[A]].contramap(IList.fromList)
+    Cogen[IList[A]].contramap(Gen.IListFromList)
 
   implicit def cogenVector[A: Cogen]: Cogen[Vector[A]] = {
     import std.vector._
