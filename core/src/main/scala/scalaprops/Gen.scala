@@ -363,6 +363,9 @@ object Gen extends GenInstances0 {
   implicit def optionTGen[F[_], A](implicit F: Gen[F[Option[A]]]): Gen[OptionT[F, A]] =
     F.map(OptionT.apply(_))
 
+  implicit def lazyOptionTGen[F[_], A](implicit F: Gen[F[LazyOption[A]]]): Gen[LazyOptionT[F, A]] =
+    F.map(LazyOptionT(_))
+
   implicit def coproductGen[F[_], G[_], A](implicit F: Gen[F[A] \/ G[A]]): Gen[Coproduct[F, G, A]] =
     F.map(Coproduct(_))
 
