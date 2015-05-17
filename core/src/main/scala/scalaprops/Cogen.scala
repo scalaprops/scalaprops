@@ -286,6 +286,9 @@ object Cogen extends CogenInstances {
         A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, A4.cogen(t._4, g))))
     }
 
+  implicit def cogenShrink[A: Gen: Cogen]: Cogen[Shrink[A]] =
+    Cogen[A => Stream[A]].contramap(_.f)
+
   implicit val instance: Contravariant[Cogen] =
     new Contravariant[Cogen] {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
