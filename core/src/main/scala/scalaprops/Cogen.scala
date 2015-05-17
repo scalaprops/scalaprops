@@ -184,6 +184,9 @@ object Cogen extends CogenInstances {
   implicit def cogenCoproduct[F[_], G[_], A](implicit A: Cogen[F[A] \/ G[A]]): Cogen[Coproduct[F, G, A]] =
     Cogen[F[A] \/ G[A]].contramap(_.run)
 
+  implicit def cogenConst[A, B](implicit A: Cogen[A]): Cogen[Const[A, B]] =
+    A.contramap(_.getConst)
+
   implicit def cogenZipper[A](implicit A: Cogen[A]): Cogen[Zipper[A]] =
     Cogen[(Stream[A], A, Stream[A])].contramap(z => (z.lefts, z.focus, z.rights))
 
