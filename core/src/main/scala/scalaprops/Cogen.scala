@@ -97,6 +97,14 @@ object Cogen extends CogenInstances {
   implicit def cogenDisjunction[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[A \/ B] =
     Cogen[Either[A, B]].contramap(_.toEither)
 
+  implicit val cogenOrdering: Cogen[Ordering] =
+    new Cogen[Ordering] {
+      def cogen[A](a: Ordering, g: Gen[A]) = a match {
+        case Ordering.GT => variant(0, g)
+        case Ordering.EQ => variant(1, g)
+        case Ordering.LT => variant(2, g)
+      }
+    }
 
   implicit def cogenOneOr[F[_], A: Cogen](implicit F: Cogen[F[A]]): Cogen[OneOr[F, A]] =
     Cogen[F[A] \/ A].contramap(_.run)
