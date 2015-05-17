@@ -172,6 +172,9 @@ object Cogen extends CogenInstances {
   implicit def cogenIndSeq[A: Cogen]: Cogen[IndSeq[A]] =
     Cogen[List[A]].contramap(Foldable[IndSeq].toList)
 
+  implicit def cogenDiev[A: Cogen]: Cogen[Diev[A]] =
+    Cogen[Vector[(A, A)]].contramap(_.intervals)
+
   implicit val cogenString: Cogen[String] =
     new Cogen[String] {
       def cogen[B](a: String, g: Gen[B]) =
