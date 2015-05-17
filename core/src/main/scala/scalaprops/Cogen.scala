@@ -211,6 +211,9 @@ object Cogen extends CogenInstances {
   implicit def cogenNullArgument[A: Gen, B: Cogen]: Cogen[NullArgument[A, B]] =
     Cogen[Option[A] => B].contramap(_.apply)
 
+  implicit def cogenContravariantCoyoneda[F[_]: Contravariant, A](implicit F: Cogen[F[A]]): Cogen[ContravariantCoyoneda[F, A]] =
+    Cogen[F[A]].contramap(_.run)
+
   implicit def cogenEitherT[F[_], A, B](implicit F: Cogen[F[A \/ B]]): Cogen[EitherT[F, A, B]] =
     F.contramap(_.run)
 
