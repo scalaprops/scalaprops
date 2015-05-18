@@ -516,7 +516,7 @@ object Gen extends GenInstances0 {
             for{
               sum <- State.get[Int]
               r <- if(sum >= max){
-                State.state[Int, Option[Int]](Option.empty[Int])
+                State.state[Int, Option[Int]](None)
               }else if((sum + n) > max){
                 State((s: Int) => (s + n) -> Option(max - sum))
               }else{
