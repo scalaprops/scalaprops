@@ -42,7 +42,7 @@ object ScalapropsRunner {
     Properties.noSort[Any](
       Tree.node(
         clazz.getName -> Maybe.empty,
-        tests.map(_.props)(collection.breakOut)
+        obj.transformProperties(tests).map(_.props)(collection.breakOut)
       )
     )
   }
