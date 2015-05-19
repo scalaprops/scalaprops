@@ -305,6 +305,9 @@ object Cogen extends CogenInstances0 {
         A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, A4.cogen(t._4, g))))
     }
 
+  implicit def cogenPartialFunction[A: Gen, B: Cogen]: Cogen[PartialFunction[A, B]] =
+    Cogen[A => Option[B]].contramap(_.lift)
+
   implicit def cogenShrink[A: Gen: Cogen]: Cogen[Shrink[A]] =
     Cogen[A => Stream[A]].contramap(_.f)
 
