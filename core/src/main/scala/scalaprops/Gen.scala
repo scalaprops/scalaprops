@@ -551,4 +551,7 @@ object Gen extends GenInstances0 {
       )
     }
   }
+
+  implicit def partialFunctionGen[A: Cogen, B: Gen]: Gen[PartialFunction[A, B]] =
+    Gen[A => Option[B]].map(Function.unlift)
 }
