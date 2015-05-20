@@ -7,7 +7,7 @@ import scalaz._
 object arrow {
 
   def identity[=>:[_, _]: Arrow, A](implicit E: Equal[A =>: A]): Property =
-    Property.prop(ArrowLaws[=>:].arrowIdentity[A])
+    forAll(ArrowLaws[=>:].arrowIdentity[A])
 
   def composition[=>:[_, _]: Arrow, A, B, C](implicit ab: Gen[A => B], bc: Gen[B => C], E: Equal[A =>: C]): Property =
     forAll(ArrowLaws[=>:].arrowComposition[A, B, C] _)

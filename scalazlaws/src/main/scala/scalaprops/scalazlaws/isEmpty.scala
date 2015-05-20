@@ -7,7 +7,7 @@ import scalaz._
 object isEmpty {
 
   def emptyIsEmpty[F[_], X](implicit F: IsEmpty[F]) =
-    Property.prop(F.isEmptyLaw.emptyIsEmpty[X])
+    forAll(F.isEmptyLaw.emptyIsEmpty[X])
 
   def emptyPlusIdentity[F[_], X](implicit f: IsEmpty[F], afx: Gen[F[X]]) =
     forAll(f.isEmptyLaw.emptyPlusIdentity[X] _)

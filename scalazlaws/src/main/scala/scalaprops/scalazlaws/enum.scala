@@ -14,10 +14,10 @@ object enum {
     forAll(A.enumLaw.predsucc _)
 
   def minmaxpred[A](implicit A: Enum[A]): Property =
-    Property.prop(A.enumLaw.minmaxpred)
+    forAll(A.enumLaw.minmaxpred)
 
   def minmaxsucc[A](implicit A: Enum[A]): Property =
-    Property.prop(A.enumLaw.minmaxsucc)
+    forAll(A.enumLaw.minmaxsucc)
 
   private[this] val smallInt = Gen.choose(-100, 100)
 
