@@ -130,6 +130,9 @@ object Property {
   def fromGen(g: Gen[Result]): Property =
     Property(g.f)
 
+  def propFromResultLazy(r: Need[Result]): Property =
+    Property((_, rand) => (r.value, rand))
+
   def propFromResult(r: Result): Property =
     Property((_, rand) => (r, rand))
 
@@ -137,6 +140,14 @@ object Property {
     if(b) Result.Proven
     else Result.Falsified(IList.empty)
   }
+
+  private[this] def propLazy(result: Need[Boolean]): Property =
+    propFromResultLazy {
+      Functor[Need].map(result){ r =>
+        if (r) Result.Proven
+        else Result.Falsified(IList.empty)
+      }
+    }
 
   def forall0[A](g: Gen[A], shrink: Shrink[A])(f: A => Property): Property =
     Property((i, r) => {
@@ -179,6 +190,9 @@ object Property {
       case t: Throwable =>
         Property((i, r) => Result.Exception(IList.empty, t) -> r)
     }
+
+  def forAll(result: => Boolean): Property =
+    propLazy(Need(result))
 
   def forAll[A1](f: A1 => Boolean)(implicit A1: Gen[A1]): Property =
     forall0(A1, Shrink.empty)(f.andThen(prop))
