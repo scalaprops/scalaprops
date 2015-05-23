@@ -29,9 +29,11 @@ object Common {
     Nil
   )
 
+  private[this] final val Scala211 = "2.11.6"
+
   val commonSettings = ReleasePlugin.releaseSettings ++ Seq(
-    scalaVersion := "2.11.6",
-    crossScalaVersions := scalaVersion.value :: "2.10.5" :: Nil,
+    scalaVersion := Scala211,
+    crossScalaVersions := Scala211 :: "2.10.5" :: Nil,
     organization := "com.github.xuwei-k",
     description := "property based testing library for Scala",
     homepage := Some(url("https://github.com/xuwei-k/scalaprops")),
