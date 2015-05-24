@@ -211,6 +211,9 @@ object ScalazLaw {
   val lensRetention = law0(lens, "retentions")
   val lensDoubleSet = law0(lens, "double set")
 
+  val iso = law("iso")
+  val isoA2B = law0(iso, "a to b")
+  val isoB2A = law0(iso, "b to a")
 
   val values: List[ScalazLaw] = set.toList
 
