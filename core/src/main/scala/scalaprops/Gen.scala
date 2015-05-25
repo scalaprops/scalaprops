@@ -261,7 +261,7 @@ object Gen extends GenInstances0 {
     choose('!', '~').map(_.toChar)
 
   val genAsciiString: Gen[String] =
-    listOf(genAsciiChar).map(_.foldLeft("")(_ + _))
+    arrayOf(genAsciiChar, 0).map(String.valueOf)
 
   implicit val genUnit: Gen[Unit] =
     value(())
