@@ -227,11 +227,17 @@ object Gen extends GenInstances0 {
   val genCharAll: Gen[Char] =
     genIntAll.map(_.toChar)
 
+  val genShortAll: Gen[Short] =
+    genIntAll.map(_.toShort)
+
   val genByteSized: Gen[Byte] =
     genIntSized.map(_.toByte)
 
   val genCharSized: Gen[Char] =
     genIntSized.map(_.toChar)
+
+  val genShortSized: Gen[Short] =
+    genIntSized.map(_.toShort)
 
   val genAsciiChar: Gen[Char] =
     choose('!', '~').map(_.toChar)
@@ -292,6 +298,18 @@ object Gen extends GenInstances0 {
         93 -> genByteAll
       )
     }
+
+  implicit val genShortBoundaries: Gen[Short] =
+    frequency(
+      1 -> value(0: Short),
+      1 -> value(1: Short),
+      1 -> value(-1: Short),
+      1 -> value(Short.MaxValue),
+      1 -> value((Short.MaxValue - 1).asInstanceOf[Short]),
+      1 -> value(Short.MinValue),
+      1 -> value((Short.MinValue + 1).asInstanceOf[Short]),
+      93 -> genShortAll
+    )
 
   implicit def lazyTuple2[A1, A2](implicit A1: Gen[A1], A2: Gen[A2]): Gen[LazyTuple2[A1, A2]] =
     Apply[Gen].apply2(A1, A2)(LazyTuple2(_, _))
