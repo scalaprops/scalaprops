@@ -65,10 +65,10 @@ object Gen extends GenInstances0 {
   private[this] def sequenceN[F[_], A](n: Int, g: Gen[A], f: List[A] => F[A]): Gen[F[A]] =
     sequenceNList(n, g).map(f)
 
-  private[this] def sequenceNIList[F[_], A](n: Int, g: Gen[A]): Gen[IList[A]] =
+  private[this] def sequenceNIList[A](n: Int, g: Gen[A]): Gen[IList[A]] =
     sequenceN[IList, A](n, g, IListFromList)
 
-  def sequenceNList[F[_], A](n: Int, g: Gen[A]): Gen[List[A]] = {
+  def sequenceNList[A](n: Int, g: Gen[A]): Gen[List[A]] = {
     @annotation.tailrec
     def loop(size: Int, i: Int, next: Rand, acc: List[A]): (List[A], Rand) = {
       if (i < n) {
