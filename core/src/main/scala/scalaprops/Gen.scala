@@ -68,6 +68,23 @@ object Gen extends GenInstances0 {
   private[this] def sequenceNIList[A](n: Int, g: Gen[A]): Gen[IList[A]] =
     sequenceN[IList, A](n, g, IListFromList)
 
+  def sequenceNArray[A: reflect.ClassTag](n: Int, g: Gen[A]): Gen[Array[A]] = {
+    val array = new Array[A](n)
+    @annotation.tailrec
+    def loop(size: Int, i: Int, next: Rand): (Array[A], Rand) = {
+      if (i < n) {
+        val r = g.f(size, next)
+        array(i) = r._1
+        loop(size, i + 1, r._2)
+      } else {
+        (array, next)
+      }
+    }
+    gen{ (size, r) =>
+      loop(size, 0, r)
+    }
+  }
+
   def sequenceNList[A](n: Int, g: Gen[A]): Gen[List[A]] = {
     @annotation.tailrec
     def loop(size: Int, i: Int, next: Rand, acc: List[A]): (List[A], Rand) = {
