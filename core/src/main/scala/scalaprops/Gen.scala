@@ -149,6 +149,13 @@ object Gen extends GenInstances0 {
       }
     }
 
+  private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], x: Int): Gen[Array[A]] =
+    parameterised{ (size, r) =>
+      chooseR(x, size, r).flatMap{ n =>
+        sequenceNArray(n, g)
+      }
+    }
+
   private[this] def listOfCBF[F[_], A](g: Gen[A], x: Int)(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
     listOf_[F, A](g, x, _.to[F])
 
