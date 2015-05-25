@@ -282,18 +282,16 @@ object Gen extends GenInstances0 {
     )
 
   implicit val genByteBoundaries: Gen[Byte] =
-    parameterised{ (_, r) =>
-      frequency(
-        1 -> value(0: Byte),
-        1 -> value(1: Byte),
-        1 -> value(-1: Byte),
-        1 -> value(Byte.MaxValue),
-        1 -> value(126: Byte),
-        1 -> value(Byte.MinValue),
-        1 -> value(-127: Byte),
-        93 -> genByteAll
-      )
-    }
+    frequency(
+      1 -> value(0: Byte),
+      1 -> value(1: Byte),
+      1 -> value(-1: Byte),
+      1 -> value(Byte.MaxValue),
+      1 -> value(126: Byte),
+      1 -> value(Byte.MinValue),
+      1 -> value(-127: Byte),
+      93 -> genByteAll
+    )
 
   implicit val genShortBoundaries: Gen[Short] =
     frequency(
