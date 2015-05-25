@@ -4,6 +4,7 @@ import Gen.gen
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
 import scalaz._
+import scalaz.Isomorphism.{<~>, IsoFunctorTemplate}
 
 final case class Gen[A] private(f: (Int, Rand) => (A, Rand)) {
 
@@ -37,6 +38,12 @@ final case class Gen[A] private(f: (Int, Rand) => (A, Rand)) {
 
   def infiniteStream(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): Stream[A] =
     Gen.infinite(size, Rand.standard(seed), this).toStream
+
+  def toReaderState: Kleisli[({type l[a] = State[Rand, a]})#l, Int, A] =
+    Gen.isoReaderState.to(this)
+
+  def toStateReader: StateT[({type l[a] = Reader[Int, a]})#l, Rand, A] =
+    Gen.isoStateReader.to(this)
 }
 
 
@@ -60,6 +67,30 @@ object Gen extends GenInstances0 {
 
   def value[A](a: A): Gen[A] =
     gen((_, r) => (a, r))
+
+  val isoReaderState: Gen <~> ({type x[a] = Kleisli[({type y[b] = State[Rand, b]})#y, Int, a]})#x =
+    new IsoFunctorTemplate[Gen, ({type x[a] = Kleisli[({type y[b] = State[Rand, b]})#y, Int, a]})#x] {
+      override def to[A](fa: Gen[A]) =
+        Kleisli[({type l[a] = State[Rand, a]})#l, Int, A] { size =>
+          State { rand =>
+            fa.f(size, rand).swap
+          }
+        }
+      override def from[A](ga: Kleisli[({type l[a] = State[Rand, a]})#l, Int, A]) =
+        gen((size, rand) => ga.run(size).run(rand).swap)
+    }
+
+  val isoStateReader: Gen <~> ({type x[a] = StateT[({type y[b] = Reader[Int, b]})#y, Rand, a]})#x =
+    new IsoFunctorTemplate[Gen, ({type x[a] = StateT[({type y[b] = Reader[Int, b]})#y, Rand, a]})#x] {
+      override def to[A](fa: Gen[A]) =
+        StateT[({type l[a] = Reader[Int, a]})#l, Rand, A] { rand =>
+          Reader { size =>
+            fa.f(size, rand).swap
+          }
+        }
+      override def from[A](ga: StateT[({type y[b] = Reader[Int, b]})#y, Rand, A]) =
+        gen((size, rand) => ga.run(rand).run(size).swap)
+    }
 
   def oneOf[A](x: Gen[A], xs: Gen[A]*): Gen[A] = {
     val array = (x +: xs).toArray[Any]
