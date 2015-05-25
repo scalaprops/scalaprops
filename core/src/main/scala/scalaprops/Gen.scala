@@ -258,32 +258,28 @@ object Gen extends GenInstances0 {
     maybe[A].map(_.toOption)
 
   implicit val genIntBoundaries: Gen[Int] =
-    parameterised{ (_, r) =>
-      frequency(
-        1 -> value(0),
-        1 -> value(1),
-        1 -> value(-1),
-        1 -> value(Int.MaxValue),
-        1 -> value(Int.MaxValue - 1),
-        1 -> value(Int.MinValue),
-        1 -> value(Int.MinValue + 1),
-        93 -> choose(Int.MinValue, Int.MaxValue)
-      )
-    }
+    frequency(
+      1 -> value(0),
+      1 -> value(1),
+      1 -> value(-1),
+      1 -> value(Int.MaxValue),
+      1 -> value(Int.MaxValue - 1),
+      1 -> value(Int.MinValue),
+      1 -> value(Int.MinValue + 1),
+      93 -> choose(Int.MinValue, Int.MaxValue)
+    )
 
   implicit val genLongBoundaries: Gen[Long] =
-    parameterised{ (_, r) =>
-      frequency(
-        1 -> value(0L),
-        1 -> value(1L),
-        1 -> value(-1L),
-        1 -> value(Long.MaxValue),
-        1 -> value(Long.MaxValue - 1),
-        1 -> value(Long.MinValue),
-        1 -> value(Long.MinValue + 1),
-        93 -> genLongAll
-      )
-    }
+    frequency(
+      1 -> value(0L),
+      1 -> value(1L),
+      1 -> value(-1L),
+      1 -> value(Long.MaxValue),
+      1 -> value(Long.MaxValue - 1),
+      1 -> value(Long.MinValue),
+      1 -> value(Long.MinValue + 1),
+      93 -> genLongAll
+    )
 
   implicit val genByteBoundaries: Gen[Byte] =
     parameterised{ (_, r) =>
