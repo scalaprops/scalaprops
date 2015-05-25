@@ -248,6 +248,9 @@ object Cogen extends CogenInstances0 {
   implicit def cogenIndexedReaderWriterStateT[F[_], R, W, S1, S2, A](implicit F: Cogen[(R, S1) => F[(W, A, S2)]]): Cogen[IndexedReaderWriterStateT[F, R, W, S1, S2, A]] =
     F.contramap(_.run)
 
+  implicit def cogenIndexedStateT[F[_], S1, S2, A](implicit F: Cogen[S1 => F[(S2, A)]]): Cogen[IndexedStateT[F, S1, S2, A]] =
+    F.contramap(s => s.apply(_))
+
   implicit def cogenWriterT[F[_], A, B](implicit F: Cogen[F[(A, B)]]): Cogen[WriterT[F, A, B]] =
     F.contramap(_.run)
 
