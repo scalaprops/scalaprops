@@ -257,11 +257,80 @@ object Gen extends GenInstances0 {
   val genShortSized: Gen[Short] =
     genIntSized.map(_.toShort)
 
-  val genAsciiChar: Gen[Char] =
+  val asciiChar: Gen[Char] =
     choose('!', '~').map(_.toChar)
 
-  val genAsciiString: Gen[String] =
-    arrayOf(genAsciiChar, 0).map(String.valueOf)
+  implicit val genAsciiChar: Gen[Char @@ GenTags.Ascii] =
+    GenTags.Ascii.subst(asciiChar)
+
+  val numChar: Gen[Char] =
+    choose('0', '9').map(_.toChar)
+
+  implicit val genNumChar: Gen[Char @@ GenTags.Num] =
+    GenTags.Num.subst(numChar)
+
+  val alphaUpperChar: Gen[Char] =
+    choose('A', 'Z').map(_.toChar)
+
+  implicit val genAlphaUpperChar: Gen[Char @@ GenTags.AlphaUpper] =
+    GenTags.AlphaUpper.subst(alphaUpperChar)
+
+  val alphaLowerChar: Gen[Char] =
+    choose('a', 'z').map(_.toChar)
+
+  implicit val genAlphaLowerChar: Gen[Char @@ GenTags.AlphaLower] =
+    GenTags.AlphaLower.subst(alphaLowerChar)
+
+  val alphaChar: Gen[Char] =
+    Gen.oneOf(alphaLowerChar, alphaUpperChar)
+
+  implicit val genAlphaChar: Gen[Char @@ GenTags.Alpha] =
+    GenTags.Alpha.subst(alphaChar)
+
+  val alphaNumChar: Gen[Char] =
+    Gen.oneOf(alphaLowerChar, alphaUpperChar, numChar)
+
+  implicit val genAlphaNumChar: Gen[Char @@ GenTags.AlphaNum] =
+    GenTags.AlphaNum.subst(alphaNumChar)
+
+  private[this] def genString(g: Gen[Char]): Gen[String] =
+    arrayOf(g, 0).map(String.valueOf)
+
+  val numString: Gen[String] =
+    genString(numChar)
+
+  implicit val genNumString: Gen[String @@ GenTags.Num] =
+    GenTags.Num.subst(numString)
+
+  val alphaUpperString: Gen[String] =
+    genString(alphaUpperChar)
+
+  implicit val genAlphaUpperString: Gen[String @@ GenTags.AlphaUpper] =
+    GenTags.AlphaUpper.subst(alphaUpperString)
+
+  val alphaLowerString: Gen[String] =
+    genString(alphaLowerChar)
+
+  implicit val genAlphaLowerString: Gen[String @@ GenTags.AlphaLower] =
+    GenTags.AlphaLower.subst(alphaLowerString)
+
+  val alphaString: Gen[String] =
+    genString(alphaChar)
+
+  implicit val genAlphaString: Gen[String @@ GenTags.Alpha] =
+    GenTags.Alpha.subst(alphaString)
+
+  val alphaNumString: Gen[String] =
+    genString(alphaNumChar)
+
+  implicit val genAlphaNumString: Gen[String @@ GenTags.AlphaNum] =
+    GenTags.AlphaNum.subst(alphaNumString)
+
+  val asciiString: Gen[String] =
+    genString(asciiChar)
+
+  implicit val genAsciiString: Gen[String @@ GenTags.Ascii] =
+    GenTags.Ascii.subst(asciiString)
 
   implicit val genUnit: Gen[Unit] =
     value(())
