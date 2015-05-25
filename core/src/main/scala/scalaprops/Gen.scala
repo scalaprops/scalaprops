@@ -62,7 +62,7 @@ object Gen extends GenInstances0 {
     choose(0, xs.length).flatMap(array(_).asInstanceOf[Need[Gen[A]]].value)
   }
 
-  private[this] def sequenceN[F[_]: Traverse, A](n: Int, g: Gen[A], f: List[A] => F[A]): Gen[F[A]] =
+  private[this] def sequenceN[F[_], A](n: Int, g: Gen[A], f: List[A] => F[A]): Gen[F[A]] =
     sequenceNList(n, g).map(f)
 
   private[this] def sequenceNIList[F[_], A](n: Int, g: Gen[A]): Gen[IList[A]] =
@@ -125,17 +125,17 @@ object Gen extends GenInstances0 {
     choose(0, as.length).map{xs(_).asInstanceOf[A]}
   }
 
-  private[this] def listOf_[F[_]: Traverse, A](g: Gen[A], x: Int, f: List[A] => F[A]): Gen[F[A]] =
+  private[this] def listOf_[F[_], A](g: Gen[A], x: Int, f: List[A] => F[A]): Gen[F[A]] =
     parameterised{ (size, r) =>
       chooseR(x, size, r).flatMap{ n =>
         sequenceN(n, g, f)
       }
     }
 
-  private[this] def listOfCBF[F[_]: Traverse, A](g: Gen[A], x: Int)(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
+  private[this] def listOfCBF[F[_], A](g: Gen[A], x: Int)(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
     listOf_[F, A](g, x, _.to[F])
 
-  private[this] def listOfCBF0[F[_]: Traverse, A](g: Gen[A])(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
+  private[this] def listOfCBF0[F[_], A](g: Gen[A])(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
     listOfCBF[F, A](g, 0)
 
   def listOf[A](g: Gen[A], x: Int = 0): Gen[IList[A]] =
@@ -144,10 +144,8 @@ object Gen extends GenInstances0 {
   implicit def ilist[A](implicit A: Gen[A]): Gen[IList[A]] =
     listOf(A)
 
-  implicit def vector[A](implicit A: Gen[A]): Gen[Vector[A]] = {
-    import scalaz.std.vector._
+  implicit def vector[A](implicit A: Gen[A]): Gen[Vector[A]] =
     listOfCBF0[Vector, A](A)
-  }
 
   implicit def mapGen[A: Gen, B: Gen]: Gen[Map[A, B]] =
     list[(A, B)].map(_.toMap)
@@ -155,15 +153,11 @@ object Gen extends GenInstances0 {
   implicit def setGen[A: Gen]: Gen[Set[A]] =
     list[A].map(_.toSet)
 
-  implicit def streamGen[A](implicit A: Gen[A]): Gen[Stream[A]] = {
-    import scalaz.std.stream._
+  implicit def streamGen[A](implicit A: Gen[A]): Gen[Stream[A]] =
     listOfCBF0[Stream, A](A)
-  }
 
-  implicit def list[A](implicit A: Gen[A]): Gen[List[A]] = {
-    import scalaz.std.list._
+  implicit def list[A](implicit A: Gen[A]): Gen[List[A]] =
     listOfCBF0[List, A](A)
-  }
 
   implicit def arrayGen[A: reflect.ClassTag: Gen]: Gen[Array[A]] =
     Gen[List[A]].map(_.toArray)
