@@ -63,6 +63,12 @@ object Rand{
       (next, next)
     }
 
+  implicit val randCogen: Cogen[Rand] =
+    new Cogen[Rand] {
+      def cogen[B](a: Rand, g: Gen[B]): Gen[B] =
+        Gen.gen((size, _) => g.f(size, a))
+    }
+
   implicit val randEqual: Equal[Rand] =
     Equal.equalA[Rand]
 
