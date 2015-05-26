@@ -1,6 +1,6 @@
 # scalaprops
 
-[![Build Status](https://secure.travis-ci.org/xuwei-k/scalaprops.png)](http://travis-ci.org/xuwei-k/scalaprops)
+[![Build Status](https://secure.travis-ci.org/scalaprops/scalaprops.png)](http://travis-ci.org/scalaprops/scalaprops)
 
 property based testing library for Scala
 
@@ -44,16 +44,16 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false
 
-libraryDependencies += "com.github.xuwei-k" %% "scalaprops" % "0.1.5-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.5-SNAPSHOT" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.xuwei-k" %% "scalaprops-scalazlaws" % "0.1.5-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.5-SNAPSHOT" % "test"
 ```
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.5-SNAPSHOT/scalaprops-all_2.11-0.1.5-SNAPSHOT-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/scalaprops-all_2.11/0.1.5-SNAPSHOT/scalaprops-all_2.11-0.1.5-SNAPSHOT-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.5-SNAPSHOT/scalaprops-all_2.11-0.1.5-SNAPSHOT-javadoc.jar/!/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.5-SNAPSHOT/scalaprops-all_2.11-0.1.5-SNAPSHOT-sxr.jar/!/index.html)
 
 
-![screencast](https://raw.githubusercontent.com/xuwei-k/scalaprops/master/screencast.gif)
+![screencast](https://raw.githubusercontent.com/scalaprops/scalaprops/master/screencast.gif)

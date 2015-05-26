@@ -34,9 +34,9 @@ object Common {
   val commonSettings = ReleasePlugin.releaseSettings ++ Seq(
     scalaVersion := Scala211,
     crossScalaVersions := Scala211 :: "2.10.5" :: Nil,
-    organization := "com.github.xuwei-k",
+    organization := "com.github.scalaprops",
     description := "property based testing library for Scala",
-    homepage := Some(url("https://github.com/xuwei-k/scalaprops")),
+    homepage := Some(url("https://github.com/scalaprops/scalaprops")),
     licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
     commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
     pomPostProcess := { node =>
@@ -53,7 +53,7 @@ object Common {
       val tag = if(isSnapshot.value) gitHash else { "v" + version.value }
       Seq(
         "-sourcepath", (baseDirectory in LocalRootProject).value.getAbsolutePath,
-        "-doc-source-url", s"https://github.com/xuwei-k/scalaprops/tree/${tag}€{FILE_PATH}.scala"
+        "-doc-source-url", s"https://github.com/scalaprops/scalaprops/tree/${tag}€{FILE_PATH}.scala"
       )
     },
     pomExtra := (
@@ -65,8 +65,8 @@ object Common {
         </developer>
       </developers>
       <scm>
-        <url>git@github.com:xuwei-k/scalaprops.git</url>
-        <connection>scm:git:git@github.com:xuwei-k/scalaprops.git</connection>
+        <url>git@github.com:scalaprops/scalaprops.git</url>
+        <connection>scm:git:git@github.com:scalaprops/scalaprops.git</connection>
         <tag>{if(isSnapshot.value) gitHash else { "v" + version.value }}</tag>
       </scm>
     ),
