@@ -1,6 +1,7 @@
 package scalaprops
 
 import java.lang.Thread.UncaughtExceptionHandler
+import java.lang.reflect.Method
 import java.util.concurrent.{TimeoutException, ForkJoinPool}
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
 import sbt.testing._
@@ -10,20 +11,25 @@ import scala.reflect.NameTransformer
 
 object ScalapropsRunner {
 
-  private[this] def invokeProperty(clazz: Class[_], obj: Scalaprops): List[(String, Property)] =
+  def testFieldNames(clazz: Class[_]): Array[String] =
+    Array(
+      findTestFields(clazz, classOf[Property]),
+      findTestFields(clazz, classOf[Properties[_]])
+    ).flatten.map(_.getName)
+
+  private[this] def findTestFields(clazz: Class[_], fieldType: Class[_]): Array[Method] =
     clazz.getMethods.filter(method =>
-      method.getParameterTypes.length == 0 &&
-      method.getReturnType == classOf[Property]
-    ).map{ method =>
+      method.getParameterTypes.length == 0 && method.getReturnType == fieldType
+    )
+
+  private[this] def invokeProperty(clazz: Class[_], obj: Scalaprops): List[(String, Property)] =
+    findTestFields(clazz, classOf[Property]).map{ method =>
       val p = method.invoke(obj).asInstanceOf[Property]
       NameTransformer.decode(method.getName) -> p
     }.toList
 
   private[this] def invokeProperties(clazz: Class[_], obj: Scalaprops): List[Properties[Any]] =
-    clazz.getMethods.withFilter(method =>
-      method.getParameterTypes.length == 0 &&
-      method.getReturnType == classOf[Properties[_]]
-    ).map{ method =>
+    findTestFields(clazz, classOf[Properties[_]]).map{ method =>
       val methodName = NameTransformer.decode(method.getName)
       val props = method.invoke(obj).asInstanceOf[Properties[Any]].props
       Properties.noSort[Any](
@@ -34,10 +40,22 @@ object ScalapropsRunner {
       )
     }(collection.breakOut)
 
-  private def allProps(clazz: Class[_], obj: Scalaprops): Properties[_] = {
-    val tests = invokeProperty(clazz, obj).map {
+  private def allProps(clazz: Class[_], obj: Scalaprops, only: Option[NonEmptyList[String]], logger: Logger): Properties[_] = {
+    val tests0 = invokeProperty(clazz, obj).map {
       case (name, p) => p.toProperties[Any](name)
     } ::: invokeProperties(clazz, obj)
+
+    val tests = only match {
+      case Some(names) =>
+        val set = Foldable[NonEmptyList].toSet(names)
+        val actualTests: Set[String] = tests0.map(_.id.toString)(collection.breakOut)
+        set.filterNot(actualTests).foreach{ typo =>
+          logger.warn(s"""'${clazz.getCanonicalName.dropRight(1)}.$typo' does not exists""")
+        }
+        tests0.filter(p => set(p.id.toString))
+      case None =>
+        tests0
+    }
 
     Properties.noSort[Any](
       Tree.node(
@@ -100,10 +118,14 @@ final class ScalapropsRunner(
           false
         )
 
+        val only = scalaz.std.list.toNel(
+          args.dropWhile("--only" != _).drop(1).takeWhile(arg => !arg.startsWith("--")).toList
+        )
+
         try {
           val clazz = testClassLoader.loadClass(testClassName + "$")
           val obj = clazz.getDeclaredField("MODULE$").get(null).asInstanceOf[Scalaprops]
-          val test = ScalapropsRunner.allProps(clazz, obj)
+          val test = ScalapropsRunner.allProps(clazz, obj, only, log)
           val result = test.props.map { case (id, checkOpt) =>
             val name = id.toString // TODO create type class ?
             (id: Any) -> (checkOpt match{
