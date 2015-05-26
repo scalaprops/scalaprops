@@ -31,7 +31,7 @@ object Common {
 
   private[this] final val Scala211 = "2.11.6"
 
-  val commonSettings = ReleasePlugin.releaseSettings ++ Seq(
+  val commonSettings = ReleasePlugin.releaseSettings ++ scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     scalaVersion := Scala211,
     crossScalaVersions := Scala211 :: "2.10.5" :: Nil,
     organization := "com.github.scalaprops",
