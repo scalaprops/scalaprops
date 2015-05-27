@@ -3,6 +3,7 @@ package scalaprops
 import scalaprops.Property.forAll
 import scalaz._
 import scalaz.std.string._
+import scalaprops.GenTags._
 
 object CharTest extends Scalaprops {
 
@@ -17,11 +18,24 @@ object CharTest extends Scalaprops {
     A.samples(listSize = 500).distinct.size == size
   }
 
-  private[this] def check[A](expect: Seq[Char])(implicit A: Gen[Char @@ A]) =
-    Properties.list(
+  private[this] def check[A](expect: Seq[Char])(implicit
+    A: Gen[Char @@ A],
+    M: Monoid[Char @@ A],
+    E: Enum[Char @@ A],
+    S: Show[Char @@ A]
+  ) = {
+    val x = Properties.list(
       checkValues[A](expect).toProperties("values"),
       checkSize[A](expect.distinct.size).toProperties("size")
     )
+
+    val y = Properties.list(
+      scalazlaws.enum.all[Char @@ A],
+      scalazlaws.monoid.all[Char @@ A]
+    )
+
+    x.product(y)
+  }
 
   val num = check[GenTags.Num]('0' to '9')
   val upper = check[GenTags.AlphaUpper]('A' to 'Z')
