@@ -2,32 +2,33 @@ package scalaprops
 
 import scalaprops.Property.forAll
 import scalaz._
+import scalaprops.GenTags._
 
 object StringTest extends Scalaprops {
 
-  val num = forAll{ str: (String @@ GenTags.Num) =>
-    val expect = ('0' to '9').toSet
-    Tag.unwrap(str).forall(expect)
+  private[this] def test[A](values: Seq[Char])(implicit
+    M: Monoid[String @@ A],
+    G: Gen[String @@ A],
+    S: Show[String @@ A],
+    O: Order[String @@ A],
+    I: IsEmpty[({type l[_] = String @@ A})#l]
+  ) = {
+    val expect = values.toSet
+    val x = forAll{ str: (String @@ A) =>
+      Tag.unwrap(str).forall(expect)
+    }
+    val y = Properties.list(
+      scalazlaws.monoid.all[String @@ A],
+      scalazlaws.order.all[String @@ A],
+      scalazlaws.isEmpty.all[({type l[_] = String @@ A})#l]
+    )
+    x.toProperties(()).product(y)
   }
 
-  val upper = forAll{ str: (String @@ GenTags.AlphaUpper) =>
-    val expect = ('A' to 'Z').toSet
-    Tag.unwrap(str).forall(expect)
-  }
-
-  val lower = forAll{ str: (String @@ GenTags.AlphaLower) =>
-    val expect = ('a' to 'z').toSet
-    Tag.unwrap(str).forall(expect)
-  }
-
-  val alpha = forAll{ str: (String @@ GenTags.Alpha) =>
-    val expect = (('a' to 'z') ++ ('A' to 'Z')).toSet
-    Tag.unwrap(str).forall(expect)
-  }
-
-  val alphaNum = forAll{ str: (String @@ GenTags.AlphaNum) =>
-    val expect = (('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9')).toSet
-    Tag.unwrap(str).forall(expect)
-  }
+  val num = test[GenTags.Num]('0' to '9')
+  val upper = test[GenTags.AlphaUpper]('A' to 'Z')
+  val lower = test[GenTags.AlphaLower]('a' to 'z')
+  val alpha = test[GenTags.Alpha](('a' to 'z') ++ ('A' to 'Z'))
+  val alphaNum = test[GenTags.AlphaNum](('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9'))
 
 }
