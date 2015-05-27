@@ -32,6 +32,19 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
 
   def ignore(reason: String): Properties[A] =
     mapCheck(_.map(_.ignore(reason)))
+
+  def product[B](that: Properties[B]): Properties[Unit :-: A :-: B :-: Or.Empty] = {
+    type T = Unit :-: A :-: B :-: Or.Empty
+    Properties.noSort[T](
+      Tree.node(
+        Or[T](()) -> Maybe.empty[Check],
+        Stream(
+          this.mapId(Or[T].apply(_)).props,
+          that.mapId(Or[T].apply(_)).props
+        )
+      )
+    )
+  }
 }
 
 object Properties {
