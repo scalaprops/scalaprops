@@ -65,6 +65,12 @@ object Cogen extends CogenInstances0 {
   implicit val cogenDouble: Cogen[Double] =
     Cogen[Long].contramap(java.lang.Double.doubleToLongBits)
 
+  implicit val cogenBigInteger: Cogen[java.math.BigInteger] =
+    Cogen[Array[Byte]].contramap(_.toByteArray)
+
+  implicit val cogenBigInt: Cogen[BigInt] =
+    Cogen[Array[Byte]].contramap(_.toByteArray)
+
   implicit def cogenOption[A](implicit A: Cogen[A]): Cogen[Option[A]] =
     new Cogen[Option[A]] {
       def cogen[B](a: Option[A], g: Gen[B]) = a match {
