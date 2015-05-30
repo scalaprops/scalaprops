@@ -696,7 +696,7 @@ object Gen extends GenInstances0 {
     F.map(NullArgument(_))
 
   implicit def nonEmptyList[A](implicit A: Gen[A]): Gen[NonEmptyList[A]] =
-    Apply[Gen].apply2(A, Gen[List[A]])(NonEmptyList.nel)
+    Apply[Gen].apply2(A, Gen[IList[A]])(NonEmptyList.nel)
 
   implicit def oneAnd[F[_], A](implicit F: Gen[F[A]], A: Gen[A]): Gen[OneAnd[F, A]] =
     Apply[Gen].apply2(A, F)(OneAnd(_, _))
@@ -786,6 +786,9 @@ object Gen extends GenInstances0 {
 
   implicit def indexedStoreTGen[F[_], I: Gen, A, B](implicit F: Gen[F[A => B]]): Gen[IndexedStoreT[F, I, A, B]] =
     Gen[(F[A => B], I)].map(IndexedStoreT(_))
+
+  implicit def tracedTGen[W[_], A, B](implicit W: Gen[W[A => B]]): Gen[TracedT[W, A, B]] =
+    W.map(TracedT(_))
 
   implicit val orderingGen: Gen[Ordering] =
     elements(

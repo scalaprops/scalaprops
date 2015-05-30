@@ -244,7 +244,7 @@ object Cogen extends CogenInstances0 {
     Cogen[IList[A]].contramap(_.toIList)
 
   implicit def cogenNonEmptyList[A: Cogen]: Cogen[NonEmptyList[A]] =
-    Cogen[(A, List[A])].contramap(nel => (nel.head, nel.tail))
+    Cogen[(A, IList[A])].contramap(nel => (nel.head, nel.tail))
 
   implicit def cogenIndSeq[A: Cogen]: Cogen[IndSeq[A]] =
     Cogen[List[A]].contramap(Foldable[IndSeq].toList)
@@ -269,6 +269,9 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenZipper[A](implicit A: Cogen[A]): Cogen[Zipper[A]] =
     Cogen[(Stream[A], A, Stream[A])].contramap(z => (z.lefts, z.focus, z.rights))
+
+  implicit def cogenTracedT[W[_], A, B](implicit W: Cogen[W[A => B]]): Cogen[TracedT[W, A, B]] =
+    W.contramap(_.run)
 
   implicit def cogenIndexedStoreT[F[_], I: Cogen, A, B](implicit F: Cogen[F[A => B]]): Cogen[IndexedStoreT[F, I, A, B]] =
     Cogen[(F[A => B], I)].contramap(_.run)
