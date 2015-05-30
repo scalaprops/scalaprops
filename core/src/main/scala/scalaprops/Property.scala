@@ -151,7 +151,6 @@ object Property {
 
   def forall0[A](g: Gen[A], shrink: Shrink[A])(f: A => Property): Property =
     Property((i, r) => {
-      val failed: Maybe[(A, Result, Rand)] => Boolean = _.exists(_._2.failed)
       def first(as: Stream[(A, Rand)], shrinks: Int): Maybe[(A, Result, Rand)] = {
         as.map{ case (a, rr) =>
           val x = exception(f(a)).f(i, rr)
@@ -162,22 +161,21 @@ object Property {
           case Stream() =>
             Maybe.empty
           case results @ (h #:: _)=>
-            results.find(failed).getOrElse(h)
+            results.find(_.exists(_._2.failed)).getOrElse(h)
         }
       }
 
       first(Stream(g.f(i, r)), 0) match {
-        case xx @ Maybe.Just((a, re, rand)) if re.failed =>
+        case Maybe.Just(xx @ (a, re, rand)) if re.failed =>
           @annotation.tailrec
-          def loop(shrinks: Int, x: Maybe[(A, Result, Rand)]): Maybe[(Result, Rand)] = {
-            val x0 = first(shrink(a).map(_ -> rand.next), shrinks)
-            if(failed(x0)) {
-              loop(shrinks + 1, x0)
-            } else {
-              x.map(t => (t._2, t._3))
+          def loop(shrinks: Int, x: (A, Result, Rand)): (Result, Rand) =
+            first(shrink(x._1).map(_ -> rand.next), shrinks) match {
+              case Maybe.Just((aa, result, rr)) if result.failed =>
+                loop(shrinks + 1, (aa, result, rr.next))
+              case _ =>
+                (x._2, x._3)
             }
-          }
-          loop(1, xx).getOrElse((Result.NoResult, Rand.standard(0)))
+          loop(1, xx)
         case xx =>
           xx.map(t => (t._2, t._3)).getOrElse((Result.NoResult, Rand.standard(0)))
       }
