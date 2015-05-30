@@ -13,7 +13,7 @@ object KleisliTest extends Scalaprops {
     Equal[A => F[B]].contramap(_.run)
   }
 
-  private def kleisliTest[F[_]: Monad](implicit
+  private def kleisliTest[F[_]: Monad: Zip](implicit
     F: Equal[F[Int]],
     E1: Equal[F[(Int, Int)]],
     E2: Equal[F[(Int, (Int, Int))]],
@@ -26,6 +26,7 @@ object KleisliTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.monad.all[K1],
+      scalazlaws.zip.all[K1],
       scalazlaws.arrow.all[K2]
     )
   }
@@ -42,6 +43,18 @@ object KleisliTest extends Scalaprops {
 
 
   val testMaybe = kleisliTest[Maybe]
+
+  val disjunctionMonadError = {
+    implicit def gen0[F[_, _], A, B, C](implicit G: Gen[A => F[B, C]], B: Bind[({type l[a] = F[B, a]})#l]): Gen[Kleisli[({type l[a] = F[B, a]})#l, A, C]] =
+      G.map(Kleisli.kleisliU(_))
+
+    implicit def equal0[F[_, _], A, B, C](implicit E: Equal[A => F[B, C]]): Equal[Kleisli[({type l[a] = F[B, a]})#l, A, C]] =
+      E.contramap(_.run)
+
+    import e._
+
+    scalazlaws.monadError.laws[({type x[a, b] = Kleisli[({type y[c] = a \/ c})#y, Byte, b]})#x, Byte]
+  }
 
   val testIList = kleisliTest[IList].andThenParamPF{
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
