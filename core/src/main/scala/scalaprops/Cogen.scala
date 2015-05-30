@@ -176,6 +176,9 @@ object Cogen extends CogenInstances0 {
   implicit def cogenEphemeralStream[A: Cogen]: Cogen[EphemeralStream[A]] =
     Cogen[List[A]].contramap(_.toList)
 
+  implicit def cogenHeap[A: Cogen]: Cogen[Heap[A]] =
+    Cogen[Stream[A]].contramap(_.toUnsortedStream)
+
   implicit def cogenDequeue[A: Cogen]: Cogen[Dequeue[A]] =
     Cogen[IList[A]].contramap(_.toIList)
 
