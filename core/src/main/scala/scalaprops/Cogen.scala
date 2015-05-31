@@ -65,6 +65,30 @@ object Cogen extends CogenInstances0 {
   implicit val cogenDouble: Cogen[Double] =
     Cogen[Long].contramap(java.lang.Double.doubleToLongBits)
 
+  implicit val cogenJavaBoolean: Cogen[java.lang.Boolean] =
+    Cogen[Boolean].contramap(_.booleanValue)
+
+  implicit val cogenJavaInteger: Cogen[java.lang.Integer] =
+    Cogen[Int].contramap(_.intValue)
+
+  implicit val cogenJavaByte: Cogen[java.lang.Byte] =
+    Cogen[Byte].contramap(_.byteValue)
+
+  implicit val cogenJavaShort: Cogen[java.lang.Short] =
+    Cogen[Short].contramap(_.shortValue)
+
+  implicit val cogenJavaLong: Cogen[java.lang.Long] =
+    Cogen[Long].contramap(_.longValue)
+
+  implicit val cogenJavaCharacter: Cogen[java.lang.Character] =
+    Cogen[Char].contramap(_.charValue)
+
+  implicit val cogenJavaFloat: Cogen[java.lang.Float] =
+    Cogen[Float].contramap(_.floatValue)
+
+  implicit val cogenJavaDouble: Cogen[java.lang.Double] =
+    Cogen[Double].contramap(_.doubleValue)
+
   implicit val cogenBigInteger: Cogen[java.math.BigInteger] =
     Cogen[Array[Byte]].contramap(_.toByteArray)
 
