@@ -200,6 +200,9 @@ object Cogen extends CogenInstances0 {
         cogenIList(cogenChar).cogen(IList(a.toCharArray: _*), g)
     }
 
+  implicit val cogenSymbol: Cogen[Symbol] =
+    Cogen[String].contramap(_.name)
+
   implicit def cogenCoproduct[F[_], G[_], A](implicit A: Cogen[F[A] \/ G[A]]): Cogen[Coproduct[F, G, A]] =
     Cogen[F[A] \/ G[A]].contramap(_.run)
 
