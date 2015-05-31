@@ -395,6 +395,21 @@ object Gen extends GenInstances0 {
       93 -> genShortAll
     )
 
+  implicit val javaIntegerGen: Gen[java.lang.Integer] =
+    Gen[Int].map(Integer.valueOf)
+
+  implicit val javaLongGen: Gen[java.lang.Long] =
+    Gen[Long].map(java.lang.Long.valueOf)
+
+  implicit val javaByteGen: Gen[java.lang.Byte] =
+    Gen[Byte].map(java.lang.Byte.valueOf)
+
+  implicit val javaShortGen: Gen[java.lang.Short] =
+    Gen[Short].map(java.lang.Short.valueOf)
+
+  implicit val javaBooleanGen: Gen[java.lang.Boolean] =
+    Gen.elements(java.lang.Boolean.TRUE, java.lang.Boolean.FALSE)
+
   implicit def lazyTuple2[A1, A2](implicit A1: Gen[A1], A2: Gen[A2]): Gen[LazyTuple2[A1, A2]] =
     Apply[Gen].apply2(A1, A2)(LazyTuple2(_, _))
 
