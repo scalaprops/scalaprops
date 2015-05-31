@@ -107,6 +107,9 @@ object Cogen extends CogenInstances0 {
       }
     }
 
+  implicit def cogenLazyEither[A: Cogen, B: Cogen]: Cogen[LazyEither[A, B]] =
+    Cogen[Either[A, B]].contramap(_.toEither)
+
   implicit def cogenDisjunction[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[A \/ B] =
     Cogen[Either[A, B]].contramap(_.toEither)
 
