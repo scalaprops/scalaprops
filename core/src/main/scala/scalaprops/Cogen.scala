@@ -159,7 +159,7 @@ object Cogen extends CogenInstances0 {
     new Cogen[IList[A]] {
       def cogen[B](a: IList[A], g: Gen[B]): Gen[B] = a match {
         case ICons(h, t) =>
-          variant(1, A.cogen(h, cogenIList[A].cogen(t, g)))
+          variant(1, A.cogen(h, cogen(t, g)))
         case INil() =>
           g
       }
