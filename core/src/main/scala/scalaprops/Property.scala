@@ -109,8 +109,8 @@ final case class Property(f: (Int, Rand) => (Result, Rand)) {
     loop(0, 0, minSize, param.rand)
   }
 
-  def toProperties[A](id: A): Properties[A] =
-    Properties.single(id, this)
+  def toProperties[A](id: A, param: Endo[Param] = Param.id): Properties[A] =
+    Properties.single(id, Check(this, param))
 
   def ignore(reason: String): Property =
     Property((_, rand) => (Result.Ignored(reason), rand))
