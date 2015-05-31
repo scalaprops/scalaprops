@@ -137,7 +137,7 @@ object Cogen extends CogenInstances0 {
         case ICons(h, t) =>
           variant(1, A.cogen(h, cogenIList[A].cogen(t, g)))
         case INil() =>
-          variant(0, g)
+          g
       }
     }
 
