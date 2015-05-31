@@ -326,6 +326,42 @@ object Cogen extends CogenInstances0 {
   implicit def cogenShrink[A: Gen: Cogen]: Cogen[Shrink[A]] =
     Cogen[A => Stream[A]].contramap(_.f)
 
+  implicit val cogenNumChar: Cogen[Char @@ GenTags.Num] =
+    Tag.subst(Cogen[Char])
+
+  implicit val cogenNumString: Cogen[String @@ GenTags.Num] =
+    Tag.subst(Cogen[String])
+
+  implicit val cogenAlphaUpperChar: Cogen[Char @@ GenTags.AlphaUpper] =
+    Tag.subst(Cogen[Char])
+
+  implicit val cogenAlphaUpperString: Cogen[String @@ GenTags.AlphaUpper] =
+    Tag.subst(Cogen[String])
+
+  implicit val cogenAlphaLowerChar: Cogen[Char @@ GenTags.AlphaLower] =
+    Tag.subst(Cogen[Char])
+
+  implicit val cogenAlphaLowerString: Cogen[String @@ GenTags.AlphaLower] =
+    Tag.subst(Cogen[String])
+
+  implicit val cogenAlphaChar: Cogen[Char @@ GenTags.Alpha] =
+    Tag.subst(Cogen[Char])
+
+  implicit val cogenAlphaString: Cogen[String @@ GenTags.Alpha] =
+    Tag.subst(Cogen[String])
+
+  implicit val cogenAlphaNumChar: Cogen[Char @@ GenTags.AlphaNum] =
+    Tag.subst(Cogen[Char])
+
+  implicit val cogenAlphaNumString: Cogen[String @@ GenTags.AlphaNum] =
+    Tag.subst(Cogen[String])
+
+  implicit val cogenAsciiChar: Cogen[Char @@ GenTags.Ascii] =
+    Tag.subst(Cogen[Char])
+
+  implicit val cogenAsciiString: Cogen[String @@ GenTags.Ascii] =
+    Tag.subst(Cogen[String])
+
   implicit val instance: Contravariant[Cogen] =
     new Contravariant[Cogen] {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
