@@ -10,7 +10,7 @@ object PropertyTest extends Scalaprops{
       sideEffect = true
       true
     }
-    assert(sideEffect == false)
+    Macros.assertEqual(sideEffect, false)
     p.check(Param.withCurrentTimeSeed(), new AtomicBoolean(), _ => ())
     sideEffect
   }
@@ -19,9 +19,9 @@ object PropertyTest extends Scalaprops{
     val f = Bool.bool(false)
     var flag = true
     def sideEffect(): Unit = flag = false
-    assert(f.implies[Boolean]{ sideEffect(); true}.f(100, param.rand)._2.isNoResult)
-    assert(f.implies[Bool]{ sideEffect(); f}.f(100, param.rand)._2.isNoResult)
-    assert(f.implies[Property]{ sideEffect(); Property.prop(true)}.f(100, param.rand)._2.isNoResult)
+    Macros.assertEqual(f.implies[Boolean]{ sideEffect(); true}.f(100, param.rand)._2, Result.NoResult)
+    Macros.assertEqual(f.implies[Bool]{ sideEffect(); f}.f(100, param.rand)._2, Result.NoResult)
+    Macros.assertEqual(f.implies[Property]{ sideEffect(); Property.prop(true)}.f(100, param.rand)._2, Result.NoResult)
     flag
   }
 }

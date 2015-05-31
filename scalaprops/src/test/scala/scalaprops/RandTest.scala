@@ -39,7 +39,7 @@ object RandTest extends Scalaprops{
     val c = a + b
     val max = if(c >= a) c else Long.MaxValue
     val x = Gen.chooseLong(a, max).samples(listSize = 1000, seed = seed).distinct.size
-    x == (max - a + 1)
+    Macros.assertEqual(x,  max - a + 1)
   }.toProperties((), Param.minSuccessful(1000))
 
 }

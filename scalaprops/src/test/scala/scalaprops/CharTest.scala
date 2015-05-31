@@ -15,7 +15,7 @@ object CharTest extends Scalaprops {
   }
 
   private[this] def checkSize[A](size: Int)(implicit A: Gen[Char @@ A]) = forAll{
-    A.samples(listSize = 500).distinct.size == size
+    Macros.assertEqual(A.samples(listSize = 500).distinct.size, size)
   }
 
   private[this] def check[A](expect: Seq[Char])(implicit
