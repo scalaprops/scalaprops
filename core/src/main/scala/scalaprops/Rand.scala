@@ -23,6 +23,32 @@ abstract class Rand {
   def nextDouble: (Double, Rand) =
     Rand.nextDouble(this)
 
+  def chooseLong(from: Long, to: Long): (Long, Rand) = {
+    if(from == to) {
+      (from, this.nextInt._2)
+    } else {
+      val min = math.min(from, to)
+      val max = math.max(from, to)
+      @annotation.tailrec
+      def loop(state: Rand): (Long, Rand) = {
+        val next = state.nextLong
+        if (min <= next._1 && next._1 <= max) {
+          next
+        } else if(0 < (max - min)){
+          val x = (next._1 % (max - min + 1)) + min
+          if (min <= x && x <= max) {
+            x -> next._2
+          } else {
+            loop(next._2)
+          }
+        } else {
+          loop(next._2)
+        }
+      }
+      loop(this)
+    }
+  }
+
   def choose(from: Int, to: Int): (Int, Rand) = {
     if(from == to) {
       (from, this.nextInt._2)
