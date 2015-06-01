@@ -109,6 +109,9 @@ object Gen extends GenInstances0 {
   def sized[A](f: Int => Gen[A]): Gen[A] =
     parameterised((i, _) => f(i))
 
+  def chooseLong(from: Long, to: Long): Gen[Long] =
+    gen{ (_, r) => r.chooseLong(from, to) }
+
   def choose(from: Int, to: Int): Gen[Int] =
     gen{ (_, r) => r.choose(from, to) }
 
