@@ -103,6 +103,17 @@ object Gen extends GenInstances0 {
     }
   }
 
+  def infinite[A](genSize: Int, r: Rand, g: Gen[A]): Iterator[A] =
+    new Iterator[A] {
+      private[this] var rand = r
+      override def next(): A = {
+        val x = g.f(genSize, rand)
+        rand = x._2
+        x._1
+      }
+      override def hasNext = true
+    }
+
   def parameterised[A](f: (Int, Rand) => Gen[A]): Gen[A] =
     gen((i, r) => f(i, r).f(i, r))
 
