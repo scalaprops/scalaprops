@@ -31,6 +31,12 @@ final case class Gen[A] private(f: (Int, Rand) => (A, Rand)) {
 
   def sample(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): A =
     f(size, Rand.standard(seed))._1
+
+  def infiniteIterator(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): Iterator[A] =
+    Gen.infinite(size, Rand.standard(seed), this)
+
+  def infiniteStream(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): Stream[A] =
+    Gen.infinite(size, Rand.standard(seed), this).toStream
 }
 
 
