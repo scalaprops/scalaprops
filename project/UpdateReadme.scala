@@ -1,5 +1,6 @@
 import sbt._, Keys._
-import sbtrelease.{Git, ReleaseStep}
+import sbtrelease.ReleasePlugin.autoImport.ReleaseStep
+import sbtrelease.Git
 
 object UpdateReadme {
 

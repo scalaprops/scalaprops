@@ -1,5 +1,6 @@
 import sbt._, Keys._
 import sbtrelease._
+import sbtrelease.ReleasePlugin.autoImport._
 import ReleaseStateTransformations._
 import com.typesafe.sbt.pgp.PgpKeys
 import xerial.sbt.Sonatype.SonatypeKeys
@@ -31,7 +32,7 @@ object Common {
 
   private[this] final val Scala211 = "2.11.6"
 
-  val commonSettings = ReleasePlugin.releaseSettings ++ scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
+  val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     scalaVersion := Scala211,
     crossScalaVersions := Scala211 :: "2.10.5" :: Nil,
     organization := "com.github.scalaprops",
@@ -85,7 +86,7 @@ object Common {
       else
         Nil
     },
-    ReleasePlugin.ReleaseKeys.releaseProcess := Seq[ReleaseStep](
+    releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
       runClean,
