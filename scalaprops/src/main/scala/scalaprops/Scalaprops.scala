@@ -21,6 +21,8 @@ object Scalaprops {
       tree match {
         case Tree.Node(root, Stream(Tree.Node((Or.L(()), Maybe.Empty()), sub))) =>
           Tree.node(root, sub.map(loop))
+        case Tree.Node((root, Maybe.Empty()), Stream(Tree.Node(((), sub1), sub2))) =>
+          Tree.node(root -> sub1, sub2.map(loop))
         case _ =>
           Tree.node(tree.rootLabel, tree.subForest.map(loop))
       }
