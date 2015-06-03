@@ -219,6 +219,16 @@ object Gen extends GenInstances0 {
   def listOf[A](g: Gen[A], min: Int = 0): Gen[IList[A]] =
     listOf_[IList, A](g, min, IListFromList)
 
+  def listOfN[A](maxSize: Int, g: Gen[A]): Gen[List[A]] =
+    choose(0, maxSize).flatMap{ n =>
+      sequenceNList(n, g)
+    }
+
+  def arrayOfN[A: reflect.ClassTag](maxSize: Int, g: Gen[A]): Gen[Array[A]] =
+    choose(0, maxSize).flatMap{ n =>
+      sequenceNArray(n, g)
+    }
+
   implicit def ilist[A](implicit A: Gen[A]): Gen[IList[A]] =
     listOf(A)
 
