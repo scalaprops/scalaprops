@@ -100,4 +100,22 @@ object GenTest extends Scalaprops {
     val min = math.min(a, b)
     (min <= x) && (x <= max)
   }
+
+  val listOfN_1 = Property.forAll{ (size0: Byte, seed: Long) =>
+    val size = math.abs(size0.toInt)
+    val result = Gen.listOfN(size, Gen[Unit]).map(_.size).sample(seed = seed)
+    result <= size
+  }
+
+  val listOfN_2 = Property.forAll{ seed: Long =>
+    val size = 3
+    Gen.listOfN(size, Gen[Unit]).map(_.size).samples(seed = seed, listSize = 100).distinct.size == (size + 1)
+  }
+
+  val arrayOfN = Property.forAll{ (size0: Byte, seed: Long) =>
+    val size = math.abs(size0.toInt)
+    val result = Gen.arrayOfN(size, Gen[Unit]).map(_.size).sample(seed = seed)
+    result <= size
+  }
+
 }
