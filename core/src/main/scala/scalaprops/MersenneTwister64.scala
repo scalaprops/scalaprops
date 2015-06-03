@@ -19,7 +19,7 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
     (this.mti0 == that.mti0) && Arrays.equals(this.mt0, that.mt0)
 
   override def next: MersenneTwister64 =
-    nextLong._2
+    nextLong._1
 
   def getSeedBytes(): Array[Byte] = {
     val bytes = new Array[Byte](BYTES)
@@ -50,7 +50,7 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
   // TODO improve
   def reseed(n: Long) = next
 
-  def nextLong: (Long, MersenneTwister64) = {
+  def nextLong: (MersenneTwister64, Long) = {
     var mti = mti0
     val mt = mt0.clone()
     var x = 0L
@@ -85,10 +85,10 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
     x ^= (x  << 37) & 0xFFF7EEE000000000L
     x ^= (x >>> 43)
 
-    (x, new MersenneTwister64(mt, mti))
+    (new MersenneTwister64(mt, mti), x)
   }
 
-  override def nextInt: (Int, Rand) =
+  override def nextInt: (Rand, Int) =
     nextIntFromNextLong
 
 }

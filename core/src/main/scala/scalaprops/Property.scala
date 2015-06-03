@@ -3,7 +3,7 @@ package scalaprops
 import java.util.concurrent.atomic.AtomicBoolean
 import scalaz._
 
-final case class Property(f: (Int, Rand) => (Result, Rand)) {
+final case class Property(f: (Int, Rand) => (Rand, Result)) {
   def toCheck: Check =
     Check(this)
 
@@ -75,31 +75,31 @@ final case class Property(f: (Int, Rand) => (Result, Rand)) {
         else sz + (maxSize - sz) / (minSuccessful - s)
       }
 
-      val r = \/.fromTryCatchThrowable[(Result, Rand), Throwable](
+      val r = \/.fromTryCatchThrowable[(Rand, Result), Throwable](
         f(math.round(size), random)
       )
 
       r match {
-        case \/-((Result.NoResult, nextRand)) =>
+        case \/-((nextRand, Result.NoResult)) =>
           if (discarded + 1 >= maxDiscarded) {
             CheckResult.Exhausted(s, discarded + 1)
           } else {
             loop(s, discarded + 1, size, nextRand)
           }
-        case \/-((Result.Proven, _)) =>
+        case \/-((_, Result.Proven)) =>
           CheckResult.Proven(s + 1, discarded)
-        case \/-((Result.Unfalsified(args), nextRand)) =>
+        case \/-((nextRand, Result.Unfalsified(args))) =>
           if (s + 1 >= minSuccessful) {
             CheckResult.Passed(s + 1, discarded)
           } else {
             listener(s)
             loop(s + 1, discarded, size, nextRand)
           }
-        case \/-((Result.Falsified(args), _)) =>
+        case \/-((_, Result.Falsified(args))) =>
           CheckResult.Falsified(s, discarded, args)
-        case \/-((Result.Exception(args, ex), _)) =>
+        case \/-((_, Result.Exception(args, ex))) =>
           CheckResult.PropException(s, discarded, args, ex)
-        case \/-((Result.Ignored(reason), _)) =>
+        case \/-((_, Result.Ignored(reason))) =>
           CheckResult.Ignored(s, discarded, reason)
         case -\/(e) =>
           CheckResult.GenException(s, discarded, e)
@@ -113,11 +113,11 @@ final case class Property(f: (Int, Rand) => (Result, Rand)) {
     Properties.single(id, Check(this, param))
 
   def ignore(reason: String): Property =
-    Property((_, rand) => (Result.Ignored(reason), rand))
+    Property((_, rand) => (rand, Result.Ignored(reason)))
 }
 
 object Property {
-  private[this] val noResult = Property((_, r) => (Result.NoResult, r))
+  private[this] val noResult = propFromResult(Result.NoResult)
 
   def implies(b: => Boolean, p: => Property): Property =
     if(b) {
@@ -131,10 +131,10 @@ object Property {
     Property(g.f)
 
   def propFromResultLazy(r: Need[Result]): Property =
-    Property((_, rand) => (r.value, rand))
+    Property((_, rand) => (rand, r.value))
 
   def propFromResult(r: Result): Property =
-    Property((_, rand) => (r, rand))
+    Property((_, rand) => (rand, r))
 
   val prop: Boolean => Property = b => propFromResult{
     if(b) Result.Proven
@@ -151,11 +151,11 @@ object Property {
 
   def forall0[A](g: Gen[A], shrink: Shrink[A])(f: A => Property): Property =
     Property((i, r) => {
-      def first(as: Stream[(A, Rand)], shrinks: Int): Maybe[(A, Result, Rand)] = {
-        as.map{ case (a, rr) =>
+      def first(as: Stream[(Rand, A)], shrinks: Int): Maybe[(A, Result, Rand)] = {
+        as.map{ case (rr, a) =>
           val x = exception(f(a)).f(i, rr)
-          x._1.toMaybe.map(result =>
-            (a, result.provenAsUnfalsified.addArg(Arg(a, shrinks)): Result, x._2)
+          x._2.toMaybe.map(result =>
+            (a, result.provenAsUnfalsified.addArg(Arg(a, shrinks)): Result, x._1)
           )
         } match {
           case Stream() =>
@@ -168,16 +168,16 @@ object Property {
       first(Stream(g.f(i, r)), 0) match {
         case Maybe.Just(xx @ (a, re, rand)) if re.failed =>
           @annotation.tailrec
-          def loop(shrinks: Int, x: (A, Result, Rand)): (Result, Rand) =
-            first(shrink(x._1).map(_ -> rand.next), shrinks) match {
+          def loop(shrinks: Int, x: (A, Result, Rand)): (Rand, Result) =
+            first(shrink(x._1).map(rand.next -> _), shrinks) match {
               case Maybe.Just((aa, result, rr)) if result.failed =>
                 loop(shrinks + 1, (aa, result, rr.next))
               case _ =>
-                (x._2, x._3)
+                (x._3, x._2)
             }
           loop(1, xx)
         case xx =>
-          xx.map(t => (t._2, t._3)).getOrElse((Result.NoResult, Rand.standard(0)))
+          xx.map(t => (t._3, t._2)).getOrElse((Rand.fromSeed(), Result.NoResult))
       }
     })
 
@@ -186,7 +186,7 @@ object Property {
       p
     } catch {
       case t: Throwable =>
-        Property((i, r) => Result.Exception(IList.empty, t) -> r)
+        Property((i, r) => (r, Result.Exception(IList.empty, t)))
     }
 
   def forAll(result: => Boolean): Property =

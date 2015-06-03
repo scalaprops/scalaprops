@@ -9,7 +9,7 @@ import scalaz.std.tuple._
 object GenTest extends Scalaprops {
 
   private implicit def genGen[A](implicit A: Gen[A]): Gen[Gen[A]] = {
-    val values = Gen[List[A]].f(100, Rand.standard(Random.nextLong()))._1
+    val values = Gen[List[A]].f(100, Rand.standard(Random.nextLong()))._2
     Gen.oneOf(
       Gen.value(A),
       List(
@@ -21,8 +21,8 @@ object GenTest extends Scalaprops {
         ),
         List.fill(100)(Random.nextInt(Int.MaxValue - 1) + 1).map(x =>
           Gen.value(Gen.gen{ (i, r) =>
-            val (a, r0) = A.f(i, r)
-            (a, r0.reseed(x))
+            val (r0, a) = A.f(i, r)
+            (r0.reseed(x), a)
           })
         )
       ).flatten : _*
@@ -34,7 +34,7 @@ object GenTest extends Scalaprops {
       Iterator.fill(100)((Random.nextInt(), Random.nextLong())).forall{
         case (size, seed) =>
           val r = Rand.standard(seed)
-          Equal[(A, Rand)].equal(x.f(size, r), y.f(size, r))
+          Equal[(Rand, A)].equal(x.f(size, r), y.f(size, r))
       }
     }
 
@@ -53,7 +53,7 @@ object GenTest extends Scalaprops {
       Gen.sequenceNList(5, Gen[Int])
     ){ (rs, xs) =>
       val g = Gen.elements(xs.head, xs.tail: _*)
-      val r = rs.map(r => g.f(Int.MaxValue, r)._1)
+      val r = rs.map(r => g.f(Int.MaxValue, r)._2)
       (r.toSet == xs.toSet) && (xs.toSet.size == N)
     }.toCheckWith(Param.rand(Rand.fromSeed())).toProperties("test Gen.element")
   }
@@ -95,7 +95,7 @@ object GenTest extends Scalaprops {
   }
 
   val choose = Property.forAll{ (a: Int, b: Int, size: Int, seed: Int) =>
-    val x = Gen.choose(a, b).f(size, Rand.fromSeed(seed))._1
+    val x = Gen.choose(a, b).f(size, Rand.fromSeed(seed))._2
     val max = math.max(a, b)
     val min = math.min(a, b)
     (min <= x) && (x <= max)

@@ -5,10 +5,10 @@ import scalaz._
 final class MersenneTwister32 private(private val array: Array[Long], private val mti: Int) extends Rand {
   private def newArray: Array[Long] = array.clone()
 
-  def nextInt: (Int, Rand) =
+  def nextInt: (Rand, Int) =
     MersenneTwister32.nextInt(this)
 
-  def nextLong: (Long, Rand) =
+  def nextLong: (Rand, Long) =
     nextLongFromNextInt
 
   override def equals(other: Any): Boolean =
@@ -65,7 +65,7 @@ object MersenneTwister32{
     MersenneTwister32(mt, N + 1)
   }
 
-  def nextInt(state: MersenneTwister32): (Int, MersenneTwister32) = {
+  def nextInt(state: MersenneTwister32): (MersenneTwister32, Int) = {
     val mt = state.newArray
     var mti = state.mti
     var y = 0L
@@ -96,7 +96,7 @@ object MersenneTwister32{
     y ^= (y << 15) & 0xefc60000L
     y ^= (y >>> 18)
 
-    y.toInt -> MersenneTwister32(mt, mti)
+    (MersenneTwister32(mt, mti), y.toInt)
   }
 
 }

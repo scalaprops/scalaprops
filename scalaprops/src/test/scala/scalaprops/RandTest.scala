@@ -8,7 +8,7 @@ object RandTest extends Scalaprops{
   val testRandChoose: Property = Property.forAll(
     List.fill(10000)((Random.nextLong, Random.nextInt, Random.nextInt)).forall {
       case (seed, y, z) =>
-        val r = Rand.standard(seed).choose(y, z)._1
+        val r = Rand.standard(seed).choose(y, z)._2
         val min = math.min(y, z)
         val max = math.max(y, z)
         (min <= r) && (r <= max)
@@ -18,7 +18,7 @@ object RandTest extends Scalaprops{
   private[this] def chooseLong(rng: Long => Rand) = Property.forAll(
     Iterator.fill(100000)((Random.nextLong, Random.nextLong, Random.nextLong)).forall {
       case (seed, y, z) =>
-        val r = rng(seed).chooseLong(y, z)._1
+        val r = rng(seed).chooseLong(y, z)._2
         val min = math.min(y, z)
         val max = math.max(y, z)
         (min <= r) && (r <= max)
@@ -29,7 +29,7 @@ object RandTest extends Scalaprops{
   val chooseLong64 = chooseLong(MersenneTwister64.standard)
 
   val chooseLong1 = Property.forAllG(Gen[Rand], Gen[Long], Gen[Long]){ (rng, y, z) =>
-    val r = rng.chooseLong(y, z)._1
+    val r = rng.chooseLong(y, z)._2
     val min = math.min(y, z)
     val max = math.max(y, z)
     (min <= r) && (r <= max)

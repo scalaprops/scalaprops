@@ -6,17 +6,17 @@ import scala.concurrent.Future
 import scalaz._
 import scalaz.Isomorphism.{<~>, IsoFunctorTemplate}
 
-final case class Gen[A] private(f: (Int, Rand) => (A, Rand)) {
+final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
 
   def map[B](g: A => B): Gen[B] =
     gen{ (i, r) =>
-      val (a, r0) = f(i, r)
-      (g(a), r0)
+      val (r0, a) = f(i, r)
+      (r0, g(a))
     }
 
   def flatMap[B](g: A => Gen[B]): Gen[B] =
     gen{ (i, r) =>
-      val (a, r0) = f(i, r)
+      val (r0, a) = f(i, r)
       g(a).f(i, r0)
     }
 
@@ -28,10 +28,10 @@ final case class Gen[A] private(f: (Int, Rand) => (A, Rand)) {
 
   /** convenience method for get sample values */
   def samples(size: Int = Param.defaultSize, listSize: Int = 100, seed: Long = Rand.defaultSeed): List[A] =
-    Gen.sequenceNList(listSize, this).f(size, Rand.standard(seed))._1
+    Gen.sequenceNList(listSize, this).f(size, Rand.standard(seed))._2
 
   def sample(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): A =
-    f(size, Rand.standard(seed))._1
+    f(size, Rand.standard(seed))._2
 
   def infiniteIterator(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): Iterator[A] =
     Gen.infinite(size, Rand.standard(seed), this)
@@ -60,24 +60,24 @@ object Gen extends GenInstances0 {
   private[scalaprops] def IListFromList[A]: List[A] => IList[A] =
     iListFromList.asInstanceOf[List[A] => IList[A]]
 
-  def gen[A](f: (Int, Rand) => (A, Rand)): Gen[A] =
+  def gen[A](f: (Int, Rand) => (Rand, A)): Gen[A] =
     new Gen(f)
 
   def apply[A](implicit A: Gen[A]): Gen[A] = A
 
   def value[A](a: A): Gen[A] =
-    gen((_, r) => (a, r))
+    gen((_, r) => (r, a))
 
   val isoReaderState: Gen <~> ({type x[a] = Kleisli[({type y[b] = State[Rand, b]})#y, Int, a]})#x =
     new IsoFunctorTemplate[Gen, ({type x[a] = Kleisli[({type y[b] = State[Rand, b]})#y, Int, a]})#x] {
       override def to[A](fa: Gen[A]) =
         Kleisli[({type l[a] = State[Rand, a]})#l, Int, A] { size =>
           State { rand =>
-            fa.f(size, rand).swap
+            fa.f(size, rand)
           }
         }
       override def from[A](ga: Kleisli[({type l[a] = State[Rand, a]})#l, Int, A]) =
-        gen((size, rand) => ga.run(size).run(rand).swap)
+        gen((size, rand) => ga.run(size).run(rand))
     }
 
   val isoStateReader: Gen <~> ({type x[a] = StateT[({type y[b] = Reader[Int, b]})#y, Rand, a]})#x =
@@ -85,11 +85,11 @@ object Gen extends GenInstances0 {
       override def to[A](fa: Gen[A]) =
         StateT[({type l[a] = Reader[Int, a]})#l, Rand, A] { rand =>
           Reader { size =>
-            fa.f(size, rand).swap
+            fa.f(size, rand)
           }
         }
       override def from[A](ga: StateT[({type y[b] = Reader[Int, b]})#y, Rand, A]) =
-        gen((size, rand) => ga.run(rand).run(size).swap)
+        gen((size, rand) => ga.run(rand).run(size))
     }
 
   def oneOf[A](x: Gen[A], xs: Gen[A]*): Gen[A] = {
@@ -111,13 +111,13 @@ object Gen extends GenInstances0 {
   def sequenceNArray[A: reflect.ClassTag](n: Int, g: Gen[A]): Gen[Array[A]] = {
     val array = new Array[A](n)
     @annotation.tailrec
-    def loop(size: Int, i: Int, next: Rand): (Array[A], Rand) = {
+    def loop(size: Int, i: Int, next: Rand): (Rand, Array[A]) = {
       if (i < n) {
         val r = g.f(size, next)
-        array(i) = r._1
-        loop(size, i + 1, r._2)
+        array(i) = r._2
+        loop(size, i + 1, r._1)
       } else {
-        (array, next)
+        (next, array)
       }
     }
     gen{ (size, r) =>
@@ -127,12 +127,12 @@ object Gen extends GenInstances0 {
 
   def sequenceNList[A](n: Int, g: Gen[A]): Gen[List[A]] = {
     @annotation.tailrec
-    def loop(size: Int, i: Int, next: Rand, acc: List[A]): (List[A], Rand) = {
+    def loop(size: Int, i: Int, next: Rand, acc: List[A]): (Rand, List[A]) = {
       if (i < n) {
         val r = g.f(size, next)
-        loop(size, i + 1, r._2, r._1 :: acc)
+        loop(size, i + 1, r._1, r._2 :: acc)
       } else {
-        (acc.reverse, next)
+        (next, acc.reverse)
       }
     }
     gen{ (size, r) =>
@@ -145,8 +145,8 @@ object Gen extends GenInstances0 {
       private[this] var rand = r
       override def next(): A = {
         val x = g.f(genSize, rand)
-        rand = x._2
-        x._1
+        rand = x._1
+        x._2
       }
       override def hasNext = true
     }
@@ -269,7 +269,7 @@ object Gen extends GenInstances0 {
     choose(0, as.length).flatMap(i => pick(i, as))
 
   def promote[A, B](f: A => Gen[B]): Gen[A => B] =
-    gen((i, r) => (a => f(a).f(i, r)._1, r))
+    gen((i, r) => (r, a => f(a).f(i, r)._2))
 
   implicit val instance: Monad[Gen] =
     new Monad[Gen] {

@@ -9,7 +9,7 @@ sealed class FunctionEqual(size: Int) {
   implicit def f1[A1: Gen, B](implicit B: Equal[B]): Equal[A1 => B] =
     Equal.equal( (x, y) =>
       Foldable[IList].all(
-        Gen[IList[A1]].f(size, Rand.standard(Random.nextLong()))._1
+        Gen[IList[A1]].f(size, Rand.standard(Random.nextLong()))._2
       )(a =>
         B.equal(x(a), y(a))
       )
