@@ -196,28 +196,28 @@ object Gen extends GenInstances0 {
     choose(0, as.length).map{xs(_).asInstanceOf[A]}
   }
 
-  private[this] def listOf_[F[_], A](g: Gen[A], x: Int, f: List[A] => F[A]): Gen[F[A]] =
+  private[this] def listOf_[F[_], A](g: Gen[A], min: Int, f: List[A] => F[A]): Gen[F[A]] =
     parameterised{ (size, r) =>
-      chooseR(x, size, r).flatMap{ n =>
+      chooseR(min, size, r).flatMap{ n =>
         sequenceN(n, g, f)
       }
     }
 
-  private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], x: Int): Gen[Array[A]] =
+  private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], min: Int): Gen[Array[A]] =
     parameterised{ (size, r) =>
-      chooseR(x, size, r).flatMap{ n =>
+      chooseR(min, size, r).flatMap{ n =>
         sequenceNArray(n, g)
       }
     }
 
-  private[this] def listOfCBF[F[_], A](g: Gen[A], x: Int)(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
-    listOf_[F, A](g, x, _.to[F])
+  private[this] def listOfCBF[F[_], A](g: Gen[A], min: Int)(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
+    listOf_[F, A](g, min, _.to[F])
 
   private[this] def listOfCBF0[F[_], A](g: Gen[A])(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
     listOfCBF[F, A](g, 0)
 
-  def listOf[A](g: Gen[A], x: Int = 0): Gen[IList[A]] =
-    listOf_[IList, A](g, x, IListFromList)
+  def listOf[A](g: Gen[A], min: Int = 0): Gen[IList[A]] =
+    listOf_[IList, A](g, min, IListFromList)
 
   implicit def ilist[A](implicit A: Gen[A]): Gen[IList[A]] =
     listOf(A)
