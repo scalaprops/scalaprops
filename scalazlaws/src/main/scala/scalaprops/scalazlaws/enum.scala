@@ -1,7 +1,7 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
+import scalaprops.Property.{forAll, forAllG}
 import scalaprops.Properties.properties
 import scala.math.{Ordering => SOrdering}
 import scalaz._
@@ -22,10 +22,10 @@ object enum {
   private[this] val smallInt = Gen.choose(-100, 100)
 
   def succn[A](implicit A: Enum[A], G: Gen[A]): Property =
-    forAll((x: A, i: Int) => A.enumLaw.succn(x, i))(G, smallInt)
+    forAllG(G, smallInt)(A.enumLaw.succn)
 
   def predn[A](implicit A: Enum[A], G: Gen[A]): Property =
-    forAll((x: A, i: Int) => A.enumLaw.predn(x, i))(G, smallInt)
+    forAllG(G, smallInt)(A.enumLaw.predn)
 
   def succorder[A](implicit A: Enum[A], G: Gen[A]): Property =
     forAll(A.enumLaw.succorder _)
