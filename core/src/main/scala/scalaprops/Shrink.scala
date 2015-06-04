@@ -5,7 +5,7 @@ import java.math.BigInteger
 import scala.reflect.ClassTag
 import scalaz._
 import scalaz.std.stream._
-import scalaz.Isomorphism.<=>
+import scalaz.Isomorphism._
 
 final class Shrink[A](val f: A => Stream[A]) {
   def apply(a: A): Stream[A] = f(a)
@@ -174,5 +174,10 @@ object Shrink {
   implicit val bigInt: Shrink[BigInt] =
     Shrink[BigInteger].xmap(BigInt(_), _.bigInteger)
 
+  implicit val shrinkFunctionIso: Shrink <~> ({type l[a] = a => Stream[a]})#l =
+    new IsoFunctorTemplate[Shrink, ({type l[a] = a => Stream[a]})#l] {
+      def to[A](fa: Shrink[A]) = fa.f
+      def from[A](ga: A => Stream[A]) = new Shrink(ga)
+    }
 
 }
