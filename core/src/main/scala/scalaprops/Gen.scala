@@ -60,6 +60,10 @@ object Gen extends GenInstances0 {
   private[scalaprops] def IListFromList[A]: List[A] => IList[A] =
     iListFromList.asInstanceOf[List[A] => IList[A]]
 
+  private[this] val Int2Byte = (_: Int).toByte
+  private[this] val Int2Short = (_: Int).toShort
+  private[this] val Int2Char = (_: Int).toChar
+
   def gen[A](f: (Int, Rand) => (Rand, A)): Gen[A] =
     new Gen(f)
 
@@ -310,28 +314,28 @@ object Gen extends GenInstances0 {
     gen((_, r) => r.nextLong)
 
   val genByteAll: Gen[Byte] =
-    genIntAll.map(_.toByte)
+    genIntAll.map(Int2Byte)
 
   val genCharAll: Gen[Char] =
-    genIntAll.map(_.toChar)
+    genIntAll.map(Int2Char)
 
   val genShortAll: Gen[Short] =
-    genIntAll.map(_.toShort)
+    genIntAll.map(Int2Short)
 
   val genByteSized: Gen[Byte] =
-    genIntSized.map(_.toByte)
+    genIntSized.map(Int2Byte)
 
   val genCharSized: Gen[Char] =
-    genIntSized.map(_.toChar)
+    genIntSized.map(Int2Char)
 
   val genShortSized: Gen[Short] =
-    genIntSized.map(_.toShort)
+    genIntSized.map(Int2Short)
 
   val positiveByte: Gen[Byte] =
-    Gen.choose(1, Byte.MaxValue).map(_.toByte)
+    Gen.choose(1, Byte.MaxValue).map(Int2Byte)
 
   val positiveShort: Gen[Short] =
-    Gen.choose(1, Short.MaxValue).map(_.toShort)
+    Gen.choose(1, Short.MaxValue).map(Int2Short)
 
   val positiveInt: Gen[Int] =
     Gen.choose(1, Int.MaxValue)
@@ -340,25 +344,25 @@ object Gen extends GenInstances0 {
     Gen.chooseLong(1, Long.MaxValue)
 
   val asciiChar: Gen[Char] =
-    choose('!', '~').map(_.toChar)
+    choose('!', '~').map(Int2Char)
 
   implicit val genAsciiChar: Gen[Char @@ GenTags.Ascii] =
     GenTags.Ascii.subst(asciiChar)
 
   val numChar: Gen[Char] =
-    choose('0', '9').map(_.toChar)
+    choose('0', '9').map(Int2Char)
 
   implicit val genNumChar: Gen[Char @@ GenTags.Num] =
     GenTags.Num.subst(numChar)
 
   val alphaUpperChar: Gen[Char] =
-    choose('A', 'Z').map(_.toChar)
+    choose('A', 'Z').map(Int2Char)
 
   implicit val genAlphaUpperChar: Gen[Char @@ GenTags.AlphaUpper] =
     GenTags.AlphaUpper.subst(alphaUpperChar)
 
   val alphaLowerChar: Gen[Char] =
-    choose('a', 'z').map(_.toChar)
+    choose('a', 'z').map(Int2Char)
 
   implicit val genAlphaLowerChar: Gen[Char @@ GenTags.AlphaLower] =
     GenTags.AlphaLower.subst(alphaLowerChar)
