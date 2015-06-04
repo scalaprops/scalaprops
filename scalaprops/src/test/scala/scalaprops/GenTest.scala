@@ -118,4 +118,13 @@ object GenTest extends Scalaprops {
     result <= size
   }
 
+  val posLong = Property.forAllG(Gen.positiveLong){_ > 0}
+  val posInt = Property.forAllG(Gen.positiveInt){_ > 0}
+  val posShort = Property.forAllG(Gen.positiveShort){_ > 0}
+  val posByte = Property.forAllG(Gen.positiveByte){_ > 0}
+
+  val negLong = Property.forAllG(Gen.negativeLong){_ < 0}
+  val negInt = Property.forAllG(Gen.negativeInt){_ < 0}
+  val negShort = Property.forAllG(Gen.negativeShort){_ < 0}
+  val negByte = Property.forAllG(Gen.negativeByte){_ < 0}
 }
