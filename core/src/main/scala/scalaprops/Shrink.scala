@@ -66,6 +66,9 @@ object Shrink {
       case \/-(a) => B(a).map(\/.right)
     }
 
+  implicit def either[A: Shrink, B: Shrink]: Shrink[A Either B] =
+    Shrink[A \/ B].xmap(_.toEither, \/.fromEither)
+
   implicit def ilist[A](implicit A: Shrink[A]): Shrink[IList[A]] = {
     def removeChunks(n: Int, as: IList[A]): Stream[IList[A]] =
       as match {
