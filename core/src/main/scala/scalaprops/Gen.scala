@@ -92,6 +92,12 @@ object Gen extends GenInstances0 {
         gen((size, rand) => ga.run(rand).run(size))
     }
 
+  val isoFunction: Gen <~> ({type l[a] = (Int, Rand) => (Rand, a)})#l =
+    new IsoFunctorTemplate[Gen, ({type l[a] = (Int, Rand) => (Rand, a)})#l] {
+      override def to[A](fa: Gen[A]) = fa.f
+      override def from[A](ga: (Int, Rand) => (Rand, A)) = Gen(ga)
+    }
+
   def oneOf[A](x: Gen[A], xs: Gen[A]*): Gen[A] = {
     val array = (x +: xs).toArray[Any]
     choose(0, xs.length).flatMap(array(_).asInstanceOf[Gen[A]])
