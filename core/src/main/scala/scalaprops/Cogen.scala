@@ -12,6 +12,12 @@ abstract class Cogen[A] { self =>
       def cogen[C](a: B, g: Gen[C]) =
         self.cogen(f(a), g)
     }
+
+  final def naturalTrans: ({type l[a] = (A, Gen[a])})#l ~> Gen =
+    new (({type l[a] = (A, Gen[a])})#l ~> Gen) {
+      def apply[C](fa: (A, Gen[C])) =
+        self.cogen(fa._1, fa._2)
+    }
 }
 
 sealed abstract class CogenInstances0 extends CogenInstances {
