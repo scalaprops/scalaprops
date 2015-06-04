@@ -5,12 +5,16 @@ import java.math.BigInteger
 import scala.reflect.ClassTag
 import scalaz._
 import scalaz.std.stream._
+import scalaz.Isomorphism.<=>
 
 final class Shrink[A](val f: A => Stream[A]) {
   def apply(a: A): Stream[A] = f(a)
 
   def xmap[B](x: A => B, y: B => A): Shrink[B] =
     Shrink.shrink(y andThen f andThen(_.map(x)))
+
+  def xmapi[B](f: A <=> B): Shrink[B] =
+    xmap(f.to, f.from)
 }
 
 object Shrink {
