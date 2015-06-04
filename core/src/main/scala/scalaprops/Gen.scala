@@ -343,6 +343,18 @@ object Gen extends GenInstances0 {
   val positiveLong: Gen[Long] =
     Gen.chooseLong(1, Long.MaxValue)
 
+  val negativeByte: Gen[Byte] =
+    Gen.choose(Byte.MinValue, -1).map(Int2Byte)
+
+  val negativeShort: Gen[Short] =
+    Gen.choose(Short.MinValue, -1).map(Int2Short)
+
+  val negativeInt: Gen[Int] =
+    Gen.choose(Int.MinValue, -1)
+
+  val negativeLong: Gen[Long] =
+    Gen.chooseLong(Long.MinValue, -1)
+
   val asciiChar: Gen[Char] =
     choose('!', '~').map(Int2Char)
 
