@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
+import Property.forAll
 
 object ISetTest extends Scalaprops {
 
@@ -13,5 +14,16 @@ object ISetTest extends Scalaprops {
 
   val testMonoid =
     scalazlaws.monoid.all[ISet[Int]]
+
+  val filter = forAll { (a: ISet[Int], p: Int => Boolean) =>
+    (a filter p).toList == a.toList.filter(p)
+  }
+
+  val partition = forAll { (a: ISet[Int], p: Int => Boolean) =>
+    val (x, y) = a partition p
+    assert((x.size + y.size) == a.size)
+    assert((x union y) == a)
+    (x.toList, y.toList) == a.toList.partition(p)
+  }
 
 }
