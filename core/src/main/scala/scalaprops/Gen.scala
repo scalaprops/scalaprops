@@ -775,4 +775,7 @@ object Gen extends GenInstances0 {
     choose(0, array.length - 1).map(array)
   }
 
+  implicit def bijectionTGen[F[_], G[_], A, B](implicit A: Cogen[A], B: Cogen[B], F: Gen[F[B]], G: Gen[G[A]]): Gen[BijectionT[F, G, A, B]] =
+    Gen[(A => F[B], B => G[A])].map{ case (f, g) => BijectionT.bijection(f, g) }
+
 }
