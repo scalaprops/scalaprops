@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
+import Property.forAll
 
 object IMapTest extends Scalaprops {
 
@@ -25,6 +26,12 @@ object IMapTest extends Scalaprops {
     implicit val e = Tags.Conjunction.subst(Equal[Int ==>> Int])
 
     scalazlaws.semigroup.all[(Int ==>> Int) @@ Tags.Conjunction]
+  }
+
+  val intersectionWithKey = forAll { (a: Int ==>> Int, b: Int ==>> Int, f: (Int, Int, Int) => Int) =>
+    val aa = a.toList.toMap
+    val bb = b.toList.toMap
+    a.intersectionWithKey(b)(f).toList == scalaz.std.map.intersectWithKey(aa, bb)(f).toList.sorted
   }
 
 }
