@@ -10,6 +10,7 @@ object ValidationTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.applicative.all[F],
+      scalazlaws.traverse.all[F],
       scalazlaws.plus.all[F]
     )
   }
