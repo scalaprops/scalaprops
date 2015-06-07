@@ -2,7 +2,6 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object FreeTest extends Scalaprops {
 
@@ -34,8 +33,7 @@ object FreeTest extends Scalaprops {
   val testMaybe = {
     type F[A] = Free[Maybe, A]
 
-    Properties.either(
-      "Free[Maybe, _]",
+    Properties.list(
       scalazlaws.monad.all[F],
       scalazlaws.traverse.all[F]
     )
@@ -44,8 +42,7 @@ object FreeTest extends Scalaprops {
   val testIList = {
     type F[A] = Free[IList, A]
 
-    Properties.either(
-      "Free[IList, _]",
+    Properties.list(
       scalazlaws.monad.all[F],
       scalazlaws.traverse.all[F]
     )
@@ -54,8 +51,7 @@ object FreeTest extends Scalaprops {
   val testNel = {
     type F[A] = Free[NonEmptyList, A]
 
-    Properties.either(
-      "Free[NonEmptyList, _]",
+    Properties.list(
       scalazlaws.monad.all[F],
       scalazlaws.traverse1.all[F]
     )
@@ -65,8 +61,7 @@ object FreeTest extends Scalaprops {
     type S[a] = Int \/ a
     type F[A] = Free[S, A]
     implicit val m = Free.freeMonad[S]
-    Properties.either(
-      """Free[Int \/ _, _]""",
+    Properties.list(
       scalazlaws.monad.all[F],
       scalazlaws.traverse.all[F]
     )

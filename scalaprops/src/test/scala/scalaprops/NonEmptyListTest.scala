@@ -2,12 +2,10 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object NonEmptyListTest extends Scalaprops {
 
-  val testLaws = Properties.either(
-    "NonEmptyList laws",
+  val testLaws = Properties.list(
     scalazlaws.traverse1.all[NonEmptyList],
     scalazlaws.monad.all[NonEmptyList],
     scalazlaws.comonad.all[NonEmptyList],

@@ -1,7 +1,6 @@
 package scalaprops
 
 import scalaz._
-import scalaz.std.string._
 import scalaz.std.tuple._
 import scalaz.std.anyVal._
 
@@ -25,8 +24,7 @@ object KleisliTest extends Scalaprops {
     type K1[a] = Kleisli[F, Int, a]
     type K2[a, b] = Kleisli[F, a, b]
 
-    Properties.either(
-      "Kleisli",
+    Properties.list(
       scalazlaws.monad.all[K1],
       scalazlaws.arrow.all[K2]
     )

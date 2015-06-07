@@ -2,7 +2,6 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object CoyonedaTest extends Scalaprops {
 
@@ -12,8 +11,7 @@ object CoyonedaTest extends Scalaprops {
   val testNel = {
     type F[A] = Coyoneda[NonEmptyList, A]
 
-    Properties.either(
-      "Coyoneda[NonEmptyList, _]",
+    Properties.list(
       scalazlaws.traverse1.all[F],
       scalazlaws.comonad.all[F],
       scalazlaws.monad.all[F],
@@ -24,8 +22,7 @@ object CoyonedaTest extends Scalaprops {
   val testMaybe = {
     type F[A] = Coyoneda[Maybe, A]
 
-    Properties.either(
-      "Coyoneda[Maybe, _]",
+    Properties.list(
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.cobind.all[F]
@@ -35,8 +32,7 @@ object CoyonedaTest extends Scalaprops {
   val testIList = {
     type F[A] = Coyoneda[IList, A]
 
-    Properties.either(
-      "Coyoneda[IList, _]",
+    Properties.list(
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.cobind.all[F]

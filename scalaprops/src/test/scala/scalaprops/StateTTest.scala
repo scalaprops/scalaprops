@@ -1,7 +1,6 @@
 package scalaprops
 
 import scalaz._
-import scalaz.std.string._
 import scalaz.std.tuple._
 import scalaz.std.anyVal._
 
@@ -15,8 +14,7 @@ object StateTTest extends Scalaprops {
   val testIList = {
     type F[A] = StateT[IList, Int, A]
 
-    Properties.either(
-      "StateT[IList, Int, _]",
+    Properties.list(
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.equal.all[F[Int]]
     )
@@ -25,8 +23,7 @@ object StateTTest extends Scalaprops {
   val testMaybe = {
     type F[A] = StateT[Maybe, Int, A]
 
-    Properties.either(
-      "StateT[Maybe, Int, _]",
+    Properties.list(
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.equal.all[F[Int]]
     )

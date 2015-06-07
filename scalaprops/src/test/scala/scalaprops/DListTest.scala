@@ -2,12 +2,10 @@ package scalaprops
 
 import scalaz.DList
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object DListTest extends Scalaprops {
 
-  val testLaws = Properties.either(
-    "DList laws",
+  val testLaws = Properties.list(
     scalazlaws.monadPlusStrong.all[DList],
     scalazlaws.zip.all[DList],
     scalazlaws.isEmpty.all[DList],

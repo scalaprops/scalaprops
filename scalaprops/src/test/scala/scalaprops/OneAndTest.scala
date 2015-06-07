@@ -2,15 +2,13 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object OneAndTest extends Scalaprops {
 
   val testIList = {
     type F[A] = OneAnd[IList, A]
 
-    Properties.either(
-      "OneAnd[IList, A]",
+    Properties.list(
       scalazlaws.order.all[F[Int]],
       scalazlaws.monad.all[F],
       scalazlaws.zip.all[F],
@@ -22,8 +20,7 @@ object OneAndTest extends Scalaprops {
   val testMaybe = {
     type F[A] = OneAnd[Maybe, A]
 
-    Properties.either(
-      "OneAnd[Maybe, A]",
+    Properties.list(
       scalazlaws.order.all[F[Int]],
       scalazlaws.monad.all[F],
       scalazlaws.zip.all[F],
@@ -36,8 +33,7 @@ object OneAndTest extends Scalaprops {
   val testNel = {
     type F[A] = OneAnd[NonEmptyList, A]
 
-    Properties.either(
-      "OneAnd[NonEmptyList, A]",
+    Properties.list(
       scalazlaws.order.all[F[Int]],
       scalazlaws.bind.all[F],
       scalazlaws.zip.all[F],

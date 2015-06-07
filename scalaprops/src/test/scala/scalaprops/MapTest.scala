@@ -2,14 +2,12 @@ package scalaprops
 
 import scalaz.std.map._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object MapTest extends Scalaprops {
 
   val testLaws1 = {
     type F[A] = Map[Int, A]
-    Properties.either(
-      "Map[Int, _]",
+    Properties.list(
       scalazlaws.bind.all[F],
       scalazlaws.traverse.all[F],
       scalazlaws.isEmpty.all[F],

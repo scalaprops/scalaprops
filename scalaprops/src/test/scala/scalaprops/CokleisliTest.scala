@@ -1,7 +1,6 @@
 package scalaprops
 
 import scalaz._
-import scalaz.std.string._
 import scalaz.std.anyVal._
 import scalaz.std.tuple._
 
@@ -20,8 +19,7 @@ object CokleisliTest extends Scalaprops {
     type C1[A] = Cokleisli[Maybe, Int, A]
     type C2[A, B] = Cokleisli[NonEmptyList, A, B]
 
-    Properties.either(
-      "Cokleisli laws",
+    Properties.list(
       scalazlaws.monad.all[C1],
       scalazlaws.arrow.all[C2]
     )

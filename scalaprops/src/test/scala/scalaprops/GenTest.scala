@@ -3,7 +3,6 @@ package scalaprops
 import scala.util.Random
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 import scalaz.std.tuple._
 
 object GenTest extends Scalaprops {
@@ -39,8 +38,7 @@ object GenTest extends Scalaprops {
     }
 
   val testLaw =
-    Properties.either(
-      "Gen",
+    Properties.list(
       scalazlaws.monad.all[Gen],
       scalazlaws.equal.all[Gen[Int]]
     )

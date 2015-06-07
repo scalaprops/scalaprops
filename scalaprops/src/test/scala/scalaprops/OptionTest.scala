@@ -2,13 +2,11 @@ package scalaprops
 
 import scalaz.std.option._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object OptionTest extends Scalaprops {
 
   val testLaws =
-    Properties.either(
-      "Option",
+    Properties.list(
       scalazlaws.monadPlusStrong.all[Option],
       scalazlaws.traverse.all[Option],
       scalazlaws.zip.all[Option],

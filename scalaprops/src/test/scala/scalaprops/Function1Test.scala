@@ -3,7 +3,6 @@ package scalaprops
 import scalaz.std.function._
 import scalaz.std.anyVal._
 import scalaz.std.tuple._
-import scalaz.std.string._
 
 object Function1Test extends Scalaprops {
 
@@ -13,8 +12,7 @@ object Function1Test extends Scalaprops {
     type F1[A] = Int => A
     type F2[A] = A => Int
 
-    Properties.either(
-      "function1",
+    Properties.list(
       scalazlaws.monad.all[F1],
       scalazlaws.comonad.all[F1],
       scalazlaws.zip.all[F1],

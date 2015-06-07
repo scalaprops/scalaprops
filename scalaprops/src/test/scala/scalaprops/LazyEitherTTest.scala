@@ -2,7 +2,6 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 import LazyEitherTest.lazyEitherEqual
 
 object LazyEitherTTest extends Scalaprops {
@@ -11,8 +10,7 @@ object LazyEitherTTest extends Scalaprops {
     F.contramap(_.run)
 
   val maybe1 =
-    Properties.either(
-      "LazyEitherT[Maybe, _, _]",
+    Properties.list(
       scalazlaws.monadError.all[({type l[a, b] = LazyEitherT[Maybe, a, b]})#l, Int],
       scalazlaws.traverse.all[({type l[a] = LazyEitherT[Maybe, Int, a]})#l]
     )
@@ -21,8 +19,7 @@ object LazyEitherTTest extends Scalaprops {
     scalazlaws.bitraverse.all[({type l[a, b] = LazyEitherT[Maybe, a, b]})#l]
 
   val ilist1 =
-    Properties.either(
-      "LazyEitherT[IList, _, _]",
+    Properties.list(
       scalazlaws.monadError.all[({type l[a, b] = LazyEitherT[IList, a, b]})#l, Int],
       scalazlaws.traverse.all[({type l[a] = LazyEitherT[IList, Int, a]})#l]
     )
@@ -31,8 +28,7 @@ object LazyEitherTTest extends Scalaprops {
     scalazlaws.bitraverse.all[({type l[a, b] = LazyEitherT[IList, a, b]})#l]
 
   val nel =
-    Properties.either(
-      "LazyEitherT[NonEmptyList, _, _]",
+    Properties.list(
       scalazlaws.monadError.all[({type l[a, b] = LazyEitherT[NonEmptyList, a, b]})#l, Int],
       scalazlaws.traverse.all[({type l[a] = LazyEitherT[NonEmptyList, Int, a]})#l]
     )

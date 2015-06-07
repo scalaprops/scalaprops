@@ -2,7 +2,6 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object CofreeTest extends Scalaprops {
 
@@ -36,8 +35,7 @@ object CofreeTest extends Scalaprops {
 
     type F[A] = Cofree[Maybe, A]
 
-    Properties.either(
-      "Cofree[Maybe, ?]",
+    Properties.list(
       scalazlaws.monad.all[F],
       scalazlaws.comonad.all[F],
       scalazlaws.traverse1.all[F],

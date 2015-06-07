@@ -2,15 +2,13 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
 
 object ValidationTest extends Scalaprops {
 
   val testLaws1 = {
     type F[A] = ValidationNel[Int, A]
 
-    Properties.either(
-      "Validation",
+    Properties.list(
       scalazlaws.applicative.all[F],
       scalazlaws.plus.all[F]
     )
