@@ -30,7 +30,7 @@ object EitherTTest extends Scalaprops {
   val testEitherTNel =
     Properties.either(
       """EitherT[NonEmptyList, _, _]""",
-      scalazlaws.monad.all[({type l[a] = EitherT[NonEmptyList, Int, a]})#l],
+      scalazlaws.monadPlus.all[({type l[a] = EitherT[NonEmptyList, Int, a]})#l],
       scalazlaws.traverse.all[({type l[a] = EitherT[NonEmptyList, Int, a]})#l]
     )
 
