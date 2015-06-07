@@ -769,4 +769,10 @@ object Gen extends GenInstances0 {
 
   implicit def partialFunctionGen[A: Cogen, B: Gen]: Gen[PartialFunction[A, B]] =
     Gen[A => Option[B]].map(Function.unlift)
+
+  implicit def javaEnumGen[A <: java.lang.Enum[A]](implicit A: reflect.ClassTag[A]): Gen[A] = {
+    val array = A.runtimeClass.getEnumConstants.asInstanceOf[Array[A]]
+    choose(0, array.length - 1).map(array)
+  }
+
 }
