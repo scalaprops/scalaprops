@@ -4,10 +4,12 @@ import Common._
 
 object build extends Build {
 
-  private[this] final val coreName = "scalaprops-core"
-  private[this] final val allName = "scalaprops-all"
-  private[this] final val scalazlawsName = "scalaprops-scalazlaws"
-  private[this] final val scalapropsName = "scalaprops"
+  private[this] val coreName = "scalaprops-core"
+  private[this] val allName = "scalaprops-all"
+  private[this] val scalazlawsName = "scalaprops-scalazlaws"
+  private[this] val scalapropsName = "scalaprops"
+
+  private[this] val scalazVersion = "7.1.2"
 
   val modules: List[String] = (
     coreName ::

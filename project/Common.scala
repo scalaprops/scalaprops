@@ -18,8 +18,6 @@ object Common {
       )
     }
 
-  final val scalazVersion = "7.1.2"
-
   private[this] def gitHash = scala.util.Try(
     sys.process.Process("git rev-parse HEAD").lines_!.head
   ).getOrElse("master")
@@ -30,7 +28,7 @@ object Common {
     Nil
   )
 
-  private[this] final val Scala211 = "2.11.6"
+  private[this] val Scala211 = "2.11.6"
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     scalaVersion := Scala211,
