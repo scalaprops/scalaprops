@@ -34,4 +34,43 @@ object IMapTest extends Scalaprops {
     a.intersectionWithKey(b)(f).toList == scalaz.std.map.intersectWithKey(aa, bb)(f).toList.sorted
   }
 
+  val mapKeys = {
+    type KEY = Short
+    type VALUE = Byte
+
+    forAll { (a: KEY ==>> VALUE, f: KEY => KEY) =>
+      a.mapKeys(f) == ==>>.fromList(a.toList.map(x => (f(x._1), x._2)))
+    }
+  }
+
+  val insertWithKey = {
+    type KEY = Short
+    type VALUE = Byte
+
+    Property.forAll{ (a: KEY ==>> VALUE, k: KEY, v: VALUE, f: (KEY, VALUE, VALUE) => VALUE) =>
+      val m = a.toList.toMap
+      val i = if(m contains k) {
+        k -> f(k, v, m(k))
+      } else {
+        k -> v
+      }
+      val x = a.insertWithKey(f, k, v)
+      val y = ==>>.fromList((m + i).toList)
+      Equal[KEY ==>> VALUE].equal(x, y)
+    }.toProperties((), Param.minSuccessful(2000))
+  }
+
+  val insertWith = {
+    import scalaz.syntax.std.function2._
+    type KEY = Short
+    type VALUE = Byte
+
+    Property.forAll{ (a: KEY ==>> VALUE, k: KEY, v: VALUE, f: (VALUE, VALUE) => VALUE) =>
+      val m = a.toList.toMap
+      val x = a.insertWith(f.flip, k, v)
+      val y = ==>>.fromList(scalaz.std.map.insertWith(m, k, v)(f).toList)
+      Equal[KEY ==>> VALUE].equal(x, y)
+    }.toProperties((), Param.minSuccessful(2000))
+  }
+
 }
