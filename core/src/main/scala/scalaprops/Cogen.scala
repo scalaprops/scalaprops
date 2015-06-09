@@ -398,6 +398,9 @@ object Cogen extends CogenInstances0 {
   implicit val cogenAsciiString: Cogen[String @@ GenTags.Ascii] =
     Tag.subst(Cogen[String])
 
+  implicit def cogenJavaEnum[A <: java.lang.Enum[A]]: Cogen[A] =
+    Cogen[Int].contramap(_.ordinal)
+
   implicit val instance: Contravariant[Cogen] =
     new Contravariant[Cogen] {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
