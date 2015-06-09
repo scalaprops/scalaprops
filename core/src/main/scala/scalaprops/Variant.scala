@@ -5,16 +5,18 @@ import scalaz.Maybe
 
 object Variant {
 
-  private[this] final case class LongGen[A](n: Long, gen: Gen[A])
+  private[this] final case class LongGen[A](n: Long, state: CogenState[A])
 
-  private[this] val variantMemo: VariantCache[LongGen, Gen] =
-    new VariantCache[LongGen, Gen]
+  private[this] val variantMemo: VariantCache[LongGen, CogenState] =
+    new VariantCache[LongGen, CogenState]
 
-  def variant[A](n: Long, g: Gen[A]): Gen[A] = {
-    val p = new LongGen(n, g)
+  def variant[A](n: Long, g: CogenState[A]): CogenState[A] = {
+    val (next, int) = g.rand.nextInt
+    val seed = n + int
+    val p = new LongGen(seed, g)
     variantMemo.get(p) match {
       case Maybe.Empty() =>
-        val t = Gen.gen((i, r) => g.f(i, r.reseed(n)))
+        val t = CogenState(next, Gen.gen((i, r) => g.gen.f(i, r.reseed(seed))))
         variantMemo.put(p, t)
         t
       case Maybe.Just(gx) =>

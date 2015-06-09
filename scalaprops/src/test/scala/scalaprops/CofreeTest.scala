@@ -10,7 +10,7 @@ object CofreeTest extends Scalaprops {
     F: shapeless.Lazy[Cogen[F[Cofree[F, A]]]]
   ): Cogen[Cofree[F, A]] =
     new Cogen[Cofree[F, A]] {
-      override def cogen[B](a: Cofree[F, A], g: Gen[B]) =
+      override def cogen[B](a: Cofree[F, A], g: CogenState[B]) =
         A.cogen(a.head, F.value.cogen(a.tail, g))
     }
 

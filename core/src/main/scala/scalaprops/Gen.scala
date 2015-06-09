@@ -72,6 +72,14 @@ object Gen extends GenInstances0 {
   def value[A](a: A): Gen[A] =
     gen((_, r) => (r, a))
 
+  implicit def f0[Z](implicit Z: Gen[Z]): Gen[Function0[Z]] =
+    Z.map(z => () => z)
+
+  implicit def f1[A1, Z](implicit A1: Cogen[A1], Z: Gen[Z]): Gen[A1 => Z] =
+    Gen.gen{ (i, r) =>
+      (r.next, a => A1.cogen(a, CogenState(r, Z)).gen.f(i, r)._2)
+    }
+
   val isoReaderState: Gen <~> ({type x[a] = Kleisli[({type y[b] = State[Rand, b]})#y, Int, a]})#x =
     new IsoFunctorTemplate[Gen, ({type x[a] = Kleisli[({type y[b] = State[Rand, b]})#y, Int, a]})#x] {
       override def to[A](fa: Gen[A]) =
@@ -287,9 +295,6 @@ object Gen extends GenInstances0 {
 
   def someOf[A](as: IList[A]): Gen[IList[A]] =
     choose(0, as.length).flatMap(i => pick(i, as))
-
-  def promote[A, B](f: A => Gen[B]): Gen[A => B] =
-    gen((i, r) => (r, a => f(a).f(i, r)._2))
 
   implicit val instance: Monad[Gen] =
     new Monad[Gen] {

@@ -16,7 +16,7 @@ object Cogen {
       val function =
 s"""  implicit final def f$i[$t, $Z](implicit ${as.map(a => s"$a: Gen[$a]").mkString(", ")}, $Z: $C[$Z]): $tpeF =
     new $tpeF {
-      def cogen[$X](f: $f, g: Gen[$X]) =
+      def cogen[$X](f: $f, g: CogenState[$X]) =
         ${as.foldRight(Z)((a, s) => s"f1($a, $s)") + ".cogen(f.curried, g)"}
     }
 """
@@ -25,7 +25,7 @@ s"""  implicit final def f$i[$t, $Z](implicit ${as.map(a => s"$a: Gen[$a]").mkSt
 s"""
   implicit final def tuple$i[$t, $Z](implicit ${as.map(a => s"$a: Cogen[$a]").mkString(", ")}): $tpeT =
     new $tpeT {
-      def cogen[$X](t: $tp, g: Gen[$X]) =
+      def cogen[$X](t: $tp, g: CogenState[$X]) =
         ${as.zipWithIndex.foldRight("g"){case ((a, m), s) => s"$a.cogen(t._${m + 1}, $s)"}}
     }
 """
@@ -40,11 +40,7 @@ s"""package scalaprops
 
 abstract class CogenInstances private[scalaprops] {
 
-  implicit final def f1[A1, Z](implicit A1: Gen[A1], C: Cogen[Z]): Cogen[A1 => Z] =
-    new Cogen[A1 => Z] {
-      def cogen[X](f: A1 => Z, g: Gen[X]) =
-        A1.flatMap(x => C.cogen(f(x), g))
-    }
+  import Cogen.f1
 
 ${(1 to 22).map(cogen).mkString("\n")}
 }

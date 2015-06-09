@@ -1,14 +1,9 @@
 package scalaprops
 
 import scalaz._
+import Gen.f1
 
 abstract class GenInstances private[scalaprops] {
-
-  implicit final def f0[Z](implicit Z: Gen[Z]): Gen[Function0[Z]] =
-    Z.map(z => () => z)
-
-  implicit final def f1[A1, Z](implicit A1: Cogen[A1], Z: Gen[Z]): Gen[A1 => Z] =
-    Gen.promote(x => A1.cogen(x, Z))
 
   implicit final def f2[A1, A2, Z](implicit A1: Cogen[A1], A2: Cogen[A2], Z: Gen[Z]): Gen[(A1, A2) => Z] =
     f1(A1, f1(A2, Z)).map(f => (a1, a2) => f(a1)(a2))

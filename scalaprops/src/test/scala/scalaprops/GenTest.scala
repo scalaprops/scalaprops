@@ -4,6 +4,7 @@ import scala.util.Random
 import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.tuple._
+import scalaz.std.string._
 
 object GenTest extends Scalaprops {
 
@@ -130,4 +131,95 @@ object GenTest extends Scalaprops {
     val values = Gen[java.util.concurrent.TimeUnit].samples(seed = seed, listSize = 200).toSet
     values == java.util.concurrent.TimeUnit.values().toSet
   }
+
+
+  val genFunction = {
+    def test1[A: Gen: Cogen](name: String) =
+      test[A, A](s"$name => $name")
+
+    def test[A: Gen: Cogen, B: Gen](name: String) =
+      Property.forAll { seed: Int =>
+        val size = 10
+        val as = Gen[A].infiniteStream(seed = seed).distinct.take(5).toList
+        val values = Gen[A => B].samples(listSize = size, seed = seed).map(as.map(_))
+        val set = values.toSet
+        val result = set.size == size
+        assert(result, s"$name ${set.size} $as $set $values")
+        result
+      }.toProperties(name)
+
+    Properties.list(
+      test1[Long]("Long"),
+      test1[Int]("Int"),
+      test1[Byte]("Byte"),
+      test1[Short]("Short"),
+      test1[Either[Byte, Short]]("Either[Byte, Short]"),
+      test1[Long \/ Int]("""(Long \/ Int)"""),
+      test1[(Int, Byte)]("Tuple2[Int, Byte]"),
+      test1[Option[Int]]("Option[Int]"),
+      test1[Map[Int, Int]]("Map[Int, Int]").andThenParam(Param.maxSize(10)),
+      test1[Int ==>> Int]("(Int ==>> Int)").andThenParam(Param.maxSize(10)),
+      test1[IList[Int]]("IList[Int]").andThenParam(Param.maxSize(10)),
+      test1[Byte \&/ Byte]("""Byte \&/ Byte)"""),
+      test[Int, List[Int]]("Int => List[Int]"),
+      test[List[Int], Int]("List[Int] => Int").andThenParam(Param.maxSize(20)),
+      test[Option[Byte], Byte]("Option[Byte] => Byte"),
+      test[Byte, Option[Byte]]("Byte => Option[Byte]"),
+      test[Either[Byte, Boolean], Int]("Either[Byte, Boolean] => Int"),
+      test[Int, Map[Int, Boolean]]("Int => Map[Int, Boolean]")
+    ).andThenParam(Param.minSuccessful(50))
+  }
+
+  val functionGenTest = {
+
+    def permutations[A](xs: IList[A], n: Int): IList[IList[A]] =
+      if (xs.isEmpty) {
+        IList.empty
+      } else {
+        def f(ls: IList[A], rest: IList[A], n: Int): IList[IList[A]] =
+          if (n == 0) IList(ls) else rest.flatMap(v => f(v :: ls, rest, n - 1))
+        f(IList.empty, xs, n)
+      }
+
+    def combinations[A: Order, B](as: IList[A], bs: IList[B]): IList[A ==>> B] = {
+      val xs = permutations(bs, as.length)
+      IList.fill(xs.length)(as).zip(xs).map {
+        case (keys, values) =>
+          keys.zip(values).toMap
+      }
+    }
+
+    val defaultSize = 10000
+
+    def test[A: Cogen : Order, B: Gen : Order](domain: IList[A], codomain: IList[B], name: String, streamSize: Int = defaultSize) = {
+      import scalaz.std.stream._
+      val size = List.fill(domain.length)(codomain.length).product
+
+      Property.forAll { seed: Long =>
+        val x = IList.fromFoldable(Gen[A => B].infiniteStream(seed = seed).map { f =>
+          IMap.fromFoldable(domain.map(a => a -> f(a)))
+        }.take(streamSize).distinct.take(size)).sorted
+
+        assert(x.length == size, s"${x.length} != $size")
+        Equal[IList[A ==>> B]].equal(x, combinations(domain, codomain).sorted)
+      }.toProperties(name)
+    }
+
+    def test1[A: Cogen : Order : Gen](values: IList[A], name: String, streamSize: Int = defaultSize) =
+      test[A, A](values, values, s"($name) => ($name)", streamSize)
+
+    val orderingValues = IList[Ordering](Ordering.EQ, Ordering.GT, Ordering.LT)
+
+    Properties.list(
+      test1(IList(true, false), "Boolean"),
+      test1(orderingValues, "Ordering"),
+      test(IList(true, false), IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), "Boolean => Maybe[Boolean]"),
+      test(IList(true, false), orderingValues, "Boolean => Ordering"),
+      test(orderingValues, IList(true, false), "Ordering => Boolean"),
+      test(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), IList(true, false), "Maybe[Boolean] => Boolean"),
+      test1(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), "Maybe[Boolean]", 20000).andThenParam(Param.minSuccessful(20)),
+      test1(IList(true, false).flatMap(a => IList(\/.right(a), \/.left(a))), """Boolean \/ Boolean""", 50000).andThenParam(Param.minSuccessful(5))
+    )
+  }
+
 }

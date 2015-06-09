@@ -5,17 +5,17 @@ import scala.concurrent.Await
 import scalaz._
 
 abstract class Cogen[A] { self =>
-  def cogen[B](a: A, g: Gen[B]): Gen[B]
+  def cogen[B](a: A, g: CogenState[B]): CogenState[B]
 
   final def contramap[B](f: B => A): Cogen[B] =
     new Cogen[B] {
-      def cogen[C](a: B, g: Gen[C]) =
+      def cogen[C](a: B, g: CogenState[C]) =
         self.cogen(f(a), g)
     }
 
-  final def naturalTrans: ({type l[a] = (A, Gen[a])})#l ~> Gen =
-    new (({type l[a] = (A, Gen[a])})#l ~> Gen) {
-      def apply[C](fa: (A, Gen[C])) =
+  final def naturalTrans: ({type l[a] = (A, CogenState[a])})#l ~> CogenState =
+    new (({type l[a] = (A, CogenState[a])})#l ~> CogenState) {
+      def apply[C](fa: (A, CogenState[C])) =
         self.cogen(fa._1, fa._2)
     }
 }
@@ -29,44 +29,50 @@ sealed abstract class CogenInstances0 extends CogenInstances {
 
 object Cogen extends CogenInstances0 {
 
+  implicit def f1[A1, Z](implicit A1: Gen[A1], C: Cogen[Z]): Cogen[A1 => Z] =
+    new Cogen[A1 => Z] {
+      def cogen[X](f: A1 => Z, g: CogenState[X]) =
+        CogenState(g.rand.next, A1.flatMap(x => C.cogen(f(x), g).gen))
+    }
+
   implicit val cogenBoolean: Cogen[Boolean] =
     new Cogen[Boolean] {
-      def cogen[B](a: Boolean, g: Gen[B]) =
+      def cogen[B](a: Boolean, g: CogenState[B]) =
         variant(if(a) 0L else 1L, g)
     }
 
   implicit val cogenUnit: Cogen[Unit] =
     new Cogen[Unit] {
-      def cogen[B](a: Unit, g: Gen[B]) = g
+      def cogen[B](a: Unit, g: CogenState[B]) = g
     }
 
   implicit val cogenInt: Cogen[Int] =
     new Cogen[Int] {
-      def cogen[B](a: Int, g: Gen[B]) =
+      def cogen[B](a: Int, g: CogenState[B]) =
         variant(if(a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenByte: Cogen[Byte] =
     new Cogen[Byte] {
-      def cogen[B](a: Byte, g: Gen[B]) =
+      def cogen[B](a: Byte, g: CogenState[B]) =
         variant(if(a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenShort: Cogen[Short] =
     new Cogen[Short] {
-      def cogen[B](a: Short, g: Gen[B]) =
+      def cogen[B](a: Short, g: CogenState[B]) =
         variant(if(a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenLong: Cogen[Long] =
     new Cogen[Long] {
-      def cogen[B](a: Long, g: Gen[B]) =
+      def cogen[B](a: Long, g: CogenState[B]) =
         variant(if(a >= 0L) 2L * a else -2L * a + 1L, g)
     }
 
   implicit val cogenChar: Cogen[Char] =
     new Cogen[Char] {
-      def cogen[B](a: Char, g: Gen[B]) =
+      def cogen[B](a: Char, g: CogenState[B]) =
         variant(a << 1, g)
     }
 
@@ -110,7 +116,7 @@ object Cogen extends CogenInstances0 {
 
   implicit val cogenJavaBigDecimal: Cogen[jm.BigDecimal] =
     new Cogen[jm.BigDecimal] {
-      def cogen[B](a: jm.BigDecimal, g: Gen[B]): Gen[B] =
+      def cogen[B](a: jm.BigDecimal, g: CogenState[B]) =
         Cogen[jm.BigInteger].cogen(a.unscaledValue, Cogen[Int].cogen(a.scale, g))
     }
 
@@ -119,11 +125,11 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenOption[A](implicit A: Cogen[A]): Cogen[Option[A]] =
     new Cogen[Option[A]] {
-      def cogen[B](a: Option[A], g: Gen[B]) = a match {
+      def cogen[B](a: Option[A], g: CogenState[B]) = a match {
         case Some(o) =>
           variant(1, A.cogen(o, g))
         case None =>
-          variant(0, g)
+          variant(g.rand.nextInt._2, g)
       }
     }
 
@@ -145,11 +151,11 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenEither[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[Either[A, B]] =
     new Cogen[Either[A, B]] {
-      def cogen[Z](a: Either[A, B], g: Gen[Z]) = a match {
+      def cogen[Z](a: Either[A, B], g: CogenState[Z]) = a match {
         case Right(x) =>
           variant(1, B.cogen(x, g))
         case Left(x) =>
-          variant(0, A.cogen(x, g))
+          variant(0, A.cogen(x, g.copy(rand = g.rand.next)))
       }
     }
 
@@ -164,7 +170,7 @@ object Cogen extends CogenInstances0 {
 
   implicit val cogenOrdering: Cogen[Ordering] =
     new Cogen[Ordering] {
-      def cogen[A](a: Ordering, g: Gen[A]) = a match {
+      def cogen[B](a: Ordering, g: CogenState[B]) = a match {
         case Ordering.GT => variant(0, g)
         case Ordering.EQ => variant(1, g)
         case Ordering.LT => variant(2, g)
@@ -179,7 +185,7 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenIList[A](implicit A: Cogen[A]): Cogen[IList[A]] =
     new Cogen[IList[A]] {
-      def cogen[B](a: IList[A], g: Gen[B]): Gen[B] = a match {
+      def cogen[B](a: IList[A], g: CogenState[B]) = a match {
         case ICons(h, t) =>
           variant(1, A.cogen(h, cogen(t, g)))
         case INil() =>
@@ -242,7 +248,7 @@ object Cogen extends CogenInstances0 {
 
   implicit val cogenString: Cogen[String] =
     new Cogen[String] {
-      def cogen[B](a: String, g: Gen[B]) =
+      def cogen[B](a: String, g: CogenState[B]) =
         cogenIList(cogenChar).cogen(IList(a.toCharArray: _*), g)
     }
 
@@ -353,19 +359,19 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenLazyTuple2[A1, A2](implicit A1: Cogen[A1], A2: Cogen[A2]): Cogen[LazyTuple2[A1, A2]] =
     new Cogen[LazyTuple2[A1, A2]] {
-      def cogen[X](t: LazyTuple2[A1, A2], g: Gen[X]) =
+      def cogen[B](t: LazyTuple2[A1, A2], g: CogenState[B]) =
         A1.cogen(t._1, A2.cogen(t._2, g))
     }
 
   implicit def cogenLazyTuple3[A1, A2, A3](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3]): Cogen[LazyTuple3[A1, A2, A3]] =
     new Cogen[LazyTuple3[A1, A2, A3]] {
-      def cogen[X](t: LazyTuple3[A1, A2, A3], g: Gen[X]) =
+      def cogen[B](t: LazyTuple3[A1, A2, A3], g: CogenState[B]) =
         A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, g)))
     }
 
   implicit def cogenLazyTuple4[A1, A2, A3, A4](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4]): Cogen[LazyTuple4[A1, A2, A3, A4]] =
     new Cogen[LazyTuple4[A1, A2, A3, A4]] {
-      def cogen[X](t: LazyTuple4[A1, A2, A3, A4], g: Gen[X]) =
+      def cogen[B](t: LazyTuple4[A1, A2, A3, A4], g: CogenState[B]) =
         A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, A4.cogen(t._4, g))))
     }
 
