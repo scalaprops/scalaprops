@@ -20,7 +20,9 @@ object build extends Build {
   )
 
   private[this] def module(id: String) =
-    Project(id, file(id)).settings(commonSettings)
+    Project(id, file(id)).settings(commonSettings).settings(
+      initialCommands in console += "import scalaprops._, scalaz._"
+    )
 
   lazy val core = module("core").settings(
     Generator.settings
