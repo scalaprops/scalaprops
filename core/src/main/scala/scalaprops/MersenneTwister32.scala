@@ -66,11 +66,11 @@ object MersenneTwister32{
   }
 
   def nextInt(state: MersenneTwister32): (MersenneTwister32, Int) = {
-    val mt = state.newArray
     var mti = state.mti
     var y = 0L
 
-    if (mti >= N) {
+    val mt0 = if (mti >= N) {
+      val mt = state.newArray
       val mag01 = Array(0L, MatrixA)
 
       var kk = 0
@@ -88,15 +88,18 @@ object MersenneTwister32{
       mt(N - 1) = mt(M - 1) ^ (y >>> 1) ^ mag01(y.toInt & 0x1)
 
       mti = 0
+      mt
+    }else{
+      state.array
     }
 
-    y = mt(mti); mti += 1
+    y = mt0(mti); mti += 1
     y ^= y >>> 11
     y ^= (y << 7) & 0x9d2c5680L
     y ^= (y << 15) & 0xefc60000L
     y ^= (y >>> 18)
 
-    (MersenneTwister32(mt, mti), y.toInt)
+    (MersenneTwister32(mt0, mti), y.toInt)
   }
 
 }
