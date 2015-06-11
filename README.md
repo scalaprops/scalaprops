@@ -15,7 +15,7 @@ property based testing library for Scala
  - [`Gen`](core/src/main/scala/scalaprops/Gen.scala) and [`Cogen`](core/src/main/scala/scalaprops/Cogen.scala) instances of scalaz datatypes
 - immutable random number generator
  - scalaprops does not use `scala.util.Random` because `scala.util.Random` is mutable
- - default implementations is [Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html)
+ - default implementation is [Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html)
 
 ### latest stable version
 
