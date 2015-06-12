@@ -555,8 +555,8 @@ object Gen extends GenInstances0 {
   implicit val genBigDecimalBoundaries: Gen[BigDecimal] =
     frequency(
       1 -> value(BigDecimal(0)),
-      1 -> value(BigDecimal("1e600")),
-      1 -> value(BigDecimal("-1e600")),
+      1 -> value(BigDecimal("1e-600")),
+      1 -> value(BigDecimal("-1e-600")),
       1 -> value(BigDecimal(1)),
       1 -> value(BigDecimal(-1)),
       1 -> value(BigDecimal(Double.MaxValue) * 10),
