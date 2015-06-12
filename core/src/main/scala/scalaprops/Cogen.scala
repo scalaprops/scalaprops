@@ -95,11 +95,22 @@ object Cogen extends CogenInstances0 {
   implicit val cogenJavaDouble: Cogen[java.lang.Double] =
     Cogen[Double].contramap(_.doubleValue)
 
-  implicit val cogenBigInteger: Cogen[java.math.BigInteger] =
+  import java.{ math => jm }
+
+  implicit val cogenBigInteger: Cogen[jm.BigInteger] =
     Cogen[Array[Byte]].contramap(_.toByteArray)
 
   implicit val cogenBigInt: Cogen[BigInt] =
     Cogen[Array[Byte]].contramap(_.toByteArray)
+
+  implicit val cogenJavaBigDecimal: Cogen[jm.BigDecimal] =
+    new Cogen[jm.BigDecimal] {
+      def cogen[B](a: jm.BigDecimal, g: Gen[B]): Gen[B] =
+        Cogen[jm.BigInteger].cogen(a.unscaledValue, Cogen[Int].cogen(a.scale, g))
+    }
+
+  implicit val cogenBigDecimal: Cogen[BigDecimal] =
+    Cogen[jm.BigDecimal].contramap(_.bigDecimal)
 
   implicit def cogenOption[A](implicit A: Cogen[A]): Cogen[Option[A]] =
     new Cogen[Option[A]] {

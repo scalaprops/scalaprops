@@ -313,6 +313,42 @@ object Gen extends GenInstances0 {
   val genLongAll: Gen[Long] =
     gen((_, r) => r.nextLong)
 
+
+  val genFiniteFloat: Gen[Float] =
+    genIntAll.map { n =>
+      import java.lang.Float.{ intBitsToFloat, isNaN, isInfinite }
+      val x = intBitsToFloat(n)
+      if (isNaN(x) || isInfinite(x)) 0F else x
+    }
+
+  val genFiniteDouble: Gen[Double] =
+    genLongAll.map { n =>
+      import java.lang.Double.{ longBitsToDouble, isNaN, isInfinite }
+      val x = longBitsToDouble(n)
+      if (isNaN(x) || isInfinite(x)) 0D else x
+    }
+
+  val genSmallBigInt: Gen[BigInt] =
+    genLongAll.map(BigInt(_))
+
+  val genLargeBigInt: Gen[BigInt] =
+    for {
+      n <- genIntAll
+      x <- genSmallBigInt
+    } yield x << (n & 0x7f)
+
+  val genSmallBigDecimal: Gen[BigDecimal] =
+    for {
+      n <- genLongAll
+      d <- genLongAll
+    } yield BigDecimal(n) / (if (d == 0L) 1 else n)
+
+  val genLargeBigDecimal: Gen[BigDecimal] =
+    for {
+      n <- genIntAll
+      x <- genLargeBigInt
+    } yield BigDecimal(x, ~(n & 0x7f))
+
   val genByteAll: Gen[Byte] =
     genIntAll.map(Int2Byte)
 
@@ -465,6 +501,72 @@ object Gen extends GenInstances0 {
       1 -> value(Long.MinValue + 1),
       93 -> genLongAll
     )
+
+  implicit val genFloatBoundaries: Gen[Float] =
+    frequency(
+      1 -> value(Float.NaN),
+      1 -> value(Float.PositiveInfinity),
+      1 -> value(Float.NegativeInfinity),
+      1 -> value(0F),
+      1 -> value(-0F),
+      1 -> value(1F),
+      1 -> value(-1F),
+      1 -> value(Float.MinPositiveValue),
+      1 -> value(-Float.MinPositiveValue),
+      50 -> genIntAll.map(_.toFloat),
+      41 -> genFiniteFloat
+    )
+
+  implicit val genDoubleBoundaries: Gen[Double] =
+    frequency(
+      1 -> value(Double.NaN),
+      1 -> value(Double.PositiveInfinity),
+      1 -> value(Double.NegativeInfinity),
+      1 -> value(0F),
+      1 -> value(-0F),
+      1 -> value(1F),
+      1 -> value(-1F),
+      1 -> value(Double.MinPositiveValue),
+      1 -> value(-Double.MinPositiveValue),
+      50 -> genLongAll.map(_.toDouble),
+      41 -> genFiniteDouble
+    )
+
+  implicit val genBigIntBoundaries: Gen[BigInt] =
+    frequency(
+      1 -> value(BigInt(0)),
+      1 -> value(BigInt(1)),
+      1 -> value(BigInt(-1)),
+      1 -> value(BigInt(Int.MaxValue) + 1),
+      1 -> value(BigInt(Int.MinValue) - 1),
+      1 -> value(BigInt(Long.MaxValue) - 1),
+      1 -> value(BigInt(Long.MinValue) + 1),
+      1 -> value(BigInt(Long.MaxValue)),
+      1 -> value(BigInt(Long.MinValue)),
+      1 -> value(BigInt(Long.MaxValue) + 1),
+      1 -> value(BigInt(Long.MinValue) - 1),
+      70 -> genSmallBigInt,
+      19 -> genLargeBigInt
+    )
+
+  implicit val genBigInteger: Gen[java.math.BigInteger] =
+    genBigIntBoundaries.map(_.bigInteger)
+
+  implicit val genBigDecimalBoundaries: Gen[BigDecimal] =
+    frequency(
+      1 -> value(BigDecimal(0)),
+      1 -> value(BigDecimal("1e-600")),
+      1 -> value(BigDecimal("-1e-600")),
+      1 -> value(BigDecimal(1)),
+      1 -> value(BigDecimal(-1)),
+      1 -> value(BigDecimal(Double.MaxValue) * 10),
+      1 -> value(BigDecimal(Double.MinValue) * 10),
+      70 -> genSmallBigDecimal,
+      19 -> genLargeBigDecimal
+    )
+
+  implicit val genJavaBigDecimal: Gen[java.math.BigDecimal] =
+    genBigDecimalBoundaries.map(_.bigDecimal)
 
   implicit val genByteBoundaries: Gen[Byte] =
     frequency(
