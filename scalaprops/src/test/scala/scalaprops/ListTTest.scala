@@ -13,4 +13,6 @@ object ListTTest extends Scalaprops {
     scalazlaws.bind.laws[({type l[a] = ListT[IList, a]})#l].andThenParam(Param.maxSize(2))
       .ignore("https://github.com/scalaz/scalaz/issues/921")
 
+  val monadTrans = scalazlaws.monadTrans.all[ListT]
+
 }

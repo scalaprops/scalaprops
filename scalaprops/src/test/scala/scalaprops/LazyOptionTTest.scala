@@ -15,4 +15,6 @@ object LazyOptionTTest extends Scalaprops{
     scalazlaws.monad.all[({type l[a] = LazyOptionT[Maybe, a]})#l]
   )
 
+  val monadTrans = scalazlaws.monadTrans.all[LazyOptionT]
+
 }

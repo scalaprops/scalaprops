@@ -26,4 +26,6 @@ object EitherTTest extends Scalaprops {
       scalazlaws.traverse.all[({type l[a] = EitherT[NonEmptyList, Int, a]})#l]
     )
 
+  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = EitherT[f, Int, a]})#l]
+
 }

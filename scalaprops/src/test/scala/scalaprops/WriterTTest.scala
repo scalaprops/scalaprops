@@ -43,4 +43,6 @@ object WriterTTest extends Scalaprops {
     )
   }
 
+  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = WriterT[f, Int, a]})#l]
+
 }

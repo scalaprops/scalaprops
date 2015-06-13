@@ -52,4 +52,6 @@ object KleisliTest extends Scalaprops {
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
+  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = Kleisli[f, Int, a]})#l]
+
 }

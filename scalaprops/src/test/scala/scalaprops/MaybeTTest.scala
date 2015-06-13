@@ -7,4 +7,7 @@ object MaybeTTest extends Scalaprops {
 
   val testMonadLaws =
     scalazlaws.monadPlus.all[({type l[a] = MaybeT[IList, a]})#l]
+
+  val monadTrans = scalazlaws.monadTrans.all[MaybeT]
+
 }

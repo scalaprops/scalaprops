@@ -9,6 +9,8 @@ object IdTTest extends Scalaprops {
   private[this] implicit def idTEqual[F[_], A](implicit F: Equal[F[A]]): Equal[IdT[F, A]] =
     F.contramap(_.run)
 
+  val monadTrans = scalazlaws.monadTrans.all[IdT]
+
   val id = {
     type F[A] = IdT[Id, A]
     Properties.list(

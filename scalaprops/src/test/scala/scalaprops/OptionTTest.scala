@@ -24,4 +24,6 @@ object OptionTTest extends Scalaprops{
     )
   }
 
+  val monadTrans = scalazlaws.monadTrans.all[OptionT]
+
 }

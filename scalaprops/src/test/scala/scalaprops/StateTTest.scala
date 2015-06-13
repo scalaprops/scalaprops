@@ -28,4 +28,7 @@ object StateTTest extends Scalaprops {
       scalazlaws.equal.all[F[Int]]
     )
   }
+
+  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = StateT[f, Int, a]})#l]
+
 }

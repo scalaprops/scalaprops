@@ -32,4 +32,6 @@ object StreamTTest extends Scalaprops {
     )
   }
 
+  val monadTrans = scalazlaws.monadTrans.all[StreamT]
+
 }

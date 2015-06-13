@@ -22,4 +22,7 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
     type F[A] = IndexedReaderWriterStateT[IList, Int, Int, Int, Int, A]
     scalazlaws.monad.all[F]
   }
+
+  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = ReaderWriterStateT[f, Int, Int, Int, a]})#l]
+
 }
