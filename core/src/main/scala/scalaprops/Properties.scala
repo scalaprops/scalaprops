@@ -97,16 +97,13 @@ object Properties {
   private[this] def distinctTree[A](tree: Tree[A])(implicit A: Order[A]): Tree[A] = {
     import std.stream._
 
-    val x = Traverse[Tree].traverseS[ISet[A], A, Maybe[A]](tree){ a =>
-      for{
-        set <- State.get[ISet[A]]
-        s <- if(set.contains(a)){
-          State.state[ISet[A], Maybe[A]](Maybe.empty[A])
-        }else {
-          State((_: ISet[A]).insert(a) -> Maybe.just(a))
-        }
-      } yield s
-    }.runZero._2
+    val x = Traverse[Tree].mapAccumL(tree, ISet.empty[A]) { (set, a) =>
+      if (set.contains(a)) {
+        (set, Maybe.empty[A])
+      } else {
+        (set.insert(a), Maybe.just(a))
+      }
+    }._2
 
     def loop(t: Tree[Maybe[A]]): Maybe[Tree[A]] =
       t.rootLabel.map{ root =>
