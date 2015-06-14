@@ -52,10 +52,10 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
 
   def nextLong: (MersenneTwister64, Long) = {
     var mti = mti0
-    val mt = mt0.clone()
     var x = 0L
 
-    if (mti >= N) {
+    val mt1 = if (mti >= N) {
+      val mt = mt0.clone()
       var kk = 0
 
       while (kk < N_M) {
@@ -74,9 +74,12 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
       mt(N_1) = mt(M_1) ^ (x >>> 1) ^ mag01(x)
 
       mti = 0
+      mt
+    } else {
+      mt0
     }
 
-    x = mt(mti)
+    x = mt1(mti)
     mti += 1
 
     // Tempering
@@ -85,7 +88,7 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
     x ^= (x  << 37) & 0xFFF7EEE000000000L
     x ^= (x >>> 43)
 
-    (new MersenneTwister64(mt, mti), x)
+    (new MersenneTwister64(mt1, mti), x)
   }
 
   override def nextInt: (Rand, Int) =
