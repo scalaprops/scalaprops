@@ -117,4 +117,30 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
+  val alter = {
+    type KEY = Byte
+    type VAL = Byte
+    val E = Equal[KEY ==>> VAL]
+
+    Property.forAll { (a: KEY ==>> VAL, k: KEY, f: Option[VAL] => Option[VAL]) =>
+      val r = a.alter(k, f)
+      a.lookup(k) match {
+        case Some(v1) =>
+          f(Some(v1)) match {
+            case Some(v2) =>
+              E.equal(a.insert(k, v2), r)
+            case None =>
+              E.equal(a.delete(k), r)
+          }
+        case None =>
+          f(None) match {
+            case Some(v2) =>
+              E.equal(a.insert(k, v2), r)
+            case None =>
+              E.equal(a, r)
+          }
+      }
+    }.toProperties((), Param.minSuccessful(5000))
+  }
+
 }
