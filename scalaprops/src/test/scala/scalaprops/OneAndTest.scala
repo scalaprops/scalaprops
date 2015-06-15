@@ -13,7 +13,8 @@ object OneAndTest extends Scalaprops {
       scalazlaws.monad.all[F],
       scalazlaws.zip.all[F],
       scalazlaws.traverse1.all[F],
-      scalazlaws.align.all[F]
+      scalazlaws.align.all[F],
+      scalazlaws.plus.all[F]
     )
   }
 
