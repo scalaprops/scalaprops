@@ -143,4 +143,28 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
+  val updateAt = {
+    type KEY = Byte
+    type VAL = Byte
+    val E = Equal[KEY ==>> VAL]
+
+    Property.NoShrink.property2{ (a0: NonEmptyList[(KEY, VAL)], f: (KEY, VAL) => Option[VAL]) =>
+      val a = IMap.fromFoldable(a0)
+      Property.forAllG(Gen.choose(0, a.size - 1)){ i =>
+        val r = a.updateAt(i, f)
+        a.elemAt(i) match {
+          case Some((k, v1)) =>
+            f(k, v1) match {
+              case Some(v2) =>
+                E.equal(r, a.update(k, _ => Some(v2)))
+              case None =>
+                E.equal(a.deleteAt(i), r) && E.equal(a.delete(k), r)
+            }
+          case None =>
+            E.equal(a, r)
+        }
+      }
+    }.toProperties((), Param.minSuccessful(5000))
+  }
+
 }
