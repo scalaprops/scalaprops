@@ -6,8 +6,11 @@ import scalaz.std.string._
 
 object TreeTest extends Scalaprops {
 
-  val traverse1 = scalazlaws.traverse1.all[Tree]
-  val monad = scalazlaws.monad.all[Tree]
+  val laws = Properties.list(
+    scalazlaws.traverse1.all[Tree],
+    scalazlaws.monad.all[Tree]
+  )
+
   val equal = scalazlaws.equal.all[Tree[Int]]
 
   // TODO test comonad law
