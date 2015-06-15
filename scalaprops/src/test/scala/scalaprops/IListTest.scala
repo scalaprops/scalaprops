@@ -6,6 +6,7 @@ import scalaz.std.anyVal._
 object IListTest extends Scalaprops {
 
   val testLaws = Properties.list(
+    scalazlaws.order.all[IList[Byte]],
     scalazlaws.monadPlusStrong.all[IList],
     scalazlaws.traverse.all[IList],
     scalazlaws.cobind.all[IList],
