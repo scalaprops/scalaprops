@@ -5,8 +5,23 @@ import scalaz.std.anyVal._
 
 object MaybeTTest extends Scalaprops {
 
-  val testMonadLaws =
-    scalazlaws.monadPlus.all[({type l[a] = MaybeT[IList, a]})#l]
+  val testLawsIList = {
+    type F[A] = MaybeT[IList, A]
+    Properties.list(
+      scalazlaws.monadPlus.all[F],
+      scalazlaws.traverse.all[F],
+      scalazlaws.equal.all[F[Byte]]
+    )
+  }
+
+  val testLawsMaybe = {
+    type F[A] = MaybeT[Maybe, A]
+    Properties.list(
+      scalazlaws.monadPlus.all[F],
+      scalazlaws.traverse.all[F],
+      scalazlaws.equal.all[F[Byte]]
+    )
+  }
 
   val monadTrans = scalazlaws.monadTrans.all[MaybeT]
 
