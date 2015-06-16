@@ -167,4 +167,25 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
+  val updateMinWithKey = {
+    type KEY = Byte
+    type VAL = Byte
+    val E = Equal[KEY ==>> VAL]
+
+    Property.forAll{ (a: (KEY ==>> VAL), f: (KEY, VAL) => Option[VAL]) =>
+      val b = a.updateMinWithKey(f)
+      a.minViewWithKey match {
+        case Some(((k, v1), c)) =>
+          f(k, v1) match {
+            case Some(v2) =>
+              (a.size == b.size) && E.equal(b, c.insert(k, v2))
+            case None =>
+              ((a.size - 1) == b.size) && E.equal(b, c)
+          }
+        case None =>
+          a.isEmpty && b.isEmpty
+      }
+    }.toProperties((), Param.minSuccessful(5000))
+  }
+
 }
