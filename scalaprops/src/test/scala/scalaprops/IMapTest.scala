@@ -209,4 +209,18 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
+  val unionWithKey = {
+    type KEY = Byte
+    type VAL = Byte
+    val E = Equal[KEY ==>> VAL]
+
+    Property.forAll { (a: KEY ==>> VAL, b: KEY ==>> VAL, f: (KEY, VAL, VAL) => VAL) =>
+      val c = a.unionWithKey(b)(f)
+      val aa = a.toList.toMap
+      val bb = b.toList.toMap
+      val cc = scalaz.std.map.unionWithKey(aa, bb)(f)
+      E.equal(IMap.fromList(cc.toList), c)
+    }.toProperties((), Param.minSuccessful(5000))
+  }
+
 }
