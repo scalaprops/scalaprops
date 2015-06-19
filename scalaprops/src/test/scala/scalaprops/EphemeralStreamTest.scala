@@ -9,6 +9,7 @@ object EphemeralStreamTest extends Scalaprops {
     scalazlaws.monadPlusStrong.all[EphemeralStream],
     scalazlaws.traverse.all[EphemeralStream],
     scalazlaws.cobind.all[EphemeralStream],
+    scalazlaws.isEmpty.all[EphemeralStream],
     scalazlaws.align.all[EphemeralStream],
     scalazlaws.zip.all[EphemeralStream]
   )
