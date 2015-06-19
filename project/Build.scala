@@ -9,7 +9,7 @@ object build extends Build {
   private[this] val scalazlawsName = "scalaprops-scalazlaws"
   private[this] val scalapropsName = "scalaprops"
 
-  private[this] val scalazVersion = "7.1.2"
+  private[this] val scalazVersion = "7.1.3"
 
   val modules: List[String] = (
     coreName ::
