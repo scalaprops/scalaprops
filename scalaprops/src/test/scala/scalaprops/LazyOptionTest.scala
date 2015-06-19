@@ -9,6 +9,7 @@ object LazyOptionTest extends Scalaprops {
     scalazlaws.monadPlusStrong.all[LazyOption],
     scalazlaws.traverse.all[LazyOption],
     scalazlaws.zip.all[LazyOption],
+    scalazlaws.isEmpty.all[LazyOption],
     scalazlaws.cobind.all[LazyOption],
     scalazlaws.align.all[LazyOption]
   )
