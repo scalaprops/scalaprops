@@ -12,6 +12,7 @@ object LazyEitherTTest extends Scalaprops {
   val maybe1 =
     Properties.list(
       scalazlaws.monadError.all[({type l[a, b] = LazyEitherT[Maybe, a, b]})#l, Int],
+      scalazlaws.monadPlus.all[({type l[a] = LazyEitherT[Maybe, Int, a]})#l],
       scalazlaws.traverse.all[({type l[a] = LazyEitherT[Maybe, Int, a]})#l]
     )
 
@@ -21,6 +22,7 @@ object LazyEitherTTest extends Scalaprops {
   val ilist1 =
     Properties.list(
       scalazlaws.monadError.all[({type l[a, b] = LazyEitherT[IList, a, b]})#l, Int],
+      scalazlaws.monadPlus.all[({type l[a] = LazyEitherT[IList, Int, a]})#l],
       scalazlaws.traverse.all[({type l[a] = LazyEitherT[IList, Int, a]})#l]
     )
 
@@ -30,6 +32,7 @@ object LazyEitherTTest extends Scalaprops {
   val nel =
     Properties.list(
       scalazlaws.monadError.all[({type l[a, b] = LazyEitherT[NonEmptyList, a, b]})#l, Int],
+      scalazlaws.monadPlus.all[({type l[a] = LazyEitherT[NonEmptyList, Int, a]})#l],
       scalazlaws.traverse.all[({type l[a] = LazyEitherT[NonEmptyList, Int, a]})#l]
     )
 
