@@ -12,6 +12,7 @@ object IdTTest extends Scalaprops {
     type F[A] = IdT[Id, A]
     Properties.list(
       scalazlaws.traverse.all[F],
+      scalazlaws.order.all[F[Byte]],
       scalazlaws.monad.all[F]
     )
   }
@@ -20,6 +21,7 @@ object IdTTest extends Scalaprops {
     type F[A] = IdT[Maybe, A]
     Properties.list(
       scalazlaws.traverse.all[F],
+      scalazlaws.order.all[F[Byte]],
       scalazlaws.monad.all[F]
     )
   }
@@ -28,6 +30,7 @@ object IdTTest extends Scalaprops {
     type F[A] = IdT[IList, A]
     Properties.list(
       scalazlaws.traverse.all[F],
+      scalazlaws.order.all[F[Byte]],
       scalazlaws.monad.all[F]
     )
   }
