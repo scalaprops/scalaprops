@@ -266,7 +266,7 @@ object Gen extends GenInstances0 {
     listOfCBF0[List, A](A)
 
   implicit def arrayGen[A: reflect.ClassTag: Gen]: Gen[Array[A]] =
-    Gen[List[A]].map(_.toArray)
+    arrayOf(Gen[A], 0)
 
   def listOf1[A](g: Gen[A]): Gen[IList[A]] =
     listOf(g, 1)
