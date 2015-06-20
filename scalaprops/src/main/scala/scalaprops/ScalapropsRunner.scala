@@ -150,7 +150,7 @@ final class ScalapropsRunner(
                       cancel,
                       count => obj.listener.onCheck(obj, name, check, log, count)
                     )
-                  )(executorService).runFor(obj.param.timeout)
+                  )(executorService).runFor(param.timeout)
                   val duration = System.currentTimeMillis() - start
                   obj.listener.onFinish(obj, name, check.prop, param, r, log)
                   r match {
