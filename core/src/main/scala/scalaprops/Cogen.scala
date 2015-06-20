@@ -35,6 +35,11 @@ object Cogen extends CogenInstances0 {
         variant(if(a) 0L else 1L, g)
     }
 
+  implicit val cogenUnit: Cogen[Unit] =
+    new Cogen[Unit] {
+      def cogen[B](a: Unit, g: Gen[B]) = g
+    }
+
   implicit val cogenInt: Cogen[Int] =
     new Cogen[Int] {
       def cogen[B](a: Int, g: Gen[B]) =
