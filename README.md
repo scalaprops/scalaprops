@@ -24,15 +24,15 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false // currently, does not support parallel execution
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.8" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.9" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.8" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.9" % "test"
 ```
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.8/scalaprops-all_2.11-0.1.8-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.8/scalaprops-all_2.11-0.1.8-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.9/scalaprops-all_2.11-0.1.9-javadoc.jar/!/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.9/scalaprops-all_2.11-0.1.9-sxr.jar/!/index.html)
 
 
 ### snapshot version
