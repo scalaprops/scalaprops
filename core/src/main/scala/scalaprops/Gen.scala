@@ -69,6 +69,12 @@ object Gen extends GenInstances0 {
 
   def apply[A](implicit A: Gen[A]): Gen[A] = A
 
+  def from[A1, Z](f: A1 => Z)(implicit A1: Gen[A1]): Gen[Z] =
+    from1(f)(A1)
+
+  def from1[A1, Z](f: A1 => Z)(implicit A1: Gen[A1]): Gen[Z] =
+    A1.map(f)
+
   def value[A](a: A): Gen[A] =
     gen((_, r) => (r, a))
 
