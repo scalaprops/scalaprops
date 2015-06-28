@@ -35,6 +35,12 @@ object Cogen extends CogenInstances0 {
         CogenState(g.rand.next, A1.flatMap(x => C.cogen(f(x), g).gen))
     }
 
+  def from[A1, Z](f: Z => Option[A1])(implicit A1: Cogen[A1]): Cogen[Z] =
+    from1[A1, Z](f)(A1)
+
+  def from1[A1, Z](f: Z => Option[A1])(implicit A1: Cogen[A1]): Cogen[Z] =
+    A1.contramap(t => f(t).get)
+
   implicit val cogenBoolean: Cogen[Boolean] =
     new Cogen[Boolean] {
       def cogen[B](a: Boolean, g: CogenState[B]) =

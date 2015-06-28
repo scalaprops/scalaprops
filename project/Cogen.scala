@@ -29,10 +29,26 @@ s"""
         ${as.zipWithIndex.foldRight("g"){case ((a, m), s) => s"$a.cogen(t._${m + 1}, $s)"}}
     }
 """
+
+      def fromDef(name: String) =
+s"""final def $name[$t, $Z](f: $Z => Option[Tuple$i[$t]])(implicit ${as.map(a => s"$a: Cogen[$a]").mkString(", ")}): Cogen[$Z] ="""
+
+      val fromN =
+s"""
+  ${fromDef("from" + i)}
+    tuple$i[$t]($t).contramap(t => f(t).get)
+"""
+
+      val from =
+s"""
+  ${fromDef("from")}
+    from$i[$t, $Z](f)($t)
+"""
+
       if(i == 1) {
         tuple
       } else {
-        function + tuple
+        function + tuple + from + fromN
       }
     }
 
