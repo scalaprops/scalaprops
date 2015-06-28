@@ -43,4 +43,28 @@ object CofreeTest extends Scalaprops {
     )
   }
 
+  val stream = {
+    type CofreeStream[A] = Cofree[Stream, A]
+
+    import scalaz.std.stream._
+    import scalaz.Isomorphism._
+
+    val iso: Tree <~> CofreeStream =
+      new IsoFunctorTemplate[Tree, CofreeStream] {
+        def to[A](tree: Tree[A]) =
+          Cofree(tree.rootLabel, tree.subForest.map(to))
+        def from[A](c: CofreeStream[A]) =
+          Tree.node(c.head, c.tail.map(from(_)))
+      }
+
+    implicit def gen[A: Gen]: Gen[CofreeStream[A]] =
+      Gen[Tree[A]].map(iso.to)
+
+    Properties.list(
+      scalazlaws.monad.all[CofreeStream],
+      scalazlaws.comonad.all[CofreeStream],
+      scalazlaws.traverse1.all[CofreeStream],
+      scalazlaws.equal.all[CofreeStream[Int]]
+    )
+  }
 }
