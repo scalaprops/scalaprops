@@ -67,4 +67,28 @@ object CofreeTest extends Scalaprops {
       scalazlaws.equal.all[CofreeStream[Int]]
     )
   }
+
+  private[this] object CofreeGenImplicit {
+    implicit def gen[F[_], A](implicit
+      F: shapeless.Lazy[Gen[F[Cofree[F, A]]]],
+      A: Gen[A]
+    ): Gen[Cofree[F, A]] =
+      Apply[Gen].apply2(A, F.value)((h, t) =>
+        Cofree(h, t)
+      )
+  }
+
+  val disjunction = {
+    type E[A] = Byte \/ A
+    type F[A] = Cofree[E, A]
+
+    import CofreeGenImplicit._
+
+    Properties.list(
+      scalazlaws.bind.all[F],
+      scalazlaws.comonad.all[F],
+      scalazlaws.traverse1.all[F],
+      scalazlaws.equal.all[F[Byte]]
+    )
+  }
 }
