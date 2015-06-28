@@ -91,4 +91,18 @@ object CofreeTest extends Scalaprops {
       scalazlaws.equal.all[F[Byte]]
     )
   }
+
+  val validation = {
+    type E[A] = ValidationNel[Byte, A]
+    type F[A] = Cofree[E, A]
+
+    import CofreeGenImplicit._
+
+    Properties.list(
+      scalazlaws.bind.all[F],
+      scalazlaws.comonad.all[F],
+      scalazlaws.traverse1.all[F],
+      scalazlaws.equal.all[F[Byte]]
+    )
+  }
 }
