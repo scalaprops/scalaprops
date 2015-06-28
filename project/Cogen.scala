@@ -23,7 +23,7 @@ s"""  implicit final def f$i[$t, $Z](implicit ${as.map(a => s"$a: Gen[$a]").mkSt
 
       val tuple =
 s"""
-  implicit final def tuple$i[$t, $Z](implicit ${as.map(a => s"$a: Cogen[$a]").mkString(", ")}): $tpeT =
+  implicit final def tuple$i[$t](implicit ${as.map(a => s"$a: Cogen[$a]").mkString(", ")}): $tpeT =
     new $tpeT {
       def cogen[$X](t: $tp, g: CogenState[$X]) =
         ${as.zipWithIndex.foldRight("g"){case ((a, m), s) => s"$a.cogen(t._${m + 1}, $s)"}}
