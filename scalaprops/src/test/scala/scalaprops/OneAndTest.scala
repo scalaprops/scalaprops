@@ -44,4 +44,14 @@ object OneAndTest extends Scalaprops {
     )
   }
 
+  val tree = {
+    type F[A] = OneAnd[Tree, A]
+
+    Properties.list(
+      scalazlaws.equal.all[F[Int]],
+      scalazlaws.traverse1.all[F],
+      scalazlaws.align.all[F]
+    )
+  }
+
 }
