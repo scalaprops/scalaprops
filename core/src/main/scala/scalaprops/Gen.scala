@@ -14,6 +14,9 @@ final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
       (r0, g(a))
     }
 
+  def mapOrId(g: PartialFunction[A, A]): Gen[A] =
+    map(a => g.applyOrElse(a, (_: A) => a))
+
   def flatMap[B](g: A => Gen[B]): Gen[B] =
     gen{ (i, r) =>
       val (r0, a) = f(i, r)
