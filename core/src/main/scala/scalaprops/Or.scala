@@ -35,6 +35,17 @@ object :-: extends OrConsInstances {
         false
     }
 
+  implicit def orGen[A, B <: Or](implicit A: Gen[A], B: Gen[B]): Gen[A :-: B] = {
+    if(B eq Or.Empty.orEmptyGen){
+      A.map[A :-: B](Or.L(_))
+    }else {
+      Gen.frequency(
+        1 -> A.map[A :-: B](Or.L(_)),
+        3 -> B.map[A :-: B](Or.R(_))
+      )
+    }
+  }
+
 }
 
 object Or {
@@ -52,6 +63,9 @@ object Or {
   object Empty {
     implicit val instance: Order[Empty] =
       Order.order((_, _) => Ordering.EQ)
+
+    implicit val orEmptyGen: Gen[Or.Empty] =
+      Gen.oneOfLazy(Need(???))
   }
 
   final class MkOr[C <: Or] private[Or] {

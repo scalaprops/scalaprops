@@ -180,4 +180,10 @@ object Shrink {
       def from[A](ga: A => Stream[A]) = new Shrink(ga)
     }
 
+  implicit def cogenShrink[A: Gen: Cogen]: Cogen[Shrink[A]] =
+    Cogen[A => Stream[A]].contramap(_.f)
+
+  implicit def shrinkGen[A: Cogen: Gen]: Gen[Shrink[A]] =
+    Gen[A => Stream[A]].map(new Shrink(_))
+
 }

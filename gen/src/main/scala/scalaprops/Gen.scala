@@ -30,16 +30,16 @@ final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
     gen((s, r) => f(g(s), r))
 
   /** convenience method for get sample values */
-  def samples(size: Int = Param.defaultSize, listSize: Int = 100, seed: Long = Rand.defaultSeed): List[A] =
+  def samples(size: Int = Gen.defaultSize, listSize: Int = 100, seed: Long = Rand.defaultSeed): List[A] =
     Gen.sequenceNList(listSize, this).f(size, Rand.standard(seed))._2
 
-  def sample(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): A =
+  def sample(size: Int = Gen.defaultSize, seed: Long = Rand.defaultSeed): A =
     f(size, Rand.standard(seed))._2
 
-  def infiniteIterator(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): Iterator[A] =
+  def infiniteIterator(size: Int = Gen.defaultSize, seed: Long = Rand.defaultSeed): Iterator[A] =
     Gen.infinite(size, Rand.standard(seed), this)
 
-  def infiniteStream(size: Int = Param.defaultSize, seed: Long = Rand.defaultSeed): Stream[A] =
+  def infiniteStream(size: Int = Gen.defaultSize, seed: Long = Rand.defaultSeed): Stream[A] =
     Gen.infinite(size, Rand.standard(seed), this).toStream
 
   def toReaderState: Kleisli[({type l[a] = State[Rand, a]})#l, Int, A] =
@@ -58,6 +58,7 @@ sealed abstract class GenInstances0 extends GenInstances {
 }
 
 object Gen extends GenInstances0 {
+  private[scalaprops] val defaultSize = 100
 
   private[this] val iListFromList = IList.fromList[Any] _
   private[scalaprops] def IListFromList[A]: List[A] => IList[A] =
@@ -864,23 +865,6 @@ object Gen extends GenInstances0 {
     Gen.sized(n =>
       Gen.choose(0, n).flatMap(loop)
     )
-  }
-
-  implicit def shrinkGen[A: Cogen: Gen]: Gen[Shrink[A]] =
-    Gen[A => Stream[A]].map(new Shrink(_))
-
-  implicit val orEmptyGen: Gen[Or.Empty] =
-    Gen.oneOfLazy(Need(???))
-
-  implicit def orGen[A, B <: Or](implicit A: Gen[A], B: Gen[B]): Gen[A :-: B] = {
-    if(B eq orEmptyGen){
-      A.map[A :-: B](Or.L(_))
-    }else {
-      Gen.frequency(
-        1 -> A.map[A :-: B](Or.L(_)),
-        3 -> B.map[A :-: B](Or.R(_))
-      )
-    }
   }
 
   implicit def partialFunctionGen[A: Cogen, B: Gen]: Gen[PartialFunction[A, B]] =

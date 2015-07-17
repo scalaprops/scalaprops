@@ -10,13 +10,11 @@ final case class Param(
   minSuccessful: Int = 100,
   maxDiscarded: Int = 500,
   minSize: Int = 0,
-  maxSize: Int = Param.defaultSize,
+  maxSize: Int = Gen.defaultSize,
   timeout: Duration = Duration(30, TimeUnit.SECONDS)
 )
 
 object Param {
-  val defaultSize = 100
-
   def withCurrentTimeSeed(): Param = Param(
     rand = Rand.standard(System.nanoTime())
   )

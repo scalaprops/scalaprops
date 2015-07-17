@@ -4,6 +4,7 @@ import Common._
 
 object build extends Build {
 
+  private[this] val genName = "scalaprops-gen"
   private[this] val coreName = "scalaprops-core"
   private[this] val allName = "scalaprops-all"
   private[this] val scalazlawsName = "scalaprops-scalazlaws"
@@ -12,6 +13,7 @@ object build extends Build {
   private[this] val scalazVersion = "7.1.3"
 
   val modules: List[String] = (
+    genName ::
     coreName ::
     allName ::
     scalazlawsName ::
@@ -24,12 +26,17 @@ object build extends Build {
       initialCommands in console += "import scalaprops._, scalaz._"
     )
 
-  lazy val core = module("core").settings(
+  lazy val gen = module("gen").settings(
     Generator.settings
   ).settings(
-    name := coreName,
+    name := genName,
+    description := "pure functional random value generator",
     libraryDependencies += "org.scalaz" %% "scalaz-core" % scalazVersion
   )
+
+  lazy val core = module("core").settings(
+    name := coreName
+  ).dependsOn(gen)
 
   lazy val scalazlaws = module("scalazlaws").settings(
     name := scalazlawsName
@@ -83,7 +90,7 @@ object build extends Build {
     artifactClassifier in sxr := Some("sxr"),
     sxr in Compile <<= (sxr in Compile).dependsOn(UnidocKeys.unidoc in Compile)
   ).aggregate(
-    core, scalaprops, scalazlaws
+    gen, core, scalaprops, scalazlaws
   )
 
 }
