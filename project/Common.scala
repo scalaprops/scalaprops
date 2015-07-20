@@ -13,7 +13,9 @@ object Common {
       if(scalaVersion.value.startsWith("2.10")) Seq(
         "com.chuusai" %% "shapeless" % v % scope,
         compilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
-      ) else Seq(
+      ) else if(scalaVersion.value.startsWith("2.12")) {
+        Nil
+      } else Seq(
         "com.chuusai" %% "shapeless" % v % scope
       )
     }
@@ -32,7 +34,7 @@ object Common {
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     scalaVersion := Scala211,
-    crossScalaVersions := Scala211 :: "2.10.5" :: Nil,
+    crossScalaVersions := "2.12.0-M2" :: Scala211 :: "2.10.5" :: Nil,
     organization := "com.github.scalaprops",
     description := "property based testing library for Scala",
     homepage := Some(url("https://github.com/scalaprops/scalaprops")),

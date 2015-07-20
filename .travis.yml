@@ -17,12 +17,17 @@ sudo: false
 script:
   - git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
   - git show --oneline --check
-  - sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile scalapropsTestNames test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && ${JAVA_HOME} == $(jdk_switcher home oraclejdk7) && "${TRAVIS_BRANCH}" == "master" ]]; then echo "publish"; fi)
+  - sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile scalapropsTestNames test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) && "${TRAVIS_BRANCH}" == "master" ]]; then echo "publish"; fi)
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
-  - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk7) ]]; then rm -rf $HOME/.ivy2/cache ; fi
+  - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) ]]; then rm -rf $HOME/.ivy2/cache ; fi
 
 env:
   global:
   - secure: h4pMOc+xQxgnoxlWzU9jGkd2i26VVOhcMydDQ1unIVfpcRCWz6rj5KWQutRQ4vuDg1+eCwUMXeG9HjOptQXFlRonOprGh/TyhjqTvukT6jwi76UdMQk9F412e1cV21t67FEdil96CTyxtd385Cv1ZfaxjmGdkqG8Jlu7/qJYCI8=
   - secure: XFwrfgjssMLrg4rNrr1fnq0tdXMAIXGhGwaRQzzgiwACkTNuQaIdlD0DoEt42ClWxpfkxqYneihtVm2c2jJHyBB4y1AjXCKuINdH2TUpzj7Ix09O6MedeuW39pNs2vLttUHpREWjGt/ObA6pZoDELEmQyhAszDscHc/9IIGq/NE=
+
+matrix:
+  include:
+    - scala: 2.12.0-M2
+      jdk: oraclejdk8
