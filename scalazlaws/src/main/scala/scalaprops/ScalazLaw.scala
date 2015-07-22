@@ -221,6 +221,10 @@ object ScalazLaw {
   val monadTransLaw2Maybe = law0(monadTrans, "law2 Maybe")
   val monadTransLaw2IList = law0(monadTrans, "law2 IList")
 
+  val comonadTrans = law("comonadTrans")
+  val comonadTransLaw1Nel = law0(comonadTrans, "law1 NonEmptyList")
+  val comonadTransLaw2Nel = law0(comonadTrans, "law2 NonEmptyList")
+
   val values: List[ScalazLaw] = set.toList
 
   implicit val scalazLawGen: Gen[ScalazLaw] = {

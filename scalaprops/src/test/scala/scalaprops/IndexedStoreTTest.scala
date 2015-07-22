@@ -23,4 +23,5 @@ object IndexedStoreTTest extends Scalaprops {
   val testMaybe3 = scalazlaws.cobind.all[({type l[A] = StoreT[Maybe, Int, A]})#l]
   val testIList3 = scalazlaws.cobind.all[({type l[A] = StoreT[IList, Int, A]})#l]
 
+  val comonadTransLaws = scalazlaws.comonadTrans.all[({type l[f[_], a] = StoreT[f, Int, a]})#l]
 }
