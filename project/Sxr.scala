@@ -37,7 +37,7 @@ object Sxr {
   )
 
   val settings2: Seq[Setting[_]] = Defaults.packageTaskSettings(
-    sxr in Compile, (crossTarget in Compile).map{ dir =>
+    sxr in Compile, (crossTarget in Compile, UnidocKeys.unidoc in Compile).map{ (dir, _) =>
       Path.allSubpaths(dir / "unidoc.sxr").toSeq
     }
   ) ++ Seq[Setting[_]](
@@ -50,10 +50,6 @@ object Sxr {
       Def.setting(libraryDependencies.value :+ compilerPlugin("org.improving" %% "sxr" % "1.0.1"))
     ),
     ifSxrAvailable(
-      sxr in Compile,
-      (sxr in Compile).dependsOn(compile in Compile)
-    ),
-    ifSxrAvailable(
       packagedArtifacts,
       Def.task(packagedArtifacts.value ++ Classpaths.packaged(Seq(sxr in Compile)).value)
     ),
@@ -64,10 +60,6 @@ object Sxr {
     ifSxrAvailable(
       artifactClassifier in sxr,
       Def.setting(Option("sxr"))
-    ),
-    ifSxrAvailable(
-      sxr in Compile,
-      (sxr in Compile).dependsOn(UnidocKeys.unidoc in Compile)
     )
   )
 
