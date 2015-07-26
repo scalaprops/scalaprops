@@ -10,7 +10,8 @@ object build extends Build {
   private[this] val scalazlawsName = "scalaprops-scalazlaws"
   private[this] val scalapropsName = "scalaprops"
 
-  private[this] val scalazVersion = "7.1.3"
+  val scalazVersion = SettingKey[String]("scalazVersion")
+  val shapelessVersion = SettingKey[String]("shapelessVersion")
 
   val modules: List[String] = (
     genName ::
@@ -23,6 +24,8 @@ object build extends Build {
 
   private[this] def module(id: String) =
     Project(id, file(id)).settings(commonSettings).settings(
+      scalazVersion := "7.1.3",
+      shapelessVersion := "2.2.5",
       initialCommands in console += "import scalaprops._, scalaz._"
     )
 
@@ -31,7 +34,7 @@ object build extends Build {
   ).settings(
     name := genName,
     description := "pure functional random value generator",
-    libraryDependencies += "org.scalaz" %% "scalaz-core" % scalazVersion
+    libraryDependencies += "org.scalaz" %% "scalaz-core" % scalazVersion.value
   )
 
   lazy val core = module("core").settings(
@@ -45,7 +48,7 @@ object build extends Build {
   lazy val scalaprops = module(scalapropsName).settings(
     name := scalapropsName,
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
-    libraryDependencies += "org.scalaz" %% "scalaz-concurrent" % scalazVersion,
+    libraryDependencies += "org.scalaz" %% "scalaz-concurrent" % scalazVersion.value,
     shapelessDependency("test"),
     (sources in Test) := {
       val s = (sources in Test).value

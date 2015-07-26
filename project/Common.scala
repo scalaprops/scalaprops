@@ -9,7 +9,7 @@ object Common {
 
   def shapelessDependency(scope: String) =
     libraryDependencies ++= {
-      val v = "2.2.3"
+      val v = build.shapelessVersion.value
       if(scalaVersion.value.startsWith("2.10")) Seq(
         "com.chuusai" %% "shapeless" % v % scope,
         compilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
