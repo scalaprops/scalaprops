@@ -78,6 +78,7 @@ object Common {
       "-language:existentials" ::
       "-language:higherKinds" ::
       "-language:implicitConversions" ::
+      "-Yno-adapted-args" ::
       Nil
     ),
     scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
