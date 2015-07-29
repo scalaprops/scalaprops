@@ -9,6 +9,7 @@ object EitherTTest extends Scalaprops {
     Properties.list(
       scalazlaws.equal.all[EitherT[Maybe, Int, Int]],
       scalazlaws.monadPlus.all[({type l[a] = EitherT[Maybe, Int, a]})#l],
+      scalazlaws.monadError.all[({type l[a, b] = EitherT[Maybe, a, b]})#l, Int],
       scalazlaws.traverse.all[({type l[a] = EitherT[Maybe, Int, a]})#l]
     )
 
@@ -19,6 +20,7 @@ object EitherTTest extends Scalaprops {
     Properties.list(
       scalazlaws.equal.all[EitherT[IList, Int, Int]],
       scalazlaws.monadPlus.all[({type l[a] = EitherT[IList, Int, a]})#l],
+      scalazlaws.monadError.all[({type l[a, b] = EitherT[IList, a, b]})#l, Int],
       scalazlaws.traverse.all[({type l[a] = EitherT[IList, Int, a]})#l]
     )
 
@@ -26,6 +28,7 @@ object EitherTTest extends Scalaprops {
     Properties.list(
       scalazlaws.equal.all[EitherT[NonEmptyList, Int, Int]],
       scalazlaws.monadPlus.all[({type l[a] = EitherT[NonEmptyList, Int, a]})#l],
+      scalazlaws.monadError.all[({type l[a, b] = EitherT[NonEmptyList, a, b]})#l, Int],
       scalazlaws.traverse.all[({type l[a] = EitherT[NonEmptyList, Int, a]})#l]
     )
 
