@@ -31,6 +31,8 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.11" % "tes
 libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.11" % "test"
 ```
 
+or you can use [sbt plugin](https://github.com/scalaprops/sbt-scalaprops)
+
 - [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.11/scalaprops-all_2.11-0.1.11-javadoc.jar/!/index.html)
 - [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.11/scalaprops-all_2.11-0.1.11-sxr.jar/!/index.html)
 
