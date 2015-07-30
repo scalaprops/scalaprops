@@ -619,6 +619,12 @@ object Gen extends GenInstances0 {
   implicit val javaShortGen: Gen[java.lang.Short] =
     Gen[Short].map(java.lang.Short.valueOf)
 
+  implicit val javaDoubleGen: Gen[java.lang.Double] =
+    Gen[Double].map(java.lang.Double.valueOf)
+
+  implicit val javaFloatGen: Gen[java.lang.Float] =
+    Gen[Float].map(java.lang.Float.valueOf)
+
   implicit val javaBooleanGen: Gen[java.lang.Boolean] =
     Gen.elements(java.lang.Boolean.TRUE, java.lang.Boolean.FALSE)
 
