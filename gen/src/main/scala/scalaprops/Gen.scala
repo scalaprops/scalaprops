@@ -442,9 +442,10 @@ object Gen extends GenInstances0 {
   implicit val genAlphaNumChar: Gen[Char @@ GenTags.AlphaNum] =
     GenTags.AlphaNum.subst(alphaNumChar)
 
-  private[this] def genString(g: Gen[Char], min: Int = 0): Gen[String] =
-    arrayOf(g, min).map(String.valueOf)
+  def genString(g: Gen[Char], min: Int = 0): Gen[String] =
+    arrayOf(g, min.max(0)).map(String.valueOf)
 
+  /** alias for `genString(g, min = 1)` */
   def nonEmptyString(g: Gen[Char]): Gen[String] =
     genString(g, 1)
 
