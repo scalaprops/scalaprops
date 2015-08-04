@@ -63,7 +63,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
       )
     )
 
-  // TODO remove `listener` parameter? use scalaz-stream?
+  // TODO remove `listener` parameter?
   def check(param: Param, cancel: AtomicBoolean, listener: Int => Unit): CheckResult = {
     import param.{rand => _, _}
     @annotation.tailrec

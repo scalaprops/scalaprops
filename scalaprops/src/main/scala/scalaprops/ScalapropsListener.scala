@@ -74,7 +74,7 @@ object ScalapropsListener {
       })
       println()
       val start = System.currentTimeMillis()
-      // TODO ugly. use scalaz-stream?
+      // TODO ugly
       tree.foreach{ case (treeLabel, (name, r)) =>
         print(treeLabel + name + " ")
         println(r.map(" " + _).getOrElse(""))
