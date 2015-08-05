@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaprops.Property.forAll
+import scalaprops.Property.{forAll, forAllG}
 import scalaz._
 import scalaprops.GenTags._
 
@@ -31,5 +31,19 @@ object StringTest extends Scalaprops {
   val lower = test[GenTags.AlphaLower]('a' to 'z')
   val alpha = test[GenTags.Alpha](('a' to 'z') ++ ('A' to 'Z'))
   val alphaNum = test[GenTags.AlphaNum](('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9'))
+
+  val genString = {
+    val g = for {
+      min <- Gen.choose(-10, 50)
+      s <- Gen.genString(Gen.asciiChar, min)
+    } yield (min, s)
+
+    val p = forAllG(g) {
+      case (min, s) => s.length >= min
+    }
+    p.toProperties("minimum length")
+  }
+
+  val nonEmptyString = forAllG(Gen.nonEmptyString(Gen.asciiChar))(_.nonEmpty)
 
 }
