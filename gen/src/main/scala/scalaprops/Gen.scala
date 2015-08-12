@@ -197,7 +197,7 @@ object Gen extends GenInstances0 {
     }
 
   @annotation.tailrec
-  private[this] def pick0[B](n: Int, gs: IList[(Int, Gen[B])]): Gen[B] = gs match {
+  private[this] def pick0[B](n: Int, gs: IList[(Int, B)]): B = gs match {
     case INil() => sys.error(s"bug? $n $gs")
     case ICons(h, t) =>
       val k = h._1
@@ -205,16 +205,25 @@ object Gen extends GenInstances0 {
       else pick0(n - k, t)
   }
 
-  def frequency[A](gs: NonEmptyList[(Int, Gen[A])]): Gen[A] = {
+  private[this] def frequency0[F[_], A](gs: NonEmptyList[(Int, F[Gen[A]])])(implicit C: Comonad[F]): Gen[A] = {
     import std.anyVal._
     val F = Foldable[NonEmptyList]
     choose(1, F.foldMap(gs)(_._1)).flatMap{ i =>
-      pick0(i, F.toIList(gs))
+      C.copoint(pick0(i, F.toIList(gs)))
     }
   }
 
+  def frequency[A](gs: NonEmptyList[(Int, Gen[A])]): Gen[A] =
+    frequency0[Id.Id, A](gs)
+
   def frequency[A](g: (Int, Gen[A]), gs: (Int, Gen[A]) *): Gen[A] =
     frequency(NonEmptyList.nels(g, gs: _*))
+
+  def lazyFrequency[A](gs: NonEmptyList[(Int, Need[Gen[A]])]): Gen[A] =
+    frequency0(gs)
+
+  def lazyFrequency[A](g: (Int, Need[Gen[A]]), gs: (Int, Need[Gen[A]]) *): Gen[A] =
+    lazyFrequency(NonEmptyList.nels(g, gs: _*))
 
   def elemFrequency[A](as: NonEmptyList[(Int, A)]): Gen[A] =
     frequency(as.map{case (i, a) => i -> Gen.value(a)})
