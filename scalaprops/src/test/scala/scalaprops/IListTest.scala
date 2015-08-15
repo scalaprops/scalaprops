@@ -1,5 +1,6 @@
 package scalaprops
 
+import scalaprops.Property.forAllG
 import scalaz.IList
 import scalaz.std.anyVal._
 
@@ -14,5 +15,19 @@ object IListTest extends Scalaprops {
     scalazlaws.align.all[IList],
     scalazlaws.zip.all[IList]
   )
+
+  val listOf = {
+    val g = for {
+      min <- Gen.choose(-10, 50)
+      xs <- Gen.listOf(Gen[Byte], min)
+    } yield (min, xs)
+
+    val p = forAllG(g) {
+      case (min, xs) => xs.length >= min
+    }
+    p.toProperties("minimum length")
+  }
+
+  val listOf1 = forAllG(Gen.listOf1(Gen[Byte]))(_.nonEmpty)
 
 }

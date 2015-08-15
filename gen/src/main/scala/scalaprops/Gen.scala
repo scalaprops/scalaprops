@@ -235,14 +235,14 @@ object Gen extends GenInstances0 {
 
   private[this] def listOf_[F[_], A](g: Gen[A], min: Int, f: List[A] => F[A]): Gen[F[A]] =
     parameterised{ (size, r) =>
-      chooseR(min, size, r).flatMap{ n =>
+      chooseR(min, size.max(min), r).flatMap{ n =>
         sequenceN(n, g, f)
       }
     }
 
   private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], min: Int): Gen[Array[A]] =
     parameterised{ (size, r) =>
-      chooseR(min, size, r).flatMap{ n =>
+      chooseR(min, size.max(min), r).flatMap{ n =>
         sequenceNArray(n, g)
       }
     }
