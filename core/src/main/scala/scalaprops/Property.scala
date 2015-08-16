@@ -193,47 +193,19 @@ object Property {
     propLazy(Need(result))
 
   def forAll[A1](f: A1 => Boolean)(implicit A1: Gen[A1]): Property =
-    forall0(A1, Shrink.empty)(f.andThen(prop))
+    forAllS(f)(A1, Shrink.empty)
 
   def forAll[A1, A2](f: (A1, A2) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2]): Property =
-    forall0(A1, Shrink.empty)(a1 =>
-      forall0(A2, Shrink.empty)(a2 =>
-        prop(f(a1, a2))
-      )
-    )
+    forAllS(f)(A1, A2, Shrink.empty, Shrink.empty)
 
   def forAll[A1, A2, A3](f: (A1, A2, A3) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3]): Property =
-    forall0(A1, Shrink.empty)(a1 =>
-      forall0(A2, Shrink.empty)(a2 =>
-        forall0(A3, Shrink.empty)(a3 =>
-          prop(f(a1, a2, a3))
-        )
-      )
-    )
+    forAllS(f)(A1, A2, A3, Shrink.empty, Shrink.empty, Shrink.empty)
 
   def forAll[A1, A2, A3, A4](f: (A1, A2, A3, A4) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4]): Property =
-    forall0(A1, Shrink.empty)(a1 =>
-      forall0(A2, Shrink.empty)(a2 =>
-        forall0(A3, Shrink.empty)(a3 =>
-          forall0(A4, Shrink.empty)(a4 =>
-            prop(f(a1, a2, a3, a4))
-          )
-        )
-      )
-    )
+    forAllS(f)(A1, A2, A3, A4, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty)
 
   def forAll[A1, A2, A3, A4, A5](f: (A1, A2, A3, A4, A5) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5]): Property =
-    forall0(A1, Shrink.empty)(a1 =>
-      forall0(A2, Shrink.empty)(a2 =>
-        forall0(A3, Shrink.empty)(a3 =>
-          forall0(A4, Shrink.empty)(a4 =>
-            forall0(A5, Shrink.empty)(a5 =>
-              prop(f(a1, a2, a3, a4, a5))
-            )
-          )
-        )
-      )
-    )
+    forAllS(f)(A1, A2, A3, A4, A5, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty)
 
   /** `forAll` with explicit `Gen` */
   def forAllG[A1](A1: Gen[A1])(f: A1 => Boolean): Property =
@@ -293,5 +265,48 @@ object Property {
     def property3[A1, A2, A3](f: (A1, A2, A3) => Property)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], S1: Shrink[A1] = Shrink.empty[A1], S2: Shrink[A2] = Shrink.empty[A2], S3: Shrink[A3] = Shrink.empty[A3]): Property =
       Property.property3(f)
   }
+
+  def forAllS[A1](f: A1 => Boolean)(implicit A1: Gen[A1], S1: Shrink[A1]): Property =
+    forall0(A1, S1)(f.andThen(prop))
+
+  def forAllS[A1, A2](f: (A1, A2) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], S1: Shrink[A1], S2: Shrink[A2]): Property =
+    forall0(A1, S1)(a1 =>
+      forall0(A2, S2)(a2 =>
+        prop(f(a1, a2))
+      )
+    )
+
+  def forAllS[A1, A2, A3](f: (A1, A2, A3) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], S1: Shrink[A1], S2: Shrink[A2], S3: Shrink[A3]): Property =
+    forall0(A1, S1)(a1 =>
+      forall0(A2, S2)(a2 =>
+        forall0(A3, S3)(a3 =>
+          prop(f(a1, a2, a3))
+        )
+      )
+    )
+
+  def forAllS[A1, A2, A3, A4](f: (A1, A2, A3, A4) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], S1: Shrink[A1], S2: Shrink[A2], S3: Shrink[A3], S4: Shrink[A4]): Property =
+    forall0(A1, S1)(a1 =>
+      forall0(A2, S2)(a2 =>
+        forall0(A3, S3)(a3 =>
+          forall0(A4, S4)(a4 =>
+            prop(f(a1, a2, a3, a4))
+          )
+        )
+      )
+    )
+
+  def forAllS[A1, A2, A3, A4, A5](f: (A1, A2, A3, A4, A5) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], S1: Shrink[A1], S2: Shrink[A2], S3: Shrink[A3], S4: Shrink[A4], S5: Shrink[A5]): Property =
+    forall0(A1, S1)(a1 =>
+      forall0(A2, S2)(a2 =>
+        forall0(A3, S3)(a3 =>
+          forall0(A4, S4)(a4 =>
+            forall0(A5, S5)(a5 =>
+              prop(f(a1, a2, a3, a4, a5))
+            )
+          )
+        )
+      )
+    )
 
 }
