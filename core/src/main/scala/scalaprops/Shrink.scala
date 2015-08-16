@@ -177,7 +177,7 @@ object Shrink {
   implicit val bigInt: Shrink[BigInt] =
     Shrink[BigInteger].xmap(BigInt(_), _.bigInteger)
 
-  implicit val shrinkFunctionIso: Shrink <~> ({type l[a] = a => Stream[a]})#l =
+  val shrinkFunctionIso: Shrink <~> ({type l[a] = a => Stream[a]})#l =
     new IsoFunctorTemplate[Shrink, ({type l[a] = a => Stream[a]})#l] {
       def to[A](fa: Shrink[A]) = fa.f
       def from[A](ga: A => Stream[A]) = new Shrink(ga)
