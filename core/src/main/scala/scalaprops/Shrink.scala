@@ -51,6 +51,9 @@ object Shrink {
   implicit val int: Shrink[Int] =
     long.xmap(_.toInt, x => x)
 
+  implicit val short: Shrink[Short] =
+    long.xmap(_.toShort, x => x)
+
   implicit val byte: Shrink[Byte] =
     long.xmap(_.toByte, x => x)
 
