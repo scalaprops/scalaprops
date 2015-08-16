@@ -5,19 +5,30 @@ import scalaprops.Property.forAll
 import scalaprops.Properties.properties
 import scalaz._
 
-object plus {
+sealed abstract class plus[G[_], A](
+  implicit A1: semigroup[G]
+) {
 
-  def associative[F[_], X](implicit f: Plus[F], afx: Gen[F[X]], ef: Equal[F[X]]) =
-    forAll(f.plusLaw.associative[X] _)
+  def associative[M[_], X](implicit f: Plus[M], afx: G[M[X]], ef: Equal[M[X]]): Property
 
-  def laws[F[_]: Plus](implicit afx: Gen[F[Int]], ef: Equal[F[Int]]): Properties[ScalazLaw] =
+  final def laws[M[_]: Plus](implicit afx: G[M[A]], ef: Equal[M[A]]): Properties[ScalazLaw] =
     properties(ScalazLaw.plus)(
-      ScalazLaw.plusAssociative -> associative[F, Int]
+      ScalazLaw.plusAssociative -> associative[M, A]
     )
 
-  def all[F[_]](implicit F: Plus[F], afx: Gen[F[Int]], ef: Equal[F[Int]]): Properties[ScalazLaw] = {
-    implicit val s = F.semigroup[Int]
-    Properties.fromProps(ScalazLaw.plusAll, plus.laws[F], semigroup.laws[F[Int]])
+  final def all[M[_]](implicit F: Plus[M], afx: G[M[A]], ef: Equal[M[A]]): Properties[ScalazLaw] = {
+    implicit val s = F.semigroup[A]
+    Properties.fromProps(ScalazLaw.plusAll, this.laws[M], semigroup[G].laws[M[A]])
   }
+
+}
+
+object plus extends plus[Gen, Int] {
+  def apply[F[_, _], G[_], A](implicit A: plus[G, A]): plus[G, A] = A
+
+  implicit val int: plus[Gen, Int] = this
+
+  def associative[M[_], X](implicit f: Plus[M], afx: Gen[M[X]], ef: Equal[M[X]]) =
+    forAll(f.plusLaw.associative[X] _)
 
 }

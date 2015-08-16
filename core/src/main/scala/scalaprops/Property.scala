@@ -308,4 +308,19 @@ object Property {
       )
     )
 
+  def forAllGS[A1](f: A1 => Boolean)(implicit A1: GS[A1]): Property =
+    forAllS(f)(A1.gen, A1.shrink)
+
+  def forAllGS[A1, A2](f: (A1, A2) => Boolean)(implicit A1: GS[A1], A2: GS[A2]): Property =
+    forAllS(f)(A1.gen, A2.gen, A1.shrink, A2.shrink)
+
+  def forAllGS[A1, A2, A3](f: (A1, A2, A3) => Boolean)(implicit A1: GS[A1], A2: GS[A2], A3: GS[A3]): Property =
+    forAllS(f)(A1.gen, A2.gen, A3.gen, A1.shrink, A2.shrink, A3.shrink)
+
+  def forAllGS[A1, A2, A3, A4](f: (A1, A2, A3, A4) => Boolean)(implicit A1: GS[A1], A2: GS[A2], A3: GS[A3], A4: GS[A4]): Property =
+    forAllS(f)(A1.gen, A2.gen, A3.gen, A4.gen, A1.shrink, A2.shrink, A3.shrink, A4.shrink)
+
+  def forAllGS[A1, A2, A3, A4, A5](f: (A1, A2, A3, A4, A5) => Boolean)(implicit A1: GS[A1], A2: GS[A2], A3: GS[A3], A4: GS[A4], A5: GS[A5]): Property =
+    forAllS(f)(A1.gen, A2.gen, A3.gen, A4.gen, A5.gen, A1.shrink, A2.shrink, A3.shrink, A4.shrink, A5.shrink)
+
 }
