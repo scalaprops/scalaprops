@@ -37,6 +37,7 @@ object Common {
     crossScalaVersions := "2.12.0-M2" :: Scala211 :: "2.10.5" :: Nil,
     organization := "com.github.scalaprops",
     description := "property based testing library for Scala",
+    fullResolvers ~= {_.filterNot(_.name == "jcenter")},
     homepage := Some(url("https://github.com/scalaprops/scalaprops")),
     licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
     commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
