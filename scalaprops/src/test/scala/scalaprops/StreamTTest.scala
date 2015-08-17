@@ -32,6 +32,14 @@ object StreamTTest extends Scalaprops {
     )
   }
 
+  val iList = {
+    type F[A] = StreamT[IList, A]
+    Properties.list(
+      scalazlaws.monadPlus.all[F],
+      scalazlaws.equal.all[F[Int]]
+    )
+  }.andThenParam(Param.maxSize(3))
+
   val monadTrans = scalazlaws.monadTrans.all[StreamT]
 
 }
