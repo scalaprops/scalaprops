@@ -37,4 +37,10 @@ object MaybeTTest extends Scalaprops {
 
   val monadTrans = scalazlaws.monadTrans.all[MaybeT]
 
+  import FunctionEqual._
+
+  val hoist1 = scalazlaws.hoist.law1[MaybeT, Maybe, Maybe, Maybe]
+  val hoist2 = scalazlaws.hoist.law1[MaybeT, IList, IList, IList]
+  val hoist3 = scalazlaws.hoist.law2[MaybeT, Maybe]
+  val hoist4 = scalazlaws.hoist.law2[MaybeT, IList]
 }

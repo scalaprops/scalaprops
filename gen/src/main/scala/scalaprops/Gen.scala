@@ -943,4 +943,20 @@ object Gen extends GenInstances0 {
   implicit def bijectionTGen[F[_], G[_], A, B](implicit A: Cogen[A], B: Cogen[B], F: Gen[F[B]], G: Gen[G[A]]): Gen[BijectionT[F, G, A, B]] =
     Gen[(A => F[B], B => G[A])].map{ case (f, g) => BijectionT.bijection(f, g) }
 
+  implicit def naturalTransGen[F[_], G[_]](implicit F: Foldable[F], G: From[G]): Gen[F ~> G] =
+    Gen.gen { (i, r) =>
+      val nt = new (F ~> G) {
+        def apply[A](fa: F[A]) = {
+          val g = F.toList(fa) match {
+            case h :: t =>
+              Gen.list(Gen.elements(h, t : _*))
+            case Nil =>
+              Gen.value(Nil)
+          }
+          g.flatMap(G.from).f(i, r)._2
+        }
+      }
+      (r.next, nt)
+    }
+
 }

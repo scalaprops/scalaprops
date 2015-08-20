@@ -34,4 +34,10 @@ object EitherTTest extends Scalaprops {
 
   val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = EitherT[f, Int, a]})#l]
 
+  import FunctionEqual._
+  private type EitherTByte[F[_], A] = EitherT[F, Byte, A]
+  val hoist1 = scalazlaws.hoist.law1[EitherTByte, Maybe, Maybe, Maybe]
+  val hoist2 = scalazlaws.hoist.law1[EitherTByte, IList, IList, IList]
+  val hoist3 = scalazlaws.hoist.law2[EitherTByte, Maybe]
+  val hoist4 = scalazlaws.hoist.law2[EitherTByte, IList]
 }
