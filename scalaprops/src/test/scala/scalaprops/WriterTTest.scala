@@ -72,4 +72,10 @@ object WriterTTest extends Scalaprops {
 
   val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = WriterT[f, Int, a]})#l]
 
+  import FunctionEqual._
+  private[this] type WriterTList[F[_], A] = WriterT[F, IList[Byte], A]
+  val hoist1 = scalazlaws.hoist.law1[WriterTList, Maybe, Maybe, Maybe]
+  val hoist2 = scalazlaws.hoist.law1[WriterTList, IList, IList, IList]
+  val hoist3 = scalazlaws.hoist.law2[WriterTList, IList]
+  val hoist4 = scalazlaws.hoist.law2[WriterTList, Maybe]
 }

@@ -217,4 +217,10 @@ object StreamTTest extends Scalaprops {
 
   val monadTrans = scalazlaws.monadTrans.all[StreamT]
 
+  import FunctionEqual._
+
+  val hoist1 = scalazlaws.hoist.law1[StreamT, Maybe, Maybe, Maybe]
+  val hoist2 = scalazlaws.hoist.law2[StreamT, Maybe]
+  val hoist3 = scalazlaws.hoist.law2[StreamT, IList]
+
 }

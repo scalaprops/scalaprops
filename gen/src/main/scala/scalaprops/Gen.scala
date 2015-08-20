@@ -1000,4 +1000,20 @@ object Gen extends GenInstances0 {
       G2.map(FreeT.liftM[S, M, A](_)),
       G1.map(FreeT.liftF[S, M, A](_))
     )
+
+  implicit def naturalTransGen[F[_], G[_]](implicit F: Foldable[F], G: From[G]): Gen[F ~> G] =
+    Gen.gen { (i, r) =>
+      val nt = new (F ~> G) {
+        def apply[A](fa: F[A]) = {
+          val g = F.toList(fa) match {
+            case h :: t =>
+              Gen.list(Gen.elements(h, t : _*))
+            case Nil =>
+              Gen.value(Nil)
+          }
+          g.flatMap(G.from).f(i, r)._2
+        }
+      }
+      (r.next, nt)
+    }
 }
