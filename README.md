@@ -1,6 +1,6 @@
 # scalaprops
 
-[![Build Status](https://secure.travis-ci.org/scalaprops/scalaprops.png)](http://travis-ci.org/scalaprops/scalaprops)
+[![Build Status](https://travis-ci.org/scalaprops/scalaprops.svg?branch=master)](https://travis-ci.org/scalaprops/scalaprops)
 
 property based testing library for Scala
 
