@@ -10,7 +10,7 @@ object invariantFunctor {
   def identity[F[_], X](implicit F: InvariantFunctor[F], afx: Gen[F[X]], ef: Equal[F[X]]): Property =
     forAll(F.invariantFunctorLaw.invariantIdentity[X] _)
 
-  def composite[F[_], X, Y, Z](implicit F: InvariantFunctor[F], af: Gen[F[X]], axy: Gen[(X => Y)],
+  def composite[F[_], X, Y, Z](implicit F: InvariantFunctor[F], af: Gen[F[X]], axy: Gen[X => Y],
                                ayz: Gen[Y => Z], ayx: Gen[Y => X], azy: Gen[Z => Y], ef: Equal[F[Z]]): Property =
     forAll(F.invariantFunctorLaw.invariantComposite[X, Y, Z] _)
 
