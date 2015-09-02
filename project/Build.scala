@@ -49,6 +49,7 @@ object build extends Build {
     name := scalapropsName,
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
     libraryDependencies += "org.scalaz" %% "scalaz-concurrent" % scalazVersion.value,
+    libraryDependencies += "org.scodec" %% "scodec-scalaz" % "1.1.0" % "test",
     shapelessDependency("test"),
     (sources in Test) := {
       val s = (sources in Test).value
