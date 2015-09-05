@@ -32,7 +32,6 @@ object KleisliTest extends Scalaprops {
 
   private val sizeSetting = Foldable1[NonEmptyList].foldLeft1(
     NonEmptyList(
-      ScalazLaw.bindApConsistentWithBind,
       ScalazLaw.composeAssociative,
       ScalazLaw.plusAssociative,
       ScalazLaw.semigroupAssociative
