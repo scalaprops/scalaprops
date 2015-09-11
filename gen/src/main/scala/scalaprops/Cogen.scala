@@ -336,6 +336,9 @@ object Cogen extends CogenInstances0 {
         Cogen[(A, Stream[Tree[A]])].cogen((a.rootLabel, a.subForest), g)
     }
 
+  implicit def cogenTreeLoc[A: Cogen]: Cogen[TreeLoc[A]] =
+    Cogen.from4(TreeLoc.unapply)
+
   implicit def cogenCoyoneda[F[_]: Functor, A](implicit F: Cogen[F[A]]): Cogen[Coyoneda[F, A]] =
     F.contramap(_.run)
 
