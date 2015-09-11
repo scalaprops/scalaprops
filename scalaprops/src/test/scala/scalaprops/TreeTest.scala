@@ -9,12 +9,11 @@ object TreeTest extends Scalaprops {
   val laws = Properties.list(
     scalazlaws.traverse1.all[Tree],
     scalazlaws.align.all[Tree],
+    scalazlaws.comonad.all[Tree],
     scalazlaws.monad.all[Tree]
   )
 
   val equal = scalazlaws.equal.all[Tree[Int]]
-
-  // TODO test comonad law
 
   val treeGenSize = {
     val F = Foldable[Tree]
