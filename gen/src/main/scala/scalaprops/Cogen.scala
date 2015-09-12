@@ -18,6 +18,41 @@ abstract class Cogen[A] { self =>
       def apply[C](fa: (A, CogenState[C])) =
         self.cogen(fa._1, fa._2)
     }
+
+  def checkLaw(implicit A: Gen[A]) = {
+    import scalaz.std.tuple._
+    import scalaz.std.anyVal._
+
+    type B = Byte
+
+    val bValues = Gen[(Int, Rand)].samples(listSize = 10, seed = System.currentTimeMillis)
+    implicit val b = Equal.equal[Gen[B]] { (x, y) =>
+      bValues.forall{ case (s, t) =>
+        Equal[(Rand, B)].equal(x.f(s, t), y.f(s, t))
+      }
+    }
+
+    val F: Equal[CogenState[B]] =
+      Divide[Equal].deriving2(Function.unlift(CogenState.unapply[B]))
+
+    implicit val g: Gen[CogenState[B]] =
+      Gen.from2(CogenState.apply[B] _)(
+        implicitly,
+        Gen[(Int, Rand) => (Rand, B)].map(Gen.gen)
+      )
+
+    val values = Gen[(A, CogenState[B])].samples(listSize = 10, seed = System.currentTimeMillis)
+    implicit val e = Equal.equal[Cogen[A]]((x, y) =>
+      values.forall{ case (s, t) =>
+        F.equal(x.cogen(s, t), y.cogen(s, t))
+      }
+    )
+
+    val l = Divisible[Cogen].divisibleLaw
+    assert(l.composition(this, this, this))
+    assert(l.rightIdentity(this))
+    assert(l.leftIdentity(this))
+  }
 }
 
 sealed abstract class CogenInstances0 extends CogenInstances {
