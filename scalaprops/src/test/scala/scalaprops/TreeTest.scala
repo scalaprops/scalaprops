@@ -15,6 +15,15 @@ object TreeTest extends Scalaprops {
 
   val equal = scalazlaws.equal.all[Tree[Int]]
 
+  val treeGenSized = Property.forAllG(Gen.positiveByte, Gen[Long]){ (n, seed) =>
+    val size = 5
+    val a = Gen.treeGenSized[Unit](n).samples(
+      listSize = size, seed = seed
+    ).map(Foldable[Tree].length)
+
+    a == List.fill(size)(n)
+  }
+
   val treeGenSize = {
     val F = Foldable[Tree]
     val p = { (size: Int) =>
