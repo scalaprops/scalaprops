@@ -25,6 +25,49 @@ object TreeTest extends Scalaprops {
     a == List.fill(size)(n)
   }
 
+  /**
+   * @see [[https://en.wikipedia.org/wiki/Catalan_number]]
+   */
+  val catalanNumber = {
+    def distinctStream[A: Order](s: Stream[A]): Int \/ Stream[A] = {
+      def loop(seen: ISet[A], rest: Stream[A], i: Int): Int \/ Stream[A] = {
+        if(i > (seen.size * 100)){
+          -\/(seen.size)
+        }else{
+          rest match {
+            case h #:: t =>
+              if (seen.contains(h)) {
+                loop(seen, t, i + 1)
+              } else {
+                loop(seen insert h, t, 0).map{x => Stream.cons(h, x)}
+              }
+            case _ =>
+              // stream is finite !?
+              \/-(rest)
+          }
+        }
+      }
+      loop(ISet.empty[A], s, 0)
+    }
+
+    val sizes = List(1, 1, 2, 5, 14, 42, 132).zipWithIndex.map(t => t.copy(_2 = t._2 + 1))
+
+    val tests = sizes.map{ case (n, i) =>
+      Property.forAll{ seed: Long =>
+        val s = Gen.treeGenSized[Unit](i).infiniteStream(seed = seed)
+        distinctStream(s) match {
+          case -\/(x) =>
+            assert(x == n, s"$x $n")
+            true
+          case \/-(x) =>
+            sys.error(x.size.toString)
+        }
+      }.toProperties(i.toString, Param.minSuccessful(5))
+    }
+
+    Properties.list(tests.head, tests.tail: _*)
+  }
+
   val treeGenSize = {
     val F = Foldable[Tree]
     val p = { (size: Int) =>
