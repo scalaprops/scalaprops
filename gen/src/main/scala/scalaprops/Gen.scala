@@ -903,6 +903,35 @@ object Gen extends GenInstances0 {
     )
   }
 
+  private[scalaprops] def treeLocGenSized[A](size: Int)(implicit A: Gen[A]): Gen[TreeLoc[A]] = {
+    def forest(n: Int): Gen[TreeLoc.TreeForest[A]] =
+      withSize(n)(treeGenSized[A])
+
+    val parent: Int => Gen[TreeLoc.Parent[A]] = { n =>
+      Gen.choose(0, n - 1).flatMap { x1 =>
+        Apply[Gen].tuple3(
+          forest(x1), A, forest(n - x1 - 1)
+        )
+      }
+    }
+
+    for{
+      a <- Gen.choose(1, size)
+      b = size - a
+      aa <- Gen.choose(1, a)
+      ba <- Gen.choose(0, b)
+      t <- Apply[Gen].apply4(
+        treeGenSized[A](aa),
+        forest(a - aa),
+        forest(ba),
+        withSize(b - ba)(parent)
+      )(TreeLoc.apply[A])
+    } yield t
+  }
+
+  implicit def treeLocGen[A: Gen]: Gen[TreeLoc[A]] =
+    Gen.sized(treeLocGenSized(_))
+
   implicit def partialFunctionGen[A: Cogen, B: Gen]: Gen[PartialFunction[A, B]] =
     Gen[A => Option[B]].map(Function.unlift)
 
