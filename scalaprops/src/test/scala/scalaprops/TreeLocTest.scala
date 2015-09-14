@@ -27,14 +27,16 @@ object TreeLocTest extends Scalaprops{
           tree = Apply[Tree].ap(fa.tree)(f.tree),
           lefts = ForestInstance.ap(fa.lefts)(f.lefts),
           rights = ForestInstance.ap(fa.rights)(f.rights),
-          parents = Zip[Stream].zipWith(fa.parents, f.parents){
+          parents = Apply[Stream].apply2(fa.parents, f.parents){
             (x, y) =>
               (ForestInstance.ap(x._1)(y._1), y._2(x._2), ForestInstance.ap(x._3)(y._3))
           }
         )
       }
     }
-    scalazlaws.apply.all[TreeLoc]
+    scalazlaws.apply.all[TreeLoc].andThenParam(
+      Param.maxSize(50)
+    )
   }
 
   val treeLocGenSized = {
