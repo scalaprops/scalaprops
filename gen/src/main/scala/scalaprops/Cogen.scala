@@ -432,10 +432,21 @@ object Cogen extends CogenInstances0 {
   implicit def cogenJavaEnum[A <: java.lang.Enum[A]]: Cogen[A] =
     Cogen[Int].contramap(_.ordinal)
 
-  implicit val instance: Contravariant[Cogen] =
-    new Contravariant[Cogen] {
+  implicit val instance: Divisible[Cogen] =
+    new Divisible[Cogen] {
+      private[this] val empty = new Cogen[Any] {
+        def cogen[X](a: Any, g: CogenState[X]) = g
+      }
+      def conquer[A] = empty.asInstanceOf[Cogen[A]]
       def contramap[A, B](r: Cogen[A])(f: B => A) =
         r contramap f
+      def divide[A, B, C](fa: Cogen[A], fb: Cogen[B])(f: C => (A, B)) =
+        new Cogen[C] {
+          def cogen[X](c: C, g: CogenState[X]) = {
+            val t = f(c)
+            fa.cogen(t._1, fb.cogen(t._2, g))
+          }
+        }
     }
 
   def apply[A](implicit A: Cogen[A]): Cogen[A] = A

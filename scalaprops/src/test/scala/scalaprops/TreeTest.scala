@@ -9,11 +9,12 @@ object TreeTest extends Scalaprops {
   val laws = Properties.list(
     scalazlaws.traverse1.all[Tree],
     scalazlaws.align.all[Tree],
+    scalazlaws.zip.all[Tree],
     scalazlaws.comonad.all[Tree],
     scalazlaws.monad.all[Tree]
   )
 
-  val equal = scalazlaws.equal.all[Tree[Int]]
+  val order = scalazlaws.order.all[Tree[Int]]
 
   val treeGenSized = Property.forAllG(Gen.positiveByte, Gen[Long]){ (n, seed) =>
     val size = 5

@@ -10,6 +10,7 @@ object ConstTest extends Scalaprops {
     Properties.list(
       scalazlaws.applicative.all[F],
       scalazlaws.contravariant.all[F],
+      scalazlaws.monoid.all[Const[Byte, Byte]],
       scalazlaws.order.all[Const[Int, Int]]
     )
   }
