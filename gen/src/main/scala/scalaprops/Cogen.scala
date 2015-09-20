@@ -244,7 +244,7 @@ object Cogen extends CogenInstances0 {
     Cogen[IList[A]].contramap(_.toIList)
 
   implicit def cogenNonEmptyList[A: Cogen]: Cogen[NonEmptyList[A]] =
-    Cogen[(A, List[A])].contramap(nel => (nel.head, nel.tail))
+    Cogen[(A, IList[A])].contramap(nel => (nel.head, nel.tail))
 
   implicit def cogenIndSeq[A: Cogen]: Cogen[IndSeq[A]] =
     Cogen[List[A]].contramap(Foldable[IndSeq].toList)
