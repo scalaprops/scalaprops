@@ -11,6 +11,34 @@ object TreeLocTest extends Scalaprops{
     scalazlaws.comonad.all[TreeLoc]
   )
 
+  val applyTest = {
+    implicit val treeLocApply: Apply[TreeLoc] = new Apply[TreeLoc] {
+      override def map[A, B](fa: TreeLoc[A])(f: A => B) =
+        fa map f
+
+      private[this] val ForestInstance: Applicative[TreeLoc.TreeForest] =
+        Applicative[Stream].compose[Tree]
+
+      override def ap[A, B](fa0: => TreeLoc[A])(f0: => TreeLoc[A => B]) = {
+        lazy val f = f0
+        lazy val fa = fa0
+
+        TreeLoc(
+          tree = Apply[Tree].ap(fa.tree)(f.tree),
+          lefts = ForestInstance.ap(fa.lefts)(f.lefts),
+          rights = ForestInstance.ap(fa.rights)(f.rights),
+          parents = Apply[Stream].apply2(fa.parents, f.parents){
+            (x, y) =>
+              (ForestInstance.ap(x._1)(y._1), y._2(x._2), ForestInstance.ap(x._3)(y._3))
+          }
+        )
+      }
+    }
+    scalazlaws.apply.all[TreeLoc].andThenParam(
+      Param.maxSize(50)
+    )
+  }
+
   val treeLocGenSized = {
     val F: Foldable[TreeLoc.TreeForest] = Foldable[Stream].compose[Tree]
 
