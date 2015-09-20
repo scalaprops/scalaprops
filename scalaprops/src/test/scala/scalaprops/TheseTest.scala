@@ -9,7 +9,7 @@ object TheseTest extends Scalaprops {
 
   val test0 =
     Properties.list(
-      scalazlaws.equal.all[Int \&/ Int],
+      scalazlaws.order.all[Int \&/ Int],
       scalazlaws.semigroup.all[Int \&/ Int]
     )
 
