@@ -63,8 +63,6 @@ object build extends Build {
     parallelExecution in Test := false
   ).dependsOn(core, scalazlaws % "test")
 
-  val sxr = TaskKey[File]("packageSxr")
-
   import UnidocKeys._
 
   val root = Project("root", file(".")).settings(
