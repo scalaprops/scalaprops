@@ -13,7 +13,7 @@ object KleisliTest extends Scalaprops {
     Equal[A => F[B]].contramap(_.run)
   }
 
-  private def kleisliTest[F[_]: Monad: Zip](implicit
+  private def kleisliTest[F[_]: MonadPlus: Zip](implicit
     F: Equal[F[Int]],
     E1: Equal[F[(Int, Int)]],
     E2: Equal[F[(Int, (Int, Int))]],
@@ -25,7 +25,7 @@ object KleisliTest extends Scalaprops {
     type K2[a, b] = Kleisli[F, a, b]
 
     Properties.list(
-      scalazlaws.monad.all[K1],
+      scalazlaws.monadPlus.all[K1],
       scalazlaws.zip.all[K1],
       scalazlaws.arrow.all[K2]
     )
@@ -60,7 +60,17 @@ object KleisliTest extends Scalaprops {
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
-  val testNonEmptyList = kleisliTest[NonEmptyList].andThenParamPF{
+  val testNonEmptyList = {
+    type K1[a] = Kleisli[NonEmptyList, Byte, a]
+    type K2[a, b] = Kleisli[NonEmptyList, a, b]
+
+    Properties.list(
+      scalazlaws.monad.all[K1],
+      scalazlaws.plus.all[K1],
+      scalazlaws.zip.all[K1],
+      scalazlaws.arrow.all[K2]
+    )
+  }.andThenParamPF{
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
