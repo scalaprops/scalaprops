@@ -6,8 +6,21 @@ import scalaz.std.stream._
 
 object TreeLocTest extends Scalaprops{
 
+  // TODO remove https://github.com/scalaz/scalaz/commit/f771380867807d4
+  private[this] implicit def treeLocOrder[A: Order]: Order[TreeLoc[A]] =
+    new Order[TreeLoc[A]] {
+      import scalaz.std.stream._
+      import scalaz.std.tuple._
+
+      override def equal(x: TreeLoc[A], y: TreeLoc[A]) =
+        TreeLoc.treeLocEqual[A].equal(x, y)
+
+      override def order(x: TreeLoc[A], y: TreeLoc[A]) =
+        Divide[Order].deriving4(Function.unlift(TreeLoc.unapply[A])).order(x, y)
+    }
+
   val laws = Properties.list(
-    scalazlaws.equal.all[TreeLoc[Byte]],
+    scalazlaws.order.all[TreeLoc[Byte]],
     scalazlaws.comonad.all[TreeLoc]
   )
 
