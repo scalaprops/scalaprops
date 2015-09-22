@@ -25,36 +25,33 @@ object TreeTest extends Scalaprops {
     a == List.fill(size)(n)
   }
 
-  /**
-   * @see [[https://en.wikipedia.org/wiki/Catalan_number]]
-   */
-  val catalanNumber = {
-    def distinctStream[A: Order](s: Stream[A]): Int \/ Stream[A] = {
-      def loop(seen: ISet[A], rest: Stream[A], i: Int): Int \/ Stream[A] = {
-        if(i > (seen.size * 100)){
-          -\/(seen.size)
-        }else{
-          rest match {
-            case h #:: t =>
-              if (seen.contains(h)) {
-                loop(seen, t, i + 1)
-              } else {
-                loop(seen insert h, t, 0).map{x => Stream.cons(h, x)}
-              }
-            case _ =>
-              // stream is finite !?
-              \/-(rest)
-          }
+  def distinctStream[A: Order](s: Stream[A]): Int \/ Stream[A] = {
+    def loop(seen: ISet[A], rest: Stream[A], i: Int): Int \/ Stream[A] = {
+      if (i > (seen.size * 100)) {
+        -\/(seen.size)
+      } else {
+        rest match {
+          case h #:: t =>
+            if (seen.contains(h)) {
+              loop(seen, t, i + 1)
+            } else {
+              loop(seen insert h, t, 0).map { x => Stream.cons(h, x)}
+            }
+          case _ =>
+            // stream is finite !?
+            \/-(rest)
         }
       }
-      loop(ISet.empty[A], s, 0)
     }
+    loop(ISet.empty[A], s, 0)
+  }
 
-    val sizes = List(1, 1, 2, 5, 14, 42, 132).zipWithIndex.map(t => t.copy(_2 = t._2 + 1))
+  def sizeTest[A: Order](numbers: List[Int], f: (Int, Long) => Stream[A]) = {
+    val sizes = numbers.zipWithIndex.map(t => t.copy(_2 = t._2 + 1))
 
     val tests = sizes.map{ case (n, i) =>
       Property.forAll{ seed: Long =>
-        val s = Gen.treeGenSized[Unit](i).infiniteStream(seed = seed)
+        val s = f(i, seed)
         distinctStream(s) match {
           case -\/(x) =>
             assert(x == n, s"$x $n")
@@ -67,6 +64,14 @@ object TreeTest extends Scalaprops {
 
     Properties.list(tests.head, tests.tail: _*)
   }
+
+  /**
+   * @see [[https://en.wikipedia.org/wiki/Catalan_number]]
+   */
+  val catalanNumber = sizeTest(
+    List(1, 1, 2, 5, 14, 42, 132),
+    (i, seed) => Gen.treeGenSized[Unit](i).infiniteStream(seed = seed)
+  )
 
   val treeGenSize = {
     val F = Foldable[Tree]
