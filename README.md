@@ -1,6 +1,6 @@
 # scalaprops
 
-[![Build Status](https://secure.travis-ci.org/scalaprops/scalaprops.png)](http://travis-ci.org/scalaprops/scalaprops)
+[![Build Status](https://travis-ci.org/scalaprops/scalaprops.svg?branch=master)](https://travis-ci.org/scalaprops/scalaprops)
 
 property based testing library for Scala
 
@@ -24,17 +24,17 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false // currently, does not support parallel execution
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.13" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.14" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.13" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.14" % "test"
 ```
 
 or you can use [sbt plugin](https://github.com/scalaprops/sbt-scalaprops)
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.13/scalaprops-all_2.11-0.1.13-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.13/scalaprops-all_2.11-0.1.13-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.14/scalaprops-all_2.11-0.1.14-javadoc.jar/!/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.14/scalaprops-all_2.11-0.1.14-sxr.jar/!/index.html)
 
 
 ### snapshot version
@@ -46,16 +46,16 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.14-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.15-SNAPSHOT" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.14-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.15-SNAPSHOT" % "test"
 ```
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.14-SNAPSHOT/scalaprops-all_2.11-0.1.14-SNAPSHOT-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.14-SNAPSHOT/scalaprops-all_2.11-0.1.14-SNAPSHOT-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.15-SNAPSHOT/scalaprops-all_2.11-0.1.15-SNAPSHOT-javadoc.jar/!/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.15-SNAPSHOT/scalaprops-all_2.11-0.1.15-SNAPSHOT-sxr.jar/!/index.html)
 
 
 ![screencast](https://raw.githubusercontent.com/scalaprops/scalaprops/master/screencast.gif)

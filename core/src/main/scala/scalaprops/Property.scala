@@ -170,7 +170,7 @@ object Property {
           @annotation.tailrec
           def loop(shrinks: Int, x: (A, Result, Rand)): (Rand, Result) =
             first(shrink(x._1).map(rand.next -> _), shrinks) match {
-              case Maybe.Just((aa, result, rr)) if result.failed =>
+              case Maybe.Just((aa, result @ Result.Falsified(args), rr)) if args.count(_.value == aa) <= 1 =>
                 loop(shrinks + 1, (aa, result, rr.next))
               case _ =>
                 (x._3, x._2)

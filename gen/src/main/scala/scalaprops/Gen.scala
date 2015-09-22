@@ -696,7 +696,7 @@ object Gen extends GenInstances0 {
     F.map(NullArgument(_))
 
   implicit def nonEmptyList[A](implicit A: Gen[A]): Gen[NonEmptyList[A]] =
-    Apply[Gen].apply2(A, Gen[List[A]])(NonEmptyList.nel)
+    Apply[Gen].apply2(A, Gen[IList[A]])(NonEmptyList.nel)
 
   implicit def oneAnd[F[_], A](implicit F: Gen[F[A]], A: Gen[A]): Gen[OneAnd[F, A]] =
     Apply[Gen].apply2(A, F)(OneAnd(_, _))
@@ -854,8 +854,30 @@ object Gen extends GenInstances0 {
       Apply[Gen].apply4(A, A, A, A)(FingerTree.four[V, A])
     )
 
-  implicit def treeGen[A](implicit A: Gen[A]): Gen[Tree[A]] = {
-    def loop(size: Int): Gen[Tree[A]] = size match {
+  private[this] def withSize[A](size: Int)(f: Int => Gen[A]): Gen[Stream[A]] = {
+    import scalaz.std.stream._
+    Applicative[Gen].sequence(
+      Stream.fill(size)(Gen.choose(1, size))
+    ).flatMap { s =>
+      val ns = Traverse[Stream].traverseS(s) { n =>
+        for {
+          sum <- State.get[Int]
+          r <- if (sum >= size) {
+            State.state[Int, Option[Int]](None)
+          } else if ((sum + n) > size) {
+            State((s: Int) => (s + n) -> Option(size - sum))
+          } else {
+            State((s: Int) => (s + n) -> Option(n))
+          }
+        } yield r
+      }.eval(0).flatten
+
+      Applicative[Gen].sequence(ns.map(f))
+    }
+  }
+
+  private[scalaprops] def treeGenSized[A: NotNothing](size: Int)(implicit A: Gen[A]): Gen[Tree[A]] =
+    size match {
       case n if n <= 1 =>
         A.map(a => Tree.leaf(a))
       case 2 =>
@@ -870,33 +892,45 @@ object Gen extends GenInstances0 {
           )
         }
       case _ =>
-        val max = size - 1
-        import scalaz.std.stream._
-        Applicative[Gen].sequence(
-          Stream.fill(max)(Gen.choose(1, max - 1))
-        ).flatMap{s =>
-          val ns = Traverse[Stream].traverseS(s){ n =>
-            for{
-              sum <- State.get[Int]
-              r <- if(sum >= max){
-                State.state[Int, Option[Int]](None)
-              }else if((sum + n) > max){
-                State((s: Int) => (s + n) -> Option(max - sum))
-              }else{
-                State((s: Int) => (s + n) -> Option(n))
-              }
-            } yield r
-          }.eval(0).flatten
-
-          Applicative[Gen].sequence(ns.map(loop)).flatMap(as =>
-            A.map(a => Tree.node(a, as))
-          )
+        withSize(size - 1)(treeGenSized[A]).flatMap{ as =>
+          A.map(a => Tree.node(a, as))
         }
     }
+
+  implicit def treeGen[A](implicit A: Gen[A]): Gen[Tree[A]] = {
     Gen.sized(n =>
-      Gen.choose(0, n).flatMap(loop)
+      Gen.choose(0, n).flatMap(treeGenSized[A])
     )
   }
+
+  private[scalaprops] def treeLocGenSized[A](size: Int)(implicit A: Gen[A]): Gen[TreeLoc[A]] = {
+    def forest(n: Int): Gen[TreeLoc.TreeForest[A]] =
+      withSize(n)(treeGenSized[A])
+
+    val parent: Int => Gen[TreeLoc.Parent[A]] = { n =>
+      Gen.choose(0, n - 1).flatMap { x1 =>
+        Apply[Gen].tuple3(
+          forest(x1), A, forest(n - x1 - 1)
+        )
+      }
+    }
+
+    for{
+      a <- Gen.choose(1, size)
+      b = size - a
+      aa <- Gen.choose(1, a)
+      ba <- Gen.choose(0, b)
+      t <- Apply[Gen].apply4(
+        treeGenSized[A](aa),
+        forest(a - aa),
+        forest(ba),
+        withSize(b - ba)(parent)
+      )(TreeLoc.apply[A])
+    } yield t
+  }
+
+  implicit def treeLocGen[A: Gen]: Gen[TreeLoc[A]] =
+    Gen.sized(treeLocGenSized(_))
 
   implicit def partialFunctionGen[A: Cogen, B: Gen]: Gen[PartialFunction[A, B]] =
     Gen[A => Option[B]].map(Function.unlift)

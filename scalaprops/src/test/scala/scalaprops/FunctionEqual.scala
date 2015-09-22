@@ -3,14 +3,14 @@ package scalaprops
 import scala.util.Random
 import scalaz._
 
-object FunctionEqual extends FunctionEqual(30)
+object FunctionEqual extends FunctionEqual(20)
 
 sealed class FunctionEqual(size: Int) {
   implicit def f1[A1: Gen, B](implicit B: Equal[B]): Equal[A1 => B] = {
-    val values = Gen[IList[A1]].sample(size = size, seed = Random.nextLong())
+    val values = Gen[A1].samples(listSize = size, size = size, seed = Random.nextLong())
 
     Equal.equal((x, y) =>
-      Foldable[IList].all(values)(a => B.equal(x(a), y(a)))
+      values.forall(a => B.equal(x(a), y(a)))
     )
   }
 

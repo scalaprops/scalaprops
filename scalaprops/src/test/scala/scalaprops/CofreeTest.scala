@@ -22,6 +22,47 @@ object CofreeTest extends Scalaprops {
       A.equal(a.head, b.head) && F.value.equal(a.tail, b.tail)
     )
 
+  private[this] implicit def cofreeZipEqual[F[_], A](implicit
+    F: shapeless.Lazy[Equal[F[Cofree[F, A]]]],
+    A: Equal[A]
+  ): Equal[CofreeZip[F, A]] =
+    Tags.Zip.subst(cofreeEqual[F, A])
+
+  private[this] type CofreeZip[F[_], A] = Cofree[F, A] @@ Tags.Zip
+
+  private def cofreeZipTest[F[_]: Applicative](implicit
+    F1: Gen[CofreeZip[F, Int]],
+    F2: Gen[CofreeZip[F, Int => Int]],
+    F3: Equal[CofreeZip[F, Int]]
+  ) = {
+    type G[A] = CofreeZip[F, A]
+    implicit val a = Cofree.cofreeZipApplicative[F]
+    scalazlaws.apply.all[G]
+  }
+
+  val zipMaybe = {
+    import CofreeGenImplicit._
+    cofreeZipTest[Maybe]
+  }
+
+  val zipIList = {
+    import CofreeGenImplicit._
+    cofreeZipTest[IList]
+  }.andThenParam(Param.maxSize(2))
+
+  val zipValidation = {
+    import CofreeGenImplicit._
+    type F[A] = ValidationNel[Byte, A]
+    cofreeZipTest[F]
+  }
+
+  val zipDisjunction = {
+    import CofreeGenImplicit._
+    type F[A] = Byte \/ A
+    cofreeZipTest[F]
+  }
+
+
   val testMaybe = {
     implicit def genCofreeMaybe[A: Gen] =
       Gen[OneAnd[List, A]].map{ list =>
@@ -76,6 +117,12 @@ object CofreeTest extends Scalaprops {
       Apply[Gen].apply2(A, F.value)((h, t) =>
         Cofree(h, t)
       )
+
+    implicit def genCofreeZip[F[_], A](implicit
+      F: shapeless.Lazy[Gen[F[Cofree[F, A]]]],
+      A: Gen[A]
+    ): Gen[CofreeZip[F, A]] =
+      Tags.Zip.subst(gen[F, A])
   }
 
   val disjunction = {

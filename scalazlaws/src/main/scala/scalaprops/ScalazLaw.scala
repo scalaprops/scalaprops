@@ -135,6 +135,15 @@ object ScalazLaw {
   val contravariantIdentity = law0(contravariant, "identity")
   val contravariantComposite = law0(contravariant, "composite")
 
+  val divide = law("divide")
+  val divideAll = all(divide)
+  val divideComposition = law0(divide, "composition")
+
+  val divisible = law("divisible")
+  val divisibleAll = all(divisible)
+  val divisibleRightIdentity = law0(divisible, "right identity")
+  val divisibleLeftIdentity = law0(divisible, "left identity")
+
   val foldable = law("foldable")
   val foldableLeftFMConsistent = law0(foldable, "left fold consistent foldMap")
   val foldableRightFMConsistent = law0(foldable, "right fold consistent foldMap")
