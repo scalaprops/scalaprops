@@ -180,6 +180,9 @@ object ScalazLaw {
   val monadErrorErrorsRaised = law0(monadError, "errors raised")
   val monadErrorErrorsStopComputation = law0(monadError, "errors stop computation")
 
+  val representable = law("representable")
+  val representableRepUnrep = law0(representable, "rep unrep")
+  val representableUnrepRep = law0(representable, "unrep rep")
 
   val compose = law("compose")
   val composeAll = all(compose)
