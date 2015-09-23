@@ -24,7 +24,7 @@ object build extends Build {
 
   private[this] def module(id: String) =
     Project(id, file(id)).settings(commonSettings).settings(
-      scalazVersion := "7.1.4",
+      scalazVersion := "7.2.0-SNAPSHOT",
       shapelessVersion := "2.2.5",
       initialCommands in console += "import scalaprops._, scalaz._"
     )
@@ -49,6 +49,7 @@ object build extends Build {
     name := scalapropsName,
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
     libraryDependencies += "org.scalaz" %% "scalaz-concurrent" % scalazVersion.value,
+    libraryDependencies += "org.apache.commons" % "commons-math3" % "3.5" % "test",
     shapelessDependency("test"),
     (sources in Test) := {
       val s = (sources in Test).value
