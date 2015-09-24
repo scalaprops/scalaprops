@@ -11,8 +11,8 @@ object ProductTest extends Scalaprops {
   val maybeMaybe = {
     type F[A] = (Maybe[A], Maybe[A])
 
-    implicit val instance1: ApplicativePlus[F] =
-      ApplicativePlus[Maybe].product[Maybe]
+    implicit val instance1: MonadPlus[F] =
+      MonadPlus[Maybe].product[Maybe]
 
     implicit val instance2: Traverse[F] =
       Traverse[Maybe].product[Maybe]
@@ -21,7 +21,7 @@ object ProductTest extends Scalaprops {
       Align[Maybe].product[Maybe]
 
     Properties.list(
-      scalazlaws.applicativePlus.all[F],
+      scalazlaws.monadPlus.all[F],
       scalazlaws.traverse.all[F],
       scalazlaws.align.all[F]
     )
@@ -30,8 +30,8 @@ object ProductTest extends Scalaprops {
   val maybeIList = {
     type F[A] = (Maybe[A], IList[A])
 
-    implicit val instance1: ApplicativePlus[F] =
-      ApplicativePlus[Maybe].product[IList]
+    implicit val instance1: MonadPlus[F] =
+      MonadPlus[Maybe].product[IList]
 
     implicit val instance2: Traverse[F] =
       Traverse[Maybe].product[IList]
@@ -40,7 +40,7 @@ object ProductTest extends Scalaprops {
       Align[Maybe].product[IList]
 
     Properties.list(
-      scalazlaws.applicativePlus.all[F],
+      scalazlaws.monadPlus.all[F],
       scalazlaws.traverse.all[F],
       scalazlaws.align.all[F]
     )
@@ -49,8 +49,8 @@ object ProductTest extends Scalaprops {
   val iListIList = {
     type F[A] = (IList[A], IList[A])
 
-    implicit val instance1: ApplicativePlus[F] =
-      ApplicativePlus[IList].product[IList]
+    implicit val instance1: MonadPlus[F] =
+      MonadPlus[IList].product[IList]
 
     implicit val instance2: Traverse[F] =
       Traverse[IList].product[IList]
@@ -59,7 +59,7 @@ object ProductTest extends Scalaprops {
       Align[IList].product[IList]
 
     Properties.list(
-      scalazlaws.applicativePlus.all[F],
+      scalazlaws.monadPlus.all[F],
       scalazlaws.traverse.all[F],
       scalazlaws.align.all[F]
     )
@@ -68,8 +68,8 @@ object ProductTest extends Scalaprops {
   val disjunction2 = {
     type F[A] = (DByte[A], DByte[A])
 
-    implicit val instance1: Applicative[F] =
-      Applicative[DByte].product[DByte]
+    implicit val instance1: Monad[F] =
+      Monad[DByte].product[DByte]
 
     implicit val instance2: Traverse[F] =
       Traverse[DByte].product[DByte]
@@ -78,7 +78,7 @@ object ProductTest extends Scalaprops {
       Plus[DByte].product[DByte]
 
     Properties.list(
-      scalazlaws.applicative.all[F],
+      scalazlaws.monad.all[F],
       scalazlaws.plus.all[F],
       scalazlaws.traverse.all[F]
     )
@@ -87,8 +87,8 @@ object ProductTest extends Scalaprops {
   val maybeDisjuction = {
     type F[A] = (Maybe[A], DByte[A])
 
-    implicit val instance1: Applicative[F] =
-      Applicative[Maybe].product[DByte]
+    implicit val instance1: Monad[F] =
+      Monad[Maybe].product[DByte]
 
     implicit val instance2: Traverse[F] =
       Traverse[Maybe].product[DByte]
@@ -97,7 +97,7 @@ object ProductTest extends Scalaprops {
       Plus[Maybe].product[DByte]
 
     Properties.list(
-      scalazlaws.applicative.all[F],
+      scalazlaws.monad.all[F],
       scalazlaws.plus.all[F],
       scalazlaws.traverse.all[F]
     )
@@ -106,8 +106,8 @@ object ProductTest extends Scalaprops {
   val nelNel = {
     type F[A] = (NonEmptyList[A], NonEmptyList[A])
 
-    implicit val instance1: Applicative[F] =
-      Applicative[NonEmptyList].product[NonEmptyList]
+    implicit val instance1: Monad[F] =
+      Monad[NonEmptyList].product[NonEmptyList]
 
     implicit val instance2: Traverse1[F] =
       Traverse1[NonEmptyList].product[NonEmptyList]
@@ -119,7 +119,7 @@ object ProductTest extends Scalaprops {
       Align[NonEmptyList].product[NonEmptyList]
 
     Properties.list(
-      scalazlaws.applicative.all[F],
+      scalazlaws.monad.all[F],
       scalazlaws.traverse1.all[F],
       scalazlaws.plus.all[F],
       scalazlaws.align.all[F]
@@ -129,8 +129,8 @@ object ProductTest extends Scalaprops {
   val treeNel = {
     type F[A] = (Tree[A], NonEmptyList[A])
 
-    implicit val instance1: Applicative[F] =
-      Applicative[Tree].product[NonEmptyList]
+    implicit val instance1: Monad[F] =
+      Monad[Tree].product[NonEmptyList]
 
     implicit val instance2: Traverse1[F] =
       Traverse1[Tree].product[NonEmptyList]
@@ -139,7 +139,7 @@ object ProductTest extends Scalaprops {
       Align[Tree].product[NonEmptyList]
 
     Properties.list(
-      scalazlaws.applicative.all[F],
+      scalazlaws.monad.all[F],
       scalazlaws.traverse1.all[F],
       scalazlaws.align.all[F]
     )
