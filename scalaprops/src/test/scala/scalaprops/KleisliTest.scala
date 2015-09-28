@@ -13,6 +13,70 @@ object KleisliTest extends Scalaprops {
     Equal[A => F[B]].contramap(_.run)
   }
 
+  private[this] implicit def kleisliMonadState[F[_, _], A1](implicit F: MonadState[F, A1]): MonadState[({type x[a, b] = Kleisli[({type y[c] = F[A1, c]})#y, a, b]})#x, A1] =
+    new MonadState[({type x[a, b] = Kleisli[({type y[c] = F[A1, c]})#y, a, b]})#x, A1] {
+      type G[A] = F[A1, A]
+
+      override val init =
+        Kleisli.kleisliMonadTrans[A1].liftMU(F.init)
+
+      override val get =
+        Kleisli.kleisliMonadTrans[A1].liftMU(F.get)
+
+      override def put(s: A1) =
+        Kleisli.kleisliMonadTrans[A1].liftMU(F.put(s))
+
+      override def point[A](a: => A) =
+        Kleisli.kleisliMonadReader[G, A1].point(a)
+
+      override def bind[A, B](fa: Kleisli[G, A1, A])(f: A => Kleisli[G, A1, B]) =
+        fa flatMap f
+    }
+
+  private[this] final class KleisliMonadStateTestHelper[F[_], S0]{
+    type S = S0
+    type F1[A] = F[A]
+    type F2[A, B] = StateT[F1, A, B]
+    type F3[A] = F2[S, A]
+    type F4[A, B] = Kleisli[F3, A, B]
+  }
+
+  val monadStateId = {
+    import StateTTest.stateTEqual
+    import FunctionEqual._
+    val H = new KleisliMonadStateTestHelper[Id.Id, Byte]
+    import H._
+    implicit val k = Gen.kleisli[F3, S, Unit]
+    scalazlaws.monadState.laws[F4, S]
+  }
+
+  val monadStateIList = {
+    import StateTTest.stateTEqual
+    import FunctionEqual._
+    val H = new KleisliMonadStateTestHelper[IList, Byte]
+    import H._
+    implicit val k = Gen.kleisli[F3, S, Unit]
+    scalazlaws.monadState.laws[F4, S]
+  }
+
+  val monadStateMaybe = {
+    import StateTTest.stateTEqual
+    import FunctionEqual._
+    val H = new KleisliMonadStateTestHelper[Maybe, Byte]
+    import H._
+    implicit val k = Gen.kleisli[F3, S, Unit]
+    scalazlaws.monadState.laws[F4, S]
+  }
+
+  val monadStateTree = {
+    import StateTTest.stateTEqual
+    import FunctionEqual._
+    val H = new KleisliMonadStateTestHelper[Tree, Byte]
+    import H._
+    scalazlaws.monadState.laws[F4, S]
+  }
+
+
   private def kleisliTest[F[_]: MonadPlus: Zip](implicit
     F: Equal[F[Int]],
     E1: Equal[F[(Int, Int)]],
