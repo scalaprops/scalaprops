@@ -122,6 +122,13 @@ object ScalazLaw {
   val monadPlusStrong = law("monadPlusStrong")
   val monadPlusStrongAll = all(monadPlusStrong)
 
+  val monadState = law("monadState")
+  val monadStateAll = all(monadState)
+  val monadStatePutPut = law0(monadState, "put put")
+  val monadStatePutGet = law0(monadState, "put get")
+  val monadStateGetPut = law0(monadState, "get put")
+  val monadStateGetGet = law0(monadState, "get get")
+
   val align = law("align")
   val alignAll = all(align)
   val alignCollapse = law0(align, "collapse")
