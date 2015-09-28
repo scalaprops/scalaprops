@@ -12,18 +12,22 @@ object StateTTest extends Scalaprops {
     F.contramap(_.apply _)
 
   val testIList = {
-    type F[A] = StateT[IList, Int, A]
+    type G[A] = IList[A]
+    type F[A] = StateT[G, Int, A]
 
     Properties.list(
+      scalazlaws.monadState.all[({type l[a, b] = StateT[G, a, b]})#l, Byte],
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.equal.all[F[Int]]
     )
   }
 
   val testMaybe = {
-    type F[A] = StateT[Maybe, Int, A]
+    type G[A] = Maybe[A]
+    type F[A] = StateT[G, Int, A]
 
     Properties.list(
+      scalazlaws.monadState.all[({type l[a, b] = StateT[G, a, b]})#l, Byte],
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.equal.all[F[Int]]
     )
