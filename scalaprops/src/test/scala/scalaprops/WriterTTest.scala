@@ -32,6 +32,16 @@ object WriterTTest extends Scalaprops {
     )
   }
 
+  val tree = {
+    type F[A] = WriterT[Tree, Byte, A]
+
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.traverse.all[F],
+      scalazlaws.equal.all[F[Int]]
+    )
+  }
+
   val either = {
     type F[A] = Byte \/ A
     type G[A] = WriterT[F, Short, A]
