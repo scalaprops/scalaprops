@@ -3,7 +3,6 @@ package scalazlaws
 
 import scalaprops.Property.{forAll, forAllG}
 import scalaprops.Properties.properties
-import scala.math.{Ordering => SOrdering}
 import scalaz._
 
 object enum {
