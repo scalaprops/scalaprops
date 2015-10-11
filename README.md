@@ -46,16 +46,16 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.15-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.1.16-SNAPSHOT" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.15-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1.16-SNAPSHOT" % "test"
 ```
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.15-SNAPSHOT/scalaprops-all_2.11-0.1.15-SNAPSHOT-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.15-SNAPSHOT/scalaprops-all_2.11-0.1.15-SNAPSHOT-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.16-SNAPSHOT/scalaprops-all_2.11-0.1.16-SNAPSHOT-javadoc.jar/!/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.1.16-SNAPSHOT/scalaprops-all_2.11-0.1.16-SNAPSHOT-sxr.jar/!/index.html)
 
 
 ![screencast](https://raw.githubusercontent.com/scalaprops/scalaprops/master/screencast.gif)
