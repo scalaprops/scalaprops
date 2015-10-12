@@ -29,6 +29,15 @@ object StateTTest extends Scalaprops {
     )
   }
 
+  val tree = {
+    type F[A] = StateT[Tree, Int, A]
+
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.equal.all[F[Int]]
+    )
+  }
+
   val bifunctor = scalazlaws.bifunctor.laws[({type l[a, b] = IndexedStateT[Maybe, Int, a, b]})#l]
 
   val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = StateT[f, Int, a]})#l]
