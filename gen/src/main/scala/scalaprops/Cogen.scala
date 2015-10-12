@@ -347,14 +347,16 @@ object Cogen extends CogenInstances0 {
     F.contramap(f => Await.result(f, 5.seconds))
   }
 
+  private[this] def nameToValue[A]: Name[A] => A = _.value
+
   implicit def cogenNeed[A](implicit A: Cogen[A]): Cogen[Need[A]] =
-    A.contramap(_.value)
+    A.contramap(nameToValue)
 
   implicit def cogenValue[A](implicit A: Cogen[A]): Cogen[Value[A]] =
-    A.contramap(_.value)
+    A.contramap(nameToValue)
 
   implicit def cogenName[A](implicit A: Cogen[A]): Cogen[Name[A]] =
-    A.contramap(_.value)
+    A.contramap(nameToValue)
 
   implicit def cogenImmutableArray[A: Cogen]: Cogen[ImmutableArray[A]] =
     Cogen[List[A]].contramap(_.toList)
