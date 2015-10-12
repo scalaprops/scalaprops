@@ -39,8 +39,8 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
       Tree.node(
         Or[T](()) -> Maybe.empty[Check],
         Stream(
-          this.mapId(Or[T].apply(_)).props,
-          that.mapId(Or[T].apply(_)).props
+          this.mapId(Or[T]._apply).props,
+          that.mapId(Or[T]._apply).props
         )
       )
     )
@@ -52,8 +52,8 @@ object Properties {
     type T = A :-: B :-: Or.Empty
     fromProps[T](
       Or[T](id),
-      prop0.mapId(Or[T].apply(_)),
-      props.map(_.mapId(Or[T].apply(_))): _*
+      prop0.mapId(Or[T]._apply),
+      props.map(_.mapId(Or[T]._apply)): _*
     )
   }
 

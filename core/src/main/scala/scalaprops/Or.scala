@@ -70,6 +70,7 @@ object Or {
 
   final class MkOr[C <: Or] private[Or] {
     def apply[T](t: T)(implicit inj: Inj[C, T]): C = inj(t)
+    private[scalaprops] def _apply[T](implicit inj: Inj[C, T]): T => C = inj(_)
   }
 
   def apply[C <: Or]: MkOr[C] = new MkOr[C]
