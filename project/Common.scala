@@ -1,8 +1,4 @@
 import sbt._, Keys._
-import sbtrelease._
-import sbtrelease.ReleasePlugin.autoImport._
-import ReleaseStateTransformations._
-import com.typesafe.sbt.pgp.PgpKeys
 import xerial.sbt.Sonatype.SonatypeKeys
 
 object Common {
@@ -33,7 +29,7 @@ object Common {
   private[this] val Scala211 = "2.11.7"
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
-    scalaVersion := Scala211,
+    scalaVersion := "2.10.6",
     crossScalaVersions := "2.12.0-M3" :: Scala211 :: "2.10.6" :: Nil,
     resolvers += Opts.resolver.sonatypeSnapshots,
     organization := "com.github.scalaprops",
@@ -41,7 +37,6 @@ object Common {
     fullResolvers ~= {_.filterNot(_.name == "jcenter")},
     homepage := Some(url("https://github.com/scalaprops/scalaprops")),
     licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
-    commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
     pomPostProcess := { node =>
       import scala.xml._
       import scala.xml.transform._
@@ -86,31 +81,6 @@ object Common {
     scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
       case Some((2, v)) if v >= 11 => unusedWarnings
     }.toList.flatten,
-    releaseProcess := Seq[ReleaseStep](
-      checkSnapshotDependencies,
-      inquireVersions,
-      runClean,
-      runTest,
-      setReleaseVersion,
-      commitReleaseVersion,
-      UpdateReadme.updateReadmeProcess,
-      tagRelease,
-      ReleaseStep(
-        action = { state =>
-          val extracted = Project extract state
-          extracted.runAggregated(PgpKeys.publishSigned in Global in extracted.get(thisProjectRef), state)
-        },
-        enableCrossBuild = true
-      ),
-      setNextVersion,
-      commitNextVersion,
-      ReleaseStep{ state =>
-        val extracted = Project extract state
-        extracted.runAggregated(SonatypeKeys.sonatypeReleaseAll in Global in extracted.get(thisProjectRef), state)
-      },
-      UpdateReadme.updateReadmeProcess,
-      pushChanges
-    ),
     credentials ++= PartialFunction.condOpt(sys.env.get("SONATYPE_USER") -> sys.env.get("SONATYPE_PASSWORD")){
       case (Some(user), Some(pass)) =>
         Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
