@@ -27,7 +27,7 @@ object TreeTest extends Scalaprops {
 
   def distinctStream[A: Order](s: Stream[A]): Int \/ Stream[A] = {
     def loop(seen: ISet[A], rest: Stream[A], i: Int): Int \/ Stream[A] = {
-      if (i > (seen.size * 100)) {
+      if (i > (seen.size * 200)) {
         -\/(seen.size)
       } else {
         rest match {
@@ -69,7 +69,7 @@ object TreeTest extends Scalaprops {
    * @see [[https://en.wikipedia.org/wiki/Catalan_number]]
    */
   val catalanNumber = sizeTest(
-    List(1, 1, 2, 5, 14, 42, 132),
+    List(1, 1, 2, 5, 14, 42),
     (i, seed) => Gen.treeGenSized[Unit](i).infiniteStream(seed = seed)
   )
 
