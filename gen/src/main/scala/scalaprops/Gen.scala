@@ -114,6 +114,20 @@ object Gen extends GenInstances0 {
         gen((size, rand) => ga.run(rand).run(size))
     }
 
+  val isoRWS: Gen <~> ({type l[a] = RWS[Int, Unit, Rand, a]})#l =
+    new IsoFunctorTemplate[Gen, ({type l[a] = RWS[Int, Unit, Rand, a]})#l] {
+      override def to[A](fa: Gen[A]) =
+        RWS{ (size, rand) =>
+          val a = fa.f(size, rand)
+          ((), a._2, a._1)
+        }
+      override def from[A](ga: RWS[Int, Unit, Rand, A]) =
+        Gen{ (size, rand) =>
+          val a = ga.run(size, rand)
+          (a._3, a._2)
+        }
+    }
+
   val isoFunction: Gen <~> ({type l[a] = (Int, Rand) => (Rand, a)})#l =
     new IsoFunctorTemplate[Gen, ({type l[a] = (Int, Rand) => (Rand, a)})#l] {
       override def to[A](fa: Gen[A]) = fa.f
