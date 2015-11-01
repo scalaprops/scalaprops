@@ -6,12 +6,15 @@ import scalaz.std.tuple._
 
 object WriterTTest extends Scalaprops {
 
+  val bindRecIList = scalazlaws.bindRec.laws[({type l[a] = WriterT[IList, Byte, a]})#l].andThenParam(Param.maxSize(1))
+
   val testMaybe1 = {
     type F[A] = WriterT[Maybe, Int, A]
 
     Properties.list(
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.traverse.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.equal.all[F[Int]]
     )
   }
@@ -43,17 +46,12 @@ object WriterTTest extends Scalaprops {
   }
 
   val either = {
-    type F[A] = Byte \/ A
+    type E = Byte
+    type F[A] = E \/ A
     type G[A] = WriterT[F, Short, A]
 
-    implicit def writerTGen0[H[_, _], E, W, A](implicit F: Gen[H[E, (W, A)]]) =
-      Gen.writerTGen[({type l[a] = H[E, a]})#l, W, A]
-
-    implicit def writerTEqual0[H[_, _], E, W, A](implicit F: Equal[H[E, (W, A)]]) =
-      WriterT.writerTEqual[({type l[a] = H[E, a]})#l, W, A]
-
     Properties.list(
-      scalazlaws.monadError.all[({type x[e, a] = WriterT[({type y[b] = e \/ b})#y, Short, a]})#x, Byte],
+      scalazlaws.monadError.all[G, E],
       scalazlaws.plus.all[G],
       scalazlaws.traverse.all[G],
       scalazlaws.equal.all[G[Int]]
@@ -65,6 +63,7 @@ object WriterTTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.monad.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.comonad.all[F],
       scalazlaws.traverse.all[F],
       scalazlaws.equal.all[F[Int]]

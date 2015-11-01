@@ -8,16 +8,21 @@ object StateTTest extends Scalaprops {
   private[this] val e = new FunctionEqual(10)
   import e._
 
-  implicit def stateTEqual[F[_], A, B](implicit F: Equal[A => F[(A, B)]]): Equal[StateT[F, A, B]] =
+  implicit def stateTEqual[F[_]: Monad, A, B](implicit F: Equal[A => F[(A, B)]]): Equal[StateT[F, A, B]] =
     F.contramap(_.apply _)
 
   val id = {
     type F[A] = State[Byte, A]
     Properties.list(
       scalazlaws.monad.all[F],
+      scalazlaws.bindRec.laws[F],
       scalazlaws.equal.all[F[Int]]
     )
   }
+
+  val bindRecIList = {
+    scalazlaws.bindRec.laws[({type l[a] = StateT[IList, Byte, a]})#l]
+  }.andThenParam(Param.maxSize(1))
 
   val testIList = {
     type F[A] = StateT[IList, Int, A]
@@ -33,6 +38,7 @@ object StateTTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.monadPlusStrong.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.equal.all[F[Int]]
     )
   }

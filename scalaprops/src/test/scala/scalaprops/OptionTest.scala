@@ -10,6 +10,7 @@ object OptionTest extends Scalaprops {
       scalazlaws.monadPlusStrong.all[Option],
       scalazlaws.traverse.all[Option],
       scalazlaws.zip.all[Option],
+      scalazlaws.bindRec.all[Option],
       scalazlaws.align.all[Option],
       scalazlaws.isEmpty.all[Option],
       scalazlaws.cobind.all[Option]

@@ -11,6 +11,20 @@ object IndexedContsTTest extends Scalaprops {
   private[this] implicit def indexedContsTEqual[W[_], M[_], R, O, A](implicit F: Equal[W[A => M[O]] => M[R]]): Equal[IndexedContsT[W, M, R, O, A]] =
     F.contramap(_.run)
 
+  private[this] def bindTest[W[_]: Cobind, M[_]](implicit
+    G1: Gen[ContsT[W, M, Int, Int]],
+    G2: Gen[ContsT[W, M, Int, Int => Int]],
+    E1: Equal[ContsT[W, M, Int, Int]]
+  ) = {
+    type F[A] = ContsT[W, M, Int, A]
+    scalazlaws.bind.all[F].andThenParam(Param.maxSize(3))
+  }
+
+  val maybeMaybe = bindTest[Maybe, Maybe]
+  val iListIList = bindTest[IList, IList]
+  val maybeIList = bindTest[Maybe, IList]
+  val iListMaybe = bindTest[IList, Maybe]
+
   val testContsTMaybe = {
     type F[A] = ContsT[NonEmptyList, Maybe, Int, A]
     scalazlaws.monad.all[F].andThenParam(Param.maxSize(4))

@@ -8,6 +8,8 @@ object Tuple3Test extends Scalaprops {
 
   type F[A] = Tuple3[IList[Boolean], IList[Byte], A]
 
+  val bindRec = scalazlaws.bindRec.all[({type l[a] = (Byte, Byte, a)})#l]
+
   val laws0 = Properties.list(
     scalazlaws.monoid.all[F[Byte]],
     scalazlaws.order.all[F[Byte]]

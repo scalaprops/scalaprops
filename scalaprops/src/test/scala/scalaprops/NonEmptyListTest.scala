@@ -17,4 +17,9 @@ object NonEmptyListTest extends Scalaprops {
   val size = Property.forAllG(Gen.positiveByte, Gen[Long]){ (s, seed) =>
     Gen[NonEmptyList[Unit]].sample(s, seed).size <= s
   }
+
+  val tailrecBindConsistency = scalazlaws.bindRec.tailrecBindConsistency[NonEmptyList, Byte]
+  val handleManyBinds = scalazlaws.bindRec.handleManyBinds[NonEmptyList, Byte](1000000).toProperties(
+    "handleManyBinds", Param.maxSize(1).andThen(Param.minSuccessful(10))
+  )
 }

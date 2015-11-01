@@ -9,7 +9,7 @@ object ZipperTest extends Scalaprops {
     Properties.list(
       scalazlaws.comonad.all[Zipper],
       scalazlaws.apply.all[Zipper],
-      scalazlaws.traverse.all[Zipper],
+      scalazlaws.traverse1.all[Zipper],
       scalazlaws.equal.all[Zipper[Int]]
     )
 

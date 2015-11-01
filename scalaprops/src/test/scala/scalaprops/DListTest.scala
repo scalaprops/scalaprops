@@ -13,4 +13,5 @@ object DListTest extends Scalaprops {
     scalazlaws.traverse.all[DList]
   )
 
+  val bindRec = scalazlaws.bindRec.laws[DList].andThenParam(Param.maxSize(1))
 }

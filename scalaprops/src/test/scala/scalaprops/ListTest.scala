@@ -14,4 +14,6 @@ object ListTest extends Scalaprops {
     scalazlaws.traverse.all[List]
   )
 
+  val bindRec = scalazlaws.bindRec.laws[List].andThenParam(Param.maxSize(1))
+
 }

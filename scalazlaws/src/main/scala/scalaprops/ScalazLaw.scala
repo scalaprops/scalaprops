@@ -90,6 +90,11 @@ object ScalazLaw {
   val monadRightIdentity = law0(monad, "right identity")
   val monadLeftIdentity = law0(monad, "left identity")
 
+  val bindRec = law("bindRec")
+  val bindRecAll = all(bindRec)
+  val bindRecTailrecBindConsistency = law0(bind, "tailrec bind consistency")
+  val bindRecHandleManyBinds = law0(bind, "handle many binds")
+
   val cobind = law("cobind")
   val cobindAll = all(cobind)
   val cobindAssociative = law0(cobind, "associative")
@@ -121,6 +126,13 @@ object ScalazLaw {
 
   val monadPlusStrong = law("monadPlusStrong")
   val monadPlusStrongAll = all(monadPlusStrong)
+
+  val monadState = law("monadState")
+  val monadStateAll = all(monadState)
+  val monadStatePutPut = law0(monadState, "put put")
+  val monadStatePutGet = law0(monadState, "put get")
+  val monadStateGetPut = law0(monadState, "get put")
+  val monadStateGetGet = law0(monadState, "get get")
 
   val align = law("align")
   val alignAll = all(align)

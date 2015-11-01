@@ -6,15 +6,10 @@ import scalaz.std.anyVal._
 object MaybeTTest extends Scalaprops {
 
   val disjunction = {
-    type F[E, A] = MaybeT[({type l[a] = E \/ a})#l, A]
-
-    implicit def gen[G[_, _], E, A](implicit G: Gen[G[E, Maybe[A]]]) =
-      Gen.maybeTGen[({type l[a] = G[E, a]})#l, A]
-
-    implicit def equal[G[_, _], E, A](implicit G: Equal[G[E, Maybe[A]]]) =
-      MaybeT.maybeTEqual[({type l[a] = G[E, a]})#l, A]
-
-    scalazlaws.monadError.all[F, Byte]
+    type E = Byte
+    type G[A] = E \/ A
+    type F[A] = MaybeT[G, A]
+    scalazlaws.monadError.all[F, E]
   }
 
   val id = {
@@ -22,9 +17,13 @@ object MaybeTTest extends Scalaprops {
     Properties.list(
       scalazlaws.monadPlus.all[F],
       scalazlaws.traverse.all[F],
+      scalazlaws.bindRec.laws[F],
       scalazlaws.equal.all[F[Byte]]
     )
   }
+
+  val bindRecIList =
+    scalazlaws.bindRec.laws[({type l[a] = MaybeT[IList, a]})#l].andThenParam(Param.maxSize(1))
 
   val testLawsIList = {
     type F[A] = MaybeT[IList, A]
@@ -40,6 +39,7 @@ object MaybeTTest extends Scalaprops {
     Properties.list(
       scalazlaws.monadPlus.all[F],
       scalazlaws.traverse.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.equal.all[F[Byte]]
     )
   }

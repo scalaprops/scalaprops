@@ -9,6 +9,8 @@ object Tuple2Test extends Scalaprops {
   val bitraverse = scalazlaws.bitraverse.all[Tuple2]
   val associative = scalazlaws.associative.all[Tuple2]
 
+  val bindRec = scalazlaws.bindRec.laws[({type l[a] = (Byte, a)})#l]
+
   val laws1 = {
     type F[A] = (IList[Boolean], A)
     Properties.list(

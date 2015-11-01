@@ -5,6 +5,8 @@ import scalaz.std.anyVal._
 
 object StreamTest extends Scalaprops {
 
+  val bindRec = scalazlaws.bindRec.laws[Stream].andThenParam(Param.maxSize(1))
+
   val laws = Properties.list(
     scalazlaws.monadPlusStrong.all[Stream],
     scalazlaws.align.all[Stream],

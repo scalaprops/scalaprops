@@ -710,7 +710,7 @@ object Gen extends GenInstances0 {
     F.map(NullArgument(_))
 
   implicit def nonEmptyList[A](implicit A: Gen[A]): Gen[NonEmptyList[A]] =
-    Apply[Gen].apply2(A, Gen[List[A]])((x, xs) => NonEmptyList.nel(x, xs.drop(1)))
+    Apply[Gen].apply2(A, Gen[IList[A]])((x, xs) => NonEmptyList.nel(x, xs.drop(1)))
 
   implicit def oneAnd[F[_], A](implicit F: Gen[F[A]], A: Gen[A]): Gen[OneAnd[F, A]] =
     Apply[Gen].apply2(A, F)(OneAnd(_, _))
@@ -763,7 +763,7 @@ object Gen extends GenInstances0 {
   implicit def unwriterTGen[F[_], A, B](implicit F: Gen[F[(A, B)]]): Gen[UnwriterT[F, A, B]] =
     F.map(UnwriterT(_))
 
-  implicit def indexedStateTGen[F[_], S1, S2, A](implicit F: Gen[S1 => F[(S2, A)]]): Gen[IndexedStateT[F, S1, S2, A]] =
+  implicit def indexedStateTGen[F[_]: Monad, S1, S2, A](implicit F: Gen[S1 => F[(S2, A)]]): Gen[IndexedStateT[F, S1, S2, A]] =
     F.map(IndexedStateT(_))
 
   implicit def indexedContsTGen[W[_], M[_], R, O, A](implicit F: Gen[W[A => M[O]] => M[R]]): Gen[IndexedContsT[W, M, R, O, A]] =
@@ -896,21 +896,21 @@ object Gen extends GenInstances0 {
   private[scalaprops] def treeGenSized[A: NotNothing](size: Int)(implicit A: Gen[A]): Gen[Tree[A]] =
     size match {
       case n if n <= 1 =>
-        A.map(a => Tree.leaf(a))
+        A.map(a => Tree.Leaf(a))
       case 2 =>
         Gen[(A, A)].map{case (a1, a2) =>
-          Tree.node(a1, Stream(Tree.leaf(a2)))
+          Tree.Node(a1, Stream(Tree.Leaf(a2)))
         }
       case 3 =>
         Gen[(A, A, A)].flatMap{case (a1, a2, a3) =>
           Gen.elements(
-            Tree.node(a1, Stream(Tree.leaf(a2), Tree.leaf(a3))),
-            Tree.node(a1, Stream(Tree.node(a2, Stream(Tree.leaf(a3)))))
+            Tree.Node(a1, Stream(Tree.Leaf(a2), Tree.Leaf(a3))),
+            Tree.Node(a1, Stream(Tree.Node(a2, Stream(Tree.Leaf(a3)))))
           )
         }
       case _ =>
         withSize(size - 1)(treeGenSized[A]).flatMap{ as =>
-          A.map(a => Tree.node(a, as))
+          A.map(a => Tree.Node(a, as))
         }
     }
 
@@ -960,4 +960,12 @@ object Gen extends GenInstances0 {
   implicit def bijectionTGen[F[_], G[_], A, B](implicit A: Cogen[A], B: Cogen[B], F: Gen[F[B]], G: Gen[G[A]]): Gen[BijectionT[F, G, A, B]] =
     Gen[(A => F[B], B => G[A])].map{ case (f, g) => BijectionT.bijection(f, g) }
 
+  implicit def freeTGen[S[_]: Functor, M[_]: Applicative, A: Gen](implicit
+    G1: Gen[S[A]], G2: Gen[M[A]]
+  ): Gen[FreeT[S, M, A]] =
+    Gen.oneOf(
+      Gen[A].map(FreeT.point[S, M, A](_)),
+      G2.map(FreeT.liftM[S, M, A](_)),
+      G1.map(FreeT.liftF[S, M, A](_))
+    )
 }

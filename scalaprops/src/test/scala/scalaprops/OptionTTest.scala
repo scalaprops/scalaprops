@@ -7,15 +7,11 @@ import scalaz.std.option._
 object OptionTTest extends Scalaprops{
 
   val disjunction = {
-    type F[E, A] = OptionT[({type l[a] = E \/ a})#l, A]
+    type E = Byte
+    type G[A] = E \/ A
+    type F[A] = OptionT[G, A]
 
-    implicit def gen[G[_, _], E, A](implicit G: Gen[G[E, Option[A]]]) =
-      Gen.optionTGen[({type l[a] = G[E, a]})#l, A]
-
-    implicit def equal[G[_, _], E, A](implicit G: Equal[G[E, Option[A]]]) =
-      OptionT.optionTEqual[({type l[a] = G[E, a]})#l, A]
-
-    scalazlaws.monadError.all[F, Byte]
+    scalazlaws.monadError.all[F, E]
   }
 
   val id = {
@@ -24,9 +20,12 @@ object OptionTTest extends Scalaprops{
     Properties.list(
       scalazlaws.equal.all[F[Int]],
       scalazlaws.traverse.all[F],
+      scalazlaws.bindRec.laws[F],
       scalazlaws.monad.all[F]
     )
   }
+
+  val iListBindRec = scalazlaws.bindRec.laws[({type l[a] = OptionT[IList, a]})#l].andThenParam(Param.maxSize(1))
 
   val iList = {
     type F[A] = OptionT[IList, A]
@@ -42,6 +41,7 @@ object OptionTTest extends Scalaprops{
     Properties.list(
       scalazlaws.equal.all[OptionT[Maybe, Int]],
       scalazlaws.traverse.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.monadPlus.all[F]
     )
   }

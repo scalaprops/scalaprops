@@ -25,7 +25,7 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
     map((i, m) => (f(i), m))
 
   def mapRootId(f: A => A): Properties[A] =
-    Properties(Tree.node(f(props.rootLabel._1) -> props.rootLabel._2, props.subForest))
+    Properties(Tree.Node(f(props.rootLabel._1) -> props.rootLabel._2, props.subForest))
 
   def mapCheck(f: Maybe[Check] => Maybe[Check]): Properties[A] =
     map((i, m) => (i, f(m)))
@@ -36,7 +36,7 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
   def product[B](that: Properties[B]): Properties[Unit :-: A :-: B :-: Or.Empty] = {
     type T = Unit :-: A :-: B :-: Or.Empty
     Properties.noSort[T](
-      Tree.node(
+      Tree.Node(
         Or[T](()) -> Maybe.empty[Check],
         Stream(
           this.mapId(Or[T]._apply).props,
@@ -66,13 +66,13 @@ object Properties {
     Order.orderBy(_._1)
 
   def single[A](id: A, c: Check): Properties[A] =
-    Properties(Tree.leaf(id -> Maybe.just(c)))
+    Properties(Tree.Leaf(id -> Maybe.just(c)))
 
   def single[A](id: A, p: Property): Properties[A] =
-    Properties(Tree.leaf(id -> Maybe.just(p.toCheck)))
+    Properties(Tree.Leaf(id -> Maybe.just(p.toCheck)))
 
   private[this] def properties0[A: Order](id: A, nodes: Stream[Tree[(A, Maybe[Check])]]): Properties[A] =
-    Properties(distinctTree(Tree.node(
+    Properties(distinctTree(Tree.Node(
       id -> Maybe.empty[Check], nodes
     ))(ord1))
 
@@ -81,12 +81,12 @@ object Properties {
 
   def properties[A: Order](id: A)(props: (A, Property) *): Properties[A] =
     properties0(
-      id, props.map{case (n, p) => Tree.leaf(n -> Maybe.just(p.toCheck))}(collection.breakOut)
+      id, props.map{case (n, p) => Tree.Leaf(n -> Maybe.just(p.toCheck))}(collection.breakOut)
     )
 
   def fromChecks[A: Order](id: A)(checks: (A, Check) *): Properties[A] =
     properties0(
-      id, checks.map{case (n, p) => Tree.leaf(n -> Maybe.just(p))}(collection.breakOut)
+      id, checks.map{case (n, p) => Tree.Leaf(n -> Maybe.just(p))}(collection.breakOut)
     )
 
   def fromProps[A: Order](id: A, prop0: Properties[A], props: Properties[A] *): Properties[A] =
@@ -107,7 +107,7 @@ object Properties {
 
     def loop(t: Tree[Maybe[A]]): Maybe[Tree[A]] =
       t.rootLabel.map{ root =>
-        Tree.node(root, MonadPlus[Stream].unite(t.subForest.map(loop)))
+        Tree.Node(root, MonadPlus[Stream].unite(t.subForest.map(loop)))
       }
 
     loop(x).toOption.get

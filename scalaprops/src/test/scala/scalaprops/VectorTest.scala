@@ -5,6 +5,8 @@ import scalaz.std.anyVal._
 
 object VectorTest extends Scalaprops {
 
+  val bindRec = scalazlaws.bindRec.laws[Vector].andThenParam(Param.maxSize(1))
+
   val testLaws =
     Properties.list(
       scalazlaws.monadPlusStrong.all[Vector],

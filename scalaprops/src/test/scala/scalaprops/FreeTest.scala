@@ -5,7 +5,7 @@ import scalaz.std.anyVal._
 
 object FreeTest extends Scalaprops {
 
-  private[this] implicit def freeEqual[F[_]: Functor, A](implicit
+  implicit def freeEqual[F[_]: Functor, A](implicit
     F: shapeless.Lazy[Equal[F[Free[F, A]]]],
     A: Equal[A]
   ): Equal[Free[F, A]] =
@@ -20,7 +20,7 @@ object FreeTest extends Scalaprops {
       }
     )
 
-  private[this] implicit def freeGen[F[_]: Applicative, A](implicit
+  implicit def freeGen[F[_]: Applicative, A](implicit
     F: Gen[F[A]],
     A: Gen[A]
   ): Gen[Free[F, A]] =
@@ -30,11 +30,17 @@ object FreeTest extends Scalaprops {
       F.map(Free.liftF(_))
     )
 
+
+  val bindRecIList =
+    scalazlaws.bindRec.laws[({type l[a] = Free[IList, a]})#l].andThenParam(Param.maxSize(1))
+
   val testMaybe = {
     type F[A] = Free[Maybe, A]
 
     Properties.list(
       scalazlaws.monad.all[F],
+      scalazlaws.zip.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.traverse.all[F]
     )
   }
@@ -44,6 +50,7 @@ object FreeTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.monad.all[F],
+      scalazlaws.zip.all[F],
       scalazlaws.traverse.all[F]
     )
   }
@@ -53,6 +60,7 @@ object FreeTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.monad.all[F],
+      scalazlaws.zip.all[F],
       scalazlaws.traverse1.all[F]
     )
   }
@@ -63,6 +71,7 @@ object FreeTest extends Scalaprops {
     implicit val m = Free.freeMonad[S]
     Properties.list(
       scalazlaws.monad.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.traverse.all[F]
     )
   }

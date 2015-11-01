@@ -16,6 +16,8 @@ object IListTest extends Scalaprops {
     scalazlaws.zip.all[IList]
   )
 
+  val bindRec = scalazlaws.bindRec.laws[IList].andThenParam(Param.maxSize(1))
+
   val listOf = {
     val g = for {
       min <- Gen.choose(-10, 50)

@@ -95,7 +95,7 @@ object CofreeTest extends Scalaprops {
         def to[A](tree: Tree[A]) =
           Cofree(tree.rootLabel, tree.subForest.map(to))
         def from[A](c: CofreeStream[A]) =
-          Tree.node(c.head, c.tail.map(from(_)))
+          Tree.Node(c.head, c.tail.map(from(_)))
       }
 
     implicit def gen[A: Gen]: Gen[CofreeStream[A]] =

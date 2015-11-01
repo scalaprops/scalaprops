@@ -13,6 +13,9 @@ object TheseTest extends Scalaprops {
       scalazlaws.semigroup.all[Int \&/ Int]
     )
 
+  // TODO bindRec.handleManyBinds
+  val bindRec = scalazlaws.bindRec.tailrecBindConsistency[({type l[a] = Byte \&/ a})#l, Byte]
+
   val test1 =
     Properties.list(
       scalazlaws.monad.all[F],

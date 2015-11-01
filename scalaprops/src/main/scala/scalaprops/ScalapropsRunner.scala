@@ -33,7 +33,7 @@ object ScalapropsRunner {
       val methodName = NameTransformer.decode(method.getName)
       val props = method.invoke(obj).asInstanceOf[Properties[Any]].props
       Properties.noSort[Any](
-        Tree.node(
+        Tree.Node(
           methodName -> Maybe.empty,
           props #:: Stream.empty
         )
@@ -58,7 +58,7 @@ object ScalapropsRunner {
     }
 
     Properties.noSort[Any](
-      Tree.node(
+      Tree.Node(
         clazz.getName -> Maybe.empty,
         obj.transformProperties(tests).map(_.props)(collection.breakOut)
       )
@@ -150,7 +150,7 @@ final class ScalapropsRunner(
                       cancel,
                       count => obj.listener.onCheck(obj, name, check, log, count)
                     )
-                  )(executorService).runFor(param.timeout)
+                  )(executorService).unsafePerformSyncFor(param.timeout)
                   val duration = System.currentTimeMillis() - start
                   obj.listener.onFinish(obj, name, check.prop, param, r, log)
                   r match {

@@ -10,8 +10,15 @@ object NullArgumentTest extends Scalaprops {
   private[this] implicit def equal[A, B](implicit A: Equal[Option[A] => B]): Equal[NullArgument[A, B]] =
     A.contramap(_.apply)
 
+  val laws = {
+    type F[A] = NullArgument[Byte, A]
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.bindRec.all[F]
+    )
+  }
+
   val testCompose = scalazlaws.compose.all[NullArgument]
-  val testMonad = scalazlaws.monad.all[({type l[a] = NullArgument[Int, a]})#l]
   val testContravariant = scalazlaws.contravariant.all[({type l[a] = NullArgument[a, Int]})#l]
   val testMonoid = scalazlaws.monoid.all[NullArgument[Int, Int]]
 }

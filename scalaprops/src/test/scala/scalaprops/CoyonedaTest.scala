@@ -15,6 +15,7 @@ object CoyonedaTest extends Scalaprops {
       scalazlaws.traverse1.all[F],
       scalazlaws.comonad.all[F],
       scalazlaws.monad.all[F],
+      scalazlaws.bindRec.laws[F].andThenParam(Param.maxSize(1)),
       scalazlaws.plus.all[F]
     )
   }
@@ -24,6 +25,7 @@ object CoyonedaTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.traverse.all[F],
+      scalazlaws.bindRec.all[F],
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.cobind.all[F]
     )
@@ -33,6 +35,7 @@ object CoyonedaTest extends Scalaprops {
     type F[A] = Coyoneda[IList, A]
 
     Properties.list(
+      scalazlaws.bindRec.laws[F].andThenParam(Param.maxSize(1)),
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlusStrong.all[F],
       scalazlaws.cobind.all[F]

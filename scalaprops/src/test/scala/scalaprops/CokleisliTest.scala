@@ -24,15 +24,39 @@ object CokleisliTest extends Scalaprops {
     )
   }
 
-  val maybe2 = scalazlaws.monad.all[({type l[a] = Cokleisli[Maybe, Byte, a]})#l]
+  val maybe2 = {
+    type F[A] = Cokleisli[Maybe, Byte, A]
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.bindRec.all[F]
+    )
+  }
 
   val nel1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[NonEmptyList, a, b]})#l]
-  val nel2 = scalazlaws.monad.all[({type l[a] = Cokleisli[NonEmptyList, Byte, a]})#l]
+  val nel2 = {
+    type F[A] = Cokleisli[NonEmptyList, Byte, A]
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.bindRec.all[F]
+    )
+  }
 
   val tree1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[Tree, a, b]})#l]
-  val tree2 = scalazlaws.monad.all[({type l[a] = Cokleisli[Tree, Byte, a]})#l]
+  val tree2 = {
+    type F[A] = Cokleisli[Tree, Byte, A]
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.bindRec.all[F]
+    )
+  }
 
   val zipper1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[Zipper, a, b]})#l]
-  val zipper2 = scalazlaws.monad.all[({type l[a] = Cokleisli[Zipper, Byte, a]})#l]
+  val zipper2 = {
+    type F[A] = Cokleisli[Zipper, Byte, A]
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.bindRec.all[F]
+    )
+  }
 
 }

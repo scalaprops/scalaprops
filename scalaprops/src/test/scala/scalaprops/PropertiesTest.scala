@@ -10,21 +10,21 @@ object PropertiesTest extends Scalaprops {
 
   val ` "directed acyclic graph" to tree` = forAll {
 
-    val functor = Tree.leaf("functor")
-    val cobind = Tree.node("cobind", Stream(functor))
-    val apply = Tree.node("apply", Stream(functor))
-    val applicative = Tree.node("applicative", Stream(apply))
-    val bind = Tree.node("bind", Stream(apply))
-    val monad = Tree.node("monad", Stream(bind, applicative))
-    val foldable = Tree.leaf("foldable")
-    val traverse = Tree.node("traverse", Stream(foldable, functor))
-    val plus = Tree.leaf("plus")
-    val plusEmpty = Tree.node("plusEmpty", Stream(plus))
-    val applicativePlus = Tree.node("applicativePlus", Stream( applicative, plusEmpty))
-    val monadPlus = Tree.node("monadPlus", Stream(applicativePlus, monad))
-    val isEmpty = Tree.node("isEmpty", Stream(plusEmpty))
+    val functor = Tree.Leaf("functor")
+    val cobind = Tree.Node("cobind", Stream(functor))
+    val apply = Tree.Node("apply", Stream(functor))
+    val applicative = Tree.Node("applicative", Stream(apply))
+    val bind = Tree.Node("bind", Stream(apply))
+    val monad = Tree.Node("monad", Stream(bind, applicative))
+    val foldable = Tree.Leaf("foldable")
+    val traverse = Tree.Node("traverse", Stream(foldable, functor))
+    val plus = Tree.Leaf("plus")
+    val plusEmpty = Tree.Node("plusEmpty", Stream(plus))
+    val applicativePlus = Tree.Node("applicativePlus", Stream( applicative, plusEmpty))
+    val monadPlus = Tree.Node("monadPlus", Stream(applicativePlus, monad))
+    val isEmpty = Tree.Node("isEmpty", Stream(plusEmpty))
 
-    val list = Tree.node("list instance", Stream(
+    val list = Tree.Node("list instance", Stream(
       isEmpty, monadPlus, traverse, cobind
     ))
 

@@ -244,7 +244,7 @@ object Cogen extends CogenInstances0 {
     Cogen[IList[A]].contramap(_.toIList)
 
   implicit def cogenNonEmptyList[A: Cogen]: Cogen[NonEmptyList[A]] =
-    Cogen[(A, List[A])].contramap(nel => (nel.head, nel.tail))
+    Cogen[(A, IList[A])].contramap(nel => (nel.head, nel.tail))
 
   implicit def cogenIndSeq[A: Cogen]: Cogen[IndSeq[A]] =
     Cogen[List[A]].contramap(Foldable[IndSeq].toList)
@@ -321,10 +321,10 @@ object Cogen extends CogenInstances0 {
   implicit def cogenIdT[F[_], A](implicit F: Cogen[F[A]]): Cogen[IdT[F, A]] =
     F.contramap(_.run)
 
-  implicit def cogenIndexedReaderWriterStateT[F[_], R, W, S1, S2, A](implicit F: Cogen[(R, S1) => F[(W, A, S2)]]): Cogen[IndexedReaderWriterStateT[F, R, W, S1, S2, A]] =
+  implicit def cogenIndexedReaderWriterStateT[F[_]: Monad, R, W, S1, S2, A](implicit F: Cogen[(R, S1) => F[(W, A, S2)]]): Cogen[IndexedReaderWriterStateT[F, R, W, S1, S2, A]] =
     F.contramap(_.run)
 
-  implicit def cogenIndexedStateT[F[_], S1, S2, A](implicit F: Cogen[S1 => F[(S2, A)]]): Cogen[IndexedStateT[F, S1, S2, A]] =
+  implicit def cogenIndexedStateT[F[_]: Monad, S1, S2, A](implicit F: Cogen[S1 => F[(S2, A)]]): Cogen[IndexedStateT[F, S1, S2, A]] =
     F.contramap(s => s.apply(_))
 
   implicit def cogenWriterT[F[_], A, B](implicit F: Cogen[F[(A, B)]]): Cogen[WriterT[F, A, B]] =

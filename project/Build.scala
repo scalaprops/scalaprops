@@ -24,7 +24,7 @@ object build extends Build {
 
   private[this] def module(id: String) =
     Project(id, file(id)).settings(commonSettings).settings(
-      scalazVersion := "7.1.5",
+      scalazVersion := "7.2.0",
       shapelessVersion := "2.2.5",
       initialCommands in console += "import scalaprops._, scalaz._"
     )
@@ -52,7 +52,7 @@ object build extends Build {
     shapelessDependency("test"),
     (sources in Test) := {
       val s = (sources in Test).value
-      val useShapeless = Set("CofreeTest.scala", "FreeTest.scala")
+      val useShapeless = Set("CofreeTest.scala", "FreeTest.scala", "FreeTTest.scala")
       if(scalaVersion.value.startsWith("2.12")) {
         s.filterNot(f => useShapeless(f.getName))
       } else {
