@@ -15,14 +15,24 @@ object CokleisliTest extends Scalaprops {
     Equal[F[A] => B].contramap(_.run)
   }
 
-  val testLaws = {
-    type C1[A] = Cokleisli[Maybe, Int, A]
-    type C2[A, B] = Cokleisli[NonEmptyList, A, B]
+  val maybe1 = {
+    type C[A, B] = Cokleisli[Maybe, A, B]
 
     Properties.list(
-      scalazlaws.monad.all[C1],
-      scalazlaws.arrow.all[C2]
+      scalazlaws.compose.all[C],
+      scalazlaws.profunctor.all[C]
     )
   }
+
+  val maybe2 = scalazlaws.monad.all[({type l[a] = Cokleisli[Maybe, Byte, a]})#l]
+
+  val nel1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[NonEmptyList, a, b]})#l]
+  val nel2 = scalazlaws.monad.all[({type l[a] = Cokleisli[NonEmptyList, Byte, a]})#l]
+
+  val tree1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[Tree, a, b]})#l]
+  val tree2 = scalazlaws.monad.all[({type l[a] = Cokleisli[Tree, Byte, a]})#l]
+
+  val zipper1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[Zipper, a, b]})#l]
+  val zipper2 = scalazlaws.monad.all[({type l[a] = Cokleisli[Zipper, Byte, a]})#l]
 
 }
