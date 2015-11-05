@@ -36,4 +36,5 @@ object LazyEitherTTest extends Scalaprops {
       scalazlaws.traverse.all[({type l[a] = LazyEitherT[NonEmptyList, Int, a]})#l]
     )
 
+  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = LazyEitherT[f, Int, a]})#l]
 }

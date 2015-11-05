@@ -10,7 +10,7 @@ object WriterTTest extends Scalaprops {
     type F[A] = WriterT[Maybe, Int, A]
 
     Properties.list(
-      scalazlaws.monad.all[F],
+      scalazlaws.monadPlusStrong.all[F],
       scalazlaws.traverse.all[F],
       scalazlaws.equal.all[F[Int]]
     )
@@ -26,7 +26,7 @@ object WriterTTest extends Scalaprops {
     type F[A] = WriterT[IList, Int, A]
 
     Properties.list(
-      scalazlaws.monad.all[F],
+      scalazlaws.monadPlusStrong.all[F],
       scalazlaws.traverse.all[F],
       scalazlaws.equal.all[F[Int]]
     )
@@ -54,6 +54,7 @@ object WriterTTest extends Scalaprops {
 
     Properties.list(
       scalazlaws.monadError.all[({type x[e, a] = WriterT[({type y[b] = e \/ b})#y, Short, a]})#x, Byte],
+      scalazlaws.plus.all[G],
       scalazlaws.traverse.all[G],
       scalazlaws.equal.all[G[Int]]
     )

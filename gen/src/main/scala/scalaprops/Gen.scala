@@ -801,6 +801,9 @@ object Gen extends GenInstances0 {
   implicit def indexedStoreTGen[F[_], I: Gen, A, B](implicit F: Gen[F[A => B]]): Gen[IndexedStoreT[F, I, A, B]] =
     Gen[(F[A => B], I)].map(IndexedStoreT(_))
 
+  implicit def tracedTGen[W[_], A, B](implicit W: Gen[W[A => B]]): Gen[TracedT[W, A, B]] =
+    W.map(TracedT(_))
+
   implicit val orderingGen: Gen[Ordering] =
     elements(
       scalaz.Ordering.GT,

@@ -15,12 +15,12 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
 
   val testMaybe = {
     type F[A] = IndexedReaderWriterStateT[Maybe, Int, Int, Int, Int, A]
-    scalazlaws.monad.all[F]
+    scalazlaws.monadPlusStrong.all[F]
   }
 
   val testIList = {
     type F[A] = IndexedReaderWriterStateT[IList, Int, Int, Int, Int, A]
-    scalazlaws.monad.all[F]
+    scalazlaws.monadPlusStrong.all[F]
   }
 
   val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = ReaderWriterStateT[f, Int, Int, Int, a]})#l]
