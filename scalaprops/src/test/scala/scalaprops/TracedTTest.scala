@@ -1,10 +1,14 @@
 package scalaprops
 
 import scalaz._
-import FunctionEqual._
 import scalaz.std.anyVal._
 
 object TracedTTest extends Scalaprops{
+
+  private[this] val e = new FunctionEqual(10)
+  import e._
+
+  override def param = super.param.copy(maxSize = 10)
 
   type Z = IList[Boolean]
 
