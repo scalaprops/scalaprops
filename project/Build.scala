@@ -74,6 +74,14 @@ object build {
     name := scalazlawsName
   ).dependsOn(core)
 
+  lazy val neko = module("neko").settings(
+    name := "neko",
+    libraryDependencies += "org.typelevel" %%% "cats-laws" % "0.6.1"
+  ).dependsOn(
+    core,
+    scalaprops % "test"
+  )
+
   lazy val scalaprops = module(scalapropsName).settings(
     name := scalapropsName
   ).dependsOn(

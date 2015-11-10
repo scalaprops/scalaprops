@@ -2,11 +2,11 @@ import UnidocKeys._
 import build._
 
 lazy val jvmProjects = Seq[ProjectReference](
-  genJVM, coreJVM, scalapropsJVM, scalazlawsJVM
+  genJVM, coreJVM, scalapropsJVM, scalazlawsJVM, nekoJVM
 )
 
 lazy val jsProjects = Seq[ProjectReference](
-  genJS, coreJS, scalapropsJS, scalazlawsJS
+  genJS, coreJS, scalapropsJS, scalazlawsJS, nekoJS
 )
 
 lazy val genJS = gen.js
@@ -54,3 +54,7 @@ val root = Project("root", file(".")).settings(
 
 lazy val rootJS = project.aggregate(jsProjects: _*)
 lazy val rootJVM = project.aggregate(jvmProjects: _*)
+
+lazy val nekoJVM = neko.jvm
+lazy val nekoJS = neko.js
+lazy val nekoRoot = project.aggregate(nekoJS, nekoJVM)
