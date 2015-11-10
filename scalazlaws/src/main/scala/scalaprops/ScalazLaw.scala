@@ -65,7 +65,7 @@ object ScalazLaw {
   val functor = law("functor")
   val functorAll = all(functor)
   val functorIdentity = law0(functor, "identity")
-  val functorCompsite = law0(functor, "composite")
+  val functorComposite = law0(functor, "composite")
 
   val apply = law("apply")
   val applyAll = all(apply)

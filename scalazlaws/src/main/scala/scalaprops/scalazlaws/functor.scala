@@ -18,7 +18,7 @@ object functor {
                  ef: Equal[F[Int]]) =
     properties(ScalazLaw.functor)(
       ScalazLaw.functorIdentity -> identity[F, Int],
-      ScalazLaw.functorCompsite -> composite[F, Int, Int, Int]
+      ScalazLaw.functorComposite -> composite[F, Int, Int, Int]
     )
 
   def all[F[_]](implicit F: Functor[F], af: Gen[F[Int]], axy: Gen[Int => Int],
