@@ -18,6 +18,16 @@ object OptionTTest extends Scalaprops{
     scalazlaws.monadError.all[F, Byte]
   }
 
+  val id = {
+    type F[A] = OptionT[Id.Id, A]
+
+    Properties.list(
+      scalazlaws.equal.all[F[Int]],
+      scalazlaws.traverse.all[F],
+      scalazlaws.monad.all[F]
+    )
+  }
+
   val iList = {
     type F[A] = OptionT[IList, A]
     Properties.list(
