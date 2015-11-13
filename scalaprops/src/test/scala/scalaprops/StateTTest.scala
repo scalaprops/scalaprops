@@ -11,6 +11,14 @@ object StateTTest extends Scalaprops {
   implicit def stateTEqual[F[_], A, B](implicit F: Equal[A => F[(A, B)]]): Equal[StateT[F, A, B]] =
     F.contramap(_.apply _)
 
+  val id = {
+    type F[A] = State[Byte, A]
+    Properties.list(
+      scalazlaws.monad.all[F],
+      scalazlaws.equal.all[F[Int]]
+    )
+  }
+
   val testIList = {
     type F[A] = StateT[IList, Int, A]
 
