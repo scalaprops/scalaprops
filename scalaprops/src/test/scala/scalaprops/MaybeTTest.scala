@@ -17,6 +17,15 @@ object MaybeTTest extends Scalaprops {
     scalazlaws.monadError.all[F, Byte]
   }
 
+  val id = {
+    type F[A] = MaybeT[Id.Id, A]
+    Properties.list(
+      scalazlaws.monadPlus.all[F],
+      scalazlaws.traverse.all[F],
+      scalazlaws.equal.all[F[Byte]]
+    )
+  }
+
   val testLawsIList = {
     type F[A] = MaybeT[IList, A]
     Properties.list(
