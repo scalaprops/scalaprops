@@ -22,4 +22,16 @@ sealed class FunctionEqual(size: Int) {
 
   implicit def f4[A1: Gen, A2: Gen, A3: Gen, A4: Gen, B](implicit B: Equal[B]): Equal[(A1, A2, A3, A4) => B] =
     f1[(A1, A2, A3, A4), B].contramap(_.tupled)
+
+  implicit def f5[A1: Gen, A2: Gen, A3: Gen, A4: Gen, A5: Gen, B](implicit B: Equal[B]): Equal[(A1, A2, A3, A4, A5) => B] =
+    f1[(A1, A2, A3, A4, A5), B].contramap(_.tupled)
+
+  implicit def f6[A1: Gen, A2: Gen, A3: Gen, A4: Gen, A5: Gen, A6: Gen, B](implicit B: Equal[B]): Equal[(A1, A2, A3, A4, A5, A6) => B] =
+    f1[(A1, A2, A3, A4, A5, A6), B].contramap(_.tupled)
+
+  implicit def f7[A1: Gen, A2: Gen, A3: Gen, A4: Gen, A5: Gen, A6: Gen, A7: Gen, B](implicit B: Equal[B]): Equal[(A1, A2, A3, A4, A5, A6, A7) => B] =
+    f1[(A1, A2, A3, A4, A5, A6, A7), B].contramap(_.tupled)
+
+  implicit def f8[A1: Gen, A2: Gen, A3: Gen, A4: Gen, A5: Gen, A6: Gen, A7: Gen, A8: Gen, B](implicit B: Equal[B]): Equal[(A1, A2, A3, A4, A5, A6, A7, A8) => B] =
+    f1[(A1, A2, A3, A4, A5, A6, A7, A8), B].contramap(_.tupled)
 }
