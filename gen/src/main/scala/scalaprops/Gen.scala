@@ -710,7 +710,7 @@ object Gen extends GenInstances0 {
     F.map(NullArgument(_))
 
   implicit def nonEmptyList[A](implicit A: Gen[A]): Gen[NonEmptyList[A]] =
-    Apply[Gen].apply2(A, Gen[List[A]])(NonEmptyList.nel)
+    Apply[Gen].apply2(A, Gen[List[A]])((x, xs) => NonEmptyList.nel(x, xs.drop(1)))
 
   implicit def oneAnd[F[_], A](implicit F: Gen[F[A]], A: Gen[A]): Gen[OneAnd[F, A]] =
     Apply[Gen].apply2(A, F)(OneAnd(_, _))

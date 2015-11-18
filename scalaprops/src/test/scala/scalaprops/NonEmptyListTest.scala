@@ -13,4 +13,8 @@ object NonEmptyListTest extends Scalaprops {
     scalazlaws.comonad.all[NonEmptyList],
     scalazlaws.plus.all[NonEmptyList]
   )
+
+  val size = Property.forAllG(Gen.positiveByte, Gen[Long]){ (s, seed) =>
+    Gen[NonEmptyList[Unit]].sample(s, seed).size <= s
+  }
 }
