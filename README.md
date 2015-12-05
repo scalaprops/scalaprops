@@ -59,3 +59,7 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.1
 
 
 ![screencast](https://raw.githubusercontent.com/scalaprops/scalaprops/master/screencast.gif)
+
+### for scalaz 7.1.x
+
+<https://github.com/scalaprops/scalaprops/tree/0.1.x>
