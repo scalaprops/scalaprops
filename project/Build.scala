@@ -24,7 +24,7 @@ object build extends Build {
 
   private[this] def module(id: String) =
     Project(id, file(id)).settings(commonSettings).settings(
-      scalazVersion := "7.1.5",
+      scalazVersion := "7.1.6",
       shapelessVersion := "2.2.5",
       initialCommands in console += "import scalaprops._, scalaz._"
     )

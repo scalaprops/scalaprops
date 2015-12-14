@@ -22,6 +22,7 @@ object StreamTTest extends Scalaprops {
     type F[A] = StreamT[G, A]
     Properties.list(
       scalazlaws.monadPlus.all[F],
+      scalazlaws.foldable.all[F],
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]
     )
@@ -32,6 +33,7 @@ object StreamTTest extends Scalaprops {
     type F[A] = StreamT[G, A]
     Properties.list(
       scalazlaws.monadPlus.all[F],
+      scalazlaws.foldable.all[F],
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]
     )
@@ -42,6 +44,7 @@ object StreamTTest extends Scalaprops {
     type F[A] = StreamT[G, A]
     Properties.list(
       scalazlaws.monadPlus.all[F],
+      scalazlaws.foldable.all[F],
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]
     )
@@ -52,6 +55,7 @@ object StreamTTest extends Scalaprops {
     type F[A] = StreamT[G, A]
     Properties.list(
       scalazlaws.monadPlus.all[F],
+      scalazlaws.foldable.all[F],
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]
     )
