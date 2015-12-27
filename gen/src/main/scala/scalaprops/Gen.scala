@@ -47,6 +47,9 @@ final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
 
   def toStateReader: StateT[({type l[a] = Reader[Int, a]})#l, Rand, A] =
     Gen.isoStateReader.to(this)
+
+  def widen[B](implicit A: Liskov[A, B]): Gen[B] =
+    Gen(Liskov.co[({type l[+a] = (Int, Rand) => (Rand, a)})#l, A, B](A)(f))
 }
 
 
