@@ -45,7 +45,13 @@ abstract class Rand {
           loop(next._1)
         }
       }
-      loop(this)
+
+      if (Int.MinValue <= min && max <= Int.MaxValue){
+        val (r, i) = choose(min.asInstanceOf[Int], max.asInstanceOf[Int])
+        (r, i)
+      } else {
+        loop(this)
+      }
     }
   }
 
