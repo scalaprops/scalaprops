@@ -26,7 +26,11 @@ object build extends Build {
     Project(id, file(id)).settings(commonSettings).settings(
       scalazVersion := "7.1.7",
       shapelessVersion := "2.2.5",
-      initialCommands in console += "import scalaprops._, scalaz._"
+      initialCommands in console += {
+        "import scalaprops._, scalaz._;" + Seq(
+          "Gen", "Cogen", "Rand"
+        ).map(a => s"val $a = scalaprops.$a").mkString(";") // for tab completion
+      }
     )
 
   lazy val gen = module("gen").settings(
