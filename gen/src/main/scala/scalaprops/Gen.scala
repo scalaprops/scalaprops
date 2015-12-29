@@ -409,40 +409,40 @@ object Gen extends GenInstances0 {
     genIntSized.map(Int2Short)
 
   val positiveByte: Gen[Byte] =
-    Gen.choose(1, Byte.MaxValue).map(Int2Byte)
+    Choose[Int].withBoundaries(1, Byte.MaxValue).map(Int2Byte)
 
   val positiveShort: Gen[Short] =
-    Gen.choose(1, Short.MaxValue).map(Int2Short)
+    Choose[Int].withBoundaries(1, Short.MaxValue).map(Int2Short)
 
   val positiveInt: Gen[Int] =
-    Gen.choose(1, Int.MaxValue)
+    Choose[Int].withBoundaries(1, Int.MaxValue)
 
   val positiveLong: Gen[Long] =
-    Gen.chooseLong(1, Long.MaxValue)
+    Choose[Long].withBoundaries(1, Long.MaxValue)
 
   val negativeByte: Gen[Byte] =
-    Gen.choose(Byte.MinValue, -1).map(Int2Byte)
+    Choose[Byte].withBoundaries(Byte.MinValue, -1)
 
   val negativeShort: Gen[Short] =
-    Gen.choose(Short.MinValue, -1).map(Int2Short)
+    Choose[Short].withBoundaries(Short.MinValue, -1)
 
   val negativeInt: Gen[Int] =
-    Gen.choose(Int.MinValue, -1)
+    Choose[Int].withBoundaries(Int.MinValue, -1)
 
   val negativeLong: Gen[Long] =
-    Gen.chooseLong(Long.MinValue, -1)
+    Choose[Long].withBoundaries(Long.MinValue, -1)
 
   val nonNegativeByte: Gen[Byte] =
-    Gen.choose(0, Byte.MaxValue).map(Int2Byte)
+    Choose[Byte].withBoundaries(0, Byte.MaxValue)
 
   val nonNegativeShort: Gen[Short] =
-    Gen.choose(0, Short.MaxValue).map(Int2Short)
+    Choose[Short].withBoundaries(0, Short.MaxValue)
 
   val nonNegativeInt: Gen[Int] =
-    Gen.choose(0, Int.MaxValue)
+    Choose[Int].withBoundaries(0, Int.MaxValue)
 
   val nonNegativeLong: Gen[Long] =
-    Gen.chooseLong(0, Long.MaxValue)
+    Choose[Long].withBoundaries(0, Long.MaxValue)
 
   val asciiChar: Gen[Char] =
     choose('!', '~').map(Int2Char)
