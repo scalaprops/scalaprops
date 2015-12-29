@@ -7,7 +7,7 @@ import CokleisliTest.cokleisliEqual
 
 object EndomorphicTest extends Scalaprops {
 
-  override val param: Param = super.param.copy(maxSize = 10)
+  override val param: Param = super.param.setMaxSize(10)
 
   private[this] implicit def endomorphicKleisliEqual[F[_], A](implicit
     F: Equal[Kleisli[F, A, A]]

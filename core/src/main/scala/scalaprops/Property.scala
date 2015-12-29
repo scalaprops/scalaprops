@@ -66,14 +66,19 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
   // TODO remove `listener` parameter?
   def check(param: Param, cancel: AtomicBoolean, listener: Int => Unit): CheckResult = {
     import param.{rand => _, _}
+    def genSize(s: Int, discarded: Int, sz: Float, r: Rand) = size match {
+      case Size.Range(minSize, maxSize) =>
+        if (s == 0 && discarded == 0) minSize
+        else sz + (maxSize - sz) / (minSuccessful - s)
+      case f: Size.Frequency =>
+        f.gen.f(0, r)._2
+    }
+
     @annotation.tailrec
     def loop(s: Int, discarded: Int, sz: Float, random: Rand): CheckResult = if(cancel.get()) {
       CheckResult.Timeout(s, discarded)
     }else{
-      val size = {
-        if (s == 0 && discarded == 0) minSize
-        else sz + (maxSize - sz) / (minSuccessful - s)
-      }
+      val size = genSize(s, discarded, sz, random)
 
       val r = \/.fromTryCatchThrowable[(Rand, Result), Throwable](
         f(math.round(size), random)
@@ -106,7 +111,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
       }
     }
 
-    loop(0, 0, minSize, param.rand)
+    loop(0, 0, size.range.fold(0)(_._1), param.rand)
   }
 
   def toProperties[A](id: A, param: Endo[Param] = Param.id): Properties[A] =

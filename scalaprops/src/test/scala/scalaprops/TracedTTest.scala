@@ -8,7 +8,7 @@ object TracedTTest extends Scalaprops{
   private[this] val e = new FunctionEqual(10)
   import e._
 
-  override def param = super.param.copy(maxSize = 10)
+  override def param = super.param.setMaxSize(10)
 
   type Z = IList[Boolean]
 

@@ -6,7 +6,7 @@ import scalaz.std.tuple._
 
 object CokleisliTest extends Scalaprops {
 
-  override val param: Param = Param.withCurrentTimeSeed().copy(maxSize = 30)
+  override val param: Param = Param.withCurrentTimeSeed().setMaxSize(30)
 
   private[this] val e = new FunctionEqual(5)
 

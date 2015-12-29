@@ -9,10 +9,17 @@ final case class Param(
   rand: Rand,
   minSuccessful: Int = 100,
   maxDiscarded: Int = 500,
-  minSize: Int = 0,
-  maxSize: Int = Gen.defaultSize,
+  size: Size = Size.default,
   timeout: Duration = Duration(30, TimeUnit.SECONDS)
-)
+) {
+
+  def setMaxSize(n: Int): Param =
+    copy(
+      size = size.range.fold(size){
+        case (min, _) => Size.Range(min, n)
+      }
+    )
+}
 
 object Param {
   def withCurrentTimeSeed(): Param = Param(
@@ -29,7 +36,10 @@ object Param {
     Endo(_.copy(minSuccessful = n))
 
   def maxSize(n: Int): Endo[Param] =
-    Endo(_.copy(maxSize = n))
+    Endo(_.setMaxSize(n))
+
+  def size(s: Size): Endo[Param] =
+    Endo(_.copy(size = s))
 
   def timeout(n: Int, timeunit: TimeUnit): Endo[Param] =
     Endo(_.copy(timeout = Duration(n, timeunit)))
