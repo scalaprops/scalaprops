@@ -15,7 +15,7 @@ final case class Param(
 
   def setMaxSize(n: Int): Param =
     copy(
-      size = size.range.fold(size){
+      size = size.range.fold(Size.Range(0, n)){
         case (min, _) => Size.Range(min, n)
       }
     )
@@ -23,7 +23,10 @@ final case class Param(
 
 object Param {
   def withCurrentTimeSeed(): Param = Param(
-    rand = Rand.standard(System.nanoTime())
+    rand = Rand.standard(System.nanoTime()),
+    size = Size.Frequency(
+      (0 to 100).map(_ -> 1).toMap
+    )
   )
 
   def rand(rand: Rand): Endo[Param] =
