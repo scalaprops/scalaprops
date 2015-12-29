@@ -230,13 +230,18 @@ object FreeTTest extends Scalaprops {
   }
 
   val iListStateIList = {
+    val laws = Set(ScalazLaw.bindAssociativity, ScalazLaw.applyComposition)
+
     type S = Byte
     type G[A] = StateT[IList, S, A]
     type F[A] = FreeT[IList, G, A]
     Properties.list(
       scalazlaws.monadState.all[F, S]
-    )
-  }.andThenParam(Param.maxSize(3))
+    ).andThenParam(Param.maxSize(3)).andThenParamPF {
+      case Or.R(Or.L(law)) if laws(law) =>
+        Param.maxSize(2).andThen(Param.minSuccessful(10))
+    }
+  }
 
   val monadTransMaybe = scalazlaws.monadTrans.all[({type l[a[_], b] = FreeT[Maybe, a, b]})#l]
   val monadTransIList = scalazlaws.monadTrans.all[({type l[a[_], b] = FreeT[IList, a, b]})#l]
