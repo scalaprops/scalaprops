@@ -127,6 +127,11 @@ object GenTest extends Scalaprops {
   val negShort = Property.forAllG(Gen.negativeShort){_ < 0}
   val negByte = Property.forAllG(Gen.negativeByte){_ < 0}
 
+  val nonNegLong = Property.forAllG(Gen.nonNegativeLong){0 <= _}
+  val nonNegInt = Property.forAllG(Gen.nonNegativeInt){0 <= _}
+  val nonNegShort = Property.forAllG(Gen.nonNegativeShort){0 <= _}
+  val nonNegByte = Property.forAllG(Gen.nonNegativeByte){0 <= _}
+
   val javaEnum = Property.forAll{ seed: Int =>
     val values = Gen[java.util.concurrent.TimeUnit].samples(seed = seed, listSize = 200).toSet
     values == java.util.concurrent.TimeUnit.values().toSet
