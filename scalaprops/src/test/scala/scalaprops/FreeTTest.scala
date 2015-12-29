@@ -236,7 +236,7 @@ object FreeTTest extends Scalaprops {
     Properties.list(
       scalazlaws.monadState.all[F, S]
     )
-  }
+  }.andThenParam(Param.maxSize(3))
 
   val monadTransMaybe = scalazlaws.monadTrans.all[({type l[a[_], b] = FreeT[Maybe, a, b]})#l]
   val monadTransIList = scalazlaws.monadTrans.all[({type l[a[_], b] = FreeT[IList, a, b]})#l]
