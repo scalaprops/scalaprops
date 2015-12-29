@@ -67,8 +67,8 @@ object Gen extends GenInstances0 {
   private[scalaprops] def IListFromList[A]: List[A] => IList[A] =
     iListFromList.asInstanceOf[List[A] => IList[A]]
 
-  private[this] val Int2Byte = (_: Int).toByte
-  private[this] val Int2Short = (_: Int).toShort
+  private[scalaprops] val Int2Byte = (_: Int).toByte
+  private[scalaprops] val Int2Short = (_: Int).toShort
   private[this] val Int2Char = (_: Int).toChar
 
   def gen[A](f: (Int, Rand) => (Rand, A)): Gen[A] =
