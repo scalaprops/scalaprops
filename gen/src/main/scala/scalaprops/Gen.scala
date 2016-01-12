@@ -382,7 +382,7 @@ object Gen extends GenInstances0 {
     for {
       n <- genLongAll
       d <- genLongAll
-    } yield BigDecimal(n) / (if (d == 0L) 1 else n)
+    } yield BigDecimal(n) / (if (d == 0L) 1 else d)
 
   val genLargeBigDecimal: Gen[BigDecimal] =
     for {
