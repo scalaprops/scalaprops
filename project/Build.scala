@@ -56,7 +56,7 @@ object build extends Build {
     shapelessDependency("test"),
     (sources in Test) := {
       val s = (sources in Test).value
-      val useShapeless = Set("CofreeTest.scala", "FreeTest.scala", "FreeTTest.scala")
+      val useShapeless = Set("CofreeTest.scala", "FreeTest.scala", "FreeTTest.scala", "FreeApTest.scala")
       if(scalaVersion.value.startsWith("2.12")) {
         s.filterNot(f => useShapeless(f.getName))
       } else {
