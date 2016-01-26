@@ -30,6 +30,11 @@ object IndexedContsTTest extends Scalaprops {
     scalazlaws.monad.all[F].andThenParam(Param.maxSize(4))
   }
 
+  val contsTTreeMaybe = {
+    type F[A] = ContsT[Tree, Maybe, Int, A]
+    scalazlaws.monad.all[F].andThenParam(Param.maxSize(4))
+  }
+
   val testContsTIList = {
     type F[A] = ContsT[NonEmptyList, IList, Int, A]
     scalazlaws.monad.all[F]
