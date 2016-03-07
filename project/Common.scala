@@ -7,6 +7,13 @@ import xerial.sbt.Sonatype.SonatypeKeys
 
 object Common {
 
+  val tagName = Def.setting{
+    s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
+  }
+  val tagOrHash = Def.setting{
+    if(isSnapshot.value) gitHash() else tagName.value
+  }
+
   def shapelessDependency(scope: String) =
     libraryDependencies ++= {
       val v = build.shapelessVersion.value
@@ -20,9 +27,8 @@ object Common {
       )
     }
 
-  private[this] def gitHash = scala.util.Try(
+  private[this] def gitHash(): String =
     sys.process.Process("git rev-parse HEAD").lines_!.head
-  ).getOrElse("master")
 
   private[this] val unusedWarnings = (
     "-Ywarn-unused" ::
@@ -52,7 +58,7 @@ object Common {
       new RuleTransformer(stripTestScope).transform(node)(0)
     },
     scalacOptions in (Compile, doc) ++= {
-      val tag = if(isSnapshot.value) gitHash else { "v" + version.value }
+      val tag = tagOrHash.value
       Seq(
         "-sourcepath", (baseDirectory in LocalRootProject).value.getAbsolutePath,
         "-doc-source-url", s"https://github.com/scalaprops/scalaprops/tree/${tag}€{FILE_PATH}.scala"
@@ -85,6 +91,7 @@ object Common {
     scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
       case Some((2, v)) if v >= 11 => unusedWarnings
     }.toList.flatten,
+    releaseTagName := tagName.value,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
