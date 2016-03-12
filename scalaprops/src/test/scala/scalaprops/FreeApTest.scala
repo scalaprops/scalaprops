@@ -2,15 +2,12 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.tuple._
 import scalaz.std.function._
-import FreeTest.freeEqual
-import FunctionEqual._
 
 object FreeApTest extends Scalaprops {
 
   private[this] implicit def freeApEqual[F[_]: Functor, A](implicit
-    F: shapeless.Lazy[Equal[F[Free[F, A]]]],
+    E: Eq1[F],
     A: Equal[A]
   ): Equal[FreeAp[F, A]] =
     FreeTest.freeEqual[F, A].contramap(_.monadic)
@@ -85,7 +82,6 @@ object FreeApTest extends Scalaprops {
   }
 
   val state = {
-    import StateTTest.stateTEqual
     type G[A] = State[Short, A]
     type F[A] = FreeAp[G, A]
     Properties.list(

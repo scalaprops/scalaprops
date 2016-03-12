@@ -7,23 +7,23 @@ object CofreeTest extends Scalaprops {
 
   private[this] implicit def cogenCofree[F[_], A](implicit
     A: Cogen[A],
-    F: shapeless.Lazy[Cogen[F[Cofree[F, A]]]]
+    F: Cogen1[F]
   ): Cogen[Cofree[F, A]] =
     new Cogen[Cofree[F, A]] {
       override def cogen[B](a: Cofree[F, A], g: CogenState[B]) =
-        A.cogen(a.head, F.value.cogen(a.tail, g))
+        A.cogen(a.head, F.cogen1[Cofree[F, A]].cogen(a.tail, g))
     }
 
   private[this] implicit def cofreeEqual[F[_], A](implicit
-    F: shapeless.Lazy[Equal[F[Cofree[F, A]]]],
+    F: Eq1[F],
     A: Equal[A]
   ): Equal[Cofree[F, A]] =
     Equal.equal((a, b) =>
-      A.equal(a.head, b.head) && F.value.equal(a.tail, b.tail)
+      A.equal(a.head, b.head) && F.eq1[Cofree[F, A]].equal(a.tail, b.tail)
     )
 
   private[this] implicit def cofreeZipEqual[F[_], A](implicit
-    F: shapeless.Lazy[Equal[F[Cofree[F, A]]]],
+    F: Eq1[F],
     A: Equal[A]
   ): Equal[CofreeZip[F, A]] =
     Tags.Zip.subst(cofreeEqual[F, A])
@@ -111,15 +111,15 @@ object CofreeTest extends Scalaprops {
 
   private[this] object CofreeGenImplicit {
     implicit def gen[F[_], A](implicit
-      F: shapeless.Lazy[Gen[F[Cofree[F, A]]]],
+      F: Gen1[F],
       A: Gen[A]
     ): Gen[Cofree[F, A]] =
-      Apply[Gen].apply2(A, F.value)((h, t) =>
+      Apply[Gen].apply2(A, F.gen1[Cofree[F, A]])((h, t) =>
         Cofree(h, t)
       )
 
     implicit def genCofreeZip[F[_], A](implicit
-      F: shapeless.Lazy[Gen[F[Cofree[F, A]]]],
+      F: Gen1[F],
       A: Gen[A]
     ): Gen[CofreeZip[F, A]] =
       Tags.Zip.subst(gen[F, A])
