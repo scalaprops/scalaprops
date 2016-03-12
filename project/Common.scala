@@ -14,19 +14,6 @@ object Common {
     if(isSnapshot.value) gitHash() else tagName.value
   }
 
-  def shapelessDependency(scope: String) =
-    libraryDependencies ++= {
-      val v = build.shapelessVersion.value
-      if(scalaVersion.value.startsWith("2.10")) Seq(
-        "com.chuusai" %% "shapeless" % v % scope,
-        compilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
-      ) else if(scalaVersion.value.startsWith("2.12")) {
-        Nil
-      } else Seq(
-        "com.chuusai" %% "shapeless" % v % scope
-      )
-    }
-
   private[this] def gitHash(): String =
     sys.process.Process("git rev-parse HEAD").lines_!.head
 

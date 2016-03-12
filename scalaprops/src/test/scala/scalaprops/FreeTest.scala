@@ -6,13 +6,13 @@ import scalaz.std.anyVal._
 object FreeTest extends Scalaprops {
 
   implicit def freeEqual[F[_]: Functor, A](implicit
-    F: shapeless.Lazy[Equal[F[Free[F, A]]]],
+    E: Eq1[F],
     A: Equal[A]
   ): Equal[Free[F, A]] =
     Equal.equal((aa, bb) =>
       (aa.resume, bb.resume) match {
         case (-\/(a), -\/(b)) =>
-          F.value.equal(a, b)
+          E.eq1[Free[F, A]].equal(a, b)
         case (\/-(a), \/-(b)) =>
           A.equal(a, b)
         case _ =>

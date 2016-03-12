@@ -35,14 +35,37 @@ object Eq1 {
       def eq1[A: Equal] = Equal[Tree[A]]
     }
 
+  implicit val streamEq1: Eq1[Stream] =
+    new Eq1[Stream] {
+      def eq1[A: Equal] = Equal[Stream[A]]
+    }
+
   implicit val iListEq1: Eq1[IList] =
     new Eq1[IList] {
       def eq1[A: Equal] = Equal[IList[A]]
     }
 
+  implicit val nelEq1: Eq1[NonEmptyList] =
+    new Eq1[NonEmptyList] {
+      def eq1[A: Equal] = Equal[NonEmptyList[A]]
+    }
+
+  implicit def writerTEq1[F[_], W](implicit F: Eq1[F], W: Equal[W]): Eq1[({type l[a] = WriterT[F, W, a]})#l] =
+    new Eq1[({type l[a] = WriterT[F, W, a]})#l] {
+      def eq1[A: Equal] = {
+        implicit val e = F.eq1[(W, A)]
+        Equal[WriterT[F, W, A]]
+      }
+    }
+
   implicit def disjunctionEq1[A: Equal]: Eq1[({type l[a] = A \/ a})#l] =
     new Eq1[({type l[a] = A \/ a})#l] {
       def eq1[B: Equal] = Equal[A \/ B]
+    }
+
+  implicit def validationEq1[A: Equal]: Eq1[({type l[a] = Validation[A, a]})#l] =
+    new Eq1[({type l[a] = Validation[A, a]})#l] {
+      def eq1[B: Equal] = Equal[Validation[A, B]]
     }
 
   implicit def f1Eq1[A: Gen]: Eq1[({type l[a] = A => a})#l] =

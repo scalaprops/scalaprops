@@ -11,7 +11,6 @@ object build extends Build {
   private[this] val scalapropsName = "scalaprops"
 
   val scalazVersion = SettingKey[String]("scalazVersion")
-  val shapelessVersion = SettingKey[String]("shapelessVersion")
 
   val modules: List[String] = (
     genName ::
@@ -25,7 +24,6 @@ object build extends Build {
   private[this] def module(id: String) =
     Project(id, file(id)).settings(commonSettings).settings(
       scalazVersion := "7.2.1",
-      shapelessVersion := "2.2.5",
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
           "Gen", "Cogen", "Rand"
@@ -53,16 +51,6 @@ object build extends Build {
     name := scalapropsName,
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
     libraryDependencies += "org.scalaz" %% "scalaz-concurrent" % scalazVersion.value,
-    shapelessDependency("test"),
-    (sources in Test) := {
-      val s = (sources in Test).value
-      val useShapeless = Set("CofreeTest.scala", "FreeTest.scala", "FreeTTest.scala", "FreeApTest.scala")
-      if(scalaVersion.value.startsWith("2.12")) {
-        s.filterNot(f => useShapeless(f.getName))
-      } else {
-        s
-      }
-    },
     testFrameworks += new TestFramework("scalaprops.ScalapropsFramework"),
     parallelExecution in Test := false
   ).dependsOn(core, scalazlaws % "test")
