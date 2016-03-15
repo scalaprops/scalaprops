@@ -228,6 +228,8 @@ object ScalazLaw {
 
 
   val profunctor = law("profunctor")
+  val profunctorIdentity = law0(profunctor, "identity")
+  val profunctorComposite = law0(profunctor, "composite")
 
 
   val lens = law("lens")

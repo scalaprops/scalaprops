@@ -10,7 +10,6 @@ cache:
     - $HOME/.sbt/launchers
 
 jdk:
-  - oraclejdk7
   - oraclejdk8
 
 sudo: false
@@ -24,7 +23,7 @@ script:
   - git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
   - git show --oneline --check
   - wget https://raw.githubusercontent.com/paulp/sbt-extras/b9c8cb27/sbt && chmod +x ./sbt
-  - ./sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test "project /" publishLocal $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) && "${TRAVIS_BRANCH}" == "master" ]]; then echo "publish"; fi)
+  - ./sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
   - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) ]]; then rm -rf $HOME/.ivy2/cache ; fi

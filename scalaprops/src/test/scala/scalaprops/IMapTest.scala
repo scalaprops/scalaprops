@@ -1,7 +1,9 @@
 package scalaprops
 
 import scalaz._
+import scalaz.Id.Id
 import scalaz.std.anyVal._
+import scalaz.std.string._
 import Property.forAll
 
 object IMapTest extends Scalaprops {
@@ -223,4 +225,24 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
+  val traverseWithKey = {
+    type KEY = Byte
+    type VAL = Int
+    type C = Short
+    val T = Traverse[({type l[a] = KEY ==>> a})#l]
+
+    def test[F[_]: Applicative](implicit E: Equal[F[KEY ==>> C]], G: Gen[F[C]]) =
+      Property.forAll { (a: KEY ==>> VAL, f: VAL => F[C]) =>
+        val g: (KEY, VAL) => F[C] = (_, v) => f(v)
+        val x = T.traverse(a)(f)
+        val y = a.traverseWithKey(g)
+        E.equal(x, y)
+      }
+
+    Properties.list(
+      test[Id].toProperties("Id"),
+      test[Maybe].toProperties("Maybe"),
+      test[IList].toProperties("IList", Param.maxSize(5))
+    ).andThenParam(Param.minSuccessful(5000))
+  }
 }
