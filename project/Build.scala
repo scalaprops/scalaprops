@@ -58,16 +58,17 @@ object build extends Build {
       }
     )
 
+  lazy val scalazSnapshotURI = uri("git://github.com/scalaz/scalaz#3a37b10745cc504fd59cf50bede6a3574857fa1a")
+
   lazy val gen = module("gen").settings(
     name := genName,
-    description := "pure functional random value generator",
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value
+    description := "pure functional random value generator"
   ).jvmSettings(
     Generator.settings: _*
   )
 
-  lazy val genJS = gen.js
-  lazy val genJVM = gen.jvm
+  lazy val genJS = gen.js.dependsOn(ProjectRef(scalazSnapshotURI, "coreJS"))
+  lazy val genJVM = gen.jvm.dependsOn(ProjectRef(scalazSnapshotURI, "coreJVM"))
   lazy val genRoot = project.aggregate(genJS, genJVM)
 
   lazy val core = module("core").settings(
