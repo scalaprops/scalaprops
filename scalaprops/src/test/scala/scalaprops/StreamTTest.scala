@@ -100,7 +100,7 @@ object StreamTTest extends Scalaprops {
       G: Gen[StreamT[F, A]],
       E: Equal[F[A]]
     ) = forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) =>
-      s.foldLeft(z)(f(_, _)) === s.foldLeftRec(z)(f)
+      s.foldLeft(z)(f) === s.foldLeftRec(z)(f)
     }
 
     Properties.properties("foldLeftRec")(

@@ -10,7 +10,6 @@ cache:
     - $HOME/.sbt/launchers
 
 jdk:
-  - oraclejdk7
   - oraclejdk8
 
 sudo: false
@@ -23,8 +22,9 @@ addons:
 script:
   - git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
   - git show --oneline --check
+  - if [[ "${TRAVIS_SCALA_VERSION}" == "2.12.0-M5" ]]; then git clone https://github.com/non/kind-projector.git && cd kind-projector && git checkout v0.8.0 && echo "sbt.version=0.13.11" > project/build.properties && sbt '++ 2.12.0-M5' publishLocal && cd .. ; fi
   - wget https://raw.githubusercontent.com/paulp/sbt-extras/b9c8cb27/sbt && chmod +x ./sbt
-  - ./sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test "project /" publishLocal $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) && "${TRAVIS_BRANCH}" == "master" ]]; then echo "publish"; fi)
+  - ./sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
   - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) ]]; then rm -rf $HOME/.ivy2/cache ; fi
