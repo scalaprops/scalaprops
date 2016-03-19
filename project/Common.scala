@@ -62,7 +62,7 @@ object Common {
       <scm>
         <url>git@github.com:scalaprops/scalaprops.git</url>
         <connection>scm:git:git@github.com:scalaprops/scalaprops.git</connection>
-        <tag>{if(isSnapshot.value) gitHash else { "v" + version.value }}</tag>
+        <tag>{tagOrHash.value}</tag>
       </scm>
     ),
     scalacOptions ++= (
