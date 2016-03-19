@@ -92,15 +92,15 @@ object ScalapropsListener {
           e.exception.printStackTrace()
           logger.trace(e.exception)
         case _: CheckResult.Exhausted =>
-          logger.error(s"exhausted ${obj.getClass.getCanonicalName} $name $result")
+          logger.error(s"exhausted ${Platform.className(obj.getClass)} $name $result")
         case _: CheckResult.Falsified =>
-          logger.error(s"falsified ${obj.getClass.getCanonicalName} $name $result")
+          logger.error(s"falsified ${Platform.className(obj.getClass)} $name $result")
         case _ =>
       }
     }
 
     override def onError(obj: Scalaprops, name: String, e: Throwable, logger: Logger): Unit = {
-      logger.error(s"error ${obj.getClass.getCanonicalName} $name")
+      logger.error(s"error ${Platform.className(obj.getClass)} $name")
       logger.trace(e)
       e.printStackTrace()
     }

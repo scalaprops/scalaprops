@@ -53,7 +53,7 @@ final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
 }
 
 
-sealed abstract class GenInstances0 extends GenInstances {
+sealed abstract class GenInstances0 extends GenInstances1 {
 
   implicit final def endomorphicGen[F[_, _], A](implicit F: Gen[F[A, A]]): Gen[Endomorphic[F, A]] =
     F.map(Endomorphic.apply)
@@ -61,7 +61,7 @@ sealed abstract class GenInstances0 extends GenInstances {
 }
 
 object Gen extends GenInstances0 {
-  private[scalaprops] val defaultSize = 100
+  private[scalaprops] val defaultSize = Platform.genSize
 
   private[this] val iListFromList = IList.fromList[Any] _
   private[scalaprops] def IListFromList[A]: List[A] => IList[A] =
@@ -954,11 +954,6 @@ object Gen extends GenInstances0 {
 
   implicit def partialFunctionGen[A: Cogen, B: Gen]: Gen[PartialFunction[A, B]] =
     Gen[A => Option[B]].map(Function.unlift)
-
-  implicit def javaEnumGen[A <: java.lang.Enum[A]](implicit A: reflect.ClassTag[A]): Gen[A] = {
-    val array = A.runtimeClass.getEnumConstants.asInstanceOf[Array[A]]
-    choose(0, array.length - 1).map(array)
-  }
 
   implicit def bijectionTGen[F[_], G[_], A, B](implicit A: Cogen[A], B: Cogen[B], F: Gen[F[B]], G: Gen[G[A]]): Gen[BijectionT[F, G, A, B]] =
     Gen[(A => F[B], B => G[A])].map{ case (f, g) => BijectionT.bijection(f, g) }

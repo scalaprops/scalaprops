@@ -3,10 +3,9 @@ package scalaprops
 import scalaz._
 import scalaz.std.tuple._
 import scalaz.std.anyVal._
+import FunctionEqual._
 
 object StateTTest extends Scalaprops {
-  private[this] val e = new FunctionEqual(10)
-  import e._
 
   implicit def stateTEqual[F[_]: Monad, A, B](implicit F: Equal[A => F[(A, B)]]): Equal[StateT[F, A, B]] =
     F.contramap(_.apply _)
@@ -50,7 +49,7 @@ object StateTTest extends Scalaprops {
       scalazlaws.monad.all[F],
       scalazlaws.equal.all[F[Int]]
     )
-  }
+  }.andThenParam(Param.minSuccessful(20)).composeParam(Param.maxSize(20))
 
   val bifunctor = scalazlaws.bifunctor.laws[({type l[a, b] = IndexedStateT[Maybe, Int, a, b]})#l]
 

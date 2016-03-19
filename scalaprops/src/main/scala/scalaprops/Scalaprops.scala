@@ -1,7 +1,11 @@
 package scalaprops
 
+import java.lang.reflect.Method
+import sbt.testing.Logger
+import scala.scalajs.js.annotation.JSExportDescendentObjects
 import scalaz._
 
+@JSExportDescendentObjects
 trait Scalaprops {
 
   def param: Param = Param.withCurrentTimeSeed()
@@ -27,6 +31,32 @@ object Scalaprops {
           Tree.Node(tree.rootLabel, tree.subForest.map(loop))
       }
     Properties.noSort(loop(p.props))
+  }
+
+  private[scalaprops] def testFieldNames(clazz: Class[_]): Array[String] =
+    Array(
+      findTestFields(clazz, classOf[Property]),
+      findTestFields(clazz, classOf[Properties[_]])
+    ).flatten.map(_.getName)
+
+  private[scalaprops] def findTestFields(clazz: Class[_], fieldType: Class[_]): Array[Method] =
+    clazz.getMethods.filter(method =>
+      method.getParameterTypes.length == 0 && method.getReturnType == fieldType
+    )
+
+  private[scalaprops] def logger(loggers: Array[Logger]): Logger = new Logger {
+    override def warn(msg: String): Unit =
+      loggers.foreach(_.warn(msg))
+    override def error(msg: String): Unit =
+      loggers.foreach(_.error(msg))
+    override def ansiCodesSupported(): Boolean =
+      loggers.forall(_.ansiCodesSupported())
+    override def debug(msg: String): Unit =
+      loggers.foreach(_.debug(msg))
+    override def trace(t: Throwable): Unit =
+      loggers.foreach(_.trace(t))
+    override def info(msg: String): Unit =
+      loggers.foreach(_.info(msg))
   }
 
 }

@@ -1,6 +1,5 @@
 package scalaprops
 
-import java.util.concurrent.atomic.AtomicBoolean
 import scalaz._
 
 final case class Property(f: (Int, Rand) => (Rand, Result)) {
@@ -64,10 +63,10 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
     )
 
   // TODO remove `listener` parameter?
-  def check(param: Param, cancel: AtomicBoolean, listener: Int => Unit): CheckResult = {
+  def check(param: Param, cancel: () => Boolean, listener: Int => Unit): CheckResult = {
     import param.{rand => _, _}
     @annotation.tailrec
-    def loop(s: Int, discarded: Int, sz: Float, random: Rand): CheckResult = if(cancel.get()) {
+    def loop(s: Int, discarded: Int, sz: Float, random: Rand): CheckResult = if(cancel()) {
       CheckResult.Timeout(s, discarded)
     }else{
       val size = {

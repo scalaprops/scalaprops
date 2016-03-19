@@ -1,7 +1,5 @@
 package scalaprops
 
-import java.util.concurrent.atomic.AtomicBoolean
-
 object PropertyTest extends Scalaprops{
 
   val `"forAll(result: => Boolean)" is lazy` = Property.forAll{
@@ -11,7 +9,7 @@ object PropertyTest extends Scalaprops{
       true
     }
     assert(sideEffect == false)
-    p.check(Param.withCurrentTimeSeed(), new AtomicBoolean(), _ => ())
+    p.check(Param.withCurrentTimeSeed(), () => false, _ => ())
     sideEffect
   }
 

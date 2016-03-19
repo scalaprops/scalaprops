@@ -7,7 +7,7 @@ import scalaz.Endo
 
 final case class Param(
   rand: Rand,
-  minSuccessful: Int = 100,
+  minSuccessful: Int = Platform.minSuccessful,
   maxDiscarded: Int = 500,
   minSize: Int = 0,
   maxSize: Int = Gen.defaultSize,
@@ -16,7 +16,7 @@ final case class Param(
 
 object Param {
   def withCurrentTimeSeed(): Param = Param(
-    rand = Rand.standard(System.nanoTime())
+    rand = Platform.randFromLong(System.nanoTime())
   )
 
   def rand(rand: Rand): Endo[Param] =

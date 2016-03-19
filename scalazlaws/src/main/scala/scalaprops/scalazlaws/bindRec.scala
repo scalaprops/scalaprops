@@ -20,7 +20,7 @@ object bindRec {
     }
 
   def laws[F[_]: BindRec](implicit G1: Gen[F[Int]], G2: Gen[Int => F[Int]], E: Equal[F[Int]]) =
-    lawsWithCount[F](1000000)
+    lawsWithCount[F](100000)
 
   def lawsWithCount[F[_]: BindRec](bindCount: Int)(implicit G1: Gen[F[Int]], G2: Gen[Int => F[Int]], E: Equal[F[Int]]) =
     Properties.fromChecks(ScalazLaw.bindRec)(
@@ -28,7 +28,7 @@ object bindRec {
         bindRec.tailrecBindConsistency[F, Int]
       ),
       ScalazLaw.bindRecHandleManyBinds -> Check(
-        bindRec.handleManyBinds[F, Int](bindCount), Param.minSuccessful(10)
+        bindRec.handleManyBinds[F, Int](bindCount), Param.minSuccessful(1)
       )
     )
 

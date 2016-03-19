@@ -3,10 +3,9 @@ package scalaprops
 import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.tuple._
+import FunctionEqual._
 
 object IndexedReaderWriterStateTTest extends Scalaprops {
-  private[this] val e = new FunctionEqual(10)
-  import e._
 
   private[this] implicit def equal[F[_]: Monad, R, W, S1, S2, A](
     implicit F: Equal[(R, S1) => F[(W, A, S2)]]
@@ -41,7 +40,7 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
   val tree = {
     type F[A] = IndexedReaderWriterStateT[Tree, Int, Int, Int, Int, A]
     scalazlaws.monad.all[F]
-  }
+  }.composeParam(Param.minSuccessful(10) andThen Param.maxSize(10))
 
   val nel = {
     type F[A] = IndexedReaderWriterStateT[NonEmptyList, Int, Int, Int, Int, A]

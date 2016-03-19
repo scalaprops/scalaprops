@@ -24,6 +24,9 @@ final class MersenneTwister32 private(private val array: Array[Long], private va
 
   def reseed(newSeed: Long): MersenneTwister32 =
     MersenneTwister32.standard(newSeed)
+
+  def setIntSeed(newSeed: Int): MersenneTwister32 =
+    MersenneTwister32.fromSeed(newSeed)
 }
 
 object MersenneTwister32{

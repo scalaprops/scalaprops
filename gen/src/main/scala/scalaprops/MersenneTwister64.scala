@@ -50,6 +50,9 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
   // TODO improve
   def reseed(n: Long) = next
 
+  override def setIntSeed(seed: Int): MersenneTwister64 =
+    MersenneTwister64.fromTime(seed)
+
   def nextLong: (MersenneTwister64, Long) = {
     var mti = mti0
     var x = 0L

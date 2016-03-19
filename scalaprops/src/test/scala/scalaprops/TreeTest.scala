@@ -23,7 +23,7 @@ object TreeTest extends Scalaprops {
     ).map(Foldable[Tree].length)
 
     a == List.fill(size)(n)
-  }
+  }.toProperties((), Param.minSuccessful(10))
 
   def distinctStream[A: Order](s: Stream[A]): Int \/ Stream[A] = {
     def loop(seen: ISet[A], rest: Stream[A], i: Int): Int \/ Stream[A] = {
@@ -65,14 +65,6 @@ object TreeTest extends Scalaprops {
     Properties.list(tests.head, tests.tail: _*)
   }
 
-  /**
-   * @see [[https://en.wikipedia.org/wiki/Catalan_number]]
-   */
-  val catalanNumber = sizeTest(
-    List(1, 1, 2, 5, 14, 42),
-    (i, seed) => Gen.treeGenSized[Unit](i).infiniteStream(seed = seed)
-  )
-
   val treeGenSize = {
     val F = Foldable[Tree]
     val p = { (size: Int) =>
@@ -88,6 +80,6 @@ object TreeTest extends Scalaprops {
       "Gen[Tree]",
       p(1000)
     )
-  }
+  }.andThenParam(Param.minSuccessful(10))
 
 }

@@ -32,7 +32,7 @@ object ChooseTest extends Scalaprops {
     }.toProperties("withBoundaries")
   ).andThenParam(Param.minSuccessful(10))
 
-  val long = test[Long](100000)
+  val long = test[Long](100000).andThenParam(Param.minSuccessful(3))
   val int = test[Int]()
   val short = test[Short]()
   val byte = test[Byte]()

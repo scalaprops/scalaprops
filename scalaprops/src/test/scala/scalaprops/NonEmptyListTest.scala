@@ -11,6 +11,7 @@ object NonEmptyListTest extends Scalaprops {
     scalazlaws.zip.all[NonEmptyList],
     scalazlaws.align.all[NonEmptyList],
     scalazlaws.comonad.all[NonEmptyList],
+    scalazlaws.bindRec.all[NonEmptyList],
     scalazlaws.plus.all[NonEmptyList]
   )
 
@@ -18,8 +19,4 @@ object NonEmptyListTest extends Scalaprops {
     Gen[NonEmptyList[Unit]].sample(s, seed).size <= s
   }
 
-  val tailrecBindConsistency = scalazlaws.bindRec.tailrecBindConsistency[NonEmptyList, Byte]
-  val handleManyBinds = scalazlaws.bindRec.handleManyBinds[NonEmptyList, Byte](1000000).toProperties(
-    "handleManyBinds", Param.maxSize(1).andThen(Param.minSuccessful(10))
-  )
 }

@@ -1,6 +1,6 @@
 package scalaprops
 
-import Variant.variant
+import Variant.variantInt
 import scala.concurrent.Await
 import scalaz._
 
@@ -44,7 +44,7 @@ object Cogen extends CogenInstances0 {
   implicit val cogenBoolean: Cogen[Boolean] =
     new Cogen[Boolean] {
       def cogen[B](a: Boolean, g: CogenState[B]) =
-        variant(if(a) 0L else 1L, g)
+        variantInt(if(a) 0 else 1, g)
     }
 
   implicit val cogenUnit: Cogen[Unit] =
@@ -55,31 +55,31 @@ object Cogen extends CogenInstances0 {
   implicit val cogenInt: Cogen[Int] =
     new Cogen[Int] {
       def cogen[B](a: Int, g: CogenState[B]) =
-        variant(if(a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if(a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenByte: Cogen[Byte] =
     new Cogen[Byte] {
       def cogen[B](a: Byte, g: CogenState[B]) =
-        variant(if(a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if(a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenShort: Cogen[Short] =
     new Cogen[Short] {
       def cogen[B](a: Short, g: CogenState[B]) =
-        variant(if(a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if(a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenLong: Cogen[Long] =
     new Cogen[Long] {
       def cogen[B](a: Long, g: CogenState[B]) =
-        variant(if(a >= 0L) 2L * a else -2L * a + 1L, g)
+        Variant.variant(if(a >= 0L) 2L * a else -2L * a + 1L, g)
     }
 
   implicit val cogenChar: Cogen[Char] =
     new Cogen[Char] {
       def cogen[B](a: Char, g: CogenState[B]) =
-        variant(a << 1, g)
+        variantInt(a << 1, g)
     }
 
   implicit val cogenFloat: Cogen[Float] =
@@ -133,9 +133,9 @@ object Cogen extends CogenInstances0 {
     new Cogen[Option[A]] {
       def cogen[B](a: Option[A], g: CogenState[B]) = a match {
         case Some(o) =>
-          variant(1, A.cogen(o, g))
+          variantInt(1, A.cogen(o, g))
         case None =>
-          variant(g.rand.nextInt._2, g)
+          variantInt(g.rand.nextInt._2, g)
       }
     }
 
@@ -159,9 +159,9 @@ object Cogen extends CogenInstances0 {
     new Cogen[Either[A, B]] {
       def cogen[Z](a: Either[A, B], g: CogenState[Z]) = a match {
         case Right(x) =>
-          variant(1, B.cogen(x, g))
+          variantInt(1, B.cogen(x, g))
         case Left(x) =>
-          variant(0, A.cogen(x, g.copy(rand = g.rand.next)))
+          variantInt(0, A.cogen(x, g.copy(rand = g.rand.next)))
       }
     }
 
@@ -177,9 +177,9 @@ object Cogen extends CogenInstances0 {
   implicit val cogenOrdering: Cogen[Ordering] =
     new Cogen[Ordering] {
       def cogen[B](a: Ordering, g: CogenState[B]) = a match {
-        case Ordering.GT => variant(0, g)
-        case Ordering.EQ => variant(1, g)
-        case Ordering.LT => variant(2, g)
+        case Ordering.GT => variantInt(0, g)
+        case Ordering.EQ => variantInt(1, g)
+        case Ordering.LT => variantInt(2, g)
       }
     }
 
@@ -193,7 +193,7 @@ object Cogen extends CogenInstances0 {
     new Cogen[IList[A]] {
       def cogen[B](a: IList[A], g: CogenState[B]) = a match {
         case ICons(h, t) =>
-          variant(1, A.cogen(h, cogen(t, g)))
+          variantInt(1, A.cogen(h, cogen(t, g)))
         case INil() =>
           g
       }

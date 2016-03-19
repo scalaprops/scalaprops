@@ -26,7 +26,7 @@ object Generator {
   val settings: Seq[Def.Setting[_]] = Seq(
     generateFiles := {
       val pack = "scalaprops"
-      val dir = (scalaSource in Compile).value / pack
+      val dir = build.CustomCrossType.shared(baseDirectory.value, "main") / pack
       def code(name: String, code: String) = GeneratedCode(dir / name, code)
       List(
         code("CogenInstances.scala", Cogen.gen),

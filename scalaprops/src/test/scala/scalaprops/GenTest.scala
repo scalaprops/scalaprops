@@ -132,12 +132,6 @@ object GenTest extends Scalaprops {
   val nonNegShort = Property.forAllG(Gen.nonNegativeShort){0 <= _}
   val nonNegByte = Property.forAllG(Gen.nonNegativeByte){0 <= _}
 
-  val javaEnum = Property.forAll{ seed: Int =>
-    val values = Gen[java.util.concurrent.TimeUnit].samples(seed = seed, listSize = 200).toSet
-    values == java.util.concurrent.TimeUnit.values().toSet
-  }
-
-
   val genFunction = {
     def test1[A: Gen: Cogen](name: String) =
       test[A, A](s"$name => $name")
@@ -162,8 +156,8 @@ object GenTest extends Scalaprops {
       test1[Long \/ Int]("""(Long \/ Int)"""),
       test1[(Int, Byte)]("Tuple2[Int, Byte]"),
       test1[Option[Int]]("Option[Int]"),
-      test1[Map[Int, Int]]("Map[Int, Int]").andThenParam(Param.maxSize(10)),
-      test1[Int ==>> Int]("(Int ==>> Int)").andThenParam(Param.maxSize(10)),
+      test1[Map[Int, Int]]("Map[Int, Int]").andThenParam(Param.maxSize(10) andThen Param.minSuccessful(5)),
+      test1[Int ==>> Int]("(Int ==>> Int)").andThenParam(Param.maxSize(10) andThen Param.minSuccessful(5)),
       test1[IList[Int]]("IList[Int]").andThenParam(Param.maxSize(10)),
       test1[Byte \&/ Byte]("""Byte \&/ Byte)"""),
       test[Int, List[Int]]("Int => List[Int]"),
@@ -171,8 +165,8 @@ object GenTest extends Scalaprops {
       test[Option[Byte], Byte]("Option[Byte] => Byte"),
       test[Byte, Option[Byte]]("Byte => Option[Byte]"),
       test[Either[Byte, Boolean], Int]("Either[Byte, Boolean] => Int"),
-      test[Int, Map[Int, Boolean]]("Int => Map[Int, Boolean]")
-    ).andThenParam(Param.minSuccessful(50))
+      test[Int, Map[Int, Boolean]]("Int => Map[Int, Boolean]").andThenParam(Param.minSuccessful(5))
+    ).composeParam(Param.minSuccessful(20))
   }
 
   val functionGenTest = {
@@ -222,8 +216,8 @@ object GenTest extends Scalaprops {
       test(IList(true, false), orderingValues, "Boolean => Ordering"),
       test(orderingValues, IList(true, false), "Ordering => Boolean"),
       test(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), IList(true, false), "Maybe[Boolean] => Boolean"),
-      test1(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), "Maybe[Boolean]", 20000).andThenParam(Param.minSuccessful(20)),
-      test1(IList(true, false).flatMap(a => IList(\/.right(a), \/.left(a))), """Boolean \/ Boolean""", 50000).andThenParam(Param.minSuccessful(5))
+      test1(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), "Maybe[Boolean]", 20000).andThenParam(Param.minSuccessful(10)),
+      test1(IList(true, false).flatMap(a => IList(\/.right(a), \/.left(a))), """Boolean \/ Boolean""", 50000).andThenParam(Param.minSuccessful(3))
     )
   }
 
