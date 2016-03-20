@@ -87,9 +87,7 @@ object build extends Build {
   lazy val scalazlawsRoot = project.aggregate(scalazlawsJS, scalazlawsJVM)
 
   lazy val scalaprops = module(scalapropsName).settings(
-    name := scalapropsName,
-    testFrameworks += new TestFramework("scalaprops.ScalapropsFramework"),
-    parallelExecution in Test := false
+    name := scalapropsName
   ).dependsOn(
     core, scalazlaws % "test"
   ).jvmSettings(
