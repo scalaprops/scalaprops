@@ -20,7 +20,12 @@ object ScalapropsRunner {
     obj.filter{ case (k, v) =>
       fieldType.isInstance(v)
     }.map{ case (k, v) =>
-      NameTransformer.decode(k).replaceAllLiterally("$1", "") -> v
+      val k0 = NameTransformer.decode(k)
+      val k1 = k0.split('$').toSeq match {
+        case init :+ _ => init.mkString("$")
+        case _ => k0
+      }
+      k1 -> v
     }
 
   private[this] def invokeProperty[A](obj: js.Dictionary[A]): List[(String, Property)] =
