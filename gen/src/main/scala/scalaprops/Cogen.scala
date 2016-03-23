@@ -199,8 +199,15 @@ object Cogen extends CogenInstances0 {
       }
     }
 
-  implicit def cogenList[A: Cogen]: Cogen[List[A]] =
-    Cogen[IList[A]].contramap(Gen.IListFromList)
+  implicit def cogenList[A](implicit A: Cogen[A]): Cogen[List[A]] =
+    new Cogen[List[A]] {
+      def cogen[B](a: List[A], g: CogenState[B]) = a match {
+        case h :: t =>
+          variantInt(1, A.cogen(h, cogen(t, g)))
+        case Nil =>
+          g
+      }
+    }
 
   implicit def cogenVector[A: Cogen]: Cogen[Vector[A]] = {
     import std.vector._
