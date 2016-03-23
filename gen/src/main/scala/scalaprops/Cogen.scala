@@ -232,7 +232,7 @@ object Cogen extends CogenInstances0 {
     Cogen[List[(A, B)]].contramap(_.toList)
 
   implicit def cogenDList[A: Cogen]: Cogen[DList[A]] =
-    Cogen[List[A]].contramap(_.toList)
+    Cogen[IList[A]].contramap(_.toIList)
 
   implicit def cogenEphemeralStream[A: Cogen]: Cogen[EphemeralStream[A]] =
     Cogen[List[A]].contramap(_.toList)
