@@ -535,6 +535,22 @@ object Gen extends GenInstances0 {
   implicit def option[A](implicit A: Gen[A]): Gen[Option[A]] =
     maybe[A].map(_.toOption)
 
+  implicit def firstOptionGen[A](implicit A: Gen[Option[A]]): Gen[FirstOption[A]] = Tag.subst(A)
+
+  implicit def lastOptionGen[A](implicit A: Gen[Option[A]]): Gen[LastOption[A]] = Tag.subst(A)
+
+  implicit def minOptionGen[A](implicit A: Gen[Option[A]]): Gen[MinOption[A]] = Tag.subst(A)
+
+  implicit def maxOptionGen[A](implicit A: Gen[Option[A]]): Gen[MaxOption[A]] = Tag.subst(A)
+
+  implicit def firstMaybeGen[A](implicit A: Gen[Maybe[A]]): Gen[FirstMaybe[A]] = Tag.subst(A)
+
+  implicit def lastMaybeGen[A](implicit A: Gen[Maybe[A]]): Gen[LastMaybe[A]] = Tag.subst(A)
+
+  implicit def minMaybeGen[A](implicit A: Gen[Maybe[A]]): Gen[MinMaybe[A]] = Tag.subst(A)
+
+  implicit def maxMaybeGen[A](implicit A: Gen[Maybe[A]]): Gen[MaxMaybe[A]] = Tag.subst(A)
+
   implicit val genIntBoundaries: Gen[Int] =
     frequency(
       1 -> value(0),
