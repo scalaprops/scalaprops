@@ -121,16 +121,31 @@ object GenTest extends Scalaprops {
   val posInt = Property.forAllG(Gen.positiveInt){_ > 0}
   val posShort = Property.forAllG(Gen.positiveShort){_ > 0}
   val posByte = Property.forAllG(Gen.positiveByte){_ > 0}
+  val posFloat = Property.forAllG(Gen.positiveFloat){_ > 0.0f}
+  val posDouble = Property.forAllG(Gen.positiveDouble){_ > 0.0d}
+  val posFiniteFloat = Property.forAllG(Gen.positiveFiniteFloat){f => f > 0.0f && !f.isInfinity}
+  val posFiniteDouble = Property.forAllG(Gen.positiveFiniteDouble){d => d > 0.0d && !d.isInfinity}
 
   val negLong = Property.forAllG(Gen.negativeLong){_ < 0}
   val negInt = Property.forAllG(Gen.negativeInt){_ < 0}
   val negShort = Property.forAllG(Gen.negativeShort){_ < 0}
   val negByte = Property.forAllG(Gen.negativeByte){_ < 0}
+  val negFloat = Property.forAllG(Gen.negativeFloat){_.compare(0.0f) < 0}
+  val negDouble = Property.forAllG(Gen.negativeDouble){_.compare(0.0d) < 0}
+  val negFiniteFloat = Property.forAllG(Gen.negativeFiniteFloat){f => f.compare(0.0f) < 0 && !f.isInfinity}
+  val negFiniteDouble = Property.forAllG(Gen.negativeFiniteDouble){d => d.compare(0.0d) < 0 && !d.isInfinity}
 
   val nonNegLong = Property.forAllG(Gen.nonNegativeLong){0 <= _}
   val nonNegInt = Property.forAllG(Gen.nonNegativeInt){0 <= _}
   val nonNegShort = Property.forAllG(Gen.nonNegativeShort){0 <= _}
   val nonNegByte = Property.forAllG(Gen.nonNegativeByte){0 <= _}
+  val nonNegFloat = Property.forAllG(Gen.nonNegativeFloat){f => f.compare(0.0f) >= 0 && !f.isNaN}
+  val nonNegDouble = Property.forAllG(Gen.nonNegativeDouble){f => f.compare(0.0d) >= 0 && !f.isNaN}
+  val nonNegFiniteFloat = Property.forAllG(Gen.nonNegativeFiniteFloat){f => f.compare(0.0f) >= 0 && !f.isInfinity && !f.isNaN}
+  val nonNegFiniteDouble = Property.forAllG(Gen.nonNegativeFiniteDouble){d => d.compare(0.0d) >= 0 && !d.isInfinity && !d.isNaN}
+
+  val finiteFloat = Property.forAllG(Gen.genFiniteFloat){f => !f.isInfinity && !f.isNaN}
+  val finiteDouble = Property.forAllG(Gen.genFiniteDouble){d => !d.isInfinity && !d.isNaN}
 
   val javaEnum = Property.forAll{ seed: Int =>
     val values = Gen[java.util.concurrent.TimeUnit].samples(seed = seed, listSize = 200).toSet
