@@ -58,7 +58,7 @@ object build extends Build {
       }
     )
 
-  lazy val scalazSnapshotURI = uri("git://github.com/scalaz/scalaz#3a37b10745cc504fd59cf50bede6a3574857fa1a")
+  lazy val scalazSnapshotURI = uri("git://github.com/shawjef3/scalaz#ccd486287e903e269f83c92fcf7aabded0bb2760")
 
   lazy val gen = module("gen").settings(
     name := genName,
