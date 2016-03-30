@@ -377,11 +377,7 @@ object Gen extends GenInstances0 {
     chooseIntBitsToFloat(0, 0x7f7fffff)
 
   val genFiniteFloat: Gen[Float] =
-    genIntAll.map { n =>
-      import java.lang.Float.{ intBitsToFloat, isNaN, isInfinite }
-      val x = intBitsToFloat(n)
-      if (isNaN(x) || isInfinite(x)) 0F else x
-    }
+    Gen.oneOf(negativeFiniteFloat, nonNegativeFiniteFloat)
 
   def chooseLongBitsToDouble(from: Long, to: Long): Gen[Double] =
     Choose[Long].withBoundaries(from, to).map(java.lang.Double.longBitsToDouble)
@@ -405,11 +401,7 @@ object Gen extends GenInstances0 {
     chooseLongBitsToDouble(0L, 0x7fefffffffffffffL)
 
   val genFiniteDouble: Gen[Double] =
-    genLongAll.map { n =>
-      import java.lang.Double.{ longBitsToDouble, isNaN, isInfinite }
-      val x = longBitsToDouble(n)
-      if (isNaN(x) || isInfinite(x)) 0D else x
-    }
+    Gen.oneOf(negativeFiniteDouble, nonNegativeFiniteDouble)
 
   val genSmallBigInt: Gen[BigInt] =
     genLongAll.map(BigInt(_))
