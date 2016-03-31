@@ -5,6 +5,8 @@ import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
 import scalaz._
 import scalaz.Isomorphism.{<~>, IsoFunctorTemplate}
+import java.lang.Float.floatToIntBits
+import java.lang.Double.doubleToLongBits
 
 final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
 
@@ -361,23 +363,55 @@ object Gen extends GenInstances0 {
   val negativeFloat: Gen[Float] =
     chooseIntBitsToFloat(0x80000000, 0xff800000)
 
+  val negativeFloat2: Gen[Float] =
+    chooseIntBitsToFloat(floatToIntBits(-0.0.toFloat), floatToIntBits(Float.NegativeInfinity))
+
+
   val positiveFloat: Gen[Float] =
     chooseIntBitsToFloat(1, 0x7f800000)
+
+  val positiveFloat2: Gen[Float] =
+    chooseIntBitsToFloat(floatToIntBits(Float.MinPositiveValue), floatToIntBits(Float.PositiveInfinity))
+
 
   val nonNegativeFloat: Gen[Float] =
     chooseIntBitsToFloat(0, 0x7f800000)
 
+  val nonNegativeFloat2: Gen[Float] =
+    chooseIntBitsToFloat(floatToIntBits(0), floatToIntBits(Float.PositiveInfinity))
+
+
   val negativeFiniteFloat: Gen[Float] =
     chooseIntBitsToFloat(0x80000000, 0xff7fffff)
+
+  val negativeFiniteFloat2: Gen[Float] =
+    chooseIntBitsToFloat(floatToIntBits(-0.0.toFloat), floatToIntBits(Float.MinValue))
+
+
 
   val positiveFiniteFloat: Gen[Float] =
     chooseIntBitsToFloat(1, 0x7f7fffff)
 
+  val positiveFiniteFloat2: Gen[Float] =
+    chooseIntBitsToFloat(floatToIntBits(Float.MinPositiveValue), floatToIntBits(Float.MaxValue))
+
+
+
   val nonNegativeFiniteFloat: Gen[Float] =
     chooseIntBitsToFloat(0, 0x7f7fffff)
 
+  val nonNegativeFiniteFloat2: Gen[Float] =
+    chooseIntBitsToFloat(floatToIntBits(0.0.toFloat), floatToIntBits(Float.MaxValue))
+
+
+
   val genFiniteFloat: Gen[Float] =
     Gen.oneOf(negativeFiniteFloat, nonNegativeFiniteFloat)
+
+  val genFiniteFloat2: Gen[Float] =
+    Gen.oneOf(negativeFiniteFloat2, nonNegativeFiniteFloat2)
+
+
 
   def chooseLongBitsToDouble(from: Long, to: Long): Gen[Double] =
     Choose[Long].withBoundaries(from, to).map(java.lang.Double.longBitsToDouble)
@@ -385,23 +419,52 @@ object Gen extends GenInstances0 {
   val negativeDouble: Gen[Double] =
     chooseLongBitsToDouble(0x8000000000000000L, 0xfff0000000000000L)
 
+  val negativeDouble2: Gen[Double] =
+    chooseLongBitsToDouble(doubleToLongBits(-0.0), doubleToLongBits(Double.NegativeInfinity))
+
+
   val positiveDouble: Gen[Double] =
     chooseLongBitsToDouble(1L, 0x7ff0000000000000L)
+
+  val positiveDouble2: Gen[Double] =
+    chooseLongBitsToDouble(doubleToLongBits(Double.MinPositiveValue), doubleToLongBits(Double.PositiveInfinity))
+
 
   val nonNegativeDouble: Gen[Double] =
     chooseLongBitsToDouble(0L, 0x7ff0000000000000L)
 
+  val nonNegativeDouble2: Gen[Double] =
+    chooseLongBitsToDouble(doubleToLongBits(0), doubleToLongBits(Double.PositiveInfinity))
+
+
   val negativeFiniteDouble: Gen[Double] =
     chooseLongBitsToDouble(0x8000000000000000L, 0xffefffffffffffffL)
+
+  val negativeFiniteDouble2: Gen[Double] =
+    chooseLongBitsToDouble(doubleToLongBits(-0.0), doubleToLongBits(Double.MinValue))
+
 
   val positiveFiniteDouble: Gen[Double] =
     chooseLongBitsToDouble(1L, 0x7fefffffffffffffL)
 
+  val positiveFiniteDouble2: Gen[Double] =
+    chooseLongBitsToDouble(doubleToLongBits(Double.MinPositiveValue), doubleToLongBits(Double.MaxValue))
+
+
+
   val nonNegativeFiniteDouble: Gen[Double] =
     chooseLongBitsToDouble(0L, 0x7fefffffffffffffL)
 
+  val nonNegativeFiniteDouble2: Gen[Double] =
+    chooseLongBitsToDouble(doubleToLongBits(0.0), doubleToLongBits(Double.MaxValue))
+
+
   val genFiniteDouble: Gen[Double] =
     Gen.oneOf(negativeFiniteDouble, nonNegativeFiniteDouble)
+
+  val genFiniteDouble2: Gen[Double] =
+    Gen.oneOf(negativeFiniteDouble2, nonNegativeFiniteDouble2)
+
 
   val genSmallBigInt: Gen[BigInt] =
     genLongAll.map(BigInt(_))

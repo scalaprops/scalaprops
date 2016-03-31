@@ -126,6 +126,87 @@ object GenTest extends Scalaprops {
   val posFiniteFloat = Property.forAllG(Gen.positiveFiniteFloat){f => f > 0.0f && !f.isInfinity}
   val posFiniteDouble = Property.forAllG(Gen.positiveFiniteDouble){d => d > 0.0d && !d.isInfinity}
 
+
+  private def genEqualTest[A](a: Gen[A], b: Gen[A]) = {
+    Property.forAll{ seed: Long =>
+      val x = a.samples(seed = seed)
+      val y = b.samples(seed = seed)
+      x == y
+    }
+  }
+
+ val posDouble2 = genEqualTest(
+    Gen.positiveDouble,
+    Gen.positiveDouble2
+  )
+
+  val posFiniteDouble2 = genEqualTest(
+    Gen.positiveFiniteDouble,
+    Gen.positiveFiniteDouble2
+  )
+
+  val negDouble2 = genEqualTest(
+    Gen.negativeDouble,
+    Gen.negativeDouble2
+  )
+
+  val negFiniteDouble2 = genEqualTest(
+    Gen.negativeFiniteDouble,
+    Gen.negativeFiniteDouble2
+  )
+
+  val nonNegDouble2 = genEqualTest(
+    Gen.nonNegativeDouble,
+    Gen.nonNegativeDouble2
+  )
+
+  val nonNegFiniteDouble2 = genEqualTest(
+    Gen.nonNegativeFiniteDouble,
+    Gen.nonNegativeFiniteDouble2
+  )
+
+  val finiteDouble2 = genEqualTest(
+    Gen.genFiniteDouble,
+    Gen.genFiniteDouble2
+  )
+
+
+  val posFloat2 = genEqualTest(
+    Gen.positiveFloat,
+    Gen.positiveFloat2
+  )
+
+  val posFiniteFloat2 = genEqualTest(
+    Gen.positiveFiniteFloat,
+    Gen.positiveFiniteFloat2
+  )
+
+  val negFloat2 = genEqualTest(
+    Gen.negativeFloat,
+    Gen.negativeFloat2
+  )
+
+  val negFiniteFloat2 = genEqualTest(
+    Gen.negativeFiniteFloat,
+    Gen.negativeFiniteFloat2
+  )
+
+  val nonNegFloat2 = genEqualTest(
+    Gen.nonNegativeFloat,
+    Gen.nonNegativeFloat2
+  )
+
+  val nonNegFiniteFloat2 = genEqualTest(
+    Gen.nonNegativeFiniteFloat,
+    Gen.nonNegativeFiniteFloat2
+  )
+
+  val finiteFloat2 = genEqualTest(
+    Gen.genFiniteFloat,
+    Gen.genFiniteFloat2
+  )
+
+
   val negLong = Property.forAllG(Gen.negativeLong){_ < 0}
   val negInt = Property.forAllG(Gen.negativeInt){_ < 0}
   val negShort = Property.forAllG(Gen.negativeShort){_ < 0}
