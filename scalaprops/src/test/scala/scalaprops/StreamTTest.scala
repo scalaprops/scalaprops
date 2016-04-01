@@ -1,9 +1,12 @@
 package scalaprops
 
 import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.stream._
+import scalaz.std.AllInstances._
 import scalaz.Isomorphism._
+import scalaz.syntax.equal._
+import scalaz.Id.Id
+import Property.forAll
+import scala.util.Try
 
 object StreamTTest extends Scalaprops {
 
@@ -15,6 +18,152 @@ object StreamTTest extends Scalaprops {
       override def from[A](ga: F[Stream[A]]) =
         StreamT.fromStream(ga)
     }
+
+  private[this] type EitherByte[A] = Byte \/ A
+
+  val unconsRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      E: Equal[F[Option[(A, StreamT[F, A])]]],
+      G: Gen[StreamT[F, A]]
+    ) = forAll { s: StreamT[F, A] =>
+      s.uncons === s.unconsRec
+    }
+
+    Properties.properties("unconsRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
+
+  val isEmptyRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      E: Equal[F[Boolean]],
+      G: Gen[StreamT[F, A]]
+    ) = forAll { s: StreamT[F, A] =>
+      s.isEmpty === s.isEmptyRec
+    }
+
+    Properties.properties("isEmptyRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
+
+  val headOptionRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      E: Equal[F[Option[A]]],
+      G: Gen[StreamT[F, A]]
+    ) = forAll { s: StreamT[F, A] =>
+      s.headOption === s.headOptionRec
+    }
+
+    Properties.properties("headOptionRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
+
+  val tailMRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      E: Equal[F[StreamT[F, A]]],
+      G: Gen[StreamT[F, A]]
+    ) = forAll { s: StreamT[F, A] =>
+      Try(s.tailM).toOption === Try(s.tailMRec).toOption
+    }
+
+    Properties.properties("tailMRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
+
+  val foldLeftRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      G: Gen[StreamT[F, A]],
+      E: Equal[F[A]]
+    ) = forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) =>
+      s.foldLeft(z)(f(_, _)) === s.foldLeftRec(z)(f)
+    }
+
+    Properties.properties("foldLeftRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
+
+  val foldRightRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      G: Gen[StreamT[F, A]],
+      E: Equal[F[A]]
+    ) = forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) =>
+      s.foldRight(z)((x, y) => f(x, y)) === s.foldRightRec(z)((x, y) => f(x, y))
+    }
+
+    Properties.properties("foldRightRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
+
+  val toStreamRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      G: Gen[StreamT[F, A]],
+      E: Equal[F[Stream[A]]]
+    ) = forAll { s: StreamT[F, A] =>
+      s.toStream === s.toStreamRec
+    }
+
+    Properties.properties("toStreamRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
+
+  val lengthRec = {
+    type A = Byte
+
+    def test[F[_]: Monad: BindRec](implicit
+      G: Gen[StreamT[F, A]],
+      E: Equal[F[Int]]
+    ) = forAll { s: StreamT[F, A] =>
+      s.length === s.lengthRec
+    }
+
+    Properties.properties("lengthRec")(
+      "Id" -> test[Id],
+      "Maybe" -> test[Maybe],
+      "IList" -> test[IList],
+      "Disjunction" -> test[EitherByte]
+    )
+  }
 
   val testId = {
     import scalaz.Id._
