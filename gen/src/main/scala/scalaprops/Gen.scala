@@ -355,19 +355,53 @@ object Gen extends GenInstances0 {
     gen((_, r) => r.nextLong)
 
 
+  def chooseIntBitsToFloat(from: Int, to: Int): Gen[Float] =
+    Choose[Int].withBoundaries(from, to).map(java.lang.Float.intBitsToFloat)
+
+  val negativeFloat: Gen[Float] =
+    chooseIntBitsToFloat(0x80000000, 0xff800000)
+
+  val positiveFloat: Gen[Float] =
+    chooseIntBitsToFloat(1, 0x7f800000)
+
+  val nonNegativeFloat: Gen[Float] =
+    chooseIntBitsToFloat(0, 0x7f800000)
+
+  val negativeFiniteFloat: Gen[Float] =
+    chooseIntBitsToFloat(0x80000000, 0xff7fffff)
+
+  val positiveFiniteFloat: Gen[Float] =
+    chooseIntBitsToFloat(1, 0x7f7fffff)
+
+  val nonNegativeFiniteFloat: Gen[Float] =
+    chooseIntBitsToFloat(0, 0x7f7fffff)
+
   val genFiniteFloat: Gen[Float] =
-    genIntAll.map { n =>
-      import java.lang.Float.{ intBitsToFloat, isNaN, isInfinite }
-      val x = intBitsToFloat(n)
-      if (isNaN(x) || isInfinite(x)) 0F else x
-    }
+    Gen.oneOf(negativeFiniteFloat, nonNegativeFiniteFloat)
+
+  def chooseLongBitsToDouble(from: Long, to: Long): Gen[Double] =
+    Choose[Long].withBoundaries(from, to).map(java.lang.Double.longBitsToDouble)
+
+  val negativeDouble: Gen[Double] =
+    chooseLongBitsToDouble(0x8000000000000000L, 0xfff0000000000000L)
+
+  val positiveDouble: Gen[Double] =
+    chooseLongBitsToDouble(1L, 0x7ff0000000000000L)
+
+  val nonNegativeDouble: Gen[Double] =
+    chooseLongBitsToDouble(0L, 0x7ff0000000000000L)
+
+  val negativeFiniteDouble: Gen[Double] =
+    chooseLongBitsToDouble(0x8000000000000000L, 0xffefffffffffffffL)
+
+  val positiveFiniteDouble: Gen[Double] =
+    chooseLongBitsToDouble(1L, 0x7fefffffffffffffL)
+
+  val nonNegativeFiniteDouble: Gen[Double] =
+    chooseLongBitsToDouble(0L, 0x7fefffffffffffffL)
 
   val genFiniteDouble: Gen[Double] =
-    genLongAll.map { n =>
-      import java.lang.Double.{ longBitsToDouble, isNaN, isInfinite }
-      val x = longBitsToDouble(n)
-      if (isNaN(x) || isInfinite(x)) 0D else x
-    }
+    Gen.oneOf(negativeFiniteDouble, nonNegativeFiniteDouble)
 
   val genSmallBigInt: Gen[BigInt] =
     genLongAll.map(BigInt(_))
