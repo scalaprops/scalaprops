@@ -8,6 +8,7 @@ import sbt.testing._
 import scala.util.control.NonFatal
 import scalaz._
 import scala.reflect.NameTransformer
+import scala.concurrent.{Await, ExecutionContext}
 
 object ScalapropsRunner {
 
@@ -118,6 +119,8 @@ final class ScalapropsRunner(
           false
         )
 
+        lazy val executionContext = ExecutionContext.fromExecutorService(executorService)
+
         val only = scalaz.std.list.toNel(
           args.dropWhile("--only" != _).drop(1).takeWhile(arg => !arg.startsWith("--")).toList
         )
@@ -144,13 +147,13 @@ final class ScalapropsRunner(
                 val start = System.currentTimeMillis()
                 val r = try {
                   obj.listener.onStart(obj, name, check.prop, param, log)
-                  val r = scalaz.concurrent.Task(
+                  val r = Await.result(scala.concurrent.Future(
                     check.prop.check(
                       param,
                       cancel,
                       count => obj.listener.onCheck(obj, name, check, log, count)
                     )
-                  )(executorService).runFor(param.timeout)
+                  )(executionContext), param.timeout)
                   val duration = System.currentTimeMillis() - start
                   obj.listener.onFinish(obj, name, check.prop, param, r, log)
                   r match {
@@ -203,6 +206,7 @@ final class ScalapropsRunner(
           Array()
         } finally {
           executorService.shutdown()
+          executionContext.shutdown()
         }
       }
 

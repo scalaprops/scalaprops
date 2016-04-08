@@ -49,8 +49,7 @@ object build extends Build {
 
   lazy val scalaprops = module(scalapropsName).settings(
     name := scalapropsName,
-    libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
-    libraryDependencies += "org.scalaz" %% "scalaz-concurrent" % scalazVersion.value
+    libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
   ).dependsOn(core, scalazlaws % "test")
 
   import UnidocKeys._
