@@ -5,7 +5,7 @@ import scalaz.std.anyVal._
 
 object FreeTest extends Scalaprops {
 
-  private[this] implicit def freeEqual[F[_]: Functor, A](implicit
+  implicit def freeEqual[F[_]: Functor, A](implicit
     F: shapeless.Lazy[Equal[F[Free[F, A]]]],
     A: Equal[A]
   ): Equal[Free[F, A]] =
