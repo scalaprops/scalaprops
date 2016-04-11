@@ -5,6 +5,7 @@ import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
 import scalaz._
 import scalaz.Isomorphism.{<~>, IsoFunctorTemplate}
+import scala.scalajs.js
 
 final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
 
@@ -153,10 +154,11 @@ object Gen extends GenInstances0 {
   private[this] def sequenceNIList[A](n: Int, g: Gen[A]): Gen[IList[A]] =
     sequenceN[IList, A](n, g, IListFromList)
 
-  def sequenceNArray[A: reflect.ClassTag](n: Int, g: Gen[A]): Gen[Array[A]] = {
-    val array = new Array[A](n)
+  def sequenceNArray[A: reflect.ClassTag](n: Int, g: Gen[A]): Gen[js.Array[A]] = {
+    val array = new js.Array[A](n)
+    array.length = n
     @annotation.tailrec
-    def loop(size: Int, i: Int, next: Rand): (Rand, Array[A]) = {
+    def loop(size: Int, i: Int, next: Rand): (Rand, js.Array[A]) = {
       if (i < n) {
         val r = g.f(size, next)
         array(i) = r._2
@@ -257,7 +259,7 @@ object Gen extends GenInstances0 {
       }
     }
 
-  private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], min: Int): Gen[Array[A]] =
+  private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], min: Int): Gen[js.Array[A]] =
     parameterised{ (size, r) =>
       chooseR(min, size.max(min), r).flatMap{ n =>
         sequenceNArray(n, g)
@@ -278,7 +280,7 @@ object Gen extends GenInstances0 {
       sequenceNList(n, g)
     }
 
-  def arrayOfN[A: reflect.ClassTag](maxSize: Int, g: Gen[A]): Gen[Array[A]] =
+  def arrayOfN[A: reflect.ClassTag](maxSize: Int, g: Gen[A]): Gen[js.Array[A]] =
     choose(0, maxSize).flatMap{ n =>
       sequenceNArray(n, g)
     }
@@ -301,8 +303,11 @@ object Gen extends GenInstances0 {
   implicit def list[A](implicit A: Gen[A]): Gen[List[A]] =
     listOfCBF0[List, A](A)
 
-  implicit def arrayGen[A: reflect.ClassTag: Gen]: Gen[Array[A]] =
+  implicit def jsArrayGen[A: reflect.ClassTag: Gen]: Gen[js.Array[A]] =
     arrayOf(Gen[A], 0)
+
+  implicit def arrayGen[A: reflect.ClassTag: Gen]: Gen[Array[A]] =
+    arrayOf(Gen[A], 0).map(_.toArray)
 
   def listOf1[A](g: Gen[A]): Gen[IList[A]] =
     listOf(g, 1)
@@ -877,7 +882,7 @@ object Gen extends GenInstances0 {
     )
 
   implicit def immutableArrayGen[A: Gen: reflect.ClassTag]: Gen[ImmutableArray[A]] =
-    Gen[Array[A]].map(ImmutableArray.fromArray)
+    Gen[Array[A]].map(a => ImmutableArray.fromArray(a.toArray))
 
   implicit def nameGen[A](implicit A: Gen[A]): Gen[Name[A]] =
     A.map(Name.apply(_))
