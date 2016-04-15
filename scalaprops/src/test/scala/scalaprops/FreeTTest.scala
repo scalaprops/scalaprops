@@ -78,8 +78,7 @@ object FreeTTest extends Scalaprops {
     type G[A] = Byte => A
     type F[A] = FreeT[Maybe, G, A]
     Properties.list(
-      scalazlaws.bindRec.laws[F],
-      scalazlaws.monad.all[F]
+      scalazlaws.bindRec.laws[F]
     )
   }.andThenParamPF{
     case Or.R(Or.L(ScalazLaw.applyComposition)) =>

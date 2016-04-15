@@ -23,7 +23,7 @@ object Common {
     Nil
   )
 
-  private[this] val Scala211 = "2.11.8"
+  private[this] val Scala211 = "2.11.8-tl-201604151108"
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     scalaVersion := Scala211,
@@ -31,6 +31,8 @@ object Common {
     organization := "com.github.scalaprops",
     description := "property based testing library for Scala",
     fullResolvers ~= {_.filterNot(_.name == "jcenter")},
+    resolvers += "scalatl" at "http://milessabin.com/scalatl",
+    scalaBinaryVersion := "2.11",
     homepage := Some(url("https://github.com/scalaprops/scalaprops")),
     licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
     commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
@@ -66,6 +68,7 @@ object Common {
       </scm>
     ),
     scalacOptions ++= (
+      "-Yhigher-order-unification" ::
       "-deprecation" ::
       "-unchecked" ::
       "-Xlint" ::
