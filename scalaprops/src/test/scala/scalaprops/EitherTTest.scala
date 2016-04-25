@@ -40,7 +40,7 @@ object EitherTTest extends Scalaprops {
       scalazlaws.monadError.all[F, Int],
       scalazlaws.traverse.all[F]
     )
-   }
+  }
 
   val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = EitherT[f, Int, a]})#l]
 
