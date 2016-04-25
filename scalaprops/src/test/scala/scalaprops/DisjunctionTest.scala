@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaz.{\/, IList}
+import scalaz._
 import scalaz.std.anyVal._
 
 object DisjunctionTest extends Scalaprops {
@@ -16,4 +16,19 @@ object DisjunctionTest extends Scalaprops {
     scalazlaws.bindRec.all[({type l[a] = Int \/ a})#l],
     scalazlaws.plus.all[({type l[a] = Int \/ a})#l]
   )
+
+  val anotherPlus = {
+    implicit def disjunctionPlus[L](implicit L: Semigroup[L]): Plus[({type l[a] = L Either a})#l] =
+      new Plus[({type l[a] = L Either a})#l] {
+        def plus[A](x: L Either A, y: => L Either A) = x match {
+          case Left(lx) => y match {
+            case Left(ly) => Left(L.append(lx, ly))
+            case r @ Right(_) => r
+          }
+          case _ => x
+        }
+      }
+    import scalaz.std.either.eitherEqual
+    scalazlaws.plus.all[({type l[a] = IList[Int] Either a})#l]
+  }
 }
