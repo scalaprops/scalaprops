@@ -55,4 +55,12 @@ object StateTTest extends Scalaprops {
 
   val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = StateT[f, Int, a]})#l]
 
+  implicit def indexedStateProfunctor[S2, F[_]](implicit F0: Functor[F]): Profunctor[({type l[a, b] = IndexedStateT[F, a, S2, b]})#l] =
+    new Profunctor[({type l[a, b] = IndexedStateT[F, a, S2, b]})#l] {
+      def mapfst[S1, B, S3](fab: IndexedStateT[F, S1, S2, B])(f: S3 => S1) = fab.contramap(f)
+      def mapsnd[S1, B, D](fab: IndexedStateT[F, S1, S2, B])(f: B => D) = fab.map(f)
+    }
+
+  val profunctorIList = scalazlaws.profunctor.all[({type l[A, B] = IndexedStateT[IList, A, Int, B]})#l]
+  val profunctorMaybe = scalazlaws.profunctor.all[({type l[A, B] = IndexedStateT[Maybe, A, Int, B]})#l]
 }
