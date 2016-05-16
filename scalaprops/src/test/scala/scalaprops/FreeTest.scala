@@ -75,4 +75,32 @@ object FreeTest extends Scalaprops {
       scalazlaws.traverse.all[F]
     )
   }
+
+  val traverseSource = {
+    import scalaz.std.tuple._
+    import Free.Source
+    implicit def sourceTraverse[A0]: Traverse[({type l[a] = Source[a, A0]})#l] = {
+      type F[A] = Free.Source[A, A0]
+      new Traverse[F] {
+        def traverseImpl[G[_] : Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]] = {
+          fa.resume match {
+            case -\/((head, tailSource)) => {
+              Applicative[G].apply2(f(head), traverseImpl[G, A, B](tailSource)(f)) { (mappedHead: B, mappedTail: F[B]) =>
+                Free.produce(mappedHead).flatMap { _: Unit =>
+                  mappedTail
+                }
+              }
+            }
+            case \/-(a) =>
+              Applicative[G].point(Free.point[({type l[a] = (B, a)})#l, A0](a))
+          }
+        }
+      }
+    }
+
+    // https://github.com/scalaz/scalaz/pull/1159
+
+    //scalazlaws.traverse.all[({type x[a] = Free[({type y[b] = (a, b)})#y, Int]})#x]
+    scalazlaws.traverse.all[({type x[a] = Source[a, Int]})#x].andThenParam(Param.minSuccessful(10000))
+  }
 }

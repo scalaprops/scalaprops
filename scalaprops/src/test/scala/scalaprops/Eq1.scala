@@ -20,6 +20,11 @@ object Eq1 {
       }
     }
 
+  implicit def tuple2Eq1[A: Equal]: Eq1[({type l[a] = (A, a)})#l] =
+    new Eq1[({type l[a] = (A, a)})#l] {
+      def eq1[B: Equal] = Equal[(A, B)]
+    }
+
   implicit val idEq1: Eq1[Id.Id] =
     new Eq1[Id.Id] {
       def eq1[A: Equal] = Equal[A]
