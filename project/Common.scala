@@ -33,6 +33,8 @@ object Common {
     fullResolvers ~= {_.filterNot(_.name == "jcenter")},
     homepage := Some(url("https://github.com/scalaprops/scalaprops")),
     licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1"),
+    addCompilerPlugin("com.milessabin" % "si2712fix-plugin" % "1.2.0" cross CrossVersion.full),
     commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
     pomPostProcess := { node =>
       import scala.xml._

@@ -75,4 +75,29 @@ object FreeTest extends Scalaprops {
       scalazlaws.traverse.all[F]
     )
   }
+
+  val sourceUnit = {
+    import Free.Source
+    import scalaz.std.AllInstances._
+
+    implicit object UnitSourceInstance extends MonadPlus[Source[?, Unit]] {
+      private type F[A] = Source[A, Unit]
+      override def bind[A, B](fa: F[A])(f: (A) => F[B]): F[B] = {
+        fa.resume match {
+          case -\/((head, tailSource)) => {
+            f(head).flatMap { _: Unit =>
+              bind(tailSource)(f)
+            }
+          }
+          case \/-(a) =>
+            Free.point[(B, ?), Unit](())
+        }
+      }
+      override def empty[A]: F[A] = Free.point[(A, ?), Unit](())
+      override def plus[A](a: F[A], b: => F[A]): F[A] =  a.flatMap { _: Unit => b }
+      override def point[A](a: => A): F[A] = Free.produce(a)
+    }
+
+    scalazlaws.monadPlusStrong.all[({type l[a] = Free.Source[a, Unit]})#l]
+  }
 }
