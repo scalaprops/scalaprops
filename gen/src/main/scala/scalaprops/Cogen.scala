@@ -25,9 +25,70 @@ sealed abstract class CogenInstances0 extends CogenInstances {
   implicit final def cogenEndomorphic[F[_, _], A](implicit F: Cogen[F[A, A]]): Cogen[Endomorphic[F, A]] =
     F.contramap(_.run)
 
+  implicit def cogenIList[A](implicit A: Cogen[A]): Cogen[IList[A]] =
+    new Cogen[IList[A]] {
+      def cogen[B](a: IList[A], g: CogenState[B]) = a match {
+        case ICons(h, t) =>
+          variantInt(1, A.cogen(h, cogen(t, g)))
+        case INil() =>
+          g
+      }
+    }
+
+  implicit def cogenList[A: Cogen]: Cogen[List[A]] =
+    Cogen[IList[A]].contramap(Gen.IListFromList)
+
+  implicit def cogenArray[A](implicit A: Cogen[A]): Cogen[Array[A]] =
+    Cogen[List[A]].contramap(_.toList)
 }
 
 object Cogen extends CogenInstances0 {
+
+  private[this] val byteArrayToIntIList: Array[Byte] => IList[Int] = { bytes =>
+    val x =
+      if(bytes.length % 4 == 0) {
+        0
+      } else {
+        -1
+      }
+    var ints = IList.empty[Int]
+    val len = ints.length + x
+    var i = 0
+    while(i < len) {
+      ints ::= ((bytes(i + 0) & 0xFF) << 24) |
+               ((bytes(i + 1) & 0xFF) << 16) |
+               ((bytes(i + 2) & 0xFF) <<  8) |
+               ((bytes(i + 3) & 0xFF) <<  0)
+      i += 1
+    }
+    if(x != 0) {
+      (bytes.length % 4) match {
+        case 1 =>
+          ints ::= ((bytes(i + 0) & 0xFF) << 24)
+        case 2 =>
+          ints ::= ((bytes(i + 0) & 0xFF) << 24) |
+                   ((bytes(i + 1) & 0xFF) << 16)
+        case 3 =>
+          ints ::= ((bytes(i + 0) & 0xFF) << 24) |
+                   ((bytes(i + 1) & 0xFF) << 16) |
+                   ((bytes(i + 2) & 0xFF) <<  8)
+      }
+    }
+    ints
+  }
+
+  private[this] val byteIListToByteArray: IList[Byte] => Array[Byte] = { list =>
+    val array = new Array[Byte](list.length)
+    @annotation.tailrec
+    def loop(i: Int, xs: IList[Byte]): Unit = xs match {
+      case ICons(h, t) =>
+        array(i) = h
+        loop(i + 1, t)
+      case _ =>
+    }
+    loop(0, list)
+    array
+  }
 
   implicit def f1[A1, Z](implicit A1: Gen[A1], C: Cogen[Z]): Cogen[A1 => Z] =
     new Cogen[A1 => Z] {
@@ -87,6 +148,15 @@ object Cogen extends CogenInstances0 {
 
   implicit val cogenDouble: Cogen[Double] =
     Cogen[Long].contramap(java.lang.Double.doubleToLongBits)
+
+  implicit val cogenByteArray: Cogen[Array[Byte]] =
+    Cogen[IList[Int]].contramap(byteArrayToIntIList)
+
+  implicit val cogenByteList: Cogen[List[Byte]] =
+    Cogen[Array[Byte]].contramap(_.toArray)
+
+  implicit val cogenByteIList: Cogen[IList[Byte]] =
+    Cogen[Array[Byte]].contramap(byteIListToByteArray)
 
   implicit val cogenJavaBoolean: Cogen[java.lang.Boolean] =
     Cogen[Boolean].contramap(_.booleanValue)
@@ -189,19 +259,6 @@ object Cogen extends CogenInstances0 {
   implicit def cogenOneAnd[F[_], A: Cogen](implicit F: Cogen[F[A]]): Cogen[OneAnd[F, A]] =
     Cogen[(A, F[A])].contramap(a => (a.head, a.tail))
 
-  implicit def cogenIList[A](implicit A: Cogen[A]): Cogen[IList[A]] =
-    new Cogen[IList[A]] {
-      def cogen[B](a: IList[A], g: CogenState[B]) = a match {
-        case ICons(h, t) =>
-          variantInt(1, A.cogen(h, cogen(t, g)))
-        case INil() =>
-          g
-      }
-    }
-
-  implicit def cogenList[A: Cogen]: Cogen[List[A]] =
-    Cogen[IList[A]].contramap(Gen.IListFromList)
-
   implicit def cogenVector[A: Cogen]: Cogen[Vector[A]] = {
     import std.vector._
     Cogen[IList[A]].contramap(IList.fromFoldable(_))
@@ -211,9 +268,6 @@ object Cogen extends CogenInstances0 {
     import std.stream._
     Cogen[IList[A]].contramap(IList.fromFoldable(_))
   }
-
-  implicit def cogenArray[A](implicit A: Cogen[A]): Cogen[Array[A]] =
-    Cogen[List[A]].contramap(_.toList)
 
   implicit def cogenMap[A: Cogen, B: Cogen]: Cogen[Map[A, B]] =
     Cogen[IList[(A, B)]].contramap(
