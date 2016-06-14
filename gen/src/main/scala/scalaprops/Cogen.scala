@@ -306,6 +306,9 @@ object Cogen extends CogenInstances0 {
   implicit def cogenLazyEitherT[F[_], A, B](implicit F: Cogen[F[LazyEither[A, B]]]): Cogen[LazyEitherT[F, A, B]] =
     F.contramap(_.run)
 
+  implicit def cogenTheseT[F[_], A, B](implicit F: Cogen[F[A \&/ B]]): Cogen[TheseT[F, A, B]] =
+    F.contramap(_.run)
+
   implicit def cogenMaybeT[F[_], A](implicit F: Cogen[F[Maybe[A]]]): Cogen[MaybeT[F, A]] =
     F.contramap(_.run)
 
@@ -341,6 +344,12 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenTreeLoc[A: Cogen]: Cogen[TreeLoc[A]] =
     Cogen.from4(TreeLoc.unapply)
+
+  implicit def cogenStrictTree[A: Cogen]: Cogen[StrictTree[A]] =
+    new Cogen[StrictTree[A]] {
+      def cogen[B](a: StrictTree[A], g: CogenState[B]) =
+        Cogen[(A, Vector[StrictTree[A]])].cogen((a.rootLabel, a.subForest), g)
+    }
 
   implicit def cogenCoyoneda[F[_]: Functor, A](implicit F: Cogen[F[A]]): Cogen[Coyoneda[F, A]] =
     F.contramap(_.run)

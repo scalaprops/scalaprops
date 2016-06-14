@@ -776,6 +776,9 @@ object Gen extends GenInstances0 {
   implicit def eitherTGen[F[_], A, B](implicit F: Gen[F[A \/ B]]): Gen[EitherT[F, A, B]] =
     F.map(EitherT(_))
 
+  implicit def theseTGen[F[_], A, B](implicit F: Gen[F[A \&/ B]]): Gen[TheseT[F, A, B]] =
+    F.map(TheseT.theseT[F, A, B](_))
+
   implicit def maybeTGen[F[_], A](implicit F: Gen[F[Maybe[A]]]): Gen[MaybeT[F, A]] =
     F.map(MaybeT.apply(_))
 
@@ -906,6 +909,32 @@ object Gen extends GenInstances0 {
       Apply[Gen].apply2(A, A)(FingerTree.two[V, A]),
       Apply[Gen].apply3(A, A, A)(FingerTree.three[V, A]),
       Apply[Gen].apply4(A, A, A, A)(FingerTree.four[V, A])
+    )
+
+  private[scalaprops] def strictTreeGenSized[A: NotNothing](size: Int)(implicit A: Gen[A]): Gen[StrictTree[A]] =
+    size match {
+      case n if n <= 1 =>
+        A.map(a => StrictTree.Leaf(a))
+      case 2 =>
+        Gen[(A, A)].map{case (a1, a2) =>
+          StrictTree.Node(a1, Vector(StrictTree.Leaf(a2)))
+        }
+      case 3 =>
+        Gen[(A, A, A)].flatMap{case (a1, a2, a3) =>
+          Gen.elements(
+            StrictTree.Node(a1, Vector(StrictTree.Leaf(a2), StrictTree.Leaf(a3))),
+            StrictTree.Node(a1, Vector(StrictTree.Node(a2, Vector(StrictTree.Leaf(a3)))))
+          )
+        }
+      case _ =>
+        withSize(size - 1)(strictTreeGenSized[A]).flatMap{ as =>
+          A.map(a => StrictTree.Node(a, as.toVector))
+        }
+    }
+
+  implicit def strictTreeGen[A](implicit A: Gen[A]): Gen[StrictTree[A]] =
+    Gen.sized(n =>
+      Gen.choose(0, n).flatMap(strictTreeGenSized[A])
     )
 
   private[this] def withSize[A](size: Int)(f: Int => Gen[A]): Gen[Stream[A]] = {
