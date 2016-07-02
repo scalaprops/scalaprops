@@ -401,7 +401,13 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenFuture[A](implicit F: Cogen[A]): Cogen[scala.concurrent.Future[A]] = {
     import scala.concurrent.duration._
-    F.contramap(f => Await.result(f, 5.seconds))
+    val ec = scala.concurrent.ExecutionContext.global
+    cogenDisjunction(Divisible[Cogen].conquer[Throwable], F).contramap(f =>
+      Await.result(
+        f.map(\/.right)(ec).recover{ case e => -\/(e) }(ec),
+        5.seconds
+      )
+    )
   }
 
   private[this] def nameToValue[A]: Name[A] => A = _.value
