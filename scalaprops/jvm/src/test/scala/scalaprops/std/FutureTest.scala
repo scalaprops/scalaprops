@@ -44,8 +44,8 @@ object FutureTest extends Scalaprops {
       }
     }
 
-  // TODO does not satisfy Cobind laws
   val laws = Properties.list(
+    scalazlaws.cobind.all[Future],
     scalazlaws.monadError.all[Future, Throwable],
     scalazlaws.equal.all[Future[Int]]
   )
