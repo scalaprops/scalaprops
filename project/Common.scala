@@ -99,7 +99,7 @@ object Common {
       commitNextVersion,
       ReleaseStep{ state =>
         val extracted = Project extract state
-        extracted.runAggregated(SonatypeKeys.sonatypeReleaseAll in Global in extracted.get(thisProjectRef), state)
+        extracted.runTask(SonatypeKeys.sonatypeReleaseAll in extracted.get(thisProjectRef), state)._1
       },
       UpdateReadme.updateReadmeProcess,
       pushChanges
