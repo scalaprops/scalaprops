@@ -410,6 +410,14 @@ object Cogen extends CogenInstances0 {
     )
   }
 
+  implicit def cogenTry[A](implicit F: Cogen[A]): Cogen[scala.util.Try[A]] =
+    cogenDisjunction(Divisible[Cogen].conquer[Throwable], F).contramap{
+      case scala.util.Failure(e) =>
+        -\/(e)
+      case scala.util.Success(a) =>
+        \/-(a)
+    }
+
   private[this] def nameToValue[A]: Name[A] => A = _.value
 
   implicit def cogenNeed[A](implicit A: Cogen[A]): Cogen[Need[A]] =
