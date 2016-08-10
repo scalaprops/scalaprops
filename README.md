@@ -8,7 +8,7 @@ property based testing library for Scala
 ### features
 - real `scala.FunctionN` generators using [`Cogen`](gen/src/main/scala/scalaprops/Cogen.scala) (aka [CoArbitrary](https://hackage.haskell.org/package/QuickCheck-2.8.1/docs/Test-QuickCheck-Arbitrary.html#t:CoArbitrary) in QuickCheck). scalaprops can generate not only constant Functions
 - flexible parameter settings for each test( [ScalaCheck doesn't have this feature](https://github.com/rickynils/scalacheck/issues/120) )
-- timeout
+- timeout as soon as possible
 - flexible law checking like [discipline](https://github.com/typelevel/discipline)
  - discipline uses only `String` for test id. but scalaprops can use other than `String`
 - scalaz integration
