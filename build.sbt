@@ -33,7 +33,7 @@ val root = Project("root", file(".")).settings(
     scalapropsJVM ::
     scalazlawsJVM ::
     Nil
-  ).map(libraryDependencies <++= libraryDependencies in _)
+  ).map(p => libraryDependencies ++= (libraryDependencies in p).value)
 ).settings(
   name := allName,
   artifacts := Nil,
@@ -41,8 +41,8 @@ val root = Project("root", file(".")).settings(
     jsProjects.foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
   },
   packagedArtifacts := Map.empty,
-  artifacts <++= Classpaths.artifactDefs(Seq(packageDoc in Compile)),
-  packagedArtifacts <++= Classpaths.packaged(Seq(packageDoc in Compile)),
+  artifacts ++= Classpaths.artifactDefs(Seq(packageDoc in Compile)).value,
+  packagedArtifacts ++= Classpaths.packaged(Seq(packageDoc in Compile)).value,
   Sxr.settings1,
   Defaults.packageTaskSettings(
     packageDoc in Compile, (UnidocKeys.unidoc in Compile).map{_.flatMap(Path.allSubpaths)}
