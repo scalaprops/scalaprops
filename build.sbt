@@ -33,13 +33,13 @@ val root = Project("root", file(".")).settings(
     scalaprops ::
     scalazlaws ::
     Nil
-  ).map(libraryDependencies <++= libraryDependencies in _)
+  ).map(p => libraryDependencies ++= (libraryDependencies in p).value)
 ).settings(
   name := allName,
   artifacts := Nil,
   packagedArtifacts := Map.empty,
-  artifacts <++= Classpaths.artifactDefs(Seq(packageDoc in Compile)),
-  packagedArtifacts <++= Classpaths.packaged(Seq(packageDoc in Compile))
+  artifacts ++= Classpaths.artifactDefs(Seq(packageDoc in Compile)).value,
+  packagedArtifacts ++= Classpaths.packaged(Seq(packageDoc in Compile)).value
 ).settings(
   Sxr.settings1
 ).settings(

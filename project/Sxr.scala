@@ -7,11 +7,11 @@ object Sxr {
   val sxr = TaskKey[File]("packageSxr")
 
   private[this] def ifSxrAvailable[A](key: SettingKey[A], value: Def.Initialize[A]): Setting[A] =
-    key <<= (key, enableSxr, value){ (k, enable, vv) =>
-      if (enable) {
-        vv
+    key := {
+      if (enableSxr.value) {
+        value.value
       } else {
-        k
+        key.value
       }
     }
 
