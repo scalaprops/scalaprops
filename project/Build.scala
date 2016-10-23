@@ -43,7 +43,6 @@ object build {
     ).settings(
       scalazVersion := "7.2.6",
       scalaJSStage in Test := FastOptStage,
-      scalaJSUseRhino in Global := false,
       jsEnv := NodeJSEnv().value,
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
