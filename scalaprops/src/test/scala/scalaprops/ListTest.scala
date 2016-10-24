@@ -7,6 +7,7 @@ object ListTest extends Scalaprops {
 
   val testLaws = Properties.list(
     scalazlaws.monadPlusStrong.all[List],
+    scalazlaws.monadPlusLeftDistribution.all[List],
     scalazlaws.align.all[List],
     scalazlaws.zip.all[List],
     scalazlaws.isEmpty.all[List],

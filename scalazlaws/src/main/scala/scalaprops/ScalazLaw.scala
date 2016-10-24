@@ -127,6 +127,9 @@ object ScalazLaw {
   val monadPlusStrong = law("monadPlusStrong")
   val monadPlusStrongAll = all(monadPlusStrong)
 
+  val monadPlusLeftDistribution = law("monadPlusLeftDistribution")
+  val monadPlusLeftDistributionAll = all(monadPlusLeftDistribution)
+
   val monadState = law("monadState")
   val monadStateAll = all(monadState)
   val monadStatePutPut = law0(monadState, "put put")

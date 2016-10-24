@@ -9,6 +9,7 @@ object IListTest extends Scalaprops {
   val testLaws = Properties.list(
     scalazlaws.order.all[IList[Byte]],
     scalazlaws.monadPlusStrong.all[IList],
+    scalazlaws.monadPlusLeftDistribution.all[IList],
     scalazlaws.traverse.all[IList],
     scalazlaws.cobind.all[IList],
     scalazlaws.isEmpty.all[IList],
