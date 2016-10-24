@@ -109,7 +109,7 @@ object FreeTTest extends Scalaprops {
     Properties.list(
       scalazlaws.bindRec.laws[F],
       scalazlaws.traverse.all[F],
-      scalazlaws.monadPlus.all[F]
+      scalazlaws.monadPlusLeftDistribution.all[F]
     )
   }
 
