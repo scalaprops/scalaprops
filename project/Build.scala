@@ -41,7 +41,7 @@ object build {
     CrossProject(id, file(id), CustomCrossType).settings(
       commonSettings: _*
     ).settings(
-      scalazVersion := "7.2.6",
+      scalazVersion := "7.2.7",
       scalaJSStage in Test := FastOptStage,
       jsEnv := NodeJSEnv().value,
       initialCommands in console += {
