@@ -22,7 +22,7 @@ object build {
 
   def module(id: String) =
     Project(id, file(id)).settings(commonSettings).settings(
-      scalazVersion := "7.1.10",
+      scalazVersion := "7.1.11",
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
           "Gen", "Cogen", "Rand"
