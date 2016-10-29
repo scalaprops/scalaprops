@@ -37,7 +37,10 @@ object Sxr {
   )
 
   val settings2: Seq[Setting[_]] = Defaults.packageTaskSettings(
-    sxr in Compile, (crossTarget in Compile, UnidocKeys.unidoc in Compile).map{ (dir, _) =>
+    sxr in Compile,
+    Def.task{
+      val dir = (crossTarget in Compile).value
+      val _ = (UnidocKeys.unidoc in Compile).value
       Path.allSubpaths(dir / "unidoc.sxr").toSeq
     }
   ) ++ Seq[Setting[_]](
