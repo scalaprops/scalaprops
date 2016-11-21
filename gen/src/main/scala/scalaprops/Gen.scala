@@ -58,6 +58,11 @@ sealed abstract class GenInstances0 extends GenInstances1 {
   implicit final def endomorphicGen[F[_, _], A](implicit F: Gen[F[A, A]]): Gen[Endomorphic[F, A]] =
     F.map(Endomorphic.apply)
 
+  implicit def genSemigroup[A](implicit A: Semigroup[A]): Semigroup[Gen[A]] =
+    new Semigroup[Gen[A]] {
+      override def append(a: Gen[A], b: => Gen[A]) =
+        Apply[Gen].apply2(a, b)(A.append(_, _))
+    }
 }
 
 object Gen extends GenInstances0 {
@@ -1029,4 +1034,11 @@ object Gen extends GenInstances0 {
       G2.map(FreeT.liftM[S, M, A](_)),
       G1.map(FreeT.liftF[S, M, A](_))
     )
+
+  implicit def genMonoid[A](implicit A: Monoid[A]): Monoid[Gen[A]] =
+    new Monoid[Gen[A]] {
+      override def append(a: Gen[A], b: => Gen[A]) =
+        Apply[Gen].apply2(a, b)(A.append(_, _))
+      override val zero = Gen.value(A.zero)
+    }
 }
