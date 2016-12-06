@@ -36,5 +36,5 @@ env:
 
 matrix:
   include:
-    - scala: 2.12.0
+    - scala: 2.12.1
       jdk: oraclejdk8
