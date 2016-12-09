@@ -22,7 +22,7 @@ script:
   - git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
   - git show --oneline --check
   - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
-  - ./sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test "project /" publishLocal
+  - ./sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test
 before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
@@ -30,10 +30,6 @@ before_cache:
 
 matrix:
   include:
-    - name: dotty
-      scala: 0.23.0-RC1
-      script:
-      - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
     - scala: SCALA_NATIVE
       jdk: openjdk8
       sudo: required
@@ -46,14 +42,4 @@ matrix:
       jdk: openjdk11
       script:
       - java -version
-      - sbt "++${TRAVIS_SCALA_VERSION}!" scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test "project /" publishLocal
-    - os: windows
-      language: bash
-      env:
-      - JDK="adopt@1.8.0-222"
-      before_install:
-      - curl "https://raw.githubusercontent.com/DanySK/Gravis-CI/c8f400623d8f756ef7c/.install-jdk-travis.sh" --output .install-jdk-travis.sh
-      - source .install-jdk-travis.sh
-      script:
-      - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
-      - ./sbt "++ 2.13.2" compile test:compile scalapropsJVM/test scalazJVM/test "project /" publishLocal
+      - sbt "++${TRAVIS_SCALA_VERSION}!" scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test
