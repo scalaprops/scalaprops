@@ -39,8 +39,7 @@ object build {
 
   private[this] def module(id: String) =
     CrossProject(id, file(id), CustomCrossType).settings(
-      commonSettings: _*
-    ).settings(
+      commonSettings,
       scalazVersion := "7.2.8",
       scalaJSStage in Test := FastOptStage,
       jsEnv := NodeJSEnv().value,
@@ -62,7 +61,7 @@ object build {
     description := "pure functional random value generator",
     libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value
   ).jvmSettings(
-    Generator.settings: _*
+    Generator.settings
   )
 
   lazy val core = module("core").settings(
