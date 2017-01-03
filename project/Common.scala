@@ -98,10 +98,7 @@ object Common {
       ),
       setNextVersion,
       commitNextVersion,
-      ReleaseStep{ state =>
-        val extracted = Project extract state
-        extracted.runTask(SonatypeKeys.sonatypeReleaseAll in extracted.get(thisProjectRef), state)._1
-      },
+      ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
       UpdateReadme.updateReadmeProcess,
       pushChanges
     ),

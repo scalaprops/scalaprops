@@ -27,8 +27,7 @@ lazy val scalaprops = module(scalapropsName).settings(
 
 val root = Project("root", file(".")).settings(
   commonSettings ++
-  unidocSettings ++
-  xerial.sbt.Sonatype.sonatypeRootSettings ++ (
+  unidocSettings ++ (
     core ::
     scalaprops ::
     scalazlaws ::
