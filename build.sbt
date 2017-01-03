@@ -27,8 +27,7 @@ lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM)
 
 val root = Project("root", file(".")).settings(
   Common.commonSettings ++
-  unidocSettings ++
-  xerial.sbt.Sonatype.sonatypeRootSettings ++ (
+  unidocSettings ++ (
     coreJVM ::
     scalapropsJVM ::
     scalazlawsJVM ::
