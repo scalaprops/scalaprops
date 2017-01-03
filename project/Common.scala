@@ -81,6 +81,7 @@ object Common {
       case Some((2, v)) if v >= 11 => unusedWarnings
     }.toList.flatten,
     releaseTagName := tagName.value,
+    releaseCrossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
