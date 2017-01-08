@@ -76,6 +76,11 @@ object Gen extends GenInstances0 {
 
   def apply[A](implicit A: Gen[A]): Gen[A] = A
 
+  def delay[A](g: => Gen[A]): Gen[A] = {
+    lazy val g0 = g
+    gen((size, r) => g0.f(size, r)) // should not change to `gen(g0.f)` !
+  }
+
   def from[A1, Z](f: A1 => Z)(implicit A1: Gen[A1]): Gen[Z] =
     from1(f)(A1)
 
