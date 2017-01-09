@@ -35,7 +35,7 @@ abstract class Rand {
         if (min <= next._2 && next._2 <= max) {
           next
         } else if(0 < (max - min)){
-          val x = (next._2 % (max - min + 1)) + min
+          val x = (next._2 % (max - min + 2)) + min - 1
           if (min <= x && x <= max) {
             (next._1, x)
           } else {
@@ -67,7 +67,7 @@ abstract class Rand {
         if (min <= next._2 && next._2 <= max) {
           next
         } else if(0 < (max - min)){
-          val x = (next._2 % (max - min + 1)) + min
+          val x = (next._2 % (max - min + 2)) + min - 1
           if (min <= x && x <= max) {
             (next._1, x)
           } else {
