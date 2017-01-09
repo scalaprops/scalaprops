@@ -860,7 +860,20 @@ object Gen extends GenInstances0 {
     Gen[A \/ B].map(_.validation)
 
   implicit def zipperGen[A: Gen]: Gen[Zipper[A]] =
-    Gen[(Stream[A], A, Stream[A])].map{case (a, b, c) => Zipper(a, b, c)}
+    Gen.sized {
+      case n if n <= 1 =>
+        Gen[A].map(a => Zipper(Stream.Empty, a, Stream.Empty))
+      case n =>
+        val z = n - 1
+        Gen.choose(0, z).flatMap { rSize =>
+          val lSize = z - rSize
+          Apply[Gen].apply3(
+            sequenceNList(lSize, Gen[A]).map(_.toStream),
+            Gen[A],
+            sequenceNList(rSize, Gen[A]).map(_.toStream)
+          )(Zipper(_, _, _))
+        }
+    }
 
   implicit def coyonedaGen[F[_], A](implicit F: Gen[F[A]]): Gen[Coyoneda[F, A]] =
     F.map(Coyoneda.lift)
