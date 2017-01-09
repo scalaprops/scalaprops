@@ -208,7 +208,7 @@ object StreamTTest extends Scalaprops {
     type G[A] = IList[A]
     type F[A] = StreamT[G, A]
     Properties.list(
-      scalazlaws.monadPlus.all[F],
+      scalazlaws.monadPlus.all[F].andThenParam(Param.minSuccessful(10)),
       scalazlaws.foldable.all[F],
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]

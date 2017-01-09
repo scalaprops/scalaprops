@@ -28,7 +28,7 @@ object traverse1 {
         identityTraverse1[F, Int, Int]
       ),
       ScalazLaw.traverse1SequentialFusion1 -> Check(
-        sequentialFusion1[F, Maybe, IList, Int, Int, Int], Param.maxSize(5)
+        sequentialFusion1[F, Maybe, IList, Int, Int, Int], Param.maxSize(3) andThen Param.minSuccessful(10)
       ),
       ScalazLaw.traverse1Naturality1 -> Check(
         naturality1[F, IList, Maybe, Int](traverse.maybe2ilist)
