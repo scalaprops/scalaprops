@@ -48,13 +48,13 @@ object GenTest extends Scalaprops {
     val N = 5
 
     Property.forAllG(
-      Gen.sequenceNList(1000, Gen[Rand]),
-      Gen.sequenceNList(5, Gen[Int])
+      Gen.sequenceNList(10000, Gen[Rand]),
+      Gen.sequenceNList(N, Gen[Int])
     ){ (rs, xs) =>
       val g = Gen.elements(xs.head, xs.tail: _*)
       val r = rs.map(r => g.f(Int.MaxValue, r)._2)
       (r.toSet == xs.toSet) && (xs.toSet.size == N)
-    }.toCheckWith(Param.rand(Rand.fromSeed())).toProperties("test Gen.element")
+    }.toProperties((), Param.rand(Rand.fromSeed()))
   }
 
   val `test Gen.sequenceNList` = {
@@ -86,7 +86,7 @@ object GenTest extends Scalaprops {
     }
 
   val maybeGen = Property.forAllG(
-    Gen[Int], Gen.choose(100, 10000), Gen[Int]
+    Gen[Int], Gen.choose(500, 10000), Gen[Int]
   ){ (size, listSize, seed) =>
     val values = Gen[Maybe[Int]].samples(size = size, listSize = listSize, seed = seed)
     val just = values.count(_.isJust)
@@ -237,8 +237,8 @@ object GenTest extends Scalaprops {
       test(IList(true, false), orderingValues, "Boolean => Ordering"),
       test(orderingValues, IList(true, false), "Ordering => Boolean"),
       test(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), IList(true, false), "Maybe[Boolean] => Boolean"),
-      test1(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), "Maybe[Boolean]", 20000).andThenParam(Param.minSuccessful(20)),
-      test1(IList(true, false).flatMap(a => IList(\/.right(a), \/.left(a))), """Boolean \/ Boolean""", 50000).andThenParam(Param.minSuccessful(5))
+      test1(IList(Maybe.just(true), Maybe.just(false), Maybe.empty[Boolean]), "Maybe[Boolean]", 100000).andThenParam(Param.minSuccessful(3)),
+      test1(IList(true, false).flatMap(a => IList(\/.right(a), \/.left(a))), """Boolean \/ Boolean""", 50000).andThenParam(Param.minSuccessful(3))
     )
   }
 

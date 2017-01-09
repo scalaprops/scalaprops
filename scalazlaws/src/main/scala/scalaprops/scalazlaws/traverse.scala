@@ -40,7 +40,7 @@ object traverse {
         purity[F, IList, Int]
       ),
       ScalazLaw.traverseSequentialFusion -> Check(
-        sequentialFusion[F, Maybe, IList, Int, Int, Int], Param.maxSize(5)
+        sequentialFusion[F, Maybe, IList, Int, Int, Int], Param.maxSize(3) andThen Param.minSuccessful(10)
       ),
       ScalazLaw.traverseNaturality  -> Check(
         naturality[F, IList, Maybe, Int](maybe2ilist)
