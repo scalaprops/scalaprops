@@ -77,4 +77,36 @@ object RandTest extends Scalaprops{
     x == (max - a + 1)
   }.toProperties((), Param.minSuccessful(1000))
 
+  val issue28 = Property.forAll {
+    Gen.chooseLong(0, Int.MaxValue.toLong * 2 + 1).sample()
+    true
+  }
+
+  val chooseLong3 = Property.forAll{ seed: Long =>
+    def boundaries(x: Int): List[Long] = {
+      val a: Long = List.fill(x)(2L).product
+      List(- a - 1, - a, - a + 1, 0, a - 1, a, a + 1)
+    }
+
+    for {
+      x <- 1 to 63
+      y <- 1 to 63
+      m <- boundaries(x)
+      n <- boundaries(y)
+      max = math.max(m, n)
+      min = math.min(m, n)
+      size = 3
+    } {
+      Gen.chooseLong(m, n).samples(seed = seed, listSize = size).foreach{ a =>
+        assert(min <= a && a <= max, s"$seed $a $min $max")
+      }
+
+      if(m.isValidInt && n.isValidInt) {
+        Gen.choose(m.toInt, n.toInt).samples(seed = seed, listSize = size).foreach{ a =>
+          assert(min <= a && a <= max, s"$seed $a $min $max")
+        }
+      }
+    }
+    true
+  }.toProperties((), Param.minSuccessful(3))
 }
