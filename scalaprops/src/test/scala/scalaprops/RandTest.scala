@@ -41,7 +41,7 @@ object RandTest extends Scalaprops{
         test(Gen.choose(n, n + m), seed, m + 1)
       }.toProperties("choose"),
       Property.forAllG(
-        Gen.choose(Int.MinValue, Int.MaxValue - N),
+        Gen.chooseLong(Long.MinValue, Long.MaxValue - N),
         Gen.choose(1, N),
         Gen[Long]
       ){ (n, m, seed) =>
