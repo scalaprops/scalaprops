@@ -29,28 +29,35 @@ abstract class Rand {
     } else {
       val min = math.min(from, to)
       val max = math.max(from, to)
-      @annotation.tailrec
-      def loop(state: Rand): (Rand, Long) = {
-        val next = state.nextLong
-        if (min <= next._2 && next._2 <= max) {
-          next
-        } else if(0 < (max - min)){
-          val x = (next._2 % (max - min + 2)) + min - 1
-          if (min <= x && x <= max) {
-            (next._1, x)
-          } else {
-            loop(next._1)
-          }
-        } else {
-          loop(next._1)
-        }
-      }
 
       if (Int.MinValue <= min && max <= Int.MaxValue){
         val (r, i) = choose(min.asInstanceOf[Int], max.asInstanceOf[Int])
         (r, i)
       } else {
-        loop(this)
+        val diff: Long = (max: Long) - (min: Long)
+        // `0 < diff` is necessary to check subtraction underflow.
+        if (0 < diff && diff < Int.MaxValue){
+          val (r, i) = choose(0, diff.asInstanceOf[Int])
+          (r, min + i)
+        } else {
+          @annotation.tailrec
+          def loop(state: Rand): (Rand, Long) = {
+            val next = state.nextLong
+            if (min <= next._2 && next._2 <= max) {
+              next
+            } else if(0 < diff){
+              val x = (next._2 % (max - min + 2)) + min - 1
+              if (min <= x && x <= max) {
+                (next._1, x)
+              } else {
+                loop(next._1)
+              }
+            } else {
+              loop(next._1)
+            }
+          }
+          loop(this)
+        }
       }
     }
   }
