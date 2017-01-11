@@ -59,7 +59,7 @@ object TreeTest extends Scalaprops {
           case \/-(x) =>
             sys.error(x.size.toString)
         }
-      }.toProperties(i.toString, Param.minSuccessful(5))
+      }.toProperties(i.toString, Param.minSuccessful(1))
     }
 
     Properties.list(tests.head, tests.tail: _*)
