@@ -37,7 +37,12 @@ object StreamTTest extends Scalaprops {
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]
     )
-  }.andThenParam(Param.maxSize(2))
+  }.andThenParam(
+    Param.maxSize(2)
+  ).andThenParamPF{
+    case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
+      Param.minSuccessful(1)
+  }
 
   val testMaybe = {
     type G[A] = Maybe[A]
@@ -59,7 +64,10 @@ object StreamTTest extends Scalaprops {
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]
     )
-  }.andThenParam(Param.maxSize(3))
+  }.andThenParam(Param.maxSize(3)).andThenParamPF{
+    case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
+      Param.minSuccessful(1)
+  }
 
   val monadTrans = scalazlaws.monadTrans.all[StreamT]
 
