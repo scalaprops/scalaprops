@@ -48,7 +48,7 @@ object CofreeTest extends Scalaprops {
   val zipIList = {
     import CofreeGenImplicit._
     cofreeZipTest[IList]
-  }.andThenParam(Param.maxSize(2) andThen Param.minSuccessful(5))
+  }.andThenParam(Param.maxSize(2) andThen Param.minSuccessful(2))
 
   val zipValidation = {
     import CofreeGenImplicit._
