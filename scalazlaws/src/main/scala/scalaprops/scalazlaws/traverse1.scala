@@ -34,7 +34,7 @@ object traverse1 {
         naturality1[F, IList, Maybe, Int](traverse.maybe2ilist)
       ),
       ScalazLaw.traverse1ParallelFusion1 -> Check(
-        parallelFusion1[NonEmptyList, Maybe, ({type l[a] = Int \/ a})#l, Int, Int], Param.maxSize(5)
+        parallelFusion1[NonEmptyList, Maybe, ({type l[a] = Int \/ a})#l, Int, Int], Param.maxSize(3)
       )
     )
 
