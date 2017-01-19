@@ -2,7 +2,7 @@ import UnidocKeys._
 import build._
 
 lazy val jvmProjects = Seq[ProjectReference](
-  genJVM, coreJVM, scalapropsJVM, scalazlawsJVM
+  genJVM, coreJVM, scalapropsJVM, scalazlawsJVM, jmh
 )
 
 lazy val jsProjects = Seq[ProjectReference](
@@ -24,6 +24,10 @@ lazy val scalazlawsRoot = project.aggregate(scalazlawsJS, scalazlawsJVM)
 lazy val scalapropsJS = scalaprops.js
 lazy val scalapropsJVM = scalaprops.jvm
 lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM)
+
+lazy val jmh = project.settings(
+  Common.commonSettings
+).dependsOn(scalapropsJVM).enablePlugins(JmhPlugin)
 
 val root = Project("root", file(".")).settings(
   Common.commonSettings ++
