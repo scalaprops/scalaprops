@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
+import scalaz.std.stream._
 
 object CofreeTest extends Scalaprops {
 
@@ -84,22 +85,18 @@ object CofreeTest extends Scalaprops {
     )
   }
 
+  private type CofreeStream[A] = Cofree[Stream, A]
+
+  private[this] val treeToCofreeStream: Tree ~> CofreeStream =
+    new (Tree ~> CofreeStream) { self =>
+      def apply[A](tree: Tree[A]) =
+        Cofree(tree.rootLabel, tree.subForest.map(self.apply))
+    }
+
   val stream = {
-    type CofreeStream[A] = Cofree[Stream, A]
-
-    import scalaz.std.stream._
-    import scalaz.Isomorphism._
-
-    val iso: Tree <~> CofreeStream =
-      new IsoFunctorTemplate[Tree, CofreeStream] {
-        def to[A](tree: Tree[A]) =
-          Cofree(tree.rootLabel, tree.subForest.map(to))
-        def from[A](c: CofreeStream[A]) =
-          Tree.node(c.head, c.tail.map(from(_)))
-      }
 
     implicit def gen[A: Gen]: Gen[CofreeStream[A]] =
-      Gen[Tree[A]].map(iso.to)
+      Gen[Tree[A]].map(treeToCofreeStream(_))
 
     Properties.list(
       scalazlaws.monad.all[CofreeStream],
