@@ -66,6 +66,14 @@ object Common {
         <tag>{tagOrHash.value}</tag>
       </scm>
     ),
+    javaOptions ++= Seq(
+      "-Xloggc:gc-log.log",
+      "-XX:+PrintGCDetails",
+      "-XX:+PrintHeapAtGC",
+      "-XX:+PrintGCDateStamps",
+      "-XX:+PrintGCTimeStamps",
+      "-XX:+PrintTenuringDistribution"
+    ),
     scalacOptions ++= (
       "-deprecation" ::
       "-unchecked" ::
