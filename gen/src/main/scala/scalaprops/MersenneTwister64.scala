@@ -94,6 +94,9 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
   override def nextInt: (Rand, Int) =
     nextIntFromNextLong
 
+  override def toString: String = {
+    mt0.mkString("MersenneTwister64(Array(", ",", s"), ${mti0})")
+  }
 }
 
 object MersenneTwister64 {
