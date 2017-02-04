@@ -18,6 +18,7 @@ property based testing library for Scala
  - scalaprops does not use `scala.util.Random` because `scala.util.Random` is mutable
  - default implementation is [Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html) (JVM) or [Tiny Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/) (Scala.js)
 - [Scala.js](https://www.scala-js.org/) support
+- [deterministic testing](#deterministic-testing)
 
 ### latest stable version
 
@@ -61,6 +62,12 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.4
 
 
 ![screencast](https://raw.githubusercontent.com/scalaprops/scalaprops/master/screencast.gif)
+
+### deterministic testing
+
+Scalaprops emitting which seed it started with during a failing test, and providing an interface `--seed=<value>` for re-running the failing test with the same seed.
+
+![deterministic-testing](deterministic-testing.gif)
 
 ### for scalaz 7.1.x
 
