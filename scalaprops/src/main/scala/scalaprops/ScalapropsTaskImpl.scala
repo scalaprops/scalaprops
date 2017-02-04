@@ -68,7 +68,7 @@ final class ScalapropsTaskImpl(
               ScalapropsEvent(testClassName, taskDef.fingerprint(), selector, status, err, duration, result0)
             }
 
-            val param = check.paramEndo(obj.param)
+            val param = arguments.param.merge(check.paramEndo(obj.param))
             val start = System.currentTimeMillis()
             val r = try {
               obj.listener.onStart(obj, name, check.prop, param, log)

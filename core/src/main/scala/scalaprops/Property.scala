@@ -64,10 +64,10 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
 
   // TODO remove `listener` parameter?
   def check(param: Param, cancel: () => Boolean, listener: Int => Unit): CheckResult = {
-    import param.{rand => _, _}
+    import param._
     @annotation.tailrec
     def loop(s: Int, discarded: Int, sz: Float, random: Rand): CheckResult = if(cancel()) {
-      CheckResult.Timeout(s, discarded)
+      CheckResult.Timeout(s, discarded, seed)
     }else{
       val size = {
         if (s == 0 && discarded == 0) minSize
@@ -81,27 +81,27 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
       r match {
         case \/-((nextRand, Result.NoResult)) =>
           if (discarded + 1 >= maxDiscarded) {
-            CheckResult.Exhausted(s, discarded + 1)
+            CheckResult.Exhausted(s, discarded + 1, seed)
           } else {
             loop(s, discarded + 1, size, nextRand)
           }
         case \/-((_, Result.Proven)) =>
-          CheckResult.Proven(s + 1, discarded)
+          CheckResult.Proven(s + 1, discarded, seed)
         case \/-((nextRand, Result.Unfalsified(args))) =>
           if (s + 1 >= minSuccessful) {
-            CheckResult.Passed(s + 1, discarded)
+            CheckResult.Passed(s + 1, discarded, seed)
           } else {
             listener(s)
             loop(s + 1, discarded, size, nextRand)
           }
         case \/-((_, Result.Falsified(args))) =>
-          CheckResult.Falsified(s, discarded, args)
+          CheckResult.Falsified(s, discarded, args, seed)
         case \/-((_, Result.Exception(args, ex))) =>
-          CheckResult.PropException(s, discarded, args, ex)
+          CheckResult.PropException(s, discarded, args, ex, seed)
         case \/-((_, Result.Ignored(reason))) =>
-          CheckResult.Ignored(s, discarded, reason)
+          CheckResult.Ignored(s, discarded, reason, seed)
         case -\/(e) =>
-          CheckResult.GenException(s, discarded, e)
+          CheckResult.GenException(s, discarded, e, seed)
       }
     }
 

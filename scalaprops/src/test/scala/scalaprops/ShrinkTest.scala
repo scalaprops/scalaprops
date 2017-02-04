@@ -18,7 +18,7 @@ object ShrinkTest extends Scalaprops {
 
     Property.property{ seed: Int =>
       val param0 = super.param.copy(
-        rand = Rand.fromSeed(seed)
+        seed = Seed.IntSeed(seed)
       )
 
       val m = 6
@@ -30,7 +30,7 @@ object ShrinkTest extends Scalaprops {
         }(g, implicitly).check(param0, () => false, _ => ())
 
         result match {
-          case CheckResult.Falsified(_, 0, ICons(arg, INil())) if (m < arg.shrinks) && (arg.shrinks < Integer.SIZE) && (arg.value == n) =>
+          case CheckResult.Falsified(_, 0, ICons(arg, INil()), _) if (m < arg.shrinks) && (arg.shrinks < Integer.SIZE) && (arg.value == n) =>
             true
           case fail =>
             sys.error(fail.toString)

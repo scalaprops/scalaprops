@@ -6,24 +6,26 @@ import scala.concurrent.duration.Duration
 import scalaz.Endo
 
 final case class Param(
-  rand: Rand,
+  seed: Seed,
   minSuccessful: Int = Platform.minSuccessful,
   maxDiscarded: Int = 500,
   minSize: Int = 0,
   maxSize: Int = Gen.defaultSize,
   timeout: Duration = Duration(30, TimeUnit.SECONDS)
-)
+) {
+  def rand: Rand = seed.createRand
+}
 
 object Param {
   def withCurrentTimeSeed(): Param = Param(
-    rand = Platform.randFromLong(System.nanoTime())
+    seed = Seed.LongSeed(System.nanoTime())
   )
 
   def rand(rand: Rand): Endo[Param] =
-    Endo(_.copy(rand = rand))
+    Endo(_.copy(seed = Seed.RandSeed(rand)))
 
   def constantSeed(value: Int): Endo[Param] =
-    Endo(_.copy(rand = Rand.fromSeed(value)))
+    Endo(_.copy(seed = Seed.IntSeed(value)))
 
   def minSuccessful(n: Int): Endo[Param] =
     Endo(_.copy(minSuccessful = n))
