@@ -24,6 +24,10 @@ final class MersenneTwister32 private(private val array: Array[Long], private va
 
   def reseed(newSeed: Long): MersenneTwister32 =
     MersenneTwister32.standard(newSeed)
+
+  override def toString: String = {
+    array.mkString("MersenneTwister32(Array(", ",", s"), ${mti})")
+  }
 }
 
 object MersenneTwister32{
