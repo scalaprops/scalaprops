@@ -27,6 +27,10 @@ final class MersenneTwister32 private(private val array: Array[Long], private va
 
   def setIntSeed(newSeed: Int): MersenneTwister32 =
     MersenneTwister32.fromSeed(newSeed)
+
+  override def toString: String = {
+    array.mkString("MersenneTwister32(Array(", ",", s"), ${mti})")
+  }
 }
 
 object MersenneTwister32{
