@@ -61,7 +61,7 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.4
 - [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.4.1-SNAPSHOT/scalaprops-all_2.11-0.4.1-SNAPSHOT-sxr.jar/!/index.html)
 
 
-![screencast](https://raw.githubusercontent.com/scalaprops/scalaprops/master/screencast.gif)
+![screencast](screencast.gif)
 
 ### deterministic testing
 
