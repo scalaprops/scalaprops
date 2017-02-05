@@ -78,7 +78,7 @@ final class ScalapropsTaskImpl(
                   { () =>
                     cancel.get || ((System.currentTimeMillis() - start) > param.timeout.toMillis)
                   },
-                  count => obj.listener.onCheck(obj, name, check, log, count)
+                  count => obj.listener.onCheck(obj, name, check.prop, param, log, count)
                 )
               }
               val duration = System.currentTimeMillis() - start

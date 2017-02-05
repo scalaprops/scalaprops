@@ -13,7 +13,7 @@ abstract class ScalapropsListener {
 
   def onError(obj: Scalaprops, name: String, e: Throwable, logger: Logger): Unit = {}
 
-  def onCheck(obj: Scalaprops, name: String, check: Check, logger: Logger, count: Int): Unit = {}
+  def onCheck(obj: Scalaprops, name: String, property: Property, param: Param, logger: Logger, count: Int): Unit = {}
 
 }
 
@@ -105,8 +105,7 @@ object ScalapropsListener {
       e.printStackTrace()
     }
 
-    override def onCheck(obj: Scalaprops, name: String, check: Check, logger: Logger, count: Int): Unit = {
-      val param = check.paramEndo(obj.param)
+    override def onCheck(obj: Scalaprops, name: String, property: Property, param: Param, logger: Logger, count: Int): Unit = {
       val N = 50
       val x = param.minSuccessful / N
       if((x <= 1) || (count % x == 0)){
