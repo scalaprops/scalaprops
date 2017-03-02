@@ -25,7 +25,14 @@ object Sxr {
     }
 
   val settings1 = Seq[Setting[_]](
-    enableSxr := { scalaVersion.value.startsWith("2.12") == false },
+    enableSxr := {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, v)) =>
+          v <= 12
+        case _ =>
+          false
+      }
+    },
     ifSxrAvailable(
       scalacOptions in UnidocKeys.unidoc,
       Def.task {
@@ -50,7 +57,7 @@ object Sxr {
     ),
     ifSxrAvailable(
       libraryDependencies,
-      Def.setting(libraryDependencies.value :+ compilerPlugin("org.improving" %% "sxr" % "1.0.1"))
+      Def.setting(libraryDependencies.value :+ compilerPlugin("org.improving" %% "sxr" % "1.0.2"))
     ),
     ifSxrAvailable(
       packagedArtifacts,
