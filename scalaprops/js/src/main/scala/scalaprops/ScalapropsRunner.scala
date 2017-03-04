@@ -11,7 +11,7 @@ import scala.collection.mutable.ArrayBuffer
 object ScalapropsRunner {
 
   /** call from sbt plugin
-    * [[https://github.com/scalaprops/sbt-scalaprops/blob/v0.1.0/src/main/scala/scalaprops/ScalapropsPlugin.scala#L28]]
+    * [[https://github.com/scalaprops/sbt-scalaprops/blob/v0.2.0/src/main/scala/scalaprops/ScalapropsPlugin.scala#L66]]
     */
   def testFieldNames(clazz: Class[_]): Array[String] =
     Scalaprops.testFieldNames(clazz)
