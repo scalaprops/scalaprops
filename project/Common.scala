@@ -26,6 +26,7 @@ object Common {
   private[this] val Scala211 = "2.11.11"
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
+    unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     scalaVersion := Scala211,
     crossScalaVersions := "2.13.0-M1" :: "2.12.2" :: Scala211 :: "2.10.6" :: Nil,
     organization := "com.github.scalaprops",
