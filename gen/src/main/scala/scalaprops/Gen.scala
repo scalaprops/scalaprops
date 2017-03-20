@@ -839,6 +839,9 @@ object Gen extends GenInstances0 {
   implicit def ephemeralStreamGen[A: Gen]: Gen[EphemeralStream[A]] =
     Gen[Stream[A]].map(EphemeralStream.fromStream(_))
 
+  implicit def corecursiveListGen[A: Gen]: Gen[CorecursiveList[A]] =
+    Gen[Stream[A]].map(CorecursiveList.fromStream)
+
   implicit def monoidCoproduct[A: Gen, B: Gen]: Gen[A :+: B] =
     Gen[Vector[A \/ B]].map(new :+:(_))
 
