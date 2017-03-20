@@ -40,7 +40,7 @@ object build {
   private[this] def module(id: String) =
     CrossProject(id, file(id), CustomCrossType).settings(
       commonSettings,
-      scalazVersion := "7.2.9",
+      scalazVersion := "7.2.10",
       scalaJSStage in Test := FastOptStage,
       jsEnv := NodeJSEnv().value,
       initialCommands in console += {
