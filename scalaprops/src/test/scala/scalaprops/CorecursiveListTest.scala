@@ -1,6 +1,5 @@
 package scalaprops
 
-import scalaprops.Property.forAllG
 import scalaz.CorecursiveList
 import scalaz.std.anyVal._
 
