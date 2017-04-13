@@ -217,7 +217,7 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenThese[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[A \&/ B] =
     Cogen[(A \/ B) \/ (A, B)].contramap{
-      case x @ \&/.Both(a, b) =>
+      case \&/.Both(a, b) =>
         \/-((a, b))
       case \&/.This(a) =>
         -\/(-\/(a))

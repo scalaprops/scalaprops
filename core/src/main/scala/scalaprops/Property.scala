@@ -88,7 +88,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
           }
         case \/-((_, Result.Proven)) =>
           CheckResult.Proven(s + 1, discarded)
-        case \/-((nextRand, Result.Unfalsified(args))) =>
+        case \/-((nextRand, Result.Unfalsified(_))) =>
           if (s + 1 >= minSuccessful) {
             CheckResult.Passed(s + 1, discarded)
           } else {
@@ -166,7 +166,7 @@ object Property {
       }
 
       first(Stream(g.f(i, r)), 0) match {
-        case Maybe.Just(xx @ (a, re, rand)) if re.failed =>
+        case Maybe.Just(xx @ (_, re, rand)) if re.failed =>
           @annotation.tailrec
           def loop(shrinks: Int, x: (A, Result, Rand)): (Rand, Result) =
             first(shrink(x._1).map(rand.next -> _), shrinks) match {
