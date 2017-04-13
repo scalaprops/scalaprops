@@ -10,7 +10,7 @@ object align {
     forAll(F.alignLaw.collapse[A] _)
 
   def laws[F[_]](implicit F: Align[F], af: Gen[F[Int]],
-                 e: Equal[F[Int]], ef: Equal[F[Int \&/ Int]]) = properties(ScalazLaw.align)(
+                 ef: Equal[F[Int \&/ Int]]) = properties(ScalazLaw.align)(
     ScalazLaw.alignCollapse -> collapse[F, Int]
   )
 

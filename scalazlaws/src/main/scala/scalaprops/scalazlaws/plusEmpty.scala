@@ -13,7 +13,7 @@ object plusEmpty {
   def rightPlusIdentity[F[_], X](implicit f: PlusEmpty[F], afx: Gen[F[X]], ef: Equal[F[X]]) =
     forAll(f.plusEmptyLaw.rightPlusIdentity[X] _)
 
-  def laws[F[_]](implicit F: PlusEmpty[F], afx: Gen[F[Int]], af: Gen[Int => Int], ef: Equal[F[Int]]) =
+  def laws[F[_]](implicit F: PlusEmpty[F], afx: Gen[F[Int]], ef: Equal[F[Int]]) =
     properties(ScalazLaw.plusEmpty) (
       ScalazLaw.plusEmptyLeftIdentity -> leftPlusIdentity[F, Int],
       ScalazLaw.plusEmptyRightIdentity -> rightPlusIdentity[F, Int]

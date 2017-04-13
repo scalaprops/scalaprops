@@ -77,7 +77,7 @@ object Shrink {
       as match {
         case INil() =>
           Stream.Empty
-        case ICons(a, INil()) =>
+        case ICons(_, INil()) =>
           Stream.cons(INil(), Stream.Empty)
         case _ =>
           val n1 = n / 2

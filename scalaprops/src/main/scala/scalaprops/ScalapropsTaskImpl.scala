@@ -94,9 +94,9 @@ final class ScalapropsTaskImpl(
                 case e: CheckResult.PropException =>
                   log.trace(e.exception)
                   event(Status.Error, duration, \&/.Both(e.exception, r))
-                case e: CheckResult.Timeout =>
+                case _: CheckResult.Timeout =>
                   event(Status.Error, duration, \&/.That(r))
-                case e: CheckResult.Ignored =>
+                case _: CheckResult.Ignored =>
                   event(Status.Ignored, duration, \&/.That(r))
               }
             } catch {

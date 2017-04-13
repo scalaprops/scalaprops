@@ -11,7 +11,7 @@ object cobind {
                                             f: Gen[F[A] => B], g: Gen[F[B] => C], h: Gen[F[C] => D]): Property =
     forAll(F.cobindLaw.cobindAssociative[A, B, C, D] _)
 
-  def laws[F[_]](implicit a: Cobind[F], am: Gen[F[Int]], e: Equal[F[Int]], g: Gen[F[Int] => Int]): Properties[ScalazLaw] =
+  def laws[F[_]](implicit a: Cobind[F], am: Gen[F[Int]], g: Gen[F[Int] => Int]): Properties[ScalazLaw] =
     Properties.fromChecks(ScalazLaw.cobind)(
       ScalazLaw.cobindAssociative -> Check(
         cobindAssociative[F, Int, Int, Int, Int], Param.maxSize(10)

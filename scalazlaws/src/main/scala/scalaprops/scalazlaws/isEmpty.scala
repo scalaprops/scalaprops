@@ -12,7 +12,7 @@ object isEmpty {
   def emptyPlusIdentity[F[_], X](implicit f: IsEmpty[F], afx: Gen[F[X]]) =
     forAll(f.isEmptyLaw.emptyPlusIdentity[X] _)
 
-  def laws[F[_]](implicit F: IsEmpty[F], afx: Gen[F[Int]], ef: Equal[F[Int]]) =
+  def laws[F[_]](implicit F: IsEmpty[F], afx: Gen[F[Int]]) =
     Properties.properties(ScalazLaw.isEmpty) (
       ScalazLaw.isEmptyEmptyIsEmpty -> emptyIsEmpty[F, Int],
       ScalazLaw.isEmptyEmptyPlusIdentity-> emptyPlusIdentity[F, Int]

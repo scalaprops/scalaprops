@@ -20,7 +20,7 @@ object Arguments {
     def arg(key: String): Seq[String] =
       args.withFilter(_.startsWith(keyPrefix + key + "=")).flatMap{
         _.split('=').toList match{
-          case k :: v => v
+          case _ :: v => v
           case _ => Nil
         }
       }
