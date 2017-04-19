@@ -23,13 +23,13 @@ object Common {
     Nil
   )
 
-  private[this] val Scala211 = "2.11.8"
+  private[this] val Scala211 = "2.11.11"
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     resolvers += Opts.resolver.sonatypeReleases,
     scalaVersion := Scala211,
-    crossScalaVersions := "2.12.1" :: Scala211 :: "2.10.6" :: Nil,
+    crossScalaVersions := "2.12.2" :: Scala211 :: "2.10.6" :: Nil,
     organization := "com.github.scalaprops",
     description := "property based testing library for Scala",
     fullResolvers ~= {_.filterNot(_.name == "jcenter")},
