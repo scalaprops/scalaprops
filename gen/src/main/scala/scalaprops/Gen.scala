@@ -447,6 +447,18 @@ object Gen extends GenInstances0 {
   val genShortSized: Gen[Short] =
     genIntSized.map(Int2Short)
 
+  val naturalByte: Gen[Byte] =
+    Gen.choose(0, Byte.MaxValue).map(Int2Byte)
+
+  val naturalShort: Gen[Short] =
+    Gen.choose(0, Short.MaxValue).map(Int2Short)
+
+  val naturalInt: Gen[Int] =
+    Gen.choose(0, Int.MaxValue)
+
+  val naturalLong: Gen[Long] =
+    Gen.chooseLong(0, Long.MaxValue)
+
   val positiveByte: Gen[Byte] =
     Choose[Int].withBoundaries(1, Byte.MaxValue).map(Int2Byte)
 
