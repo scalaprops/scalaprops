@@ -42,7 +42,6 @@ object build {
       commonSettings,
       scalazVersion := "7.2.12",
       scalaJSStage in Test := FastOptStage,
-      jsEnv := NodeJSEnv().value,
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
           "Gen", "Cogen", "Rand"
