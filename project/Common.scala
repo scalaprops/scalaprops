@@ -29,7 +29,7 @@ object Common {
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     resolvers += Opts.resolver.sonatypeReleases,
     scalaVersion := Scala211,
-    crossScalaVersions := "2.12.2" :: Scala211 :: "2.10.6" :: Nil,
+    crossScalaVersions := "2.12.2" :: Scala211 :: "2.10.6" :: "2.13.0-M1" :: Nil,
     organization := "com.github.scalaprops",
     description := "property based testing library for Scala",
     fullResolvers ~= {_.filterNot(_.name == "jcenter")},
