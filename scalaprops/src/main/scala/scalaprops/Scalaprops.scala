@@ -2,10 +2,10 @@ package scalaprops
 
 import java.lang.reflect.Method
 import sbt.testing.Logger
-import scala.scalajs.js.annotation.JSExportDescendentObjects
+import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 import scalaz._
 
-@JSExportDescendentObjects
+@EnableReflectiveInstantiation
 trait Scalaprops {
 
   def param: Param = Param.withCurrentTimeSeed()
