@@ -17,7 +17,6 @@ object KleisliTest extends Scalaprops {
     F: Equal[F[Int]],
     E1: Equal[F[(Int, Int)]],
     E2: Equal[F[(Int, (Int, Int))]],
-    E3: Equal[F[((Int, Int), Int)]],
     G1: Gen[Kleisli[F, Int, Int]],
     G2: Gen[Kleisli[F, Int, Int => Int]]
   ) = {

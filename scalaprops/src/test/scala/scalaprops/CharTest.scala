@@ -20,10 +20,8 @@ object CharTest extends Scalaprops {
 
   private[this] def check[A](expect: Seq[Char])(implicit
     A: Gen[Char @@ A],
-    C: Cogen[Char @@ A],
     M: Monoid[Char @@ A],
-    E: Enum[Char @@ A],
-    S: Show[Char @@ A]
+    E: Enum[Char @@ A]
   ) = {
     val x = Properties.list(
       checkValues[A](expect).toProperties("values"),
