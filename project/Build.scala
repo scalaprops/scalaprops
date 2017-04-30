@@ -82,6 +82,16 @@ object build {
   ).dependsOn(core)
 
   lazy val scalaprops = module(scalapropsName).settings(
+    scalacOptions := {
+      // suppress some warnings if Scala 2.12
+      // see https://github.com/scala/scala/pull/5402 and "scala -Ywarn-unused:help"
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, v)) if v >= 12 =>
+          scalacOptions.value.filterNot(_ == "-Ywarn-unused") :+ "-Ywarn-unused:-params,-patvars,_"
+        case _ =>
+          scalacOptions.value
+      }
+    },
     name := scalapropsName
   ).dependsOn(
     core, scalazlaws % "test"
