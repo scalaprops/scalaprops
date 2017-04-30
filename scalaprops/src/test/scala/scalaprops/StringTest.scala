@@ -9,8 +9,6 @@ object StringTest extends Scalaprops {
   private[this] def test[A](values: Seq[Char])(implicit
     M: Monoid[String @@ A],
     G: Gen[String @@ A],
-    C: Cogen[String @@ A],
-    S: Show[String @@ A],
     O: Order[String @@ A],
     I: IsEmpty[({type l[_] = String @@ A})#l]
   ) = {

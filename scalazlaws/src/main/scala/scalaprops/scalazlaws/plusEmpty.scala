@@ -19,7 +19,7 @@ object plusEmpty {
       ScalazLaw.plusEmptyRightIdentity -> rightPlusIdentity[F, Int]
     )
 
-  def all[F[_]](implicit F: PlusEmpty[F], afx: Gen[F[Int]], af: Gen[Int => Int], ef: Equal[F[Int]]) = {
+  def all[F[_]](implicit F: PlusEmpty[F], afx: Gen[F[Int]], ef: Equal[F[Int]]) = {
     implicit val m = F.monoid[Int]
     Properties.fromProps(ScalazLaw.plusEmptyAll, plusEmpty.laws[F], plus.laws[F], monoid.laws[F[Int]])
   }
