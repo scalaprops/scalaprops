@@ -21,6 +21,16 @@ lazy val scalazlaws = module("scalazlaws").settings(
 
 lazy val scalaprops = module(scalapropsName).settings(
   name := scalapropsName,
+  scalacOptions := {
+    // suppress some warnings if Scala 2.12
+    // see https://github.com/scala/scala/pull/5402 and "scala -Ywarn-unused:help"
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v >= 12 =>
+        scalacOptions.value.filterNot(_ == "-Ywarn-unused") :+ "-Ywarn-unused:-params,-patvars,_"
+      case _ =>
+        scalacOptions.value
+    }
+  },
   libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
 ).dependsOn(core, scalazlaws % "test")
 
