@@ -1,4 +1,3 @@
-import sbtunidoc.Plugin._
 import build._
 import Common._
 import UnidocKeys._
