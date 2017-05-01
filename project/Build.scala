@@ -1,5 +1,4 @@
 import sbt._, Keys._
-import sbtunidoc.Plugin._
 import Common._
 import org.scalajs.sbtplugin.cross.{CrossType, CrossProject}
 import org.scalajs.sbtplugin.ScalaJSPlugin
