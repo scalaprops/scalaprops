@@ -23,7 +23,7 @@ object Common {
     Nil
   )
 
-  private[this] val Scala211 = "2.11.8"
+  private[this] val Scala211 = "2.11.11"
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     scalaVersion := Scala211,
