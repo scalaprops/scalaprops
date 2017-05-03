@@ -42,7 +42,7 @@ object CofreeTest extends Scalaprops {
     scalazlaws.apply.all[G]
   }
 
-  private[this] val structTreeToCofreeIList: StrictTree ~> CofreeIList = {
+  private[this] val strictTreeToCofreeIList: StrictTree ~> CofreeIList = {
     new (StrictTree ~> CofreeIList) {
       def apply[A](tree: StrictTree[A]) =
         Cofree(tree.rootLabel, IList.fromFoldable(tree.subForest).map(apply))
@@ -56,7 +56,7 @@ object CofreeTest extends Scalaprops {
 
   val zipIList = {
     implicit def gen[A: Gen]: Gen[CofreeZip[IList, A]] =
-      Tags.Zip.subst(Gen[StrictTree[A]].map(structTreeToCofreeIList.apply))
+      Tags.Zip.subst(Gen[StrictTree[A]].map(strictTreeToCofreeIList.apply))
 
     cofreeZipTest[IList]
   }
