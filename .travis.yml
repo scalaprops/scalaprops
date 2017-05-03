@@ -24,7 +24,7 @@ script:
   - git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
   - git show --oneline --check
   - wget https://raw.githubusercontent.com/paulp/sbt-extras/b9c8cb27/sbt && chmod +x ./sbt
-  - ./sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile scalapropsTestNames test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) && "${TRAVIS_BRANCH}" == "master" ]]; then echo "publish"; fi)
+  - ./sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile scalapropsTestNames test mimaReportBinaryIssues $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) && "${TRAVIS_BRANCH}" == "master" ]]; then echo "publish"; fi)
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
   - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) ]]; then rm -rf $HOME/.ivy2/cache ; fi
@@ -57,5 +57,5 @@ matrix:
       - jar tf $HOME/.sbt/0.13/java9-rt-ext/rt.jar | grep java/lang/Object
       - cd ..
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/9ade5fa54914ca8aded44105bf4b9a60966f3ccd/sbt && chmod +x ./sbt
-      - ./sbt -Dscala.ext.dirs=$HOME/.sbt/0.13/java9-rt-ext ++$TRAVIS_SCALA_VERSION test
+      - ./sbt -Dscala.ext.dirs=$HOME/.sbt/0.13/java9-rt-ext ++$TRAVIS_SCALA_VERSION test mimaReportBinaryIssues
       - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) ]]; then rm -rf $HOME/.ivy2/cache ; fi

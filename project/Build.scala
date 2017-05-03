@@ -1,5 +1,6 @@
 import sbt._, Keys._
 import Common._
+import com.typesafe.tools.mima.plugin.MimaKeys.mimaPreviousArtifacts
 
 object build {
 
@@ -23,6 +24,16 @@ object build {
   def module(id: String) =
     Project(id, file(id)).settings(commonSettings).settings(
       scalazVersion := "7.1.13",
+      mimaPreviousArtifacts := {
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, v)) if v <= 12 =>
+            Set(
+              organization.value %% name.value % "0.1.18"
+            )
+          case _ =>
+            Set.empty
+        }
+      },
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
           "Gen", "Cogen", "Rand"
