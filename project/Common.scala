@@ -27,7 +27,7 @@ object Common {
 
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     scalaVersion := Scala211,
-    crossScalaVersions := "2.12.2" :: Scala211 :: "2.10.6" :: Nil,
+    crossScalaVersions := "2.13.0-M1" :: "2.12.2" :: Scala211 :: "2.10.6" :: Nil,
     organization := "com.github.scalaprops",
     description := "property based testing library for Scala",
     fullResolvers ~= {_.filterNot(_.name == "jcenter")},
