@@ -12,4 +12,5 @@ object SetTest extends Scalaprops {
       scalazlaws.foldable.all[Set]
     )
 
+  val test2 = scalazlaws.band.all[Set[Int]]
 }
