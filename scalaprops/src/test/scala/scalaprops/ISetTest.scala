@@ -12,8 +12,10 @@ object ISetTest extends Scalaprops {
   val testOrder =
     scalazlaws.order.all[ISet[Int]]
 
-  val testMonoid =
-    scalazlaws.monoid.all[ISet[Int]]
+  val test = Properties.list(
+    scalazlaws.monoid.all[ISet[Int]],
+    scalazlaws.band.all[ISet[Int]]
+  )
 
   val filter = forAll { (a: ISet[Int], p: Int => Boolean) =>
     (a filter p).toList == a.toList.filter(p)

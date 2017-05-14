@@ -16,7 +16,10 @@ object IMapTest extends Scalaprops {
 
   val bifoldable = scalazlaws.bifoldable.all[==>>]
   val order = scalazlaws.order.all[Int ==>> Int]
-  val monoid = scalazlaws.monoid.all[Int ==>> Int]
+  val laws2 = Properties.list(
+    scalazlaws.monoid.all[Int ==>> Int],
+    scalazlaws.band.all[Int ==>> ISet[Int]]
+  )
 
   val conjunction = {
     implicit def imapConjunctionGen[A: Gen: Order, B: Gen]: Gen[((A ==>> B) @@ Tags.Conjunction)] =

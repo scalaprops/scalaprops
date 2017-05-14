@@ -57,6 +57,10 @@ object ScalazLaw {
   val monoidLeftIdentity = law0(monoid, "left identity")
   val monoidRightIdentity = law0(monoid, "right identity")
 
+  val band = law("band")
+  val bandAll = all(band)
+  val bandIdempotency = law0(band, "idempotency")
+
 
   val invariantFunctor = law("invariantFunctor")
   val invariantFunctorIdentity = law0(invariantFunctor, "identity")

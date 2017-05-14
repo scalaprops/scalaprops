@@ -13,4 +13,9 @@ object MaybeTest extends Scalaprops {
     scalazlaws.align.all[Maybe],
     scalazlaws.zip.all[Maybe]
   )
+
+  val test2 = Properties.list(
+    scalazlaws.monoid.all[Maybe[Int]],
+    scalazlaws.band.all[Maybe[ISet[Int]]]
+  )
 }
