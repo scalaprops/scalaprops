@@ -25,6 +25,17 @@ object Common {
 
   private[this] val Scala211 = "2.11.11"
 
+  def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
+    pomPostProcess := { node =>
+      import scala.xml._
+      import scala.xml.transform._
+      val rule = new RewriteRule {
+        override def transform(n: Node) =
+          if (filter(n)) NodeSeq.Empty else n
+      }
+      new RuleTransformer(rule).transform(node)(0)
+    }
+
   val commonSettings = scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     resolvers += Opts.resolver.sonatypeReleases,
@@ -36,15 +47,8 @@ object Common {
     homepage := Some(url("https://github.com/scalaprops/scalaprops")),
     licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
     commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
-    pomPostProcess := { node =>
-      import scala.xml._
-      import scala.xml.transform._
-      def stripIf(f: Node => Boolean) = new RewriteRule {
-        override def transform(n: Node) =
-          if (f(n)) NodeSeq.Empty else n
-      }
-      val stripTestScope = stripIf { n => n.label == "dependency" && (n \ "scope").text == "test" }
-      new RuleTransformer(stripTestScope).transform(node)(0)
+    stripPom { node =>
+      node.label == "dependency" && (node \ "scope").text == "test"
     },
     scalacOptions in (Compile, doc) ++= {
       val tag = tagOrHash.value
