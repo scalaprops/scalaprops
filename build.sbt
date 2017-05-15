@@ -40,8 +40,10 @@ val root = Project("root", file(".")).settings(
     jsProjects.foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
   },
   packagedArtifacts := Map.empty,
-  artifacts ++= Classpaths.artifactDefs(Seq(packageDoc in Compile)).value,
-  packagedArtifacts ++= Classpaths.packaged(Seq(packageDoc in Compile)).value,
+  artifacts ++= Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
+  packagedArtifacts ++= Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
+  description := "scalaprops unidoc",
+  Common.stripPom { _.label == "dependencies" },
   Sxr.settings1,
   Defaults.packageTaskSettings(
     packageDoc in Compile, (UnidocKeys.unidoc in Compile).map{_.flatMap(Path.allSubpaths)}
