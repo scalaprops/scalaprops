@@ -39,7 +39,7 @@ object build {
   private[this] def module(id: String) =
     CrossProject(id, file(id), CustomCrossType).settings(
       commonSettings,
-      scalazVersion := "7.2.12",
+      scalazVersion := "7.2.13",
       scalaJSStage in Test := FastOptStage,
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
