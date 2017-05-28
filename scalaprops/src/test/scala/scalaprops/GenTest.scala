@@ -8,7 +8,7 @@ import scalaz.std.string._
 
 object GenTest extends Scalaprops {
 
-  private implicit def genGen[A](implicit A: Gen[A]): Gen[Gen[A]] = {
+  implicit def genGen[A](implicit A: Gen[A]): Gen[Gen[A]] = {
     val values = Gen[List[A]].sample(size = 100, seed = Random.nextLong())
     Gen.oneOf(
       Gen.value(A),
