@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/scalaprops/scalaprops.svg?branch=master)](https://travis-ci.org/scalaprops/scalaprops)
 [![Scala.js](https://www.scala-js.org/assets/badges/scalajs-0.6.14.svg)](https://www.scala-js.org)
-[![scaladoc](http://javadoc.io/badge/com.github.scalaprops/scalaprops-all_2.12.svg?label=scaladoc)](http://javadoc.io/doc/com.github.scalaprops/scalaprops-all_2.12)
+[![scaladoc](http://javadoc-badge.appspot.com/com.github.scalaprops/scalaprops-all_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/com.github.scalaprops/scalaprops-all_2.12/scalaprops/index.html?javadocio=true)
 
 property based testing library for Scala
 
