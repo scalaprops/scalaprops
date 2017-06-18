@@ -1,6 +1,14 @@
 import UnidocKeys._
 import build._
 
+lazy val notPublish = Seq(
+  publishArtifact := false,
+  publish := {},
+  publishLocal := {},
+  PgpKeys.publishSigned := {},
+  PgpKeys.publishLocalSigned := {}
+)
+
 lazy val jvmProjects = Seq[ProjectReference](
   genJVM, coreJVM, scalapropsJVM, scalazlawsJVM
 )
@@ -11,19 +19,27 @@ lazy val jsProjects = Seq[ProjectReference](
 
 lazy val genJS = gen.js
 lazy val genJVM = gen.jvm
-lazy val genRoot = project.aggregate(genJS, genJVM)
+lazy val genRoot = project.aggregate(genJS, genJVM).settings(
+  notPublish
+)
 
 lazy val coreJS = core.js
 lazy val coreJVM = core.jvm
-lazy val coreRoot = project.aggregate(coreJS, coreJVM)
+lazy val coreRoot = project.aggregate(coreJS, coreJVM).settings(
+  notPublish
+)
 
 lazy val scalazlawsJS = scalazlaws.js
 lazy val scalazlawsJVM = scalazlaws.jvm
-lazy val scalazlawsRoot = project.aggregate(scalazlawsJS, scalazlawsJVM)
+lazy val scalazlawsRoot = project.aggregate(scalazlawsJS, scalazlawsJVM).settings(
+  notPublish
+)
 
 lazy val scalapropsJS = scalaprops.js
 lazy val scalapropsJVM = scalaprops.jvm
-lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM)
+lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM).settings(
+  notPublish
+)
 
 val root = Project("root", file(".")).settings(
   Common.commonSettings ++
@@ -53,5 +69,9 @@ val root = Project("root", file(".")).settings(
   jvmProjects ++ jsProjects : _*
 )
 
-lazy val rootJS = project.aggregate(jsProjects: _*)
-lazy val rootJVM = project.aggregate(jvmProjects: _*)
+lazy val rootJS = project.aggregate(jsProjects: _*).settings(
+  notPublish
+)
+lazy val rootJVM = project.aggregate(jvmProjects: _*).settings(
+  notPublish
+)
