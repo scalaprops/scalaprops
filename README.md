@@ -19,9 +19,15 @@ property based testing library for Scala
  - scalaprops does not use `scala.util.Random` because `scala.util.Random` is mutable
  - default implementation is [Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html) (JVM) or [Tiny Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/) (Scala.js)
 - [Scala.js](https://www.scala-js.org/) support
+- [scala-native](http://scala-native.org) support. see <https://github.com/scalaprops/scalaprops-native-example>
 - [deterministic testing](#deterministic-testing)
 
 ### latest stable version
+
+[please use sbt plugin because there are some convenient features.](https://github.com/scalaprops/sbt-scalaprops)
+
+
+<details><summary>setup without sbt plugin</summary>
 
 ```scala
 testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
@@ -35,13 +41,16 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.5.0" % "test
 libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.5.0" % "test"
 ```
 
-or you can use [sbt plugin](https://github.com/scalaprops/sbt-scalaprops)
+</details>
+
 
 - [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.0/scalaprops-all_2.11-0.5.0-javadoc.jar/!/index.html)
 - [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.0/scalaprops-all_2.11-0.5.0-sxr.jar/!/index.html)
 
 
 ### snapshot version
+
+<details><summary>setup without sbt plugin</summary>
 
 ```scala
 resolvers += Opts.resolver.sonatypeSnapshots
@@ -57,6 +66,7 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.5.1-SNAPSHOT
 libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.5.1-SNAPSHOT" % "test"
 ```
 
+</details>
 
 - [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.1-SNAPSHOT/scalaprops-all_2.11-0.5.1-SNAPSHOT-javadoc.jar/!/index.html)
 - [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.1-SNAPSHOT/scalaprops-all_2.11-0.5.1-SNAPSHOT-sxr.jar/!/index.html)
