@@ -1,8 +1,12 @@
 import sbt._, Keys._
 import Common._
-import org.scalajs.sbtplugin.cross.{CrossType, CrossProject}
-import org.scalajs.sbtplugin.ScalaJSPlugin
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+
+import scalanative.sbtplugin.ScalaNativePlugin.autoImport._
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
+import sbtcrossproject.CrossPlugin.autoImport._
+import sbtcrossproject.CrossProject
+import sbtcrossproject.CrossProject._
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.{scalaJSOptimizerOptions, scalaJSVersion}
 
 object build {
 
@@ -24,10 +28,18 @@ object build {
   )
 
   // avoid move files
-  // https://github.com/scala-js/scala-js/blob/v0.6.8/sbt-plugin/src/main/scala/scala/scalajs/sbtplugin/cross/CrossProject.scala#L193-L206
-  object CustomCrossType extends CrossType {
+  object CustomCrossType extends sbtcrossproject.CrossType {
     override def projectDir(crossBase: File, projectType: String) =
       crossBase / projectType
+
+    override def projectDir(crossBase: File, projectType: sbtcrossproject.Platform) = {
+      val dir = projectType match {
+        case JVMPlatform => "jvm"
+        case JSPlatform => "js"
+        case NativePlatform => "native"
+       }
+       crossBase / dir
+    }
 
     def shared(projectBase: File, conf: String) =
       projectBase.getParentFile / "src" / conf / "scala"
@@ -37,10 +49,9 @@ object build {
   }
 
   private[this] def module(id: String) =
-    CrossProject(id, file(id), CustomCrossType).settings(
+    CrossProject(id, file(id), CustomCrossType, JSPlatform, JVMPlatform, NativePlatform).settings(
       commonSettings,
       scalazVersion := "7.2.13",
-      scalaJSStage in Test := FastOptStage,
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
           "Gen", "Cogen", "Rand"
@@ -68,6 +79,10 @@ object build {
     name := genName,
     description := "pure functional random value generator",
     libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value
+  ).platformsSettings(JSPlatform, NativePlatform)(
+    unmanagedSourceDirectories in Compile += {
+      baseDirectory.value.getParentFile / "js_native/src/main/scala/"
+    }
   ).jvmSettings(
     Generator.settings
   )
@@ -95,10 +110,13 @@ object build {
   ).dependsOn(
     core, scalazlaws % "test"
   ).jvmSettings(
-    libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
+    libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
+  ).platformsSettings(JVMPlatform, NativePlatform)(
     libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   ).jsSettings(
     libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion
+  ).nativeSettings(
+    libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion
   )
 
 }

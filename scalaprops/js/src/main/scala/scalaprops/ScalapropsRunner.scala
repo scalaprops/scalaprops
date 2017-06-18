@@ -51,12 +51,12 @@ object ScalapropsRunner {
 
     val tests = only match {
       case Some(names) =>
-        val set = Foldable[NonEmptyList].toSet(names)
-        val actualTests: Set[String] = tests0.map(_.id.toString)(collection.breakOut)
-        set.filterNot(actualTests).foreach{ typo =>
-          logger.warn(s"""'${obj.toString.dropRight(1)}.$typo' does not exists""")
-        }
-        tests0.filter(p => set(p.id.toString))
+        ScalapropsTaskImpl.filterTests(
+          objName = obj.toString.dropRight(1),
+          names = names,
+          tests = tests0,
+          logger = logger
+        )
       case None =>
         tests0
     }

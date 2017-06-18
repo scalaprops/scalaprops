@@ -10,8 +10,13 @@ final case class Arguments(
 
 object Arguments {
 
+  private[this] val keyPrefix = "--"
+
+  def objects(args: List[String]): Set[String] = {
+    args.takeWhile(!_.startsWith(keyPrefix)).toSet
+  }
+
   def parse(args: List[String]): Arguments = {
-    val keyPrefix = "--"
 
     val only = scalaz.std.list.toNel(
       args.dropWhile((keyPrefix + "only") != _).drop(1).takeWhile(arg => !arg.startsWith(keyPrefix))

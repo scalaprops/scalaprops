@@ -17,27 +17,37 @@ lazy val jsProjects = Seq[ProjectReference](
   genJS, coreJS, scalapropsJS, scalazlawsJS
 )
 
+lazy val nativeProjects = Seq[ProjectReference](
+  genNative, coreNative, scalapropsNative, scalazlawsNative
+)
+
 lazy val genJS = gen.js
 lazy val genJVM = gen.jvm
-lazy val genRoot = project.aggregate(genJS, genJVM).settings(
+lazy val genNative = gen.native
+lazy val genRoot = project.aggregate(genJS, genJVM, genNative).settings(
   notPublish
 )
 
 lazy val coreJS = core.js
 lazy val coreJVM = core.jvm
-lazy val coreRoot = project.aggregate(coreJS, coreJVM).settings(
+lazy val coreNative = core.native
+lazy val coreRoot = project.aggregate(coreJS, coreJVM, genNative).settings(
   notPublish
 )
 
 lazy val scalazlawsJS = scalazlaws.js
 lazy val scalazlawsJVM = scalazlaws.jvm
-lazy val scalazlawsRoot = project.aggregate(scalazlawsJS, scalazlawsJVM).settings(
+lazy val scalazlawsNative = scalazlaws.native
+lazy val scalazlawsRoot = project.aggregate(scalazlawsJS, scalazlawsJVM, scalazlawsNative).settings(
   notPublish
 )
 
 lazy val scalapropsJS = scalaprops.js
 lazy val scalapropsJVM = scalaprops.jvm
-lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM).settings(
+lazy val scalapropsNative = scalaprops.native.settings(
+  scalapropsNativeSettings
+)
+lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM, scalapropsNative).settings(
   notPublish
 )
 
@@ -53,7 +63,7 @@ val root = Project("root", file(".")).settings(
   name := allName,
   artifacts := Nil,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := {
-    jsProjects.foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
+    (jsProjects ++ nativeProjects).foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
   },
   packagedArtifacts := Map.empty,
   artifacts ++= Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
@@ -66,12 +76,15 @@ val root = Project("root", file(".")).settings(
   ),
   Sxr.settings2
 ).aggregate(
-  jvmProjects ++ jsProjects : _*
+  jvmProjects ++ jsProjects : _* // ignore native
 )
 
 lazy val rootJS = project.aggregate(jsProjects: _*).settings(
   notPublish
 )
 lazy val rootJVM = project.aggregate(jvmProjects: _*).settings(
+  notPublish
+)
+lazy val rootNative = project.aggregate(nativeProjects: _*).settings(
   notPublish
 )

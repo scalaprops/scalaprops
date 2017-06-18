@@ -25,6 +25,8 @@ object Common {
 
   private[this] val Scala211 = "2.11.11"
 
+  private[this] val SetScala211 = releaseStepCommand("++" + Scala211)
+
   def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
     pomPostProcess := { node =>
       import scala.xml._
@@ -92,6 +94,8 @@ object Common {
       inquireVersions,
       runClean,
       runTest,
+      SetScala211,
+      releaseStepCommand("scalapropsNative/test"),
       setReleaseVersion,
       commitReleaseVersion,
       UpdateReadme.updateReadmeProcess,
@@ -103,6 +107,8 @@ object Common {
         },
         enableCrossBuild = true
       ),
+      SetScala211,
+      releaseStepCommand("rootNative/publishSigned"),
       setNextVersion,
       commitNextVersion,
       ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
