@@ -24,6 +24,9 @@ final case class Properties[A] private (props: Tree[(A, Maybe[Check])]) {
   def mapId[B](f: A => B): Properties[B] =
     map((i, m) => (f(i), m))
 
+  def widen[B](implicit e: A <:< B): Properties[B] =
+    mapId[B](e)
+
   def mapRootId(f: A => A): Properties[A] =
     Properties(Tree.Node(f(props.rootLabel._1) -> props.rootLabel._2, props.subForest))
 
