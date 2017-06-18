@@ -95,7 +95,7 @@ object RandTest extends Scalaprops{
       n <- boundaries(y)
       max = math.max(m, n)
       min = math.min(m, n)
-      size = 3
+      size = 2
     } {
       Gen.chooseLong(m, n).samples(seed = seed, listSize = size).foreach{ a =>
         assert(min <= a && a <= max, s"$seed $a $min $max")
@@ -108,5 +108,5 @@ object RandTest extends Scalaprops{
       }
     }
     true
-  }.toProperties((), Param.minSuccessful(3))
+  }.toProperties((), Param.minSuccessful(2))
 }
