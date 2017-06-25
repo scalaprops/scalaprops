@@ -10,7 +10,7 @@ object TheseTest extends Scalaprops {
   val test0 =
     Properties.list(
       scalazlaws.order.all[Int \&/ Int],
-      scalazlaws.semigroup.all[Int \&/ Int]
+      scalazlaws.band.all[ISet[Int] \&/ ISet[Int]]
     )
 
   // TODO bindRec.handleManyBinds
