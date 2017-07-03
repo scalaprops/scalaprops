@@ -25,6 +25,7 @@ lazy val genJS = gen.js
 lazy val genJVM = gen.jvm
 lazy val genNative = gen.native
 lazy val genRoot = project.aggregate(genJS, genJVM, genNative).settings(
+  Common.commonSettings,
   notPublish
 )
 
@@ -32,6 +33,7 @@ lazy val coreJS = core.js
 lazy val coreJVM = core.jvm
 lazy val coreNative = core.native
 lazy val coreRoot = project.aggregate(coreJS, coreJVM, genNative).settings(
+  Common.commonSettings,
   notPublish
 )
 
@@ -39,6 +41,7 @@ lazy val scalazlawsJS = scalazlaws.js
 lazy val scalazlawsJVM = scalazlaws.jvm
 lazy val scalazlawsNative = scalazlaws.native
 lazy val scalazlawsRoot = project.aggregate(scalazlawsJS, scalazlawsJVM, scalazlawsNative).settings(
+  Common.commonSettings,
   notPublish
 )
 
@@ -48,6 +51,7 @@ lazy val scalapropsNative = scalaprops.native.settings(
   scalapropsNativeSettings
 )
 lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM, scalapropsNative).settings(
+  Common.commonSettings,
   notPublish
 )
 
@@ -80,11 +84,14 @@ val root = Project("root", file(".")).settings(
 )
 
 lazy val rootJS = project.aggregate(jsProjects: _*).settings(
+  Common.commonSettings,
   notPublish
 )
 lazy val rootJVM = project.aggregate(jvmProjects: _*).settings(
+  Common.commonSettings,
   notPublish
 )
 lazy val rootNative = project.aggregate(nativeProjects: _*).settings(
+  Common.commonSettings,
   notPublish
 )
