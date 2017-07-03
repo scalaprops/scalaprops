@@ -6,7 +6,7 @@ import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _,
 import sbtcrossproject.CrossPlugin.autoImport._
 import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossProject._
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.{scalaJSOptimizerOptions, scalaJSVersion}
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.scalaJSVersion
 
 object build {
 
@@ -58,16 +58,6 @@ object build {
         ).map(a => s"val $a = scalaprops.$a").mkString(";") // for tab completion
       }
     ).jsSettings(
-      scalaJSOptimizerOptions ~= { options =>
-        // https://github.com/scala-js/scala-js/issues/2798
-        try {
-          scala.util.Properties.isJavaAtLeast("1.8")
-          options
-        } catch {
-          case _: NumberFormatException =>
-            options.withParallel(false)
-        }
-      },
       scalacOptions += {
         val a = (baseDirectory in LocalRootProject).value.toURI.toString
         val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + Common.tagOrHash.value
