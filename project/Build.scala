@@ -28,7 +28,7 @@ object build {
         CrossVersion.partialVersion(scalaVersion.value) match {
           case Some((2, v)) if v <= 12 =>
             Set(
-              organization.value %% name.value % "0.1.18"
+              organization.value %% name.value % "0.1.19"
             )
           case _ =>
             Set.empty
