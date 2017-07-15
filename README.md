@@ -44,8 +44,8 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.5
 </details>
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.0/scalaprops-all_2.11-0.5.0-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.0/scalaprops-all_2.11-0.5.0-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.0/scalaprops-all_2.12-0.5.0-javadoc.jar/!/scalaprops/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.0/scalaprops-all_2.12-0.5.0-sxr.jar/!/index.html)
 
 
 ### snapshot version
@@ -68,8 +68,8 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.5
 
 </details>
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.1-SNAPSHOT/scalaprops-all_2.11-0.5.1-SNAPSHOT-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.11/0.5.1-SNAPSHOT/scalaprops-all_2.11-0.5.1-SNAPSHOT-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.1-SNAPSHOT/scalaprops-all_2.12-0.5.1-SNAPSHOT-javadoc.jar/!/scalaprops/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.1-SNAPSHOT/scalaprops-all_2.12-0.5.1-SNAPSHOT-sxr.jar/!/index.html)
 
 
 ![screencast](screencast.gif)

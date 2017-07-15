@@ -8,7 +8,7 @@ object UpdateReadme {
 
   val updateReadmeTask = { state: State =>
     val extracted = Project.extract(state)
-    val scalaV = extracted get scalaBinaryVersion
+    val scalaV = "2.12"
     val v = extracted get version
     val org =  extracted get organization
     val modules = build.modules
@@ -23,7 +23,7 @@ object UpdateReadme {
       }else if(line.contains(sonatypeURL) && matchReleaseOrSnapshot){
         val n = extracted get (name in LocalRootProject)
         val sxrIndexHtml = "-sxr.jar/!/index.html"
-        val javadocIndexHtml = "-javadoc.jar/!/index.html"
+        val javadocIndexHtml = "-javadoc.jar/!/scalaprops/index.html"
         val baseURL = s"${sonatypeURL}${snapshotOrRelease}/archive/${org.replace('.', '/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}"
         if(line.contains(javadocIndexHtml)){
           s"- [API Documentation](${baseURL}${javadocIndexHtml})"
