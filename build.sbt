@@ -1,4 +1,3 @@
-import UnidocKeys._
 import build._
 
 lazy val notPublish = Seq(
@@ -56,13 +55,15 @@ lazy val scalapropsRoot = project.aggregate(scalapropsJS, scalapropsJVM, scalapr
 )
 
 val root = Project("root", file(".")).settings(
-  Common.commonSettings ++
-  unidocSettings ++ (
+  Common.commonSettings,
+  (
     coreJVM ::
     scalapropsJVM ::
     scalazlawsJVM ::
     Nil
   ).map(p => libraryDependencies ++= (libraryDependencies in p).value)
+).enablePlugins(
+  ScalaUnidocPlugin
 ).settings(
   name := allName,
   artifacts := Nil,
@@ -76,7 +77,7 @@ val root = Project("root", file(".")).settings(
   Common.stripPom { _.label == "dependencies" },
   Sxr.settings1,
   Defaults.packageTaskSettings(
-    packageDoc in Compile, (UnidocKeys.unidoc in Compile).map{_.flatMap(Path.allSubpaths)}
+    packageDoc in Compile, (unidoc in Compile).map{_.flatMap(Path.allSubpaths)}
   ),
   Sxr.settings2
 ).aggregate(

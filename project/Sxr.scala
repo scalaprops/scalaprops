@@ -1,5 +1,6 @@
 import sbt._, Keys._
-import sbtunidoc.Plugin._
+import sbtunidoc.BaseUnidocPlugin.autoImport.unidoc
+import sbtunidoc.ScalaUnidocPlugin.autoImport.ScalaUnidoc
 
 object Sxr {
 
@@ -34,10 +35,10 @@ object Sxr {
       }
     },
     ifSxrAvailable(
-      scalacOptions in UnidocKeys.unidoc,
+      scalacOptions in unidoc,
       Def.task {
-        (scalacOptions in UnidocKeys.unidoc).value ++ Seq(
-          "-P:sxr:base-directory:" + (sources in UnidocKeys.unidoc in ScalaUnidoc).value.mkString(":")
+        (scalacOptions in unidoc).value ++ Seq(
+          "-P:sxr:base-directory:" + (sources in unidoc in ScalaUnidoc).value.mkString(":")
         )
       }
     )
@@ -47,7 +48,7 @@ object Sxr {
     sxr in Compile,
     Def.task{
       val dir = (crossTarget in Compile).value
-      val _ = (UnidocKeys.unidoc in Compile).value
+      val _ = (unidoc in Compile).value
       Path.allSubpaths(dir / "unidoc.sxr").toSeq
     }
   ) ++ Seq[Setting[_]](
