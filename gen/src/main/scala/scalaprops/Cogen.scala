@@ -199,6 +199,12 @@ object Cogen extends CogenInstances0 {
   implicit val cogenBigDecimal: Cogen[BigDecimal] =
     Cogen[jm.BigDecimal].contramap(_.bigDecimal)
 
+  implicit def cogenAlter[F[_], A](implicit F: Cogen[F[A]]): Cogen[Alter[F, A]] =
+    F.contramap(_.f)
+
+  implicit def cogenAp[F[_], A](implicit F: Cogen[F[A]]): Cogen[Ap[F, A]] =
+    F.contramap(_.f)
+
   implicit def cogenOption[A](implicit A: Cogen[A]): Cogen[Option[A]] =
     new Cogen[Option[A]] {
       def cogen[B](a: Option[A], g: CogenState[B]) = a match {

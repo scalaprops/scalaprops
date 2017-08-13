@@ -565,6 +565,12 @@ object Gen extends GenInstances0 {
   implicit val genUnit: Gen[Unit] =
     value(())
 
+  implicit def genAlter[F[_], A](implicit F: Gen[F[A]]): Gen[Alter[F, A]] =
+    F.map(Alter(_))
+
+  implicit def genAp[F[_], A](implicit F: Gen[F[A]]): Gen[Ap[F, A]] =
+    F.map(Ap(_))
+
   implicit def maybe[A](implicit A: Gen[A]): Gen[Maybe[A]] =
     Gen.frequency(
       1 -> Gen.value(Maybe.empty[A]),
