@@ -51,7 +51,7 @@ object build {
   private[this] def module(id: String) =
     CrossProject(id, file(id), CustomCrossType, JSPlatform, JVMPlatform, NativePlatform).settings(
       commonSettings,
-      scalazVersion := "7.2.14",
+      scalazVersion := "7.2.15",
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
           "Gen", "Cogen", "Rand"
