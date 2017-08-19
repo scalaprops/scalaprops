@@ -4,7 +4,14 @@ import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.function._
 
-object FreeApTest extends Scalaprops {
+sealed trait FreeApInstances {
+
+  implicit def freeApCobind[F[_]]: Cobind[({type l[a] = FreeAp[F, a]})#l] =
+    new FreeApCobind[F] {}
+
+}
+
+object FreeApTest extends Scalaprops with FreeApInstances{
 
   private[this] implicit def freeApEqual[F[_]: Functor, A](implicit
     E: Eq1[F],
@@ -30,10 +37,30 @@ object FreeApTest extends Scalaprops {
     Apply[Gen].apply2(G2, freeApGen0[F, Byte => A])(FreeAp.apply[F, Byte, A](_, _))
   )
 
+  implicit def freeApComonad[F[_]](implicit C: Comonad[F]): Comonad[({type l[a] = FreeAp[F, a]})#l] =
+    new Comonad[({type l[a] = FreeAp[F, a]})#l] with FreeApCobind[F] {
+      override def copoint[A](p: FreeAp[F, A]) =
+        p.para[A](
+          identity,
+          new NaturalTransformation[
+            ({type l[a] = (F[a], FreeAp[F, a => A])})#l,
+            ({type l[a] = A})#l
+          ] {
+            def apply[B](fa: (F[B], FreeAp[F, B => A])) = {
+              copoint(fa._2).apply(C.copoint(fa._1))
+            }
+          }
+        )
+    }
+
+  implicit def cogenFreeAp[F[_]: Applicative, A](implicit C: Cogen[F[A]]): Cogen[FreeAp[F, A]] =
+    C.contramap[FreeAp[F, A]](_.retract)
+
   val id = {
     type F[A] = FreeAp[Id.Id, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.comonad.all[F],
       scalazlaws.applicative.all[F]
     )
   }
@@ -42,6 +69,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[Maybe, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.all[F]
     )
   }
@@ -50,6 +78,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[IList, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.all[F]
     )
   }
@@ -58,6 +87,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[NonEmptyList, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.comonad.all[F],
       scalazlaws.applicative.all[F]
     )
   }
@@ -67,6 +97,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.all[F]
     )
   }
@@ -76,6 +107,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.laws[F], // exclude applyComposition law. because too slow
       scalazlaws.functor.all[F]
     )
@@ -86,6 +118,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.laws[F], // exclude applyComposition law. because too slow
       scalazlaws.functor.all[F]
     )
@@ -96,6 +129,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.all[F]
     )
   }
@@ -105,6 +139,7 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.all[F]
     )
   }
@@ -114,8 +149,18 @@ object FreeApTest extends Scalaprops {
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
+      scalazlaws.cobind.all[F],
       scalazlaws.applicative.all[F]
     )
   }
 
 }
+
+private trait FreeApCobind[F[_]] extends Cobind[({type l[a] = FreeAp[F, a]})#l] {
+  override final def cobind[A, B] (fa: FreeAp[F, A])(f: FreeAp[F, A] => B) =
+    FreeAp.point(f(fa))
+
+  override final def map[A, B] (fa: FreeAp[F, A])(f: A => B) =
+    fa map f
+}
+
