@@ -63,6 +63,8 @@ object build {
         val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + Common.tagOrHash.value
         s"-P:scalajs:mapSourceURI:$a->$g/"
       }
+    ).nativeSettings(
+      nativeGC := "immix"
     )
 
   lazy val gen = module("gen").settings(
