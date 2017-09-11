@@ -14,7 +14,7 @@ object ISetTest extends Scalaprops {
 
   val test = Properties.list(
     scalazlaws.monoid.all[ISet[Int]],
-    scalazlaws.band.all[ISet[Int]]
+    scalazlaws.semilattice.all[ISet[Int]]
   )
 
   val filter = forAll { (a: ISet[Int], p: Int => Boolean) =>

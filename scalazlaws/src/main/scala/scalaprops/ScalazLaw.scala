@@ -61,6 +61,10 @@ object ScalazLaw {
   val bandAll = all(band)
   val bandIdempotency = law0(band, "idempotency")
 
+  val semilattice = law("semilattice")
+  val semilatticeAll = all(semilattice)
+  val semilatticeCommutative = law0(semilattice, "commutative")
+
 
   val invariantFunctor = law("invariantFunctor")
   val invariantFunctorIdentity = law0(invariantFunctor, "identity")

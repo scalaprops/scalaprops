@@ -18,7 +18,7 @@ object IMapTest extends Scalaprops {
   val order = scalazlaws.order.all[Int ==>> Int]
   val laws2 = Properties.list(
     scalazlaws.monoid.all[Int ==>> Int],
-    scalazlaws.band.all[Int ==>> ISet[Int]]
+    scalazlaws.semilattice.all[Int ==>> ISet[Int]]
   )
 
   val conjunction = {
