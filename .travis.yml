@@ -10,7 +10,7 @@ cache:
     - $HOME/.sbt/launchers
 
 jdk:
-  - oraclejdk7
+  - openjdk7
   - oraclejdk8
 
 sudo: false
