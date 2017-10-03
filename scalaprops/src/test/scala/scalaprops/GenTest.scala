@@ -41,6 +41,7 @@ object GenTest extends Scalaprops {
   val testLaw =
     Properties.list(
       scalazlaws.monad.all[Gen],
+      scalazlaws.bindRec.all[Gen],
       scalazlaws.equal.all[Gen[Int]]
     )
 
