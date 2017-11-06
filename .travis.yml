@@ -25,9 +25,10 @@ script:
   - git show --oneline --check
   - wget https://raw.githubusercontent.com/paulp/sbt-extras/b9c8cb27/sbt && chmod +x ./sbt
   - ./sbt ++${TRAVIS_SCALA_VERSION} checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test "project /" publishLocal $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) && "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_REPO_SLUG}" == "scalaprops/scalaprops" ]]; then echo "publish"; fi)
+before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
-  - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk8) ]]; then rm -rf $HOME/.ivy2/cache ; fi
+  - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk9) ]]; then rm -rf $HOME/.ivy2/cache ; fi
 
 env:
   global:
@@ -49,3 +50,20 @@ matrix:
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/3ba0e52f32d32c0454ec3a926caae2db0caaca12/sbt && chmod +x ./sbt
       script:
       - ./sbt -J-Xmx5G ++${TRAVIS_SCALA_VERSION} rootNative/compile "show genNative/nativeMissingDependencies" "show coreNative/nativeMissingDependencies" "show scalazlawsNative/nativeMissingDependencies" "show scalapropsNative/nativeMissingDependencies" scalapropsNative/test
+    - sudo: required
+      scala: 2.12.4
+      jdk: oraclejdk9
+      before_install:
+      # https://github.com/sbt/sbt/pull/2951
+      - git clone https://github.com/retronym/java9-rt-export
+      - cd java9-rt-export/
+      - git checkout 1019a2873d057dd7214f4135e84283695728395d
+      - echo "sbt.version=1.0.2" > project/build.properties
+      - sbt package
+      - java -version
+      - mkdir -p $HOME/.sbt/0.13/java9-rt-ext; java -jar target/java9-rt-export-*.jar $HOME/.sbt/0.13/java9-rt-ext/rt.jar
+      - jar tf $HOME/.sbt/0.13/java9-rt-ext/rt.jar | grep java/lang/Object
+      - cd ..
+      script:
+      - java -version
+      - sbt -Dscala.ext.dirs=$HOME/.sbt/0.13/java9-rt-ext ++$TRAVIS_SCALA_VERSION scalapropsJS/test scalapropsJVM/test "project /" publishLocal
