@@ -33,6 +33,7 @@ object TestExecutorImpl {
   }
   def withExecutor[A](logger: Logger)(f: TestExecutor => A): A = {
     val executor = newInstance(logger)
-    try f(executor) finally executor.shutdown()
+    try f(executor)
+    finally executor.shutdown()
   }
 }

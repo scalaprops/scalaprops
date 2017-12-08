@@ -20,13 +20,18 @@ object PropertiesTest extends Scalaprops {
     val traverse = Tree.Node("traverse", Stream(foldable, functor))
     val plus = Tree.Leaf("plus")
     val plusEmpty = Tree.Node("plusEmpty", Stream(plus))
-    val applicativePlus = Tree.Node("applicativePlus", Stream( applicative, plusEmpty))
+    val applicativePlus = Tree.Node("applicativePlus", Stream(applicative, plusEmpty))
     val monadPlus = Tree.Node("monadPlus", Stream(applicativePlus, monad))
     val isEmpty = Tree.Node("isEmpty", Stream(plusEmpty))
 
-    val list = Tree.Node("list instance", Stream(
-      isEmpty, monadPlus, traverse, cobind
-    ))
+    val list = Tree.Node(
+      "list instance",
+      Stream(
+        isEmpty,
+        monadPlus,
+        traverse,
+        cobind
+      ))
 
     val dag = """"list instance"
 |

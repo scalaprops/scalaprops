@@ -11,24 +11,33 @@ object ScalapropsRunner {
     Scalaprops.testFieldNames(clazz)
 
   private[this] def invokeProperty(clazz: Class[_], obj: Scalaprops): List[(String, Property)] =
-    Scalaprops.findTestFields(clazz, classOf[Property]).map{ method =>
-      val p = method.invoke(obj).asInstanceOf[Property]
-      NameTransformer.decode(method.getName) -> p
-    }.toList
+    Scalaprops
+      .findTestFields(clazz, classOf[Property])
+      .map { method =>
+        val p = method.invoke(obj).asInstanceOf[Property]
+        NameTransformer.decode(method.getName) -> p
+      }
+      .toList
 
   private[this] def invokeProperties(clazz: Class[_], obj: Scalaprops): List[Properties[Any]] =
-    Scalaprops.findTestFields(clazz, classOf[Properties[_]]).map{ method =>
-      val methodName = NameTransformer.decode(method.getName)
-      val props = method.invoke(obj).asInstanceOf[Properties[Any]].props
-      Properties.noSort[Any](
-        Tree.Node(
-          methodName -> Maybe.empty,
-          props #:: Stream.empty
+    Scalaprops
+      .findTestFields(clazz, classOf[Properties[_]])
+      .map { method =>
+        val methodName = NameTransformer.decode(method.getName)
+        val props = method.invoke(obj).asInstanceOf[Properties[Any]].props
+        Properties.noSort[Any](
+          Tree.Node(
+            methodName -> Maybe.empty,
+            props #:: Stream.empty
+          )
         )
-      )
-    }(collection.breakOut)
+      }(collection.breakOut)
 
-  private[scalaprops] def allProps(clazz: Class[_], obj: Scalaprops, only: Option[NonEmptyList[String]], logger: Logger): Properties[_] = {
+  private[scalaprops] def allProps(
+    clazz: Class[_],
+    obj: Scalaprops,
+    only: Option[NonEmptyList[String]],
+    logger: Logger): Properties[_] = {
     val tests0 = invokeProperty(clazz, obj).map {
       case (name, p) => p.toProperties[Any](name)
     } ::: invokeProperties(clazz, obj)
@@ -87,8 +96,8 @@ final class ScalapropsRunner(
   private[this] val results = ArrayBuffer.empty[TestResult]
   private[this] val arguments = Arguments.parse(args.toList)
 
-  override def tasks(taskDefs: Array[TaskDef]) = taskDefs.map{
-    taskDef => new ScalapropsTaskImpl(
+  override def tasks(taskDefs: Array[TaskDef]) = taskDefs.map { taskDef =>
+    new ScalapropsTaskImpl(
       taskDef = taskDef,
       testClassLoader = testClassLoader,
       args = args,
