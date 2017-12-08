@@ -3,6 +3,8 @@ language: scala
 scala:
   - 2.10.6
   - 2.11.11
+  - 2.12.4
+  - 2.13.0-M2
 
 cache:
   directories:
@@ -10,7 +12,6 @@ cache:
     - $HOME/.sbt/launchers
 
 jdk:
-  - openjdk7
   - oraclejdk8
 
 sudo: false
@@ -37,10 +38,6 @@ env:
 
 matrix:
   include:
-    - scala: 2.12.4
-      jdk: oraclejdk8
-    - scala: 2.13.0-M2
-      jdk: oraclejdk8
     - scala: 2.11.11
       jdk: oraclejdk8
       sudo: required
