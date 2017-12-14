@@ -2,7 +2,6 @@ import build._
 import sbtrelease._
 import ReleaseStateTransformations._
 import com.typesafe.sbt.pgp.PgpKeys
-import xerial.sbt.Sonatype.SonatypeKeys
 import sbtcrossproject.CrossProject
 
 val scalazVersion = SettingKey[String]("scalazVersion")

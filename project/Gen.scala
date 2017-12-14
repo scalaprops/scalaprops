@@ -2,8 +2,6 @@ object Gen {
   def gen: String = {
     val A = "A"
     val Z = "Z"
-    val G = "Gen"
-    val X = "X"
 
     val genF = (i: Int) => {
       val as = (1 to i).map(A + _)
