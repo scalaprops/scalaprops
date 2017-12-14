@@ -220,7 +220,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     releaseStepCommand("rootNative/publishSigned"),
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
+    releaseStepCommand("sonatypeReleaseAll"),
     UpdateReadme.updateReadmeProcess,
     pushChanges
   ),
