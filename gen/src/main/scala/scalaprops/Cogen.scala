@@ -298,7 +298,7 @@ object Cogen extends CogenInstances0 {
     Cogen[List[A]].contramap(_.toList)
 
   implicit def cogenCorecursiveList[A: Cogen]: Cogen[CorecursiveList[A]] =
-    Cogen[Stream[A]].contramap(CorecursiveList.streamIso.from)
+    Cogen[Stream[A]].contramap(CorecursiveList.streamIso.from.apply _)
 
   implicit def cogenHeap[A: Cogen]: Cogen[Heap[A]] =
     Cogen[Stream[A]].contramap(_.toUnsortedStream)
