@@ -122,7 +122,7 @@ def gitHash(): String =
 
 val unusedWarnings = Seq("-Ywarn-unused", "-Ywarn-unused-import")
 
-val Scala211 = "2.11.11"
+val Scala211 = "2.11.12"
 val SetScala211 = releaseStepCommand("++" + Scala211)
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
@@ -146,7 +146,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       Opts.resolver.sonatypeStaging
   ),
   scalaVersion := Scala211,
-  crossScalaVersions := "2.12.4" :: Scala211 :: "2.10.6" :: "2.13.0-M2" :: Nil,
+  crossScalaVersions := "2.12.4" :: Scala211 :: "2.10.7" :: "2.13.0-M2" :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
