@@ -19,8 +19,9 @@ final class MersenneTwister32 private(private val array: Array[Long], private va
 
   override def hashCode: Int = mti
 
-  def ===(that: MersenneTwister32): Boolean =
-    (this.mti == that.mti) && java.util.Arrays.equals(this.array, that.array)
+  def ===(that: MersenneTwister32): Boolean = {
+    (this eq that) || (this.mti == that.mti) && java.util.Arrays.equals(this.array, that.array)
+  }
 
   def reseed(newSeed: Long): MersenneTwister32 =
     MersenneTwister32.standard(newSeed)
