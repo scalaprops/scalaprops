@@ -16,7 +16,7 @@ final class MersenneTwister64 private(private val mt0: Array[Long], private val 
   override def hashCode = mti0
 
   def ===(that: MersenneTwister64): Boolean = {
-    (this eq that) || (this.mti0 == that.mti0) && Arrays.equals(this.mt0, that.mt0)
+    (this eq that) || ((this.mti0 == that.mti0) && Arrays.equals(this.mt0, that.mt0))
   }
 
   override def next: MersenneTwister64 =
