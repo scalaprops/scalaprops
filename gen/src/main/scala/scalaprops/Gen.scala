@@ -1064,4 +1064,7 @@ object Gen extends GenInstances0 {
       G2.map(FreeT.liftM[S, M, A](_)),
       G1.map(FreeT.liftF[S, M, A](_))
     )
+
+  implicit def tannenGen[F[_], G[_, _], A, B](implicit F: Gen[F[G[A, B]]]): Gen[Tannen[F, G, A, B]] =
+    F.map(Tannen[F, G, A, B](_))
 }

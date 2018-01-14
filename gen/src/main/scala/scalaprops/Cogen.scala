@@ -520,6 +520,9 @@ object Cogen extends CogenInstances0 {
   implicit def cogenJavaEnum[A <: java.lang.Enum[A]]: Cogen[A] =
     Cogen[Int].contramap(_.ordinal)
 
+  implicit def cogenTannen[F[_], G[_, _], A, B](implicit F: Cogen[F[G[A, B]]]): Cogen[Tannen[F, G, A, B]] =
+    F.contramap(_.f)
+
   implicit val instance: Divisible[Cogen] =
     new Divisible[Cogen] {
       private[this] val empty = new Cogen[Any] {
