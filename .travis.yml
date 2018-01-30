@@ -38,14 +38,14 @@ env:
 
 matrix:
   include:
-    - scala: 2.11.12
+    - scala: SCALA_NATIVE
       jdk: oraclejdk8
       sudo: required
       before_install:
       - curl https://raw.githubusercontent.com/scala-native/scala-native/21539aa97947f7/bin/travis_setup.sh | bash -x
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
       script:
-      - ./sbt -J-Xmx5G ++${TRAVIS_SCALA_VERSION} rootNative/compile "show genNative/nativeMissingDependencies" "show coreNative/nativeMissingDependencies" "show scalazlawsNative/nativeMissingDependencies" "show scalapropsNative/nativeMissingDependencies" scalapropsNative/test
+      - ./sbt -J-Xmx5G rootNative/compile "show genNative/nativeMissingDependencies" "show coreNative/nativeMissingDependencies" "show scalazlawsNative/nativeMissingDependencies" "show scalapropsNative/nativeMissingDependencies" scalapropsNative/test
     - scala: 2.12.4
       jdk: oraclejdk9
       script:
