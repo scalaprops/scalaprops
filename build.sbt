@@ -28,7 +28,8 @@ val CustomCrossType = new sbtcrossproject.CrossType {
 }
 
 def module(id: String): CrossProject =
-  CrossProject(id, file(id), CustomCrossType, JSPlatform, JVMPlatform, NativePlatform)
+  CrossProject(id, file(id))(JSPlatform, JVMPlatform, NativePlatform)
+    .crossType(CustomCrossType)
     .settings(
       commonSettings,
       scalazVersion := "7.2.19",
