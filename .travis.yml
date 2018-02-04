@@ -50,4 +50,4 @@ matrix:
       jdk: oraclejdk9
       script:
       - java -version
-      - sbt -Dsbt.scala.version=2.10.7 ++$TRAVIS_SCALA_VERSION scalapropsJS/test scalapropsJVM/test "project /" publishLocal
+      - sbt ++$TRAVIS_SCALA_VERSION scalapropsJS/test scalapropsJVM/test "project /" publishLocal
