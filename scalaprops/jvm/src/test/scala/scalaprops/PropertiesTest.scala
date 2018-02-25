@@ -6,7 +6,7 @@ import scalaz.std.string._
 
 object PropertiesTest extends Scalaprops {
 
-  // http://typelevel.org/blog/2013/11/17/discipline.html
+  // https://typelevel.org/blog/2013/11/17/discipline.html
 
   val ` "directed acyclic graph" to tree` = forAll {
 
