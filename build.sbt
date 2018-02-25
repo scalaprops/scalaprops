@@ -152,7 +152,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
   homepage := Some(url("https://github.com/scalaprops/scalaprops")),
-  licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
+  licenses := Seq("MIT License" -> url("https://opensource.org/licenses/mit-license")),
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
   stripPom { node =>
     node.label == "dependency" && (node \ "scope").text == "test"
