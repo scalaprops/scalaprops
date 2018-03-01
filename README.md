@@ -17,7 +17,7 @@ property based testing library for Scala
  - [`Gen`](gen/src/main/scala/scalaprops/Gen.scala) and [`Cogen`](gen/src/main/scala/scalaprops/Cogen.scala) instances of scalaz datatypes
 - immutable random number generator
  - scalaprops does not use `scala.util.Random` because `scala.util.Random` is mutable
- - default implementation is [Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html) (JVM) or [Tiny Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/) (Scala.js)
+ - default implementation is [Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html) (JVM, scala-native) or [Tiny Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/) (Scala.js)
 - [Scala.js](https://www.scala-js.org/) support
 - [scala-native](http://scala-native.org) support. see <https://github.com/scalaprops/scalaprops-native-example>
 - [deterministic testing](#deterministic-testing)
