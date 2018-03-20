@@ -3,7 +3,7 @@ language: scala
 scala:
   - 2.10.7
   - 2.11.12
-  - 2.12.4
+  - 2.12.5
   - 2.13.0-M3
 
 cache:
@@ -46,7 +46,7 @@ matrix:
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
       script:
       - ./sbt -J-Xmx5G rootNative/compile "show genNative/nativeMissingDependencies" "show coreNative/nativeMissingDependencies" "show scalazlawsNative/nativeMissingDependencies" "show scalapropsNative/nativeMissingDependencies" scalapropsNative/test
-    - scala: 2.12.4
+    - scala: 2.12.5
       jdk: oraclejdk9
       script:
       - java -version
