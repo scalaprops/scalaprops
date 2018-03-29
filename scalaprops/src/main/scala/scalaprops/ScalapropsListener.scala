@@ -46,11 +46,11 @@ object ScalapropsListener {
     private[this] def event2string(event: ScalapropsEvent) =
       event.result match {
         case \&/.That(r) =>
-          r.toString + " " + event.duration
+          r.toString + " " + event.duration + "ms"
         case \&/.Both(_, r) =>
-          r.toString + " " + event.duration
+          r.toString + " " + event.duration + "ms"
         case \&/.This(e) =>
-          e.toString + " " + event.duration
+          e.toString + " " + event.duration + "ms"
       }
 
     override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {
