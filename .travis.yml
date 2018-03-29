@@ -40,7 +40,7 @@ matrix:
       - curl https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh | bash -x
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
       script:
-      - ./sbt -J-Xmx5G rootNative/compile "show genNative/nativeMissingDependencies" "show coreNative/nativeMissingDependencies" "show scalazlawsNative/nativeMissingDependencies" "show scalapropsNative/nativeMissingDependencies" scalapropsNative/test
+      - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test
     - scala: 2.12.5
       jdk: oraclejdk9
       script:
