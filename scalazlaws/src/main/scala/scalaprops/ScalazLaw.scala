@@ -238,6 +238,10 @@ object ScalazLaw {
   val profunctor = law("profunctor")
 
 
+  val reducer = law("reducer")
+  val reducerConsCorrectness = law0(reducer, "consCorrectness")
+  val reducerSnocCorrectness = law0(reducer, "snocCorrectness")
+
   val lens = law("lens")
   val lensIdentity = law0(lens, "identity")
   val lensRetention = law0(lens, "retentions")
