@@ -32,6 +32,9 @@ final class MersenneTwister32 private(private val array: Array[Long], private va
   override def toString: String = {
     array.mkString("MersenneTwister32(Array(", ",", s"), ${mti})")
   }
+
+  protected override def clone(): MersenneTwister32 =
+    new MersenneTwister32(array.clone(), mti)
 }
 
 object MersenneTwister32{
@@ -71,6 +74,50 @@ object MersenneTwister32{
       i += 1
     }
     MersenneTwister32(mt, N + 1)
+  }
+
+  def nextNImpl(state0: MersenneTwister32, count: Int): MersenneTwister32 = {
+    @annotation.tailrec
+    def loop(state: MersenneTwister32, counter: Int): MersenneTwister32 = {
+      if(counter <= 0) {
+        state
+      } else {
+        var mti = state.mti
+        var y = 0L
+
+        val mt0 = if (mti >= N) {
+          val mt = state.array
+          val mag01 = Array(0L, MatrixA)
+
+          var kk = 0
+          while (kk < N - M) {
+            y = (mt(kk) & UpperMask) | (mt(kk + 1) & LowerMask)
+            mt(kk) = mt(kk + M) ^ (y >>> 1) ^ mag01(y.toInt & 0x1)
+            kk += 1
+          }
+          while (kk < N - 1) {
+            y = (mt(kk) & UpperMask) | (mt(kk + 1) & LowerMask)
+            mt(kk) = mt(kk + (M - N)) ^ (y >>> 1) ^ mag01(y.toInt & 0x1)
+            kk += 1
+          }
+          y = (mt(N - 1) & UpperMask) | (mt(0) & LowerMask)
+          mt(N - 1) = mt(M - 1) ^ (y >>> 1) ^ mag01(y.toInt & 0x1)
+
+          mti = 0
+          mt
+        } else {
+          state.array
+        }
+
+        loop(MersenneTwister32(mt0, mti + 1), counter - 1)
+      }
+    }
+
+    if(count < 0) {
+      throw new IllegalArgumentException("count must be positive")
+    } else {
+      loop(state0.clone(), count)
+    }
   }
 
   def nextInt(state: MersenneTwister32): (MersenneTwister32, Int) = {

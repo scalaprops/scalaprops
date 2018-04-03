@@ -96,4 +96,39 @@ object RandTest extends Scalaprops{
     }
     true
   }.toProperties((), Param.minSuccessful(2))
+
+  val mt32nextN = Property.forAllG(Gen.nonNegativeShort, Gen[Int]){ (count, seed) =>
+    val rand = MersenneTwister32.fromSeed(seed)
+
+    def time[A](label: String)(f: => A): (A, Long) = {
+      val start = System.nanoTime()
+      val result = f
+      val t = System.nanoTime() - start
+      (result, t)
+    }
+    println()
+    val (y, time2) = time("y") {
+      def loop(r: Rand, i: Int): Rand = {
+        if(i > 0) {
+          loop(r.next, i - 1)
+        } else {
+          r
+        }
+      }
+      loop(rand, count)
+    }
+    val (x, time1) = time("x") {
+      MersenneTwister32.nextNImpl(rand, count)
+    }
+    val z = x === y.asInstanceOf[MersenneTwister32]
+    println((time1 < time2, time2.toDouble / time1, count))
+    if(!z) {
+      println(rand)
+      println()
+      println(x)
+      println()
+      println(y)
+    }
+    z
+  }.toProperties((), Param.minSuccessful(1000))
 }
