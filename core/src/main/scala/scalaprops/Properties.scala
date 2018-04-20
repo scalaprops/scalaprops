@@ -84,12 +84,12 @@ object Properties {
 
   def properties[A: Order](id: A)(props: (A, Property) *): Properties[A] =
     properties0(
-      id, props.map{case (n, p) => Tree.Leaf(n -> Maybe.just(p.toCheck))}(collection.breakOut)
+      id, props.map{case (n, p) => Tree.Leaf(n -> Maybe.just(p.toCheck))}.toStream
     )
 
   def fromChecks[A: Order](id: A)(checks: (A, Check) *): Properties[A] =
     properties0(
-      id, checks.map{case (n, p) => Tree.Leaf(n -> Maybe.just(p))}(collection.breakOut)
+      id, checks.map{case (n, p) => Tree.Leaf(n -> Maybe.just(p))}.toStream
     )
 
   def fromProps[A: Order](id: A, prop0: Properties[A], props: Properties[A] *): Properties[A] =

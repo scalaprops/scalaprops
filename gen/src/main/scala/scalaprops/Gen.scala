@@ -1,7 +1,6 @@
 package scalaprops
 
 import Gen.gen
-import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
 import scalaz._
 import scalaz.Isomorphism.{<~>, IsoFunctorTemplate}
@@ -269,12 +268,6 @@ object Gen extends GenInstances0 {
       }
     }
 
-  private[this] def listOfCBF[F[_], A](g: Gen[A], min: Int)(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
-    listOf_[F, A](g, min, _.to[F])
-
-  private[this] def listOfCBF0[F[_], A](g: Gen[A])(implicit F: CanBuildFrom[Nothing, A, F[A]]): Gen[F[A]] =
-    listOfCBF[F, A](g, 0)
-
   def listOf[A](g: Gen[A], min: Int = 0): Gen[IList[A]] =
     listOf_[IList, A](g, min, IListFromList)
 
@@ -292,7 +285,7 @@ object Gen extends GenInstances0 {
     listOf(A)
 
   implicit def vector[A](implicit A: Gen[A]): Gen[Vector[A]] =
-    listOfCBF0[Vector, A](A)
+    listOf_[Vector, A](A, 0, _.toVector)
 
   implicit def mapGen[A: Gen, B: Gen]: Gen[Map[A, B]] =
     list[(A, B)].map(_.toMap)
@@ -301,10 +294,10 @@ object Gen extends GenInstances0 {
     list[A].map(_.toSet)
 
   implicit def streamGen[A](implicit A: Gen[A]): Gen[Stream[A]] =
-    listOfCBF0[Stream, A](A)
+    listOf_[Stream, A](A, 0, _.toStream)
 
   implicit def list[A](implicit A: Gen[A]): Gen[List[A]] =
-    listOfCBF0[List, A](A)
+    listOf_[List, A](A, 0, _.toList)
 
   implicit def arrayGen[A: reflect.ClassTag: Gen]: Gen[Array[A]] =
     arrayOf(Gen[A], 0)

@@ -167,7 +167,7 @@ object ScalapropsTaskImpl {
     objName: String, tests: List[Properties[Any]], names: NonEmptyList[String], logger: Logger
   ): List[Properties[Any]] = {
     val set = Foldable[NonEmptyList].toSet(names)
-    val actualTests: Set[String] = tests.map(_.id.toString)(collection.breakOut)
+    val actualTests = tests.map(_.id.toString).toSet
     set.filterNot(actualTests).foreach{ typo =>
       logger.warn(s"""'${objName}.$typo' does not exists""")
     }

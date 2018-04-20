@@ -29,7 +29,7 @@ object ScalapropsListener {
       case Stream(t) =>
         shift("`- ", "  ", drawTree(t))
       case t #:: ts =>
-        shift("+- ", "| ", drawTree(t)) append drawSubTrees(ts)
+        shift("+- ", "| ", drawTree(t)) ++ drawSubTrees(ts)
     }
     def shift(first: String, other: String, s: Stream[(String, A)]): Stream[(String, A)] =
       (first #:: Stream.continually(other)).zip(s).map {

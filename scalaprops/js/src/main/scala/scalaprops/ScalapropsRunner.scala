@@ -46,7 +46,7 @@ object ScalapropsRunner {
             props #:: Stream.empty
           )
         )
-    }(collection.breakOut)
+    }.toList
 
   def allProps(obj: Scalaprops, only: Option[NonEmptyList[String]], logger: Logger): Properties[_] = {
     val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[_]]).map {
@@ -68,7 +68,7 @@ object ScalapropsRunner {
     Properties.noSort[Any](
       Tree.Node(
         obj.getClass.getName -> Maybe.empty,
-        obj.transformProperties(tests).map(_.props)(collection.breakOut)
+        obj.transformProperties(tests).map(_.props).toStream
       )
     )
   }
