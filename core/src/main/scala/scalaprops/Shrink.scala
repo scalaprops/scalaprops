@@ -130,9 +130,8 @@ object Shrink {
     }
 
   implicit def map[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[Map[A, B]] = {
-    import syntax.foldable._
     Shrink[IList[(A, B)]].xmap(
-      _.to[({type l[_] = Map[A, B]})#l],
+      _.foldLeft(Map.newBuilder[A, B])(_ += _).result,
       _.foldRight(IList.empty[(A, B)])(_ :: _)
     )
   }
