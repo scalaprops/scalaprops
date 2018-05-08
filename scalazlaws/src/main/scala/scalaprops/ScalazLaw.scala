@@ -8,7 +8,7 @@ final class ScalazLaw private(val ord: Int, val fullName: String, val simpleName
 }
 
 object ScalazLaw {
-  private[this] val set = collection.mutable.Set.empty[ScalazLaw]
+  private[this] val set = scala.collection.mutable.Set.empty[ScalazLaw]
 
   private[this] def law(fullName: String, simpleName: String = ""): ScalazLaw =
     set.synchronized{
