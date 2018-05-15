@@ -206,8 +206,6 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     inquireVersions,
     runClean,
     runTest,
-    SetScala211,
-    releaseStepCommand("scalapropsNative/test"),
     setReleaseVersion,
     commitReleaseVersion,
     UpdateReadme.updateReadmeProcess,
