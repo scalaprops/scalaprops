@@ -101,7 +101,9 @@ lazy val scalaprops = module(scalapropsName)
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
   )
   .platformsSettings(JVMPlatform, NativePlatform)(
-    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
+    unmanagedSourceDirectories in Compile += {
+      baseDirectory.value.getParentFile / "jvm_native/src/main/scala/"
+    }
   )
   .jsSettings(
     libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion
@@ -217,6 +219,8 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       },
       enableCrossBuild = true
     ),
+    // TODO scala-js for Scala 2.13.0-M4
+    releaseStepCommandAndRemaining("; ++ 2.13.0-M4 ; rootJVM/publishSigned"),
     SetScala211,
     releaseStepCommand("rootNative/publishSigned"),
     setNextVersion,
