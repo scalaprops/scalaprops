@@ -186,9 +186,13 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     "-Xfuture",
     "-language:existentials",
     "-language:higherKinds",
-    "-language:implicitConversions",
-    "-Yno-adapted-args"
+    "-language:implicitConversions"
   ),
+  scalacOptions ++= PartialFunction
+    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
+      case Some((2, v)) if v <= 12 => "-Yno-adapted-args"
+    }
+    .toList,
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
       case Some((2, v)) if v >= 11 => unusedWarnings
