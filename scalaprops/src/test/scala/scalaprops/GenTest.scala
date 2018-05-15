@@ -226,7 +226,7 @@ object GenTest extends Scalaprops {
 
         assert(x.length == size, s"${x.length} != $size")
         Equal[IList[A ==>> B]].equal(x, combinations(domain, codomain).sorted)
-      }.toProperties(name).andThenParam(Param.minSuccessful(20))
+      }.toProperties(name)
     }
 
     def test1[A: Cogen : Order : Gen](values: IList[A], name: String, streamSize: Int = defaultSize) =
