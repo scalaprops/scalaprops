@@ -206,6 +206,15 @@ object GenTest extends Scalaprops {
 
     val defaultSize = 10000
 
+    // https://github.com/scala/bug/issues/10883
+    implicit class Scala_2_13_Stream_Bug[A](self: Stream[A]) {
+      def take_scala_10883_workaround(n: Int): Stream[A] = {
+        if (n <= 0 || self.isEmpty) Stream.empty
+        else if (n == 1) Stream.cons(self.head, Stream.empty)
+        else Stream.cons(self.head, self.tail take_scala_10883_workaround n-1)
+      }
+    }
+
     def test[A: Cogen : Order, B: Gen : Order](domain: IList[A], codomain: IList[B], name: String, streamSize: Int = defaultSize) = {
       import scalaz.std.stream._
       val size = List.fill(domain.length)(codomain.length).product
@@ -213,7 +222,7 @@ object GenTest extends Scalaprops {
       Property.forAll { seed: Long =>
         val x = IList.fromFoldable(Gen[A => B].infiniteStream(seed = seed).map { f =>
           IMap.fromFoldable(domain.map(a => a -> f(a)))
-        }.take(streamSize).distinct.take(size)).sorted
+        }.take_scala_10883_workaround(streamSize).distinct.take_scala_10883_workaround(size)).sorted
 
         assert(x.length == size, s"${x.length} != $size")
         Equal[IList[A ==>> B]].equal(x, combinations(domain, codomain).sorted)
