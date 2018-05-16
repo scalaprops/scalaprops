@@ -112,7 +112,7 @@ final class ScalapropsRunner(
     s"""done
 Total test count: ${status.all}
 Failed ${status.failure}, Errors ${status.error}, Passed ${status.success}, Ignored ${status.ignored}
-""" + TestResult.formatResults(results.toSeq, arguments.showDuration)
+""" + TestResult.formatResults(results, arguments.showDuration)
   }
 
 }
