@@ -5,6 +5,7 @@ scala:
   - 2.11.12
   - 2.12.6
   - 2.13.0-M3
+  - 2.13.0-M4
 
 cache:
   directories:
@@ -33,9 +34,6 @@ env:
 
 matrix:
   include:
-    - scala: 2.13.0-M4
-      script:
-      - sbt "++${TRAVIS_SCALA_VERSION}" checkGenerateCodeError scalapropsJVM/test
     - scala: SCALA_NATIVE
       jdk: oraclejdk8
       sudo: required
