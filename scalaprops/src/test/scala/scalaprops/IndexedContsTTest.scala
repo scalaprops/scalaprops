@@ -46,7 +46,7 @@ object IndexedContsTTest extends Scalaprops {
   }
 
   val testBifunctorMaybeMaybe =
-    scalazlaws.bifunctor.all[({type F[A, B] = IndexedContsT[Maybe, IList, A, Int, B]})#F]
+    scalazlaws.bifunctor.all[({type F[A, B] = IndexedContsT[Maybe, Maybe, A, Int, B]})#F]
 
   val testBifunctorMaybeIList =
     scalazlaws.bifunctor.all[({type F[A, B] = IndexedContsT[Maybe, IList, A, Int, B]})#F]
@@ -55,7 +55,7 @@ object IndexedContsTTest extends Scalaprops {
     scalazlaws.bifunctor.all[({type F[A, B] = IndexedContsT[IList, Maybe, A, Int, B]})#F]
 
   val testContravariantMaybeMaybe =
-    scalazlaws.contravariant.all[({type F[A] = IndexedContsT[Maybe, IList, Int, A, Int]})#F]
+    scalazlaws.contravariant.all[({type F[A] = IndexedContsT[Maybe, Maybe, Int, A, Int]})#F]
 
   val testContravariantMaybeIList =
     scalazlaws.contravariant.all[({type F[A] = IndexedContsT[Maybe, IList, Int, A, Int]})#F]
