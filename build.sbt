@@ -123,7 +123,7 @@ val tagOrHash = Def.setting {
 def gitHash(): String =
   sys.process.Process("git rev-parse HEAD").lines_!.head
 
-val unusedWarnings = Seq("-Ywarn-unused", "-Ywarn-unused-import")
+val unusedWarnings = Seq("-Ywarn-unused")
 
 val Scala211 = "2.11.12"
 val SetScala211 = releaseStepCommand("++" + Scala211)
