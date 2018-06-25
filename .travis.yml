@@ -42,7 +42,7 @@ matrix:
       script:
       - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test
     - scala: 2.12.6
-      jdk: oraclejdk9
+      jdk: oraclejdk10
       script:
       - java -version
       - sbt ++$TRAVIS_SCALA_VERSION scalapropsJS/test scalapropsJVM/test "project /" publishLocal
