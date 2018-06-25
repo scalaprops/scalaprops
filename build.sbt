@@ -32,7 +32,7 @@ def module(id: String): CrossProject =
     .crossType(CustomCrossType)
     .settings(
       commonSettings,
-      scalazVersion := "7.2.24",
+      scalazVersion := "7.2.25",
       initialCommands in console += {
         "import scalaprops._, scalaz._;" + Seq(
           "Gen",
