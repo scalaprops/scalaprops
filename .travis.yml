@@ -41,6 +41,9 @@ matrix:
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
       script:
       - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test
+    - scala: 2.13.0-M5
+      script:
+      - sbt ++$TRAVIS_SCALA_VERSION scalapropsJVM/test
     - scala: 2.12.6
       jdk: oraclejdk10
       script:
