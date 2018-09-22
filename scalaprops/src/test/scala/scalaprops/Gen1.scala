@@ -1,6 +1,7 @@
 package scalaprops
 
 import scalaz._
+import ScalapropsScalaz._
 
 abstract class Gen1[F[_]] { self =>
 

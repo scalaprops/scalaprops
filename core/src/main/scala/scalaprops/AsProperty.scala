@@ -1,7 +1,5 @@
 package scalaprops
 
-import scalaz.Contravariant
-
 /**
  * @see [[scalaprops.Bool]]
  */
@@ -29,10 +27,4 @@ object AsProperty {
 
   implicit val property: AsProperty[Property] =
     from(identity)
-
-  implicit val instance: Contravariant[AsProperty] =
-    new Contravariant[AsProperty] {
-      def contramap[A, B](r: AsProperty[A])(f: B => A) =
-        r contramap f
-    }
 }

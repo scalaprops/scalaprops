@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaz.Endo
+import scalaprops.internal._
 
 final case class Check(prop: Property, paramEndo: Endo[Param] = Param.id) {
   def toProperties[A](id: A): Properties[A] =

@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaz._
+import scalaprops.internal._
 
 final case class Property(f: (Int, Rand) => (Rand, Result)) {
   def toCheck: Check =
@@ -19,7 +19,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
 
   def and(p: Property): Property =
     Property.fromGen(
-      Apply[Gen].apply2(gen, p.gen)((res1, res2) =>
+      Gen.from2((res1: Result, res2: Result) =>
         if(res1.isException || res1.isFalsified){
           res1
         }else if(res2.isException || res2.isFalsified){
@@ -29,12 +29,12 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
         }else if(res2.isProven || res2.isUnfalsified){
           res1
         }else Result.NoResult
-      )
+      )(gen, p.gen)
     )
 
   def or(p: Property): Property =
     Property.fromGen(
-      Apply[Gen].apply2(gen, p.gen)((res1, res2) =>
+      Gen.from2((res1: Result, res2: Result) =>
         if(res1.isException || res1.isFalsified){
           res1
         }else if(res2.isException || res2.isFalsified){
@@ -44,12 +44,12 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
         }else if(res2.isProven || res2.isUnfalsified){
           res2
         }else Result.NoResult
-      )
+      )(gen, p.gen)
     )
 
   def sequence(p: Property): Property =
     Property.fromGen(
-      Apply[Gen].apply2(gen, p.gen)((res1, res2) =>
+      Gen.from2((res1: Result, res2: Result) =>
         if(res1.isException || res1.isProven || res1.isUnfalsified) {
           res1
         }else if(res2.isException || res2.isProven || res2.isUnfalsified){
@@ -59,7 +59,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
         }else if(res2.isFalsified){
           res1
         }else Result.NoResult
-      )
+      )(gen, p.gen)
     )
 
   // TODO remove `listener` parameter?
@@ -74,33 +74,36 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
         else sz + (maxSize - sz) / (minSuccessful - s)
       }
 
-      val r = \/.fromTryCatchThrowable[(Rand, Result), Throwable](
-        f(math.round(size), random)
-      )
+      val r = try {
+        Right(f(math.round(size), random))
+      } catch {
+        case e: Throwable =>
+          Left(e)
+      }
 
       r match {
-        case \/-((nextRand, Result.NoResult)) =>
+        case Right((nextRand, Result.NoResult)) =>
           if (discarded + 1 >= maxDiscarded) {
             CheckResult.Exhausted(s, discarded + 1, seed)
           } else {
             loop(s, discarded + 1, size, nextRand)
           }
-        case \/-((_, Result.Proven)) =>
+        case Right((_, Result.Proven)) =>
           CheckResult.Proven(s + 1, discarded, seed)
-        case \/-((nextRand, Result.Unfalsified(_))) =>
+        case Right((nextRand, Result.Unfalsified(_))) =>
           if (s + 1 >= minSuccessful) {
             CheckResult.Passed(s + 1, discarded, seed)
           } else {
             listener(s)
             loop(s + 1, discarded, size, nextRand)
           }
-        case \/-((_, Result.Falsified(args))) =>
+        case Right((_, Result.Falsified(args))) =>
           CheckResult.Falsified(s, discarded, args, seed)
-        case \/-((_, Result.Exception(args, ex))) =>
+        case Right((_, Result.Exception(args, ex))) =>
           CheckResult.PropException(s, discarded, args, ex, seed)
-        case \/-((_, Result.Ignored(reason))) =>
+        case Right((_, Result.Ignored(reason))) =>
           CheckResult.Ignored(s, discarded, reason, seed)
-        case -\/(e) =>
+        case Left(e) =>
           CheckResult.GenException(s, discarded, e, seed)
       }
     }
@@ -129,7 +132,7 @@ object Property {
   def fromGen(g: Gen[Result]): Property =
     Property(g.f)
 
-  def propFromResultLazy(r: Need[Result]): Property =
+  def propFromResultLazy(r: Lazy[Result]): Property =
     Property((_, rand) => (rand, r.value))
 
   def propFromResult(r: Result): Property =
@@ -137,39 +140,39 @@ object Property {
 
   val prop: Boolean => Property = b => propFromResult{
     if(b) Result.Proven
-    else Result.Falsified(IList.empty)
+    else Result.Falsified(List.empty)
   }
 
-  private[this] def propLazy(result: Need[Boolean]): Property =
+  private[this] def propLazy(result: Lazy[Boolean]): Property =
     propFromResultLazy {
-      Functor[Need].map(result){ r =>
+      result.map{ r =>
         if (r) Result.Proven
-        else Result.Falsified(IList.empty)
+        else Result.Falsified(List.empty)
       }
     }
 
   def forall0[A](g: Gen[A], shrink: Shrink[A])(f: A => Property): Property =
     Property((i, r) => {
-      def first(as: Stream[(Rand, A)], shrinks: Int): Maybe[(A, Result, Rand)] = {
+      def first(as: Stream[(Rand, A)], shrinks: Int): Option[(A, Result, Rand)] = {
         as.map{ case (rr, a) =>
           val x = exception(f(a)).f(i, rr)
-          x._2.toMaybe.map(result =>
+          x._2.toOption.map(result =>
             (a, result.provenAsUnfalsified.addArg(Arg(a, shrinks)): Result, x._1)
           )
         } match {
           case Stream() =>
-            Maybe.empty
+            Option.empty
           case results @ (h #:: _)=>
             results.find(_.exists(_._2.failed)).getOrElse(h)
         }
       }
 
       first(Stream(g.f(i, r)), 0) match {
-        case Maybe.Just(xx @ (_, re, rand)) if re.failed =>
+        case Some(xx @ (_, re, rand)) if re.failed =>
           @annotation.tailrec
           def loop(shrinks: Int, x: (A, Result, Rand)): (Rand, Result) =
             first(shrink(x._1).map(rand.next -> _), shrinks) match {
-              case Maybe.Just((aa, result @ Result.Falsified(args), rr)) if args.count(_.value == aa) <= 1 =>
+              case Some((aa, result @ Result.Falsified(args), rr)) if args.count(_.value == aa) <= 1 =>
                 loop(shrinks + 1, (aa, result, rr.next))
               case _ =>
                 (x._3, x._2)
@@ -185,11 +188,11 @@ object Property {
       p
     } catch {
       case t: Throwable =>
-        Property((i, r) => (r, Result.Exception(IList.empty, t)))
+        Property((i, r) => (r, Result.Exception(List.empty, t)))
     }
 
   def forAll(result: => Boolean): Property =
-    propLazy(Need(result))
+    propLazy(Lazy(result))
 
   def forAll[A1](f: A1 => Boolean)(implicit A1: Gen[A1]): Property =
     forAllS(f)(A1, Shrink.empty)

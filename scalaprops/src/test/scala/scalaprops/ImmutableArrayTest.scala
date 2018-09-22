@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.ImmutableArray
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object ImmutableArrayTest extends Scalaprops {
 

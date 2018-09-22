@@ -3,7 +3,7 @@ package scalaprops
 import java.lang.reflect.Method
 import sbt.testing.Logger
 import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
-import scalaz._
+import scalaprops.internal._
 
 @EnableReflectiveInstantiation
 trait Scalaprops {
@@ -21,11 +21,11 @@ trait Scalaprops {
 object Scalaprops {
 
   def filterUnitEmpty[A](p: Properties[A]): Properties[A] = {
-    def loop(tree: Tree[(A, Maybe[Check])]): Tree[(A, Maybe[Check])] =
+    def loop(tree: Tree[(A, Option[Check])]): Tree[(A, Option[Check])] =
       tree match {
-        case Tree.Node(root, Stream(Tree.Node((Or.L(()), Maybe.Empty()), sub))) =>
+        case Tree.Node(root, Stream(Tree.Node((Or.L(()), None), sub))) =>
           Tree.Node(root, sub.map(loop))
-        case Tree.Node((root, Maybe.Empty()), Stream(Tree.Node(((), sub1), sub2))) =>
+        case Tree.Node((root, None), Stream(Tree.Node(((), sub1), sub2))) =>
           Tree.Node(root -> sub1, sub2.map(loop))
         case _ =>
           Tree.Node(tree.rootLabel, tree.subForest.map(loop))

@@ -3,6 +3,7 @@ package scalaprops
 import scalaz._
 import scalaz.Id.Id
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object IdTTest extends Scalaprops {
 

@@ -1,7 +1,6 @@
 package scalaprops
 
 import java.util.WeakHashMap
-import scalaz.Maybe
 
 object Variant {
 
@@ -18,12 +17,12 @@ object Variant {
     val seed = n + int
     val p = new LongGen(seed, g)
     variantMemo.get(p) match {
-      case Maybe.Empty() =>
+      case Some(gx) =>
+        gx
+      case _ =>
         val t = CogenState(next, Gen.gen((i, r) => g.gen.f(i, r.reseed(seed))))
         variantMemo.put(p, t)
         t
-      case Maybe.Just(gx) =>
-        gx
     }
   }
 
@@ -33,8 +32,8 @@ object Variant {
       this
     }
 
-    def get[A](k: K[A]): Maybe[V[A]] =
-      Maybe.fromNullable(delegate.get(k).asInstanceOf[V[A]])
+    def get[A](k: K[A]): Option[V[A]] =
+      Option(delegate.get(k).asInstanceOf[V[A]])
   }
 
 }

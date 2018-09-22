@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.std.option._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object OptionTest extends Scalaprops {
 

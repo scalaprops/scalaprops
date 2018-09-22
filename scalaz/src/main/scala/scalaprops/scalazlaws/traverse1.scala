@@ -5,6 +5,7 @@ import scalaprops.Property.forAll
 import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.tuple._
+import ScalapropsScalaz._
 
 object traverse1 {
   def identityTraverse1[F[_], X, Y](implicit f: Traverse1[F], afx: Gen[F[X]], axy: Gen[X => Y], ef: Equal[F[Y]]) =

@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.Heap
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object HeapTest extends Scalaprops {
 

@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object TreeLocTest extends Scalaprops{
 
@@ -14,7 +15,7 @@ object TreeLocTest extends Scalaprops{
   val treeLocGenSized = {
     Property.forAllG(Gen.positiveByte, Gen[Long]){ (n, seed) =>
       val size = 5
-      val a = Gen.treeLocGenSized[Unit](n).samples(
+      val a = ScalapropsScalaz.treeLocGenSized[Unit](n).samples(
         listSize = size, seed = seed
       ).map(Foldable[TreeLoc].length)
 

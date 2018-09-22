@@ -4,7 +4,7 @@ import scala.util.Random
 import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.tuple._
-import scalaz.std.string._
+import ScalapropsScalaz._
 
 object GenTest extends Scalaprops {
 
@@ -86,7 +86,7 @@ object GenTest extends Scalaprops {
       (t.size < f.size) && t.nonEmpty
     }
 
-  val maybeGen = Property.forAllG(
+  val testMaybeGen = Property.forAllG(
     Gen[Int], Gen.choose(500, 10000), Gen[Int]
   ){ (size, listSize, seed) =>
     val values = Gen[Maybe[Int]].samples(size = size, listSize = listSize, seed = seed)

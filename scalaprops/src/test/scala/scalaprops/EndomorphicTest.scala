@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import KleisliTest.kleisliEqual
 import CokleisliTest.cokleisliEqual
+import ScalapropsScalaz._
 
 object EndomorphicTest extends Scalaprops {
 

@@ -3,6 +3,7 @@ package scalaprops
 import scalaz._
 import scalaz.std.tuple._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object Tuple4Test extends Scalaprops {
 

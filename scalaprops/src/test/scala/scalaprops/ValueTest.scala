@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.Value
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object ValueTest extends Scalaprops {
 

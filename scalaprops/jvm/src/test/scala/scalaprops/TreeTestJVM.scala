@@ -9,6 +9,6 @@ object TreeTestJVM extends Scalaprops {
    */
   val catalanNumber = TreeTest.sizeTest(
     List(1, 1, 2, 5, 14, 42),
-    (i, seed) => Gen.treeGenSized[Unit](i).infiniteStream(seed = seed)
+    (i, seed) => ScalapropsScalaz.treeGenSized[Unit](i).infiniteStream(seed = seed)
   )
 }

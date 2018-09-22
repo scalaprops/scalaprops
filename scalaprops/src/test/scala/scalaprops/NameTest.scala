@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.Name
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object NameTest extends Scalaprops {
 

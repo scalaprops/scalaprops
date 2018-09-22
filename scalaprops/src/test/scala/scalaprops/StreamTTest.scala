@@ -7,6 +7,7 @@ import scalaz.syntax.equal._
 import scalaz.Id.Id
 import Property.forAll
 import scala.util.Try
+import ScalapropsScalaz._
 
 object StreamTTest extends Scalaprops {
 

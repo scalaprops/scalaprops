@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.{\/, IList}
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object DisjunctionTest extends Scalaprops {
 

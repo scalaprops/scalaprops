@@ -3,6 +3,7 @@ package scalaprops
 import scalaprops.Property.forAllG
 import scalaz.IList
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object IListTest extends Scalaprops {
 

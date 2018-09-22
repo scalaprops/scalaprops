@@ -3,6 +3,7 @@ package scalaprops
 import scalaz._
 import scalaz.Id.Id
 import scalaz.std.AllInstances._
+import ScalapropsScalaz._
 
 object FreeTTest extends Scalaprops {
   import FreeTest._

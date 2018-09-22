@@ -1,8 +1,7 @@
 package scalaprops
 
 import scalaprops.Property.forAll
-import scalaz._
-import scalaz.std.string._
+import scalaprops.internal.Tree
 
 object PropertiesTest extends Scalaprops {
 
@@ -33,51 +32,51 @@ object PropertiesTest extends Scalaprops {
         cobind
       ))
 
-    val dag = """"list instance"
+    val dag = """list instance
 |
-+- "isEmpty"
++- isEmpty
 |  |
-|  `- "plusEmpty"
+|  `- plusEmpty
 |     |
-|     `- "plus"
+|     `- plus
 |
-+- "monadPlus"
++- monadPlus
 |  |
-|  +- "applicativePlus"
+|  +- applicativePlus
 |  |  |
-|  |  +- "applicative"
+|  |  +- applicative
 |  |  |  |
-|  |  |  `- "apply"
+|  |  |  `- apply
 |  |  |     |
-|  |  |     `- "functor"
+|  |  |     `- functor
 |  |  |
-|  |  `- "plusEmpty"
+|  |  `- plusEmpty
 |  |     |
-|  |     `- "plus"
+|  |     `- plus
 |  |
-|  `- "monad"
+|  `- monad
 |     |
-|     +- "bind"
+|     +- bind
 |     |  |
-|     |  `- "apply"
+|     |  `- apply
 |     |     |
-|     |     `- "functor"
+|     |     `- functor
 |     |
-|     `- "applicative"
+|     `- applicative
 |        |
-|        `- "apply"
+|        `- apply
 |           |
-|           `- "functor"
+|           `- functor
 |
-+- "traverse"
++- traverse
 |  |
-|  +- "foldable"
+|  +- foldable
 |  |
-|  `- "functor"
+|  `- functor
 |
-`- "cobind"
+`- cobind
    |
-   `- "functor"
+   `- functor
 """
 
     assert(list.drawTree == dag)
@@ -86,34 +85,34 @@ object PropertiesTest extends Scalaprops {
     val methodName = "distinctTree"
     val method = clazz.getDeclaredMethods.find(_.getName == methodName).getOrElse(sys.error("not found " + methodName))
     method.setAccessible(true)
-    val tree = method.invoke(Properties, list, Order[String]).asInstanceOf[Tree[String]]
-    tree.drawTree == """"list instance"
+    val tree = method.invoke(Properties, list).asInstanceOf[Tree[String]]
+    tree.drawTree == """list instance
 |
-+- "isEmpty"
++- isEmpty
 |  |
-|  `- "plusEmpty"
+|  `- plusEmpty
 |     |
-|     `- "plus"
+|     `- plus
 |
-+- "monadPlus"
++- monadPlus
 |  |
-|  +- "applicativePlus"
+|  +- applicativePlus
 |  |  |
-|  |  `- "applicative"
+|  |  `- applicative
 |  |     |
-|  |     `- "apply"
+|  |     `- apply
 |  |        |
-|  |        `- "functor"
+|  |        `- functor
 |  |
-|  `- "monad"
+|  `- monad
 |     |
-|     `- "bind"
+|     `- bind
 |
-+- "traverse"
++- traverse
 |  |
-|  `- "foldable"
+|  `- foldable
 |
-`- "cobind"
+`- cobind
 """
   }
 

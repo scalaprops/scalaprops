@@ -1,8 +1,8 @@
 package scalaprops
 
 import sbt.testing._
+import scalaprops.internal._
 import scala.collection.mutable.ArrayBuffer
-import scalaz._
 import scala.reflect.NameTransformer
 
 object ScalapropsRunner {
@@ -27,7 +27,7 @@ object ScalapropsRunner {
         val props = method.invoke(obj).asInstanceOf[Properties[Any]].props
         Properties.noSort[Any](
           Tree.Node(
-            methodName -> Maybe.empty,
+            methodName -> Option.empty,
             props #:: Stream.empty
           )
         )
@@ -37,27 +37,27 @@ object ScalapropsRunner {
   private[scalaprops] def allProps(
     clazz: Class[_],
     obj: Scalaprops,
-    only: Option[NonEmptyList[String]],
+    only: List[String],
     logger: Logger): Properties[_] = {
     val tests0 = invokeProperty(clazz, obj).map {
       case (name, p) => p.toProperties[Any](name)
     } ::: invokeProperties(clazz, obj)
 
     val tests = only match {
-      case Some(names) =>
+      case names @ (_ :: _) =>
         ScalapropsTaskImpl.filterTests(
           objName = clazz.getCanonicalName.dropRight(1),
           names = names,
           tests = tests0,
           logger = logger
         )
-      case None =>
+      case _ =>
         tests0
     }
 
     Properties.noSort[Any](
       Tree.Node(
-        clazz.getName -> Maybe.empty,
+        clazz.getName -> Option.empty,
         obj.transformProperties(tests).map(_.props).toStream
       )
     )
@@ -76,7 +76,7 @@ object ScalapropsRunner {
     fingerprint: Fingerprint,
     testClassName: String,
     testClassLoader: ClassLoader,
-    only: Option[NonEmptyList[String]],
+    only: List[String],
     logger: Logger
   ): Properties[_] = {
     val clazz = testClassLoader.loadClass(testClassName + "$")

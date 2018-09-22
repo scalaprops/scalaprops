@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.stream._
 import scalaz.std.vector._
+import ScalapropsScalaz._
 
 object CofreeTest extends Scalaprops {
 

@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.std.anyVal._
 import scalaz.LazyOption
+import ScalapropsScalaz._
 
 object LazyOptionTest extends Scalaprops {
 

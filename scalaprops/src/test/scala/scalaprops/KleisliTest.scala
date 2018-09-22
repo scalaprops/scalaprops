@@ -1,8 +1,10 @@
 package scalaprops
 
-import scalaz._
+import scalaprops.internal._
+import scalaz.{Endo => _, _}
 import scalaz.std.tuple._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object KleisliTest extends Scalaprops {
 

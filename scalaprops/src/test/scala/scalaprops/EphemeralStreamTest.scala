@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.EphemeralStream
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object EphemeralStreamTest extends Scalaprops {
 

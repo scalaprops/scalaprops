@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.std.either._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object EitherTest extends Scalaprops {
 

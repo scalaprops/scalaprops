@@ -5,8 +5,8 @@ import sbt.testing._
 import scala.reflect.NameTransformer
 import scala.scalajs._
 import scala.scalajs.js.WrappedDictionary
-import scalaz._
 import scala.collection.mutable.ArrayBuffer
+import scalaprops.internal._
 
 object ScalapropsRunner {
 
@@ -42,32 +42,32 @@ object ScalapropsRunner {
         val props = properties.asInstanceOf[Properties[Any]].props
         Properties.noSort[Any](
           Tree.Node(
-            name -> Maybe.empty,
+            name -> Option.empty,
             props #:: Stream.empty
           )
         )
     }.toList
 
-  def allProps(obj: Scalaprops, only: Option[NonEmptyList[String]], logger: Logger): Properties[_] = {
+  def allProps(obj: Scalaprops, only: List[String], logger: Logger): Properties[_] = {
     val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[_]]).map {
       case (name, p) => p.toProperties[Any](name)
     } ::: invokeProperties(obj.asInstanceOf[js.Dictionary[_]])
 
     val tests = only match {
-      case Some(names) =>
+      case names @ (_ :: _) =>
         ScalapropsTaskImpl.filterTests(
           objName = obj.toString.dropRight(1),
           names = names,
           tests = tests0,
           logger = logger
         )
-      case None =>
+      case Nil =>
         tests0
     }
 
     Properties.noSort[Any](
       Tree.Node(
-        obj.getClass.getName -> Maybe.empty,
+        obj.getClass.getName -> Option.empty,
         obj.transformProperties(tests).map(_.props).toStream
       )
     )
@@ -96,7 +96,7 @@ object ScalapropsRunner {
     fingerprint: Fingerprint,
     testClassName: String,
     testClassLoader: ClassLoader,
-    only: Option[NonEmptyList[String]],
+    only: List[String],
     logger: Logger
   ): Properties[_] = {
     val obj = getTestObject(fingerprint, testClassName, testClassLoader)

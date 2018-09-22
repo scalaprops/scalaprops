@@ -1,7 +1,6 @@
 package scalaprops
 
 import sbt.testing._
-import scalaz._
 import scala.collection.mutable.ArrayBuffer
 
 object ScalapropsRunner {
@@ -24,7 +23,7 @@ object ScalapropsRunner {
     fingerprint: Fingerprint,
     testClassName: String,
     testClassLoader: ClassLoader,
-    only: Option[NonEmptyList[String]],
+    only: List[String],
     logger: Logger
   ): Properties[_] = {
     ???

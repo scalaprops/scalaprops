@@ -2,8 +2,6 @@ package scalaprops
 package scalazlaws
 
 import scalaz._
-import scalaz.std.tuple._
-import scalaz.std.anyVal._
 
 object bitraverse {
 

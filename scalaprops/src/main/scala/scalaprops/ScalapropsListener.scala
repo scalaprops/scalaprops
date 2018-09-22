@@ -1,7 +1,7 @@
 package scalaprops
 
 import sbt.testing.Logger
-import scalaz._
+import scalaprops.internal._
 
 abstract class ScalapropsListener {
 
@@ -9,7 +9,7 @@ abstract class ScalapropsListener {
 
   def onFinish(obj: Scalaprops, name: String, property: Property, param: Param, result: CheckResult, logger: Logger): Unit = {}
 
-  def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {}
+  def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOpt[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {}
 
   def onError(obj: Scalaprops, name: String, e: Throwable, logger: Logger): Unit = {}
 
@@ -45,21 +45,21 @@ object ScalapropsListener {
 
     private[this] def event2string(event: ScalapropsEvent) =
       event.result match {
-        case \&/.That(r) =>
+        case CheckResultError.Value(r) =>
           r.toString + " " + event.duration + "ms"
-        case \&/.Both(_, r) =>
+        case CheckResultError.Both(_, r) =>
           r.toString + " " + event.duration + "ms"
-        case \&/.This(e) =>
+        case CheckResultError.Err(e) =>
           e.toString + " " + event.duration + "ms"
       }
 
-    override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {
+    override def onFinishAll(obj: Scalaprops, result: Tree[(Any, LazyOpt[(Property, Param, ScalapropsEvent)])], logger: Logger): Unit = {
       val tree = drawTree(result.map {
         case (name, x) =>
           name.toString -> x.map{ case (prop, param, event) =>
             val str = event2string(event)
             if(logger.ansiCodesSupported()){
-              event.result.b match {
+              event.result.value match {
                 case Some(_: CheckResult.Proven | _: CheckResult.Passed) =>
                   Console.GREEN + str + Console.RESET
                 case Some(_: CheckResult.Ignored) =>

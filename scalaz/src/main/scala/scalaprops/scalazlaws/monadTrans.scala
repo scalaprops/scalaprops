@@ -3,6 +3,7 @@ package scalazlaws
 
 import scalaz._
 import Property.forAll
+import ScalapropsScalaz._
 
 object monadTrans {
 

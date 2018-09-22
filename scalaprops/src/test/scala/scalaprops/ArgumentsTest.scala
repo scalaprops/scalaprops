@@ -1,7 +1,5 @@
 package scalaprops
 
-import scalaz.NonEmptyList
-
 object ArgumentsTest extends Scalaprops {
 
   val parse = Property.forAll{
@@ -22,7 +20,7 @@ object ArgumentsTest extends Scalaprops {
     )
     val result = Arguments.parse(args)
     val expect = Arguments(
-      only = Some(NonEmptyList("foo", "bar")),
+      only = List("foo", "bar"),
       showDuration = 30,
       param = ParamOpt(
         seed = Some(Seed.IntSeed(100)),

@@ -3,6 +3,7 @@ package scalaprops
 import scalaz.Equal
 import scalaz.std.anyVal._
 import GenTest._
+import ScalapropsScalaz._
 
 object CogenStateTest extends Scalaprops {
 

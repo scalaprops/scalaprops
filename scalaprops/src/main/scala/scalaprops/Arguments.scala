@@ -1,9 +1,7 @@
 package scalaprops
 
-import scalaz.NonEmptyList
-
 final case class Arguments(
-  only: Option[NonEmptyList[String]],
+  only: List[String],
   showDuration: Int,
   param: ParamOpt
 )
@@ -18,9 +16,7 @@ object Arguments {
 
   def parse(args: List[String]): Arguments = {
 
-    val only = scalaz.std.list.toNel(
-      args.dropWhile((keyPrefix + "only") != _).drop(1).takeWhile(arg => !arg.startsWith(keyPrefix))
-    )
+    val only = args.dropWhile((keyPrefix + "only") != _).drop(1).takeWhile(arg => !arg.startsWith(keyPrefix))
 
     def arg(key: String): Seq[String] =
       args.withFilter(_.startsWith(keyPrefix + key + "=")).flatMap{

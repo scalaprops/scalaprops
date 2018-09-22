@@ -1,39 +1,13 @@
 package scalaprops
 
-import scalaz._
-import Or.{L, R}
-
 sealed abstract class Or
 
 sealed abstract class :-:[+H, +T <: Or] extends Or
 
 sealed abstract class OrConsInstances {
-
-  implicit def order[H, T <: Or](implicit H: Order[H], T: Order[T]): Order[H :-: T] =
-    Order.order{
-      case (L(a), L(b)) =>
-        H.order(a, b)
-      case (R(a), R(b)) =>
-        T.order(a, b)
-      case (R(_), L(_)) =>
-        Ordering.LT
-      case (L(_), R(_)) =>
-        Ordering.GT
-    }
-
 }
 
 object :-: extends OrConsInstances {
-
-  implicit def equal[H, T <: Or](implicit H: Equal[H], T: Equal[T]): Equal[H :-: T] =
-    Equal.equal{
-      case (L(a), L(b)) =>
-        H.equal(a, b)
-      case (R(a), R(b)) =>
-        T.equal(a, b)
-      case _ =>
-        false
-    }
 
   implicit def orGen[A, B <: Or](implicit A: Gen[A], B: Gen[B]): Gen[A :-: B] = {
     if(B eq Or.Empty.orEmptyGen){
@@ -61,11 +35,8 @@ object Or {
   sealed trait Empty extends Or
 
   object Empty {
-    implicit val instance: Order[Empty] =
-      Order.order((_, _) => Ordering.EQ)
-
     implicit val orEmptyGen: Gen[Or.Empty] =
-      Gen.oneOfLazy(Need(???))
+      Gen.oneOfLazy(Lazy(???))
   }
 
   final class MkOr[C <: Or] private[Or] {

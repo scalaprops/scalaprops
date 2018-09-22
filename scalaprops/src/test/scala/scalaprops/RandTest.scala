@@ -1,7 +1,7 @@
 package scalaprops
 
 import scala.util.Random
-import scalaz.std.string._
+import ScalapropsScalaz._
 
 object RandTest extends Scalaprops{
   val testEqualLaw = scalazlaws.equal.all[Rand]

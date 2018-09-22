@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.DList
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object DListTest extends Scalaprops {
 

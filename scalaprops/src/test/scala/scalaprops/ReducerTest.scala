@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.Tags._
 import scalaz.std.AllInstances._
 import EndoTest.endoEqual
+import ScalapropsScalaz._
 
 object ReducerTest extends Scalaprops{
 

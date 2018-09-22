@@ -1,7 +1,5 @@
 package scalaprops
 
-import scalaz._
-
 final class MersenneTwister32 private(private val array: Array[Long], private val mti: Int) extends Rand {
   private def newArray: Array[Long] = array.clone()
 
@@ -42,9 +40,6 @@ object MersenneTwister32{
 
   private[this] val UpperMask = 0x80000000L
   private[this] val LowerMask = 0x7fffffffL
-
-  implicit val randEqual: Equal[MersenneTwister32] =
-    Equal.equalA[MersenneTwister32]
 
   private def apply(array: Array[Long], mti: Int): MersenneTwister32 =
     new MersenneTwister32(array, mti)

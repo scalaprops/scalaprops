@@ -2,25 +2,25 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.anyVal._
-import scalaz.std.string._
+import ScalapropsScalaz._
 
 object TreeTest extends Scalaprops {
 
   val laws = Properties.list(
-    scalazlaws.traverse1.all[Tree],
-    scalazlaws.align.all[Tree],
-    scalazlaws.zip.all[Tree],
-    scalazlaws.comonad.all[Tree],
-    scalazlaws.monad.all[Tree]
+    scalazlaws.traverse1.all[scalaz.Tree],
+    scalazlaws.align.all[scalaz.Tree],
+    scalazlaws.zip.all[scalaz.Tree],
+    scalazlaws.comonad.all[scalaz.Tree],
+    scalazlaws.monad.all[scalaz.Tree]
   )
 
-  val order = scalazlaws.order.all[Tree[Int]]
+  val order = scalazlaws.order.all[scalaz.Tree[Int]]
 
   val treeGenSized = Property.forAllG(Gen.positiveByte, Gen[Long]){ (n, seed) =>
     val size = 5
-    val a = Gen.treeGenSized[Unit](n).samples(
+    val a = ScalapropsScalaz.treeGenSized[Unit](n).samples(
       listSize = size, seed = seed
-    ).map(Foldable[Tree].length)
+    ).map(Foldable[scalaz.Tree].length)
 
     a == List.fill(size)(n)
   }.toProperties((), Param.minSuccessful(10))
@@ -66,9 +66,9 @@ object TreeTest extends Scalaprops {
   }
 
   val treeGenSize = {
-    val F = Foldable[Tree]
+    val F = Foldable[scalaz.Tree]
     val p = { (size: Int) =>
-      Property.forAll{ tree: Tree[Int] =>
+      Property.forAll{ tree: scalaz.Tree[Int] =>
         val c = F.count(tree)
         (c <= size) && ((c * 0.7) < F.toIList(tree).distinct.length)
       }.toProperties(size.toString).andThenParam(

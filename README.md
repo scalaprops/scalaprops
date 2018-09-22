@@ -34,18 +34,18 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false // currently, does not support parallel execution
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.5.5" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.6.0" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.5.5" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.6.0" % "test"
 ```
 
 </details>
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.5/scalaprops-all_2.12-0.5.5-javadoc.jar/!/scalaprops/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.5/scalaprops-all_2.12-0.5.5-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.6.0/scalaprops-all_2.12-0.6.0-javadoc.jar/!/scalaprops/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.6.0/scalaprops-all_2.12-0.6.0-sxr.jar/!/index.html)
 
 
 ### snapshot version
@@ -59,17 +59,17 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.5.6-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.6.0-SNAPSHOT" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalazlaws" % "0.5.6-SNAPSHOT" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.6.0-SNAPSHOT" % "test"
 ```
 
 </details>
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.6-SNAPSHOT/scalaprops-all_2.12-0.5.6-SNAPSHOT-javadoc.jar/!/scalaprops/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.5.6-SNAPSHOT/scalaprops-all_2.12-0.5.6-SNAPSHOT-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.6.0-SNAPSHOT/scalaprops-all_2.12-0.6.0-SNAPSHOT-javadoc.jar/!/scalaprops/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.6.0-SNAPSHOT/scalaprops-all_2.12-0.6.0-SNAPSHOT-sxr.jar/!/index.html)
 
 
 ![screencast](screencast.gif)

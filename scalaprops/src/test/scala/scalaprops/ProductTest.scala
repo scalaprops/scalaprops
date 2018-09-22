@@ -3,6 +3,7 @@ package scalaprops
 import scalaz._
 import scalaz.std.tuple.tuple2Equal
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object ProductTest extends Scalaprops {
 

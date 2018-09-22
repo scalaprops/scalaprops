@@ -1,20 +1,13 @@
 package scalaprops
 
 import java.math.BigInteger
-
 import scala.reflect.ClassTag
-import scalaz._
-import scalaz.std.stream._
-import scalaz.Isomorphism._
 
 final class Shrink[A](val f: A => Stream[A]) {
   def apply(a: A): Stream[A] = f(a)
 
   def xmap[B](x: A => B, y: B => A): Shrink[B] =
     Shrink.shrink(y andThen f andThen(_.map(x)))
-
-  def xmapi[B](f: A <=> B): Shrink[B] =
-    xmap(f.to, f.from)
 }
 
 object Shrink {
@@ -26,12 +19,6 @@ object Shrink {
   private[this] val Empty = shrink[Any](_ => Stream.Empty)
 
   def empty[A]: Shrink[A] = Empty.asInstanceOf[Shrink[A]]
-
-  implicit val shrinkInstance: InvariantFunctor[Shrink] =
-    new InvariantFunctor[Shrink] {
-      def xmap[A, B](ma: Shrink[A], f: A => B, g: B => A) =
-        ma.xmap(f, g)
-    }
 
   implicit val long: Shrink[Long] =
     shrink{
@@ -63,22 +50,26 @@ object Shrink {
       case Some(a) => None #:: A(a).map(Option(_))
     }
 
-  implicit def disjunction[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[A \/ B] =
+  implicit def either[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[A Either B] =
     shrink{
-      case -\/(a) => A(a).map(\/.left)
-      case \/-(a) => B(a).map(\/.right)
+      case Left(a) =>
+        A(a).map(Left(_))
+      case Right(a) =>
+        B(a).map(Right(_))
     }
 
-  implicit def either[A: Shrink, B: Shrink]: Shrink[A Either B] =
-    Shrink[A \/ B].xmap(_.toEither, \/.fromEither)
+  implicit def list[A](implicit A: Shrink[A]): Shrink[List[A]] = {
 
-  implicit def ilist[A](implicit A: Shrink[A]): Shrink[IList[A]] = {
-    def removeChunks(n: Int, as: IList[A]): Stream[IList[A]] =
+    def interleave[B](s1: Stream[B], s2: Stream[B]): Stream[B] =
+      if (s1.isEmpty) s2
+      else s1.head #:: interleave(s2, s1.tail)
+
+    def removeChunks(n: Int, as: List[A]): Stream[List[A]] =
       as match {
-        case INil() =>
+        case Nil =>
           Stream.Empty
-        case ICons(_, INil()) =>
-          Stream.cons(INil(), Stream.Empty)
+        case _ :: Nil =>
+          Stream.cons(Nil, Stream.Empty)
         case _ =>
           val n1 = n / 2
           val n2 = n - n1
@@ -89,7 +80,7 @@ object Shrink {
               val as2 = as.drop(n1)
               Stream.cons(
                 as2,
-                std.stream.interleave(
+                interleave(
                   removeChunks(n1, as1).withFilter(_.nonEmpty).map(_ ::: as2),
                   removeChunks(n2, as2).withFilter(_.nonEmpty).map(as1 ::: _)
                 )
@@ -98,59 +89,69 @@ object Shrink {
           )
       }
 
-    def shrinkOne(as: IList[A]): Stream[IList[A]] = as match {
-      case INil() => Stream.Empty
-      case ICons(h, t) =>
+    def shrinkOne(as: List[A]): Stream[List[A]] = as match {
+      case h :: t =>
         (A(h).map(_ :: t) ++ shrinkOne(t)).map(h :: _)
+      case _ =>
+        Stream.Empty
     }
 
     shrink(as => removeChunks(as.length, as) #::: shrinkOne(as))
   }
 
-  implicit def list[A: Shrink]: Shrink[List[A]] =
-    Shrink[IList[A]].xmap(_.toList, Gen.IListFromList)
-
   implicit def stream[A: Shrink]: Shrink[Stream[A]] = {
-    Shrink[IList[A]].xmap(_.toStream, IList.fromFoldable(_))
+    Shrink[List[A]].xmap(_.toStream, _.toList)
   }
 
   implicit def tuple2[A1, A2](implicit A1: Shrink[A1], A2: Shrink[A2]): Shrink[(A1, A2)] =
     shrink{ case (a1, a2) =>
-      Apply[Stream].tuple2(A1(a1), A2(a2))
+      for {
+        x1 <- A1(a1)
+        x2 <- A2(a2)
+      } yield (x1, x2)
     }
 
   implicit def tuple3[A1, A2, A3](implicit A1: Shrink[A1], A2: Shrink[A2], A3: Shrink[A3]): Shrink[(A1, A2, A3)] =
     shrink{ case (a1, a2, a3) =>
-      Apply[Stream].tuple3(A1(a1), A2(a2), A3(a3))
+      for {
+        x1 <- A1(a1)
+        x2 <- A2(a2)
+        x3 <- A3(a3)
+      } yield (x1, x2, x3)
     }
 
   implicit def tuple4[A1, A2, A3, A4](implicit A1: Shrink[A1], A2: Shrink[A2], A3: Shrink[A3], A4: Shrink[A4]): Shrink[(A1, A2, A3, A4)] =
     shrink{ case (a1, a2, a3, a4) =>
-      Apply[Stream].tuple4(A1(a1), A2(a2), A3(a3), A4(a4))
+      for {
+        x1 <- A1(a1)
+        x2 <- A2(a2)
+        x3 <- A3(a3)
+        x4 <- A4(a4)
+      } yield (x1, x2, x3, x4)
     }
 
   implicit def map[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[Map[A, B]] = {
-    Shrink[IList[(A, B)]].xmap(
+    Shrink[List[(A, B)]].xmap(
       _.foldLeft(Map.newBuilder[A, B])(_ += _).result,
-      _.foldRight(IList.empty[(A, B)])(_ :: _)
+      _.foldRight(List.empty[(A, B)])(_ :: _)
     )
   }
 
   implicit def array[A: Shrink](implicit A: ClassTag[A]): Shrink[Array[A]] = {
-    def ilist2array(list: IList[A]) = {
+    def ilist2array(list: List[A]) = {
       val array = new Array[A](list.length)
       @annotation.tailrec
-      def loop(xs: IList[A], i: Int): Unit = xs match {
-        case ICons(h, t) =>
+      def loop(xs: List[A], i: Int): Unit = xs match {
+        case h :: t =>
           array(i) = h
           loop(t, i + 1)
-        case INil() =>
+        case _ =>
       }
       loop(list, 0)
       array
     }
 
-    Shrink[IList[A]].xmap(ilist2array, array => IList(array: _*))
+    Shrink[List[A]].xmap(ilist2array, _.toList)
   }
 
   implicit val bigInteger: Shrink[BigInteger] =
@@ -175,12 +176,6 @@ object Shrink {
 
   implicit val bigInt: Shrink[BigInt] =
     Shrink[BigInteger].xmap(BigInt(_), _.bigInteger)
-
-  val shrinkFunctionIso: Shrink <~> ({type l[a] = a => Stream[a]})#l =
-    new IsoFunctorTemplate[Shrink, ({type l[a] = a => Stream[a]})#l] {
-      def to[A](fa: Shrink[A]) = fa.f
-      def from[A](ga: A => Stream[A]) = new Shrink(ga)
-    }
 
   implicit def cogenShrink[A: Gen: Cogen]: Cogen[Shrink[A]] =
     Cogen[A => Stream[A]].contramap(_.f)

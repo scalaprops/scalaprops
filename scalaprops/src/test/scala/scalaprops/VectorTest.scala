@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.std.vector._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object VectorTest extends Scalaprops {
 

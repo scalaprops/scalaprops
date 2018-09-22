@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import sbt.testing._
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.NonFatal
-import scalaz._
+import scalaprops.internal._
 
 final class ScalapropsTaskImpl(
   override val taskDef: TaskDef,
@@ -74,17 +74,17 @@ object ScalapropsTaskImpl {
     obj: Scalaprops,
     fingerprint: Fingerprint,
     executor: TestExecutor
-  ): Tree[(Any, LazyOption[(Property, Param, ScalapropsEvent)])] = {
-    tests.props.loc.cojoin.toTree.map { t =>
+  ): Tree[(Any, LazyOpt[(Property, Param, ScalapropsEvent)])] = {
+    tests.props.zipper.cojoin.toTree.map { t =>
       (t.tree.rootLabel +: t.parents.map(_._2)).map(_._1).reverse.mkString(".") -> t.tree.rootLabel
     }.map { case (fullName, (id, checkOpt)) =>
       val name = id.toString
       (id: Any) -> (checkOpt match {
-        case Maybe.Just(check) => LazyOption.lazySome {
+        case Some(check) => LazyOpt.lazySome {
           val cancel = new AtomicBoolean(false)
           val selector = new TestSelector(name)
 
-          def event (status: Status, duration: Long, result0: Throwable \&/ CheckResult) = {
+          def event(status: Status, duration: Long, result0: CheckResultError) = {
             status match {
               case Status.Success =>
                 testStatus.success.incrementAndGet()
@@ -96,7 +96,7 @@ object ScalapropsTaskImpl {
                 testStatus.ignored.incrementAndGet()
               case Status.Pending | Status.Skipped | Status.Canceled =>
             }
-            val err = result0.a match {
+            val err = result0.error match {
               case Some(e) => new OptionalThrowable(e)
               case None => emptyThrowable
             }
@@ -119,31 +119,31 @@ object ScalapropsTaskImpl {
             obj.listener.onFinish(obj, name, check.prop, param, r, log)
             r match {
               case _: CheckResult.Proven | _: CheckResult.Passed =>
-                event(Status.Success, duration, \&/.That(r))
+                event(Status.Success, duration, CheckResultError.Value(r))
               case _: CheckResult.Exhausted | _: CheckResult.Falsified =>
-                event(Status.Failure, duration, \&/.That(r))
+                event(Status.Failure, duration, CheckResultError.Value(r))
               case e: CheckResult.GenException =>
                 log.trace(e.exception)
-                event(Status.Error, duration, \&/.Both(e.exception, r))
+                event(Status.Error, duration, CheckResultError.Both(e.exception, r))
               case e: CheckResult.PropException =>
                 log.trace(e.exception)
-                event(Status.Error, duration, \&/.Both(e.exception, r))
+                event(Status.Error, duration, CheckResultError.Both(e.exception, r))
               case _: CheckResult.Timeout =>
-                event(Status.Error, duration, \&/.That(r))
+                event(Status.Error, duration, CheckResultError.Value(r))
               case _: CheckResult.Ignored =>
-                event(Status.Ignored, duration, \&/.That(r))
+                event(Status.Ignored, duration, CheckResultError.Value(r))
             }
           } catch {
             case e: TimeoutException =>
               val duration = System.currentTimeMillis() - start
               log.trace(e)
               obj.listener.onError(obj, name, e, log)
-              event(Status.Error, duration, \&/.This(e))
+              event(Status.Error, duration, CheckResultError.Err(e))
             case NonFatal(e) =>
               val duration = System.currentTimeMillis() - start
               log.trace(e)
               obj.listener.onError(obj, name, e, log)
-              event(Status.Error, duration, \&/.This(e))
+              event(Status.Error, duration, CheckResultError.Err(e))
           } finally {
             cancel.set(true)
             testStatus.all.incrementAndGet()
@@ -157,16 +157,16 @@ object ScalapropsTaskImpl {
           )
           (check.prop, param, r)
         }
-        case Maybe.Empty() =>
-          LazyOption.lazyNone
+        case None =>
+          LazyOpt.lazyNone
       })
     }
   }
 
   private[scalaprops] def filterTests(
-    objName: String, tests: List[Properties[Any]], names: NonEmptyList[String], logger: Logger
+    objName: String, tests: List[Properties[Any]], names: List[String], logger: Logger
   ): List[Properties[Any]] = {
-    val set = Foldable[NonEmptyList].toSet(names)
+    val set = names.toSet
     val actualTests = tests.map(_.id.toString).toSet
     set.filterNot(actualTests).foreach{ typo =>
       logger.warn(s"""'${objName}.$typo' does not exists""")

@@ -1,6 +1,7 @@
 package scalaprops
 
 import scalaz.IList
+import ScalapropsScalaz._
 
 object CogenTest extends Scalaprops {
 

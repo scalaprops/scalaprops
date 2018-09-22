@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.CorecursiveList
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object CorecursiveListTest extends Scalaprops {
 

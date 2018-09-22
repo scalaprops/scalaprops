@@ -3,6 +3,7 @@ package scalaprops
 import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.list._
+import ScalapropsScalaz._
 
 object ListTTest extends Scalaprops {
 

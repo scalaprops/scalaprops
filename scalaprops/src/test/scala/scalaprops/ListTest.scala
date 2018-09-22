@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.std.list._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object ListTest extends Scalaprops {
 

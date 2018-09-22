@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.Diev
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object DievTest extends Scalaprops {
 

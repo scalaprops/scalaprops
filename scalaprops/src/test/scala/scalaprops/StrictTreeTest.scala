@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz._
 import scalaz.std.AllInstances._
+import ScalapropsScalaz._
 
 object StrictTreeTest extends Scalaprops {
 
@@ -17,7 +18,7 @@ object StrictTreeTest extends Scalaprops {
 
   val strictTreeGenSized = Property.forAllG(Gen.positiveByte, Gen[Long]){ (n, seed) =>
     val size = 5
-    val a = Gen.strictTreeGenSized[Unit](n).samples(
+    val a = ScalapropsScalaz.strictTreeGenSized[Unit](n).samples(
       listSize = size, seed = seed
     ).map(Foldable[StrictTree].length)
 

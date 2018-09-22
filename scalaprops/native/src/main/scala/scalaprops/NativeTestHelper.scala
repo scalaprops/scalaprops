@@ -4,7 +4,7 @@ import sbt.testing.{Event, EventHandler, Logger, Status}
 
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.NameTransformer
-import scalaz.{Maybe, Tree}
+import scalaprops.internal._
 
 object NativeTestHelper {
 
@@ -48,13 +48,13 @@ abstract class NativeTestHelper {
       if(objects.isEmpty || objects.contains(className)) {
         val tests = props.map{ case (id, p) =>
           Properties(Tree.Node(
-            NameTransformer.decode(id) -> Maybe.empty[Check],
+            NameTransformer.decode(id) -> Option.empty[Check],
             Stream(p.widen[Any].props)
           ))
         }.toList
 
         args.only match {
-          case Some(names) =>
+          case names @ (_ :: _) =>
             // test specific fields
             Some(
               ScalapropsTaskImpl.filterTests(
@@ -64,7 +64,7 @@ abstract class NativeTestHelper {
                 logger = logger
               )
             )
-          case None =>
+          case Nil =>
             // test all fields
             Some(tests)
         }
@@ -77,7 +77,7 @@ abstract class NativeTestHelper {
     testsOpt.foreach { tests =>
       val tree = ScalapropsTaskImpl.createTree(
         tests = Properties(Tree.Node(
-          className -> Maybe.empty[Check],
+          className -> Option.empty[Check],
           obj.transformProperties(tests).toStream.map(_.props)
         )),
         testClassName = className,

@@ -34,7 +34,7 @@ def module(id: String): CrossProject =
       commonSettings,
       scalazVersion := "7.2.27",
       initialCommands in console += {
-        "import scalaprops._, scalaz._;" + Seq(
+        "import scalaprops._;" + Seq(
           "Gen",
           "Cogen",
           "Rand"
@@ -57,8 +57,7 @@ def module(id: String): CrossProject =
 lazy val gen = module("gen")
   .settings(
     name := genName,
-    description := "pure functional random value generator",
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value
+    description := "pure functional random value generator"
   )
   .platformsSettings(JSPlatform, NativePlatform)(
     unmanagedSourceDirectories in Compile += {
@@ -75,9 +74,10 @@ lazy val core = module("core")
   )
   .dependsOn(gen)
 
-lazy val scalazlaws = module("scalazlaws")
+lazy val scalaz = module("scalaz")
   .settings(
-    name := scalazlawsName
+    name := scalazName,
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value
   )
   .dependsOn(core)
 
@@ -87,7 +87,7 @@ lazy val scalaprops = module(scalapropsName)
   )
   .dependsOn(
     core,
-    scalazlaws % "test"
+    scalaz % "test"
   )
   .jvmSettings(
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
@@ -128,6 +128,7 @@ val unusedWarnings = Def.setting {
 }
 
 val Scala211 = "2.11.12"
+val Scala212 = "2.12.8"
 val SetScala211 = releaseStepCommand("++" + Scala211)
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
@@ -150,8 +151,8 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     else
       Opts.resolver.sonatypeStaging
   ),
-  scalaVersion := Scala211,
-  crossScalaVersions := "2.12.8" :: Scala211 :: "2.10.7" :: "2.13.0-M5" :: Nil,
+  scalaVersion := Scala212,
+  crossScalaVersions := Scala212 :: Scala211 :: "2.10.7" :: "2.13.0-M5" :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
@@ -244,21 +245,21 @@ lazy val jvmProjects = Seq[ProjectReference](
   genJVM,
   coreJVM,
   scalapropsJVM,
-  scalazlawsJVM
+  scalazJVM
 )
 
 lazy val jsProjects = Seq[ProjectReference](
   genJS,
   coreJS,
   scalapropsJS,
-  scalazlawsJS
+  scalazJS
 )
 
 lazy val nativeProjects = Seq[ProjectReference](
   genNative,
   coreNative,
   scalapropsNative,
-  scalazlawsNative
+  scalazNative
 )
 
 lazy val genJS = gen.js
@@ -281,11 +282,11 @@ lazy val coreRoot = project
     notPublish
   )
 
-lazy val scalazlawsJS = scalazlaws.js
-lazy val scalazlawsJVM = scalazlaws.jvm
-lazy val scalazlawsNative = scalazlaws.native
-lazy val scalazlawsRoot = project
-  .aggregate(scalazlawsJS, scalazlawsJVM, scalazlawsNative)
+lazy val scalazJS = scalaz.js
+lazy val scalazJVM = scalaz.jvm
+lazy val scalazNative = scalaz.native
+lazy val scalazRoot = project
+  .aggregate(scalazJS, scalazJVM, scalazNative)
   .settings(
     commonSettings,
     notPublish
@@ -309,7 +310,7 @@ val root = Project("root", file("."))
     (
       coreJVM ::
         scalapropsJVM ::
-        scalazlawsJVM ::
+        scalazJVM ::
         Nil
     ).map(p => libraryDependencies ++= (libraryDependencies in p).value)
   )

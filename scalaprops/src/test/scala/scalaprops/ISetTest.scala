@@ -3,6 +3,7 @@ package scalaprops
 import scalaz._
 import scalaz.std.anyVal._
 import Property.forAll
+import ScalapropsScalaz._
 
 object ISetTest extends Scalaprops {
 

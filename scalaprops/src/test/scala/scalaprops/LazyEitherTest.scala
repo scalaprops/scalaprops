@@ -3,6 +3,7 @@ package scalaprops
 import scalaz.{Equal, LazyEither}
 import scalaz.std.anyVal._
 import scalaz.std.either._
+import ScalapropsScalaz._
 
 object LazyEitherTest extends Scalaprops {
 

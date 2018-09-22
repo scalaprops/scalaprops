@@ -1,7 +1,5 @@
 package scalaprops
 
-import scalaz._
-
 abstract class Rand {
 
   def nextInt: (Rand, Int)
@@ -108,9 +106,6 @@ object Rand{
       def cogen[B](a: Rand, g: CogenState[B]) =
         CogenState(g.rand.next, Gen.gen((size, _) => g.gen.f(size, a)))
     }
-
-  implicit val randEqual: Equal[Rand] =
-    Equal.equalA[Rand]
 
   def standard(s: Long): Rand =
     Platform.randFromLong(s)

@@ -1,7 +1,5 @@
 package scalaprops
 
-import scalaz.InvariantFunctor
-
 abstract class Choose[A] {
   def withBoundaries(from: A, to: A): Gen[A]
   def choose(from: A, to: A): Gen[A]
@@ -9,18 +7,6 @@ abstract class Choose[A] {
 
 object Choose {
   def apply[A](implicit A: Choose[A]): Choose[A] = A
-
-  implicit val chooseInstance: InvariantFunctor[Choose] =
-    new InvariantFunctor[Choose] {
-      def xmap[A, B](ma: Choose[A], f: A => B, g: B => A) =
-        new Choose[B] {
-          override def withBoundaries(from: B, to: B) =
-            ma.withBoundaries(g(from), g(to)).map(f)
-
-          override def choose(from: B, to: B) =
-            ma.choose(g(from), g(to)).map(f)
-        }
-    }
 
   implicit val intChoose: Choose[Int] =
     new Choose[Int] {

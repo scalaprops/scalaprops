@@ -3,6 +3,7 @@ package scalaprops
 import scalaz._
 import scalaz.std.anyVal._
 import scalaz.std.stream._
+import ScalapropsScalaz._
 
 object ShrinkTest extends Scalaprops {
 
@@ -30,7 +31,7 @@ object ShrinkTest extends Scalaprops {
         }(g, implicitly).check(param0, () => false, _ => ())
 
         result match {
-          case CheckResult.Falsified(_, 0, ICons(arg, INil()), _) if (m < arg.shrinks) && (arg.shrinks < Integer.SIZE) && (arg.value == n) =>
+          case CheckResult.Falsified(_, 0, arg :: Nil, _) if (m < arg.shrinks) && (arg.shrinks < Integer.SIZE) && (arg.value == n) =>
             true
           case fail =>
             sys.error(fail.toString)

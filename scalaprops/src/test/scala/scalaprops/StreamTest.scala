@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz.std.stream._
 import scalaz.std.anyVal._
+import ScalapropsScalaz._
 
 object StreamTest extends Scalaprops {
 
