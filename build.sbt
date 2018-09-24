@@ -81,16 +81,6 @@ lazy val scalazlaws = module("scalazlaws")
 
 lazy val scalaprops = module(scalapropsName)
   .settings(
-    scalacOptions := {
-      // suppress some warnings if Scala 2.12
-      // see https://github.com/scala/scala/pull/5402 and "scala -Ywarn-unused:help"
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, v)) if v >= 12 =>
-          scalacOptions.value.filterNot(_ == "-Ywarn-unused") :+ "-Ywarn-unused:-params,-patvars,_"
-        case _ =>
-          scalacOptions.value
-      }
-    },
     name := scalapropsName
   )
   .dependsOn(
@@ -123,7 +113,17 @@ val tagOrHash = Def.setting {
 def gitHash(): String =
   sys.process.Process("git rev-parse HEAD").lines_!.head
 
-val unusedWarnings = Seq("-Ywarn-unused")
+val unusedWarnings = Def.setting {
+  PartialFunction
+    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
+      case Some((2, v)) if v >= 12 =>
+        Seq("-Ywarn-unused:imports,locals")
+      case Some((2, 11)) =>
+        Seq("-Ywarn-unused", "-Ywarn-unused-import")
+    }
+    .toList
+    .flatten
+}
 
 val Scala211 = "2.11.12"
 val SetScala211 = releaseStepCommand("++" + Scala211)
@@ -195,12 +195,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       case Some((2, v)) if v <= 12 => "-Yno-adapted-args"
     }
     .toList,
-  scalacOptions ++= PartialFunction
-    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
-      case Some((2, v)) if v >= 11 => unusedWarnings
-    }
-    .toList
-    .flatten,
+  scalacOptions ++= unusedWarnings.value,
   releaseTagName := tagName.value,
   releaseCrossBuild := true,
   releaseProcess := Seq[ReleaseStep](
@@ -233,7 +228,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
         Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
     }
     .toList
-) ++ Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings)
+) ++ Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value)
 
 lazy val notPublish = Seq(
   publishArtifact := false,
