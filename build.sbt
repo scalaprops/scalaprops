@@ -49,6 +49,8 @@ def module(id: String): CrossProject =
       }
     )
     .nativeSettings(
+      scalaVersion := Scala211,
+      crossScalaVersions := Seq(Scala211),
       nativeGC := "immix"
     )
 
