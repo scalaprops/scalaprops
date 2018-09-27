@@ -25,7 +25,7 @@ script:
 before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
-  - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk9) ]]; then rm -rf $HOME/.ivy2/cache ; fi
+  - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk11) ]]; then rm -rf $HOME/.ivy2/cache ; fi
 
 env:
   global:
@@ -43,7 +43,7 @@ matrix:
       script:
       - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test
     - scala: 2.12.6
-      jdk: oraclejdk10
+      jdk: oraclejdk11
       script:
       - java -version
       - sbt ++$TRAVIS_SCALA_VERSION scalapropsJS/test scalapropsJVM/test "project /" publishLocal
