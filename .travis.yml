@@ -3,7 +3,7 @@ language: scala
 scala:
   - 2.10.7
   - 2.11.12
-  - 2.12.7
+  - 2.12.8
   - 2.13.0-M5
 
 cache:
@@ -41,7 +41,7 @@ matrix:
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
       script:
       - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test
-    - scala: 2.12.7
+    - scala: 2.12.8
       jdk: oraclejdk11
       script:
       - java -version
