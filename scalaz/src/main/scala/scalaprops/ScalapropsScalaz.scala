@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaz._
 import scalaz.Isomorphism._
+import scalaz.Liskov.<~<
 import Gen.gen
 import Variant.variantInt
 
@@ -371,6 +372,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   implicit val genInstance: Monad[Gen] with BindRec[Gen] =
     new Monad[Gen] with BindRec[Gen] {
+      override def widen[A, B](fa: Gen[A])(implicit ev: A <~< B) =
+        Gen.gen(Liskov.co[({type l[+a] = (Int, Rand) => (Rand, a)})#l, A, B](ev).apply(fa.f))
       override def bind[A, B](fa: Gen[A])(f: A => Gen[B]) =
         fa flatMap f
       override def map[A, B](fa: Gen[A])(f: A => B) =
