@@ -22,7 +22,7 @@ script:
   - git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
   - git show --oneline --check
   - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
-  - ./sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test "project /" publishLocal
+  - ./sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test
 before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
@@ -32,10 +32,6 @@ before_install:
   - source .install-jdk-travis.sh
 matrix:
   include:
-    - name: dotty
-      scala: 0.24.0-RC1
-      script:
-      - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
     - scala: SCALA_NATIVE
       sudo: required
       before_install:
@@ -51,14 +47,4 @@ matrix:
       - JDK="adopt@1.11.0-7"
       script:
       - java -version
-      - sbt "++${TRAVIS_SCALA_VERSION}!" scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test "project /" publishLocal
-    - os: windows
-      language: bash
-      script:
-      - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
-      - ./sbt "++ 2.13.3" compile test:compile scalapropsJVM/test scalazJVM/test "project /" publishLocal
-    - name: dotty-nightly
-      script:
-      - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck SetDottyNightlyVersion checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
-  allow_failures:
-  - name: dotty-nightly
+      - sbt "++${TRAVIS_SCALA_VERSION}!" scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test
