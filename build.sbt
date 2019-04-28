@@ -49,6 +49,7 @@ def module(id: String): CrossProject =
       }
     )
     .nativeSettings(
+      scalapropsNativeSettings,
       scalaVersion := Scala211,
       crossScalaVersions := Seq(Scala211),
       nativeGC := "immix"
@@ -79,15 +80,17 @@ lazy val scalaz = module("scalaz")
     name := scalazName,
     libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value
   )
-  .dependsOn(core)
+  .dependsOn(
+    core,
+    scalaprops % "test"
+  )
 
 lazy val scalaprops = module(scalapropsName)
   .settings(
     name := scalapropsName
   )
   .dependsOn(
-    core,
-    scalaz % "test"
+    core
   )
   .jvmSettings(
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
@@ -294,9 +297,7 @@ lazy val scalazRoot = project
 
 lazy val scalapropsJS = scalaprops.js
 lazy val scalapropsJVM = scalaprops.jvm
-lazy val scalapropsNative = scalaprops.native.settings(
-  scalapropsNativeSettings
-)
+lazy val scalapropsNative = scalaprops.native
 lazy val scalapropsRoot = project
   .aggregate(scalapropsJS, scalapropsJVM, scalapropsNative)
   .settings(
