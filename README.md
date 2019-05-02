@@ -80,6 +80,9 @@ Scalaprops emitting which seed it started with during a failing test, and provid
 
 ![deterministic-testing](deterministic-testing.gif)
 
+### examples
+See [scalaprops-example](https://github.com/scalaprops/scalaprops-examples) project.
+
 ### for scalaz 7.1.x
 
 <https://github.com/scalaprops/scalaprops/tree/0.1.x>
