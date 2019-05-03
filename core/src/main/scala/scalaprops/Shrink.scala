@@ -138,7 +138,7 @@ object Shrink {
   }
 
   implicit def array[A: Shrink](implicit A: ClassTag[A]): Shrink[Array[A]] = {
-    def ilist2array(list: List[A]) = {
+    def list2array(list: List[A]) = {
       val array = new Array[A](list.length)
       @annotation.tailrec
       def loop(xs: List[A], i: Int): Unit = xs match {
@@ -151,7 +151,7 @@ object Shrink {
       array
     }
 
-    Shrink[List[A]].xmap(ilist2array, _.toList)
+    Shrink[List[A]].xmap(list2array, _.toList)
   }
 
   implicit val bigInteger: Shrink[BigInteger] =
