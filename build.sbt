@@ -191,16 +191,20 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
-    "-Xfuture",
     "-language:existentials",
     "-language:higherKinds",
     "-language:implicitConversions"
   ),
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
-      case Some((2, v)) if v <= 12 => "-Yno-adapted-args"
+      case Some((2, v)) if v <= 12 =>
+        Seq(
+          "-Yno-adapted-args",
+          "-Xfuture"
+        )
     }
-    .toList,
+    .toList
+    .flatten,
   scalacOptions ++= unusedWarnings.value,
   releaseTagName := tagName.value,
   releaseCrossBuild := true,

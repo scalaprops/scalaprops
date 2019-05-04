@@ -67,12 +67,12 @@ object Choose {
             case 1 =>
               Gen.elements(min, max)
             case 2 =>
-              Gen.elements(min, min + 1l, max)
+              Gen.elements(min, min + 1L, max)
             case _ =>
               Gen.frequency(
                 1 -> Gen.value(min),
-                1 -> Gen.value(min + 1l),
-                1 -> Gen.value(max - 1l),
+                1 -> Gen.value(min + 1L),
+                1 -> Gen.value(max - 1L),
                 1 -> Gen.value(max),
                 90 -> Gen.chooseLong(from, to)
               )
