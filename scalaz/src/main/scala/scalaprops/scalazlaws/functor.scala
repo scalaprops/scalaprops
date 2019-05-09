@@ -5,6 +5,53 @@ import scalaprops.Property.forAll
 import scalaprops.Properties.properties
 import scalaz._
 
+object TestNewLaw {
+
+  import scalaz.std.anyVal._
+
+  trait Ev1[T[_], F[_]] {
+    def ev[A: T]: T[F[A]]
+  }
+
+  final case class Testable1[F[_]](gen: Ev1[Gen, F], cogen: Ev1[Cogen, F], equal: Ev1[Equal, F])
+
+  sealed abstract class Type1With[Ev[_[_]]] {
+    type Type1[_]
+    def evidence: Ev[Type1]
+  }
+
+  type Kind = Type1With[Testable1]
+
+  sealed abstract class LawCase{
+    type A
+    def equal: Equal[A]
+    def lhs: A
+    def rhs: A
+  }
+
+  object LawCase {
+    def apply[A0: Equal](lhs0: A0, rhs0: A0): LawCase {type A = A0} =
+      new LawCase {
+        type A = A0
+        def equal = Equal[A]
+        def lhs = lhs0
+        def rhs = rhs0
+      }
+  }
+
+  type X = Int
+
+  def identity(k: Kind)(fk: Functor[k.Type1]): Gen[LawCase] = {
+
+    k.evidence.gen.ev(Gen[X]).map { ka =>
+      val lhs = fk.map(ka)(x => x)
+      val rhs = ka
+      LawCase(lhs, rhs)(k.evidence.equal.ev[X])
+    }
+  }
+
+}
+
 object functor {
 
   def identity[F[_], X](implicit F: Functor[F], afx: Gen[F[X]], ef: Equal[F[X]]) =
