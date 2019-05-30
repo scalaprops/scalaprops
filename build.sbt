@@ -155,7 +155,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       Opts.resolver.sonatypeStaging
   ),
   scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala211 :: "2.10.7" :: "2.13.0-RC2" :: Nil,
+  crossScalaVersions := Scala212 :: Scala211 :: "2.10.7" :: "2.13.0-RC3" :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
