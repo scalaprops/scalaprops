@@ -1,5 +1,7 @@
 language: scala
 
+dist: xenial
+
 scala:
   - 2.10.7
   - 2.11.12
@@ -12,7 +14,7 @@ cache:
     - $HOME/.sbt/launchers
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 sudo: false
 
@@ -24,12 +26,12 @@ script:
 before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
   - find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
-  - if [[ ${JAVA_HOME} == $(jdk_switcher home oraclejdk11) ]]; then rm -rf $HOME/.ivy2/cache ; fi
+  - if [[ ${JAVA_HOME} == $(jdk_switcher home openjdk11) ]]; then rm -rf $HOME/.ivy2/cache ; fi
 
 matrix:
   include:
     - scala: SCALA_NATIVE
-      jdk: oraclejdk8
+      jdk: openjdk8
       sudo: required
       before_install:
       - curl https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh | bash -x
@@ -37,7 +39,7 @@ matrix:
       script:
       - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test scalazNative/test
     - scala: 2.12.8
-      jdk: oraclejdk11
+      jdk: openjdk11
       script:
       - java -version
       - sbt ++$TRAVIS_SCALA_VERSION scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test "project /" publishLocal
