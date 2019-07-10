@@ -688,14 +688,16 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     import scalaz.TreeLoc
     def forest(n: Int): Gen[TreeLoc.TreeForest[A]] =
       withSize(n)(treeGenSized[A])
-     val parent: Int => Gen[TreeLoc.Parent[A]] = { n =>
+
+    val parent: Int => Gen[TreeLoc.Parent[A]] = { n =>
       Gen.choose(0, n - 1).flatMap { x1 =>
         Apply[Gen].tuple3(
           forest(x1), A, forest(n - x1 - 1)
         )
       }
     }
-     for{
+
+    for{
       a <- Gen.choose(1, size)
       b = size - a
       aa <- Gen.choose(1, a)
