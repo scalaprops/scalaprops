@@ -20,29 +20,34 @@ object Shrink {
 
   def empty[A]: Shrink[A] = Empty.asInstanceOf[Shrink[A]]
 
-  implicit val long: Shrink[Long] =
+  private[this] def longMin(min: Long): Shrink[Long] =
     shrink{
       case 0L => Stream.Empty
       case i =>
         val is = 0L #:: Stream.iterate(i)(_ / 2L).takeWhile(_ != 0L).map(i - _)
-        if(i < 0L){
-          -i #:: is
+        if(min < i && i < 0L){
+          is
         } else {
           is
         }
     }
 
+  implicit val long: Shrink[Long] = longMin(Long.MinValue)
+
   implicit val boolean: Shrink[Boolean] =
-    shrink(_ => Stream.cons(false, Stream.Empty))
+    shrink {
+      case true  => Stream(false)
+      case false => Stream.empty
+    }
 
   implicit val int: Shrink[Int] =
-    long.xmap(_.toInt, x => x)
+    longMin(Int.MinValue).xmap(_.toInt, x => x)
 
   implicit val short: Shrink[Short] =
-    long.xmap(_.toShort, x => x)
+    longMin(Short.MinValue).xmap(_.toShort, x => x)
 
   implicit val byte: Shrink[Byte] =
-    long.xmap(_.toByte, x => x)
+    longMin(Byte.MinValue).xmap(_.toByte, x => x)
 
   implicit def option[A](implicit A: Shrink[A]): Shrink[Option[A]] =
     shrink{
@@ -91,7 +96,7 @@ object Shrink {
 
     def shrinkOne(as: List[A]): Stream[List[A]] = as match {
       case h :: t =>
-        (A(h).map(_ :: t) ++ shrinkOne(t)).map(h :: _)
+        A(h).map(_ :: t) #::: shrinkOne(t).map(h :: _)
       case _ =>
         Stream.Empty
     }
@@ -154,28 +159,20 @@ object Shrink {
     Shrink[List[A]].xmap(list2array, _.toList)
   }
 
-  implicit val bigInteger: Shrink[BigInteger] =
-    Shrink[(Byte, Array[Byte])].xmap(
-      bs => {
-        val x = new Array[Byte](bs._2.length - 1)
-        var i = 0
-        while(i < bs._2.length){
-          x(i) = bs._2.apply(i)
-          i += 1
-        }
-        x(bs._2.length) = bs._1
-        new BigInteger(x)
-      },
-      i => {
-        val b = i.toByteArray
-        val x = new Array[Byte](b.length - 1)
-        System.arraycopy(b, 0, x, 0, b.length - 1)
-        (b(0), x)
-      }
-    )
-
   implicit val bigInt: Shrink[BigInt] =
-    Shrink[BigInteger].xmap(BigInt(_), _.bigInteger)
+    Shrink.shrink[BigInt] {
+      case i if i == 0 => Stream.empty
+      case i =>
+        val is = BigInt(0) #:: Stream.iterate(i)(_ / 2).takeWhile(_ != 0).map(i - _)
+        if (i < 0) {
+          -i #:: is
+        } else {
+          is
+        }
+    }
+
+  implicit val bigInteger: Shrink[BigInteger] =
+    bigInt.xmap(_.bigInteger, BigInt(_))
 
   implicit def cogenShrink[A: Gen: Cogen]: Cogen[Shrink[A]] =
     Cogen[A => Stream[A]].contramap(_.f)
