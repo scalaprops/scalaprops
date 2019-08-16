@@ -48,30 +48,6 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.6.1" 
 - [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.6.1/scalaprops-all_2.12-0.6.1-sxr.jar/!/index.html)
 
 
-### snapshot version
-
-<details><summary>setup without sbt plugin</summary>
-
-```scala
-resolvers += Opts.resolver.sonatypeSnapshots
-
-testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
-
-parallelExecution in Test := false
-
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.6.2-SNAPSHOT" % "test"
-```
-
-```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.6.2-SNAPSHOT" % "test"
-```
-
-</details>
-
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.6.2-SNAPSHOT/scalaprops-all_2.12-0.6.2-SNAPSHOT-javadoc.jar/!/scalaprops/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/scalaprops/scalaprops-all_2.12/0.6.2-SNAPSHOT/scalaprops-all_2.12-0.6.2-SNAPSHOT-sxr.jar/!/index.html)
-
-
 ![screencast](screencast.gif)
 
 ### deterministic testing
