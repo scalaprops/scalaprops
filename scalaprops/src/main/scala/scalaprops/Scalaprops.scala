@@ -41,7 +41,7 @@ object Scalaprops {
 
   private[scalaprops] def findTestFields(clazz: Class[_], fieldType: Class[_]): Array[Method] =
     clazz.getMethods.filter(method =>
-      method.getParameterTypes.length == 0 && method.getReturnType == fieldType
+      method.getParameterTypes.length == 0 && method.getReturnType == fieldType && !method.getName.contains("$anonfun")
     )
 
   private[scalaprops] def logger(loggers: Array[Logger]): Logger = new Logger {
