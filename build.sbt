@@ -147,7 +147,6 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
 
 val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
-  resolvers += Opts.resolver.sonatypeReleases,
   publishTo := Some(
     if (isSnapshot.value)
       Opts.resolver.sonatypeSnapshots
