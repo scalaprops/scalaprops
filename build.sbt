@@ -1,7 +1,6 @@
 import build._
 import sbtrelease._
 import ReleaseStateTransformations._
-import com.typesafe.sbt.pgp.PgpKeys
 import sbtcrossproject.CrossProject
 
 val scalazVersion = SettingKey[String]("scalazVersion")
