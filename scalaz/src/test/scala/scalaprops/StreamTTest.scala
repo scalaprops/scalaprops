@@ -11,8 +11,8 @@ import ScalapropsScalaz._
 
 object StreamTTest extends Scalaprops {
 
-  private[this] def iso[F[_]: Monad]: ({type l[a] = StreamT[F, a]})#l <~> ({type l[a] = F[Stream[a]]})#l =
-    new IsoFunctorTemplate[({type l[a] = StreamT[F, a]})#l, ({type l[a] = F[Stream[a]]})#l] {
+  private[this] def iso[F[_]: Monad]: ({ type l[a] = StreamT[F, a] })#l <~> ({ type l[a] = F[Stream[a]] })#l =
+    new IsoFunctorTemplate[({ type l[a] = StreamT[F, a] })#l, ({ type l[a] = F[Stream[a]] })#l] {
       override def to[A](fa: StreamT[F, A]) =
         fa.toStream
 
@@ -25,7 +25,8 @@ object StreamTTest extends Scalaprops {
   val unconsRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       E: Equal[F[Option[(A, StreamT[F, A])]]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] =>
@@ -43,7 +44,8 @@ object StreamTTest extends Scalaprops {
   val isEmptyRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       E: Equal[F[Boolean]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] =>
@@ -61,7 +63,8 @@ object StreamTTest extends Scalaprops {
   val headOptionRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       E: Equal[F[Option[A]]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] =>
@@ -79,7 +82,8 @@ object StreamTTest extends Scalaprops {
   val tailMRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       E: Equal[F[StreamT[F, A]]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] =>
@@ -97,7 +101,8 @@ object StreamTTest extends Scalaprops {
   val foldLeftRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[A]]
     ) = forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) =>
@@ -115,7 +120,8 @@ object StreamTTest extends Scalaprops {
   val foldRightRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[A]]
     ) = forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) =>
@@ -133,7 +139,8 @@ object StreamTTest extends Scalaprops {
   val toStreamRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[Stream[A]]]
     ) = forAll { s: StreamT[F, A] =>
@@ -151,7 +158,8 @@ object StreamTTest extends Scalaprops {
   val lengthRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](implicit
+    def test[F[_]: Monad: BindRec](
+      implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[Int]]
     ) = forAll { s: StreamT[F, A] =>
@@ -188,11 +196,12 @@ object StreamTTest extends Scalaprops {
       scalazlaws.equal.all[F[Int]]
     )
   }.andThenParam(
-    Param.maxSize(2)
-  ).andThenParamPF{
-    case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
-      Param.minSuccessful(1)
-  }
+      Param.maxSize(2)
+    )
+    .andThenParamPF {
+      case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
+        Param.minSuccessful(1)
+    }
 
   val testMaybe = {
     type G[A] = Maybe[A]
@@ -214,7 +223,7 @@ object StreamTTest extends Scalaprops {
       scalazlaws.iso.all(iso[G].unlift[Byte]),
       scalazlaws.equal.all[F[Int]]
     )
-  }.andThenParam(Param.maxSize(3)).andThenParamPF{
+  }.andThenParam(Param.maxSize(3)).andThenParamPF {
     case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
       Param.minSuccessful(1)
   }

@@ -5,18 +5,18 @@ import java.math.BigInteger
 import scala.annotation.tailrec
 
 /** TinyMT is a pseudo random number generator.
-  *
-  * <p>
-  * To get an instance, call `TinyMT32.getDefault`
-  * </p>
-  * <p>
-  * This class supports jump function. User can get an array of pseudo random
-  * number generators by calling `TinyMT32#getDefaultArray`
-  * </p>
-  *
-  * @author M. Saito
-  * @see [[http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/index.html TinyMT web page]]
-  */
+ *
+ * <p>
+ * To get an instance, call `TinyMT32.getDefault`
+ * </p>
+ * <p>
+ * This class supports jump function. User can get an array of pseudo random
+ * number generators by calling `TinyMT32#getDefaultArray`
+ * </p>
+ *
+ * @author M. Saito
+ * @see [[http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/index.html TinyMT web page]]
+ */
 object TinyMT32 {
   private final case class MutableState(
     var st0: Int,
@@ -51,86 +51,103 @@ object TinyMT32 {
 
   /** bit size of int. */
   private val INT_SIZE: Int = 32
+
   /** least long over int. */
   private val LONG_LIMIT: Long = 0x100000000L
+
   /** initialize shift. */
   private val INITIALIZE_SHIFT: Int = 27
+
   /** initialize shift. */
   private val INITIALIZE_SHIFT2: Int = 30
+
   /** magic number. */
   private val MAGIC_NUMBER1: Int = 1664525
+
   /** magic number. */
   private val MAGIC_NUMBER2: Int = 1566083941
+
   /** magic number. */
   private val MAGIC_NUMBER3: Int = 1812433253
+
   /** int to float shift. */
   private val INT_TO_FLOAT_SHIFT: Int = 9
+
   /** long to double shift. */
   private val LONG_TO_DOUBLE_SHIFT: Int = 12
+
   /** hexadecimal base. */
   private val HEXA_DECIMAL_BASE: Int = 16
+
   /** int to unsigned long mask. */
-  private val INT_TO_LONG_MASK: Long = 0xffffffffL
+  private val INT_TO_LONG_MASK: Long = 0xFFFFFFFFL
+
   /** long to double mask. */
-  private val LONG_TO_DOUBLE_MASK: Long = 0x3ff0000000000000L
+  private val LONG_TO_DOUBLE_MASK: Long = 0x3FF0000000000000L
+
   /** basic jump step.
-    * every jump step is a multiple of this step.
-    */
+   * every jump step is a multiple of this step.
+   */
   private val BASIC_JUMP_STEP: BigInteger = new BigInteger("2").pow(64)
+
   /** mask pattern to limit internal size. */
   private val MASK: Int = 0x7fffffff
+
   /** fixed shift 0. */
   private val SH0: Int = 1
+
   /** fixed shift 1. */
   private val SH1: Int = 10
+
   /** fixed 8 bit shift. */
   private val SH8: Int = 8
+
   /** pre loop before generation. */
   private val MIN_LOOP: Int = 8
 
   /**
-    * Factory method which returns the TinyMT with the first generated
-    * parameter of TinyMTDC.
-    *
-    * @param seed
-    * seed of pseudo random numbers.
-    * @return TinyMT with the first parameter.
-    */
+   * Factory method which returns the TinyMT with the first generated
+   * parameter of TinyMTDC.
+   *
+   * @param seed
+   * seed of pseudo random numbers.
+   * @return TinyMT with the first parameter.
+   */
   def getDefault(seed: String): TinyMT32 = {
     val defaultParameter = TinyMT32Parameter.getDefaultParameter
     (new TinyMT32(defaultParameter)).setSeed(seed)
   }
 
   /**
-    * Factory method which returns the TinyMT with the first generated
-    * parameter of TinyMTDC.
-    *
-    * @param seed
-    * seed of pseudo random numbers.
-    * @return TinyMT with the first parameter.
-    */
+   * Factory method which returns the TinyMT with the first generated
+   * parameter of TinyMTDC.
+   *
+   * @param seed
+   * seed of pseudo random numbers.
+   * @return TinyMT with the first parameter.
+   */
   def getDefault(seed: Long): TinyMT32 = {
     val defaultParameter = TinyMT32Parameter.getDefaultParameter
     (new TinyMT32(defaultParameter)).setLongSeed(seed)
   }
 
   /** get default TinyMT32 with seeding by array.
-    *
-    * @param seeds seeds for initialization.
-    * @return random number generator TinyMT32
-    */
+   *
+   * @param seeds seeds for initialization.
+   * @return random number generator TinyMT32
+   */
   def getDefault(seeds: Array[Int]): TinyMT32 = {
     val defaultParameter = TinyMT32Parameter.getDefaultParameter
     new TinyMT32(defaultParameter).setSeed(seeds)
   }
 
   /**
-    * Factory method which returns the TinyMT with the first generated
-    * parameter of TinyMTDC. `System#nanoTime` and
-    * `Thread#getId()` are used for seed.
-    *
-    * @return TinyMT with the first parameter.
-    */
+   * Factory method which returns the TinyMT with the first generated
+   * parameter of TinyMTDC. `System#nanoTime` and
+   * `Thread#getId()` are used for seed.
+   *
+   * @return TinyMT with the first parameter.
+   */
   def getDefault(): TinyMT32 = {
     val seed = new Array[Int](4)
     val time: Long = System.nanoTime
@@ -144,64 +161,64 @@ object TinyMT32 {
   }
 
   /**
-    * make and return an array of TinyMT. Each element has the same
-    * characteristic polynomial with TinyMT gotten by getDefaultMT. Especially,
-    * the first element is just same as default TinyMT. The second element has
-    * the state of <b>jump</b> * 2<sup>64</sup> steps after the first element.
-    * In other word, the first element will generate the same sequence with the
-    * second element, after <b>jump</b> * 2<sup>64</sup> pseudo random number
-    * generation.
-    *
-    * @param count
-    * number of TinyMT to be created.
-    * @param seed
-    * seed of first element
-    * @param jump
-    * step is jump * 2<sup>64</sup>
-    * @return array of TinyMT
-    */
+   * make and return an array of TinyMT. Each element has the same
+   * characteristic polynomial with TinyMT gotten by getDefaultMT. Especially,
+   * the first element is just same as default TinyMT. The second element has
+   * the state of <b>jump</b> * 2<sup>64</sup> steps after the first element.
+   * In other word, the first element will generate the same sequence with the
+   * second element, after <b>jump</b> * 2<sup>64</sup> pseudo random number
+   * generation.
+   *
+   * @param count
+   * number of TinyMT to be created.
+   * @param seed
+   * seed of first element
+   * @param jump
+   * step is jump * 2<sup>64</sup>
+   * @return array of TinyMT
+   */
   def getDefaultArray(count: Int, seed: Long, jump: Long): Array[TinyMT32] = {
     val tiny: TinyMT32 = getDefault(seed)
     tiny.getJumpedArray(count, jump)
   }
 
   /**
-    * Make and return an array of TinyMT. Each element has the same
-    * characteristic polynomial with TinyMT gotten by getDefaultMT. Especially,
-    * the first element is just same as default TinyMT. The second element has
-    * the state of <b>jump</b> * 2<sup>64</sup> steps after the first element.
-    * In other word, the first element will generate the same sequence with the
-    * second element, after <b>jump</b> * 2<sup>64</sup> pseudo random number
-    * generation.
-    *
-    * This is equals to TinyMT32.getDefault(seed).getJumpedArray(count, jump);
-    *
-    * @param count
-    * number of TinyMT to be created.
-    * @param seed
-    * seed of first element
-    * @param jump
-    * step is jump * 2<sup>64</sup>
-    * @return array of TinyMT
-    */
+   * Make and return an array of TinyMT. Each element has the same
+   * characteristic polynomial with TinyMT gotten by getDefaultMT. Especially,
+   * the first element is just same as default TinyMT. The second element has
+   * the state of <b>jump</b> * 2<sup>64</sup> steps after the first element.
+   * In other word, the first element will generate the same sequence with the
+   * second element, after <b>jump</b> * 2<sup>64</sup> pseudo random number
+   * generation.
+   *
+   * This is equals to TinyMT32.getDefault(seed).getJumpedArray(count, jump);
+   *
+   * @param count
+   * number of TinyMT to be created.
+   * @param seed
+   * seed of first element
+   * @param jump
+   * step is jump * 2<sup>64</sup>
+   * @return array of TinyMT
+   */
   def getDefaultArray(count: Int, seed: String, jump: Long): Array[TinyMT32] = {
     val tiny = getDefault(seed)
     tiny.getJumpedArray(count, jump)
   }
 
   /** return TinyMT32 instance whose parameter has ID = 1.
-    *
-    * @param threadId thread ID
-    * @return TinyMT32 instance
-    */
+   *
+   * @param threadId thread ID
+   * @return TinyMT32 instance
+   */
   def getThreadLocal(threadId: Long): TinyMT32 = {
     new TinyMT32(TinyMT32Parameter.getThreadLocalParameter(threadId))
   }
 }
 
 /**
-  * @param parameter parameters for this generator.
-  */
+ * @param parameter parameters for this generator.
+ */
 final case class TinyMT32(
   private val st0: Int,
   private val st1: Int,
@@ -220,10 +237,10 @@ final case class TinyMT32(
     )
 
   /** Constructor from a parameter.
-    *
-    * @param param
-    * a parameter generated by TinyMTDC
-    */
+   *
+   * @param param
+   * a parameter generated by TinyMTDC
+   */
   private def this(param: TinyMT32Parameter) {
     this(
       st0 = 0,
@@ -253,8 +270,7 @@ final case class TinyMT32(
   def setLongSeed(seed: Long): TinyMT32 = {
     if ((seed >= 0) && (seed < TinyMT32.LONG_LIMIT)) {
       setIntSeed(seed.toInt)
-    }
-    else {
+    } else {
       val tmp = new Array[Int](2)
       tmp(0) = (seed & 0xffffffff).toInt
       tmp(1) = (seed >>> TinyMT32.INT_SIZE).toInt
@@ -286,8 +302,7 @@ final case class TinyMT32(
     val status = Array[Int](0, parameter.mat1, parameter.mat2, parameter.tmat)
     if (keyLength + 1 > TinyMT32.MIN_LOOP) {
       count = keyLength + 1
-    }
-    else {
+    } else {
       count = TinyMT32.MIN_LOOP
     }
     r = iniFunc1(status(0) ^ status(mid % size) ^ status((size - 1) % size))
@@ -344,7 +359,7 @@ final case class TinyMT32(
 
     @tailrec
     def loop(z: TinyMT32.MutableState, i: Int): TinyMT32 =
-      if(i < TinyMT32.MIN_LOOP) {
+      if (i < TinyMT32.MIN_LOOP) {
         loop(z.next(), i + 1)
       } else {
         z.asImmutable
@@ -354,18 +369,18 @@ final case class TinyMT32(
   }
 
   /** sub function of initialization.
-    *
-    * @param x input number
-    * @return scrambled integer
-    */
+   *
+   * @param x input number
+   * @return scrambled integer
+   */
   private def iniFunc1(x: Int): Int =
     (x ^ (x >>> TinyMT32.INITIALIZE_SHIFT)) * TinyMT32.MAGIC_NUMBER1
 
   /** sub function of initialization.
-    *
-    * @param x input number
-    * @return scrambled integer
-    */
+   *
+   * @param x input number
+   * @return scrambled integer
+   */
   private def iniFunc2(x: Int): Int =
     (x ^ (x >>> TinyMT32.INITIALIZE_SHIFT)) * TinyMT32.MAGIC_NUMBER2
 
@@ -380,8 +395,10 @@ final case class TinyMT32(
     {
       @tailrec
       def loop0(i: Int): Unit = {
-        if(i < TinyMT32.MIN_LOOP) {
-          status(i & counterMask) ^= i + TinyMT32.MAGIC_NUMBER3 * (status((i - 1) & counterMask) ^ (status((i - 1) & counterMask) >>> TinyMT32.INITIALIZE_SHIFT2))
+        if (i < TinyMT32.MIN_LOOP) {
+          status(i & counterMask) ^= i + TinyMT32.MAGIC_NUMBER3 * (status((i - 1) & counterMask) ^ (status(
+            (i - 1) & counterMask
+          ) >>> TinyMT32.INITIALIZE_SHIFT2))
           loop0(i + 1)
         }
       }
@@ -398,7 +415,7 @@ final case class TinyMT32(
 
     @tailrec
     def loop(i: Int, z: TinyMT32.MutableState): TinyMT32 =
-      if(i < TinyMT32.MIN_LOOP) {
+      if (i < TinyMT32.MIN_LOOP) {
         loop(i + 1, z.next())
       } else {
         z.asImmutable
@@ -441,9 +458,9 @@ final case class TinyMT32(
   }
 
   /** The output function.
-    *
-    * @return pseudo random number
-    */
+   *
+   * @return pseudo random number
+   */
   private def output: Int = {
     var t0: Int = 0
     var t1: Int = 0
@@ -455,9 +472,9 @@ final case class TinyMT32(
   }
 
   /** make float random.
-    *
-    * @return float output.
-    */
+   *
+   * @return float output.
+   */
   private def outputFloat: Float = {
     var t0: Int = 0
     var t1: Int = 0
@@ -477,12 +494,11 @@ final case class TinyMT32(
       parameter = this.parameter
     )
 
-
   /** jump function.
-    *
-    * @param pol jump polynomial
-    * @return jumped new TinyMT
-    */
+   *
+   * @param pol jump polynomial
+   * @return jumped new TinyMT
+   */
   private def jump(pol: F2Polynomial): TinyMT32 = {
     val degree = pol.degree
 
@@ -501,22 +517,22 @@ final case class TinyMT32(
   }
 
   /**
-    * Make and return an array of TinyMT. Each element of the array has the
-    * same characteristic polynomial with this. Especially, the first element
-    * is just same as this. The second element has the state of <b>jump</b> *
-    * 2<sup>64</sup> steps after the first element. In other word, the first
-    * element will generate the same sequence with the second element, after
-    * <b>jump</b> * 2<sup>64</sup> pseudo random number generation.
-    *
-    * <p>
-    * Note: Do not call any setSeed methods after jump. Seeding will cancel
-    * the effect of jump.
-    * </p>
-    *
-    * @param count number of arrays
-    * @param jump  jump step
-    * @return jumped array of TinyMT32.
-    */
+   * Make and return an array of TinyMT. Each element of the array has the
+   * same characteristic polynomial with this. Especially, the first element
+   * is just same as this. The second element has the state of <b>jump</b> *
+   * 2<sup>64</sup> steps after the first element. In other word, the first
+   * element will generate the same sequence with the second element, after
+   * <b>jump</b> * 2<sup>64</sup> pseudo random number generation.
+   *
+   * <p>
+   * Note: Do not call any setSeed methods after jump. Seeding will cancel
+   * the effect of jump.
+   * </p>
+   *
+   * @param count number of arrays
+   * @param jump  jump step
+   * @return jumped array of TinyMT32.
+   */
   def getJumpedArray(count: Int, jump: Long): Array[TinyMT32] = {
     val tiny = new Array[TinyMT32](count)
     tiny(0) = this

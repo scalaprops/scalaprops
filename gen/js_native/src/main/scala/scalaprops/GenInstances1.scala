@@ -1,5 +1,3 @@
 package scalaprops
 
-abstract class GenInstances1 extends GenInstances {
-
-}
+abstract class GenInstances1 extends GenInstances {}

@@ -13,7 +13,7 @@ object bifoldable {
     forAll(F.bifoldableLaw.rightFMConsistent[A, B] _)
 
   def laws[F[_, _]](implicit fa: Gen[F[Int, Int]], F: Bifoldable[F]) =
-    Properties.properties(ScalazLaw.bifoldable) (
+    Properties.properties(ScalazLaw.bifoldable)(
       ScalazLaw.bifoldableLeftFMConsistent -> leftFMConsistent[F, Int, Int],
       ScalazLaw.bifoldableRightFMConsistent -> rightFMConsistent[F, Int, Int]
     )
@@ -22,7 +22,7 @@ object bifoldable {
     Properties.fromProps[(ScalazLaw, *^*->*.T)](
       ScalazLaw.bifoldableAll -> *^*->*.Empty,
       bifoldable.laws[F].mapId((_, *^*->*.Empty)),
-      scalazlaws.foldable.laws[({type l[a] = F[a, Int]})#l](implicitly, F.leftFoldable[Int]).mapId((_, *^*->*.L)),
-      scalazlaws.foldable.laws[({type l[a] = F[Int, a]})#l](implicitly, F.rightFoldable[Int]).mapId((_, *^*->*.R))
+      scalazlaws.foldable.laws[({ type l[a] = F[a, Int] })#l](implicitly, F.leftFoldable[Int]).mapId((_, *^*->*.L)),
+      scalazlaws.foldable.laws[({ type l[a] = F[Int, a] })#l](implicitly, F.rightFoldable[Int]).mapId((_, *^*->*.R))
     )
 }

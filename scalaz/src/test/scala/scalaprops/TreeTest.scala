@@ -16,14 +16,20 @@ object TreeTest extends Scalaprops {
 
   val order = scalazlaws.order.all[scalaz.Tree[Int]]
 
-  val treeGenSized = Property.forAllG(Gen.positiveByte, Gen[Long]){ (n, seed) =>
-    val size = 5
-    val a = ScalapropsScalaz.treeGenSized[Unit](n).samples(
-      listSize = size, seed = seed
-    ).map(Foldable[scalaz.Tree].length)
+  val treeGenSized = Property
+    .forAllG(Gen.positiveByte, Gen[Long]) { (n, seed) =>
+      val size = 5
+      val a = ScalapropsScalaz
+        .treeGenSized[Unit](n)
+        .samples(
+          listSize = size,
+          seed = seed
+        )
+        .map(Foldable[scalaz.Tree].length)
 
-    a == List.fill(size)(n)
-  }.toProperties((), Param.minSuccessful(10))
+      a == List.fill(size)(n)
+    }
+    .toProperties((), Param.minSuccessful(10))
 
   def distinctStream[A: Order](s: Stream[A]): Int \/ Stream[A] = {
     def loop(seen: ISet[A], rest: Stream[A], i: Int): Int \/ Stream[A] = {
@@ -35,7 +41,9 @@ object TreeTest extends Scalaprops {
             if (seen.contains(h)) {
               loop(seen, t, i + 1)
             } else {
-              loop(seen insert h, t, 0).map { x => Stream.cons(h, x)}
+              loop(seen insert h, t, 0).map { x =>
+                Stream.cons(h, x)
+              }
             }
           case _ =>
             // stream is finite !?
@@ -49,17 +57,18 @@ object TreeTest extends Scalaprops {
   def sizeTest[A: Order](numbers: List[Int], f: (Int, Long) => Stream[A]) = {
     val sizes = numbers.zipWithIndex.map(t => t.copy(_2 = t._2 + 1))
 
-    val tests = sizes.map{ case (n, i) =>
-      Property.forAll{ seed: Long =>
-        val s = f(i, seed)
-        distinctStream(s) match {
-          case -\/(x) =>
-            assert(x == n, s"$x $n")
-            true
-          case \/-(x) =>
-            sys.error(x.size.toString)
-        }
-      }.toProperties(i.toString, Param.minSuccessful(1))
+    val tests = sizes.map {
+      case (n, i) =>
+        Property.forAll { seed: Long =>
+          val s = f(i, seed)
+          distinctStream(s) match {
+            case -\/(x) =>
+              assert(x == n, s"$x $n")
+              true
+            case \/-(x) =>
+              sys.error(x.size.toString)
+          }
+        }.toProperties(i.toString, Param.minSuccessful(1))
     }
 
     Properties.list(tests.head, tests.tail: _*)
@@ -68,12 +77,13 @@ object TreeTest extends Scalaprops {
   val treeGenSize = {
     val F = Foldable[scalaz.Tree]
     val p = { (size: Int) =>
-      Property.forAll{ tree: scalaz.Tree[Int] =>
+      Property.forAll { tree: scalaz.Tree[Int] =>
         val c = F.count(tree)
         (c <= size) && ((c * 0.7) < F.toIList(tree).distinct.length)
-      }.toProperties(size.toString).andThenParam(
-        Param.maxSize(size)
-      )
+      }.toProperties(size.toString)
+        .andThenParam(
+          Param.maxSize(size)
+        )
     }
 
     Properties.fromProps(

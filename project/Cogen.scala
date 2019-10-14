@@ -14,7 +14,9 @@ object Cogen {
       val tpeT = s"$C[$tp]"
 
       val function =
-s"""  implicit final def f$i[$t, $Z](implicit ${as.map(a => s"$a: Gen[$a]").mkString(", ")}, $Z: $C[$Z]): $tpeF =
+        s"""  implicit final def f$i[$t, $Z](implicit ${as
+          .map(a => s"$a: Gen[$a]")
+          .mkString(", ")}, $Z: $C[$Z]): $tpeF =
     new $tpeF {
       def cogen[$X](f: $f, g: CogenState[$X]) =
         ${as.foldRight(Z)((a, s) => s"f1($a, $s)") + ".cogen(f.curried, g)"}
@@ -22,37 +24,39 @@ s"""  implicit final def f$i[$t, $Z](implicit ${as.map(a => s"$a: Gen[$a]").mkSt
 """
 
       val tuple =
-s"""
+        s"""
   implicit final def tuple$i[$t](implicit ${as.map(a => s"$a: Cogen[$a]").mkString(", ")}): $tpeT =
     new $tpeT {
       def cogen[$X](t: $tp, g: CogenState[$X]) =
-        ${as.zipWithIndex.foldRight("g"){case ((a, m), s) => s"$a.cogen(t._${m + 1}, $s)"}}
+        ${as.zipWithIndex.foldRight("g") { case ((a, m), s) => s"$a.cogen(t._${m + 1}, $s)" }}
     }
 """
 
       def fromDef(name: String) =
-s"""final def $name[$t, $Z](f: $Z => Option[Tuple$i[$t]])(implicit ${as.map(a => s"$a: Cogen[$a]").mkString(", ")}): Cogen[$Z] ="""
+        s"""final def $name[$t, $Z](f: $Z => Option[Tuple$i[$t]])(implicit ${as
+          .map(a => s"$a: Cogen[$a]")
+          .mkString(", ")}): Cogen[$Z] ="""
 
       val fromN =
-s"""
+        s"""
   ${fromDef("from" + i)}
     tuple$i[$t]($t).contramap(t => f(t).get)
 """
 
       val from =
-s"""
+        s"""
   ${fromDef("from")}
     from$i[$t, $Z](f)($t)
 """
 
-      if(i == 1) {
+      if (i == 1) {
         tuple
       } else {
         function + tuple + from + fromN
       }
     }
 
-s"""package scalaprops
+    s"""package scalaprops
 
 abstract class CogenInstances private[scalaprops] {
 

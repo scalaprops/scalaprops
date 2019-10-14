@@ -8,7 +8,7 @@ object Function1Test extends Scalaprops {
 
   import FunctionEqual._
 
-  val bindRec = scalazlaws.bindRec.laws[({type l[a] = Byte => a})#l]
+  val bindRec = scalazlaws.bindRec.laws[({ type l[a] = Byte => a })#l]
 
   val testLaws1 = {
     type F1[A] = Int => A

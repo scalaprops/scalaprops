@@ -7,15 +7,16 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0")
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.29")
 addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.3.2")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.7")
 
 scalacOptions ++= (
   "-deprecation" ::
-  "-unchecked" ::
-  "-language:existentials" ::
-  "-language:higherKinds" ::
-  "-language:implicitConversions" ::
-  "-Yno-adapted-args" ::
-  Nil
+    "-unchecked" ::
+    "-language:existentials" ::
+    "-language:higherKinds" ::
+    "-language:implicitConversions" ::
+    "-Yno-adapted-args" ::
+    Nil
 )
 
-fullResolvers ~= {_.filterNot(_.name == "jcenter")}
+fullResolvers ~= { _.filterNot(_.name == "jcenter") }

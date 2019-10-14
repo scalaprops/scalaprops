@@ -13,7 +13,7 @@ object monoid {
     forAll(A.monoidLaw.rightIdentity _)
 
   def laws[A: Monoid: Equal: Gen]: Properties[ScalazLaw] =
-    properties(ScalazLaw.monoid) (
+    properties(ScalazLaw.monoid)(
       ScalazLaw.monoidLeftIdentity -> leftIdentity[A],
       ScalazLaw.monoidRightIdentity -> rightIdentity[A]
     )

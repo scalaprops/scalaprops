@@ -8,7 +8,7 @@ import ScalapropsScalaz._
 object CogenStateTest extends Scalaprops {
 
   implicit def cogenStateEqual[A: Equal]: Equal[CogenState[A]] =
-    Equal.equal{ (x, y) =>
+    Equal.equal { (x, y) =>
       Equal[Rand].equal(x.rand, y.rand) && Equal[Gen[A]].equal(x.gen, y.gen)
     }
 

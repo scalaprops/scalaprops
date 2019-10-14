@@ -19,8 +19,8 @@ object Arguments {
     val only = args.dropWhile((keyPrefix + "only") != _).drop(1).takeWhile(arg => !arg.startsWith(keyPrefix))
 
     def arg(key: String): Seq[String] =
-      args.withFilter(_.startsWith(keyPrefix + key + "=")).flatMap{
-        _.split('=').toList match{
+      args.withFilter(_.startsWith(keyPrefix + key + "=")).flatMap {
+        _.split('=').toList match {
           case _ :: v => v
           case _ => Nil
         }
@@ -55,7 +55,7 @@ object Arguments {
   private[this] def long(string: String): Option[Long] = {
     try {
       val n = java.lang.Long.parseLong(string)
-      if(n >= 0) Some(n)
+      if (n >= 0) Some(n)
       else None
     } catch {
       case _: NumberFormatException =>
@@ -75,7 +75,7 @@ object Arguments {
   private[this] def uint(string: String): Option[Int] = {
     try {
       val n = Integer.parseInt(string)
-      if(n >= 0) Some(n)
+      if (n >= 0) Some(n)
       else None
     } catch {
       case _: NumberFormatException =>

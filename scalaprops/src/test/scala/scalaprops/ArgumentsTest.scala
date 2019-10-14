@@ -2,9 +2,11 @@ package scalaprops
 
 object ArgumentsTest extends Scalaprops {
 
-  val parse = Property.forAll{
+  val parse = Property.forAll {
     val args = List(
-      "--only", "foo", "bar",
+      "--only",
+      "foo",
+      "bar",
       "--showDuration=invalid",
       "--showDuration=10",
       "--showDuration=foo=bar",

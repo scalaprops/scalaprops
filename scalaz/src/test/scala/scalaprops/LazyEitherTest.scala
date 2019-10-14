@@ -11,9 +11,9 @@ object LazyEitherTest extends Scalaprops {
     Equal[A Either B].contramap(_.toEither)
 
   val testLaws1 = Properties.list(
-    scalazlaws.monadError.all[({type l[a] = LazyEither[Int, a]})#l, Int],
-    scalazlaws.bindRec.all[({type l[a] = LazyEither[Int, a]})#l],
-    scalazlaws.traverse.all[({type l[a] = LazyEither[Int, a]})#l]
+    scalazlaws.monadError.all[({ type l[a] = LazyEither[Int, a] })#l, Int],
+    scalazlaws.bindRec.all[({ type l[a] = LazyEither[Int, a] })#l],
+    scalazlaws.traverse.all[({ type l[a] = LazyEither[Int, a] })#l]
   )
 
   val testLaw2 = scalazlaws.bitraverse.all[LazyEither]

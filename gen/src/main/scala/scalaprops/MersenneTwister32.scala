@@ -1,6 +1,6 @@
 package scalaprops
 
-final class MersenneTwister32 private(private val array: Array[Long], private val mti: Int) extends Rand {
+final class MersenneTwister32 private (private val array: Array[Long], private val mti: Int) extends Rand {
   private def newArray: Array[Long] = array.clone()
 
   def nextInt: (Rand, Int) =
@@ -32,14 +32,14 @@ final class MersenneTwister32 private(private val array: Array[Long], private va
   }
 }
 
-object MersenneTwister32{
+object MersenneTwister32 {
   private[this] val N = 624
   private[this] val M = 397
 
-  private[this] val MatrixA = 0x9908b0dfL
+  private[this] val MatrixA = 0x9908B0DFL
 
   private[this] val UpperMask = 0x80000000L
-  private[this] val LowerMask = 0x7fffffffL
+  private[this] val LowerMask = 0x7FFFFFFFL
 
   private def apply(array: Array[Long], mti: Int): MersenneTwister32 =
     new MersenneTwister32(array, mti)
@@ -50,7 +50,7 @@ object MersenneTwister32{
   private[scalaprops] val default: MersenneTwister32 = fromSeed0(Rand.defaultSeed)
 
   def fromSeed(seed: Int = Rand.defaultSeed): MersenneTwister32 = {
-    if(seed == Rand.defaultSeed) {
+    if (seed == Rand.defaultSeed) {
       default
     } else {
       fromSeed0(seed)
@@ -61,8 +61,8 @@ object MersenneTwister32{
     val mt = new Array[Long](N)
     mt(0) = seed
     var i = 1
-    while(i < N){
-      mt(i) = (1812433253L * (mt(i - 1) ^ (mt(i - 1) >>> 30)) + i) & 0xffffffffL
+    while (i < N) {
+      mt(i) = (1812433253L * (mt(i - 1) ^ (mt(i - 1) >>> 30)) + i) & 0xFFFFFFFFL
       i += 1
     }
     MersenneTwister32(mt, N + 1)
@@ -92,14 +92,14 @@ object MersenneTwister32{
 
       mti = 0
       mt
-    }else{
+    } else {
       state.array
     }
 
     y = mt0(mti); mti += 1
     y ^= y >>> 11
-    y ^= (y << 7) & 0x9d2c5680L
-    y ^= (y << 15) & 0xefc60000L
+    y ^= (y << 7) & 0x9D2C5680L
+    y ^= (y << 15) & 0xEFC60000L
     y ^= (y >>> 18)
 
     (MersenneTwister32(mt0, mti), y.toInt)

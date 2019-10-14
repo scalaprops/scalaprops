@@ -30,17 +30,17 @@ sealed abstract class AddArgs extends HasResult {
 }
 
 object Result {
-  final case class Unfalsified(args: List[Arg]) extends AddArgs{
+  final case class Unfalsified(args: List[Arg]) extends AddArgs {
     override def addArg(a: Arg): AddArgs = copy(a :: args)
   }
-  final case class Falsified(args: List[Arg]) extends AddArgs{
+  final case class Falsified(args: List[Arg]) extends AddArgs {
     override def addArg(a: Arg): AddArgs = copy(a :: args)
   }
   case object Proven extends HasResult
-  final case class Exception(args: List[Arg], exception: Throwable) extends AddArgs{
+  final case class Exception(args: List[Arg], exception: Throwable) extends AddArgs {
     override def addArg(a: Arg): AddArgs = copy(a :: args)
   }
-  final case class Ignored(reason: String) extends AddArgs{ self =>
+  final case class Ignored(reason: String) extends AddArgs { self =>
     override def addArg(a: Arg): AddArgs = self
   }
   case object NoResult extends Result

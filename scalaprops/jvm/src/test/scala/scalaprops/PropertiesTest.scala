@@ -30,7 +30,8 @@ object PropertiesTest extends Scalaprops {
         monadPlus,
         traverse,
         cobind
-      ))
+      )
+    )
 
     val dag = """list instance
 |

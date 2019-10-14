@@ -14,8 +14,8 @@ object NullResultTest extends Scalaprops {
     A.contramap(_.apply)
 
   val arrow = scalazlaws.arrow.all[NullResult]
-  val monadPlus = scalazlaws.monadPlusStrong.all[({type l[a] = NullResult[Int, a]})#l]
-  val testContravariant = scalazlaws.contravariant.all[({type l[a] = NullResult[a, Int]})#l]
+  val monadPlus = scalazlaws.monadPlusStrong.all[({ type l[a] = NullResult[Int, a] })#l]
+  val testContravariant = scalazlaws.contravariant.all[({ type l[a] = NullResult[a, Int] })#l]
   val testMonoid = scalazlaws.monoid.all[NullResult[Int, Int]]
 
 }

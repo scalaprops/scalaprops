@@ -11,11 +11,16 @@ object monadPlusStrong {
     forAll(F.strongMonadPlusLaw.rightZero[X] _)
 
   def laws[F[_]](implicit F: MonadPlus[F], afx: Gen[F[Int]], ef: Equal[F[Int]]): Properties[ScalazLaw] =
-    properties(ScalazLaw.monadPlusStrong) (
+    properties(ScalazLaw.monadPlusStrong)(
       ScalazLaw.monadPlusRightZero -> rightZero[F, Int]
     )
 
-  def all[F[_]](implicit F: MonadPlus[F], afx: Gen[F[Int]], afy: Gen[F[Int => Int]], ef: Equal[F[Int]]): Properties[ScalazLaw] =
+  def all[F[_]](
+    implicit F: MonadPlus[F],
+    afx: Gen[F[Int]],
+    afy: Gen[F[Int => Int]],
+    ef: Equal[F[Int]]
+  ): Properties[ScalazLaw] =
     Properties.fromProps(
       ScalazLaw.monadPlusStrongAll,
       monadPlusStrong.laws[F],

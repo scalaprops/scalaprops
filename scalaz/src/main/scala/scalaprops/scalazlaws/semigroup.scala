@@ -10,7 +10,7 @@ object semigroup {
     forAll(A.semigroupLaw.associative _)
 
   def laws[A: Semigroup: Equal: Gen]: Properties[ScalazLaw] =
-    properties(ScalazLaw.semigroup) (
+    properties(ScalazLaw.semigroup)(
       ScalazLaw.semigroupAssociative -> associative[A]
     )
 

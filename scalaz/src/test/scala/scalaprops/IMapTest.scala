@@ -9,10 +9,10 @@ object IMapTest extends Scalaprops {
 
   val testLaws =
     Properties.list(
-      scalazlaws.bind.all[({type l[a] = Int ==>> a})#l],
-      scalazlaws.align.all[({type l[a] = Int ==>> a})#l],
-      scalazlaws.zip.all[({type l[a] = Int ==>> a})#l],
-      scalazlaws.traverse.all[({type l[a] = Int ==>> a})#l]
+      scalazlaws.bind.all[({ type l[a] = Int ==>> a })#l],
+      scalazlaws.align.all[({ type l[a] = Int ==>> a })#l],
+      scalazlaws.zip.all[({ type l[a] = Int ==>> a })#l],
+      scalazlaws.traverse.all[({ type l[a] = Int ==>> a })#l]
     )
 
   val bifoldable = scalazlaws.bifoldable.all[==>>]
@@ -51,9 +51,9 @@ object IMapTest extends Scalaprops {
     type KEY = Short
     type VALUE = Byte
 
-    Property.forAll{ (a: KEY ==>> VALUE, k: KEY, v: VALUE, f: (KEY, VALUE, VALUE) => VALUE) =>
+    Property.forAll { (a: KEY ==>> VALUE, k: KEY, v: VALUE, f: (KEY, VALUE, VALUE) => VALUE) =>
       val m = a.toList.toMap
-      val i = if(m contains k) {
+      val i = if (m contains k) {
         k -> f(k, v, m(k))
       } else {
         k -> v
@@ -69,7 +69,7 @@ object IMapTest extends Scalaprops {
     type KEY = Short
     type VALUE = Byte
 
-    Property.forAll{ (a: KEY ==>> VALUE, k: KEY, v: VALUE, f: (VALUE, VALUE) => VALUE) =>
+    Property.forAll { (a: KEY ==>> VALUE, k: KEY, v: VALUE, f: (VALUE, VALUE) => VALUE) =>
       val m = a.toList.toMap
       val x = a.insertWith(f.flip, k, v)
       val y = ==>>.fromList(scalaz.std.map.insertWith(m, k, v)(f).toList)
@@ -152,9 +152,9 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.NoShrink.property2{ (a0: NonEmptyList[(KEY, VAL)], f: (KEY, VAL) => Option[VAL]) =>
+    Property.NoShrink.property2 { (a0: NonEmptyList[(KEY, VAL)], f: (KEY, VAL) => Option[VAL]) =>
       val a = IMap.fromFoldable(a0)
-      Property.forAllG(Gen.choose(0, a.size - 1)){ i =>
+      Property.forAllG(Gen.choose(0, a.size - 1)) { i =>
         val r = a.updateAt(i, f)
         a.elemAt(i) match {
           case Some((k, v1)) =>
@@ -176,7 +176,7 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.forAll{ (a: (KEY ==>> VAL), f: (KEY, VAL) => Option[VAL]) =>
+    Property.forAll { (a: (KEY ==>> VAL), f: (KEY, VAL) => Option[VAL]) =>
       val b = a.updateMinWithKey(f)
       a.minViewWithKey match {
         case Some(((k, v1), c)) =>
@@ -197,7 +197,7 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.forAll{ (a: (KEY ==>> VAL), f: (KEY, VAL) => Option[VAL]) =>
+    Property.forAll { (a: (KEY ==>> VAL), f: (KEY, VAL) => Option[VAL]) =>
       val b = a.updateMaxWithKey(f)
       a.maxViewWithKey match {
         case Some(((k, v1), c)) =>

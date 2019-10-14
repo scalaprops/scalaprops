@@ -9,10 +9,13 @@ object IndexedContsTTest extends Scalaprops {
   private[this] val F = new FunctionEqual(5)
   import F._
 
-  private[this] implicit def indexedContsTEqual[W[_], M[_], R, O, A](implicit F: Equal[W[A => M[O]] => M[R]]): Equal[IndexedContsT[W, M, R, O, A]] =
+  private[this] implicit def indexedContsTEqual[W[_], M[_], R, O, A](
+    implicit F: Equal[W[A => M[O]] => M[R]]
+  ): Equal[IndexedContsT[W, M, R, O, A]] =
     F.contramap(_.run)
 
-  private[this] def bindTest[W[_]: Cobind, M[_]](implicit
+  private[this] def bindTest[W[_]: Cobind, M[_]](
+    implicit
     G1: Gen[ContsT[W, M, Int, Int]],
     G2: Gen[ContsT[W, M, Int, Int => Int]],
     E1: Equal[ContsT[W, M, Int, Int]]
@@ -47,20 +50,20 @@ object IndexedContsTTest extends Scalaprops {
   }
 
   val testBifunctorMaybeMaybe =
-    scalazlaws.bifunctor.all[({type F[A, B] = IndexedContsT[Maybe, Maybe, A, Int, B]})#F]
+    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, Maybe, A, Int, B] })#F]
 
   val testBifunctorMaybeIList =
-    scalazlaws.bifunctor.all[({type F[A, B] = IndexedContsT[Maybe, IList, A, Int, B]})#F]
+    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, IList, A, Int, B] })#F]
 
   val testBifunctorIListMaybe =
-    scalazlaws.bifunctor.all[({type F[A, B] = IndexedContsT[IList, Maybe, A, Int, B]})#F]
+    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[IList, Maybe, A, Int, B] })#F]
 
   val testContravariantMaybeMaybe =
-    scalazlaws.contravariant.all[({type F[A] = IndexedContsT[Maybe, Maybe, Int, A, Int]})#F]
+    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, Maybe, Int, A, Int] })#F]
 
   val testContravariantMaybeIList =
-    scalazlaws.contravariant.all[({type F[A] = IndexedContsT[Maybe, IList, Int, A, Int]})#F]
+    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, IList, Int, A, Int] })#F]
 
   val testContravariantIListMaybe =
-    scalazlaws.contravariant.all[({type F[A] = IndexedContsT[IList, Maybe, Int, A, Int]})#F]
+    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[IList, Maybe, Int, A, Int] })#F]
 }

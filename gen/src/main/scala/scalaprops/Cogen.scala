@@ -2,7 +2,7 @@ package scalaprops
 
 import Variant.variantInt
 import scala.concurrent.{Await, Future}
-import scala.util.{Success, Failure}
+import scala.util.{Failure, Success}
 
 abstract class Cogen[A] { self =>
   def cogen[B](a: A, g: CogenState[B]): CogenState[B]
@@ -34,7 +34,7 @@ object Cogen extends CogenInstances0 {
 
   private[this] val byteArrayToIntList: Array[Byte] => List[Int] = { bytes =>
     val x =
-      if(bytes.length % 4 == 0) {
+      if (bytes.length % 4 == 0) {
         0
       } else {
         -1
@@ -42,24 +42,24 @@ object Cogen extends CogenInstances0 {
     var ints = List.empty[Int]
     val len = ints.length + x
     var i = 0
-    while(i < len) {
+    while (i < len) {
       ints ::= ((bytes(i + 0) & 0xFF) << 24) |
-               ((bytes(i + 1) & 0xFF) << 16) |
-               ((bytes(i + 2) & 0xFF) <<  8) |
-               ((bytes(i + 3) & 0xFF) <<  0)
+        ((bytes(i + 1) & 0xFF) << 16) |
+        ((bytes(i + 2) & 0xFF) << 8) |
+        ((bytes(i + 3) & 0xFF) << 0)
       i += 1
     }
-    if(x != 0) {
+    if (x != 0) {
       (bytes.length % 4) match {
         case 1 =>
           ints ::= ((bytes(i + 0) & 0xFF) << 24)
         case 2 =>
           ints ::= ((bytes(i + 0) & 0xFF) << 24) |
-                   ((bytes(i + 1) & 0xFF) << 16)
+            ((bytes(i + 1) & 0xFF) << 16)
         case 3 =>
           ints ::= ((bytes(i + 0) & 0xFF) << 24) |
-                   ((bytes(i + 1) & 0xFF) << 16) |
-                   ((bytes(i + 2) & 0xFF) <<  8)
+            ((bytes(i + 1) & 0xFF) << 16) |
+            ((bytes(i + 2) & 0xFF) << 8)
       }
     }
     ints
@@ -80,7 +80,7 @@ object Cogen extends CogenInstances0 {
   implicit val cogenBoolean: Cogen[Boolean] =
     new Cogen[Boolean] {
       def cogen[B](a: Boolean, g: CogenState[B]) =
-        variantInt(if(a) 0 else 1, g)
+        variantInt(if (a) 0 else 1, g)
     }
 
   implicit val cogenUnit: Cogen[Unit] =
@@ -91,25 +91,25 @@ object Cogen extends CogenInstances0 {
   implicit val cogenInt: Cogen[Int] =
     new Cogen[Int] {
       def cogen[B](a: Int, g: CogenState[B]) =
-        variantInt(if(a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if (a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenByte: Cogen[Byte] =
     new Cogen[Byte] {
       def cogen[B](a: Byte, g: CogenState[B]) =
-        variantInt(if(a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if (a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenShort: Cogen[Short] =
     new Cogen[Short] {
       def cogen[B](a: Short, g: CogenState[B]) =
-        variantInt(if(a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if (a >= 0) 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenLong: Cogen[Long] =
     new Cogen[Long] {
       def cogen[B](a: Long, g: CogenState[B]) =
-        Variant.variant(if(a >= 0L) 2L * a else -2L * a + 1L, g)
+        Variant.variant(if (a >= 0L) 2L * a else -2L * a + 1L, g)
     }
 
   implicit val cogenChar: Cogen[Char] =
@@ -154,7 +154,7 @@ object Cogen extends CogenInstances0 {
   implicit val cogenJavaDouble: Cogen[java.lang.Double] =
     Cogen[Double].contramap(_.doubleValue)
 
-  import java.{ math => jm }
+  import java.{math => jm}
 
   implicit val cogenBigInteger: Cogen[jm.BigInteger] =
     Cogen[Array[Byte]].contramap(_.toByteArray)
@@ -221,11 +221,12 @@ object Cogen extends CogenInstances0 {
   implicit def cogenFuture[A](implicit F: Cogen[A]): Cogen[Future[A]] = {
     import scala.concurrent.duration._
     val ec = scala.concurrent.ExecutionContext.global
-    cogenEither(conquer[Throwable], F).contramap(f =>
-      Await.result(
-        f.map(Right(_))(ec).recover{ case e => Left(e) }(ec),
-        5.seconds
-      )
+    cogenEither(conquer[Throwable], F).contramap(
+      f =>
+        Await.result(
+          f.map(Right(_))(ec).recover { case e => Left(e) }(ec),
+          5.seconds
+        )
     )
   }
 

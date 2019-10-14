@@ -7,7 +7,7 @@ final class Shrink[A](val f: A => Stream[A]) {
   def apply(a: A): Stream[A] = f(a)
 
   def xmap[B](x: A => B, y: B => A): Shrink[B] =
-    Shrink.shrink(y andThen f andThen(_.map(x)))
+    Shrink.shrink(y andThen f andThen (_.map(x)))
 }
 
 object Shrink {
@@ -21,11 +21,11 @@ object Shrink {
   def empty[A]: Shrink[A] = Empty.asInstanceOf[Shrink[A]]
 
   private[this] def longMin(min: Long): Shrink[Long] =
-    shrink{
+    shrink {
       case 0L => Stream.Empty
       case i =>
         val is = 0L #:: Stream.iterate(i)(_ / 2L).takeWhile(_ != 0L).map(i - _)
-        if(min < i && i < 0L){
+        if (min < i && i < 0L) {
           is
         } else {
           is
@@ -36,7 +36,7 @@ object Shrink {
 
   implicit val boolean: Shrink[Boolean] =
     shrink {
-      case true  => Stream(false)
+      case true => Stream(false)
       case false => Stream.empty
     }
 
@@ -50,13 +50,13 @@ object Shrink {
     longMin(Byte.MinValue).xmap(_.toByte, x => x)
 
   implicit def option[A](implicit A: Shrink[A]): Shrink[Option[A]] =
-    shrink{
+    shrink {
       case None => Stream.Empty
       case Some(a) => None #:: A(a).map(Option(_))
     }
 
   implicit def either[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[A Either B] =
-    shrink{
+    shrink {
       case Left(a) =>
         A(a).map(Left(_))
       case Right(a) =>
@@ -80,8 +80,7 @@ object Shrink {
           val n2 = n - n1
           val as1 = as.take(n1)
           Stream.cons(
-            as1,
-            {
+            as1, {
               val as2 = as.drop(n1)
               Stream.cons(
                 as2,
@@ -109,30 +108,38 @@ object Shrink {
   }
 
   implicit def tuple2[A1, A2](implicit A1: Shrink[A1], A2: Shrink[A2]): Shrink[(A1, A2)] =
-    shrink{ case (a1, a2) =>
-      for {
-        x1 <- A1(a1)
-        x2 <- A2(a2)
-      } yield (x1, x2)
+    shrink {
+      case (a1, a2) =>
+        for {
+          x1 <- A1(a1)
+          x2 <- A2(a2)
+        } yield (x1, x2)
     }
 
   implicit def tuple3[A1, A2, A3](implicit A1: Shrink[A1], A2: Shrink[A2], A3: Shrink[A3]): Shrink[(A1, A2, A3)] =
-    shrink{ case (a1, a2, a3) =>
-      for {
-        x1 <- A1(a1)
-        x2 <- A2(a2)
-        x3 <- A3(a3)
-      } yield (x1, x2, x3)
+    shrink {
+      case (a1, a2, a3) =>
+        for {
+          x1 <- A1(a1)
+          x2 <- A2(a2)
+          x3 <- A3(a3)
+        } yield (x1, x2, x3)
     }
 
-  implicit def tuple4[A1, A2, A3, A4](implicit A1: Shrink[A1], A2: Shrink[A2], A3: Shrink[A3], A4: Shrink[A4]): Shrink[(A1, A2, A3, A4)] =
-    shrink{ case (a1, a2, a3, a4) =>
-      for {
-        x1 <- A1(a1)
-        x2 <- A2(a2)
-        x3 <- A3(a3)
-        x4 <- A4(a4)
-      } yield (x1, x2, x3, x4)
+  implicit def tuple4[A1, A2, A3, A4](
+    implicit A1: Shrink[A1],
+    A2: Shrink[A2],
+    A3: Shrink[A3],
+    A4: Shrink[A4]
+  ): Shrink[(A1, A2, A3, A4)] =
+    shrink {
+      case (a1, a2, a3, a4) =>
+        for {
+          x1 <- A1(a1)
+          x2 <- A2(a2)
+          x3 <- A3(a3)
+          x4 <- A4(a4)
+        } yield (x1, x2, x3, x4)
     }
 
   implicit def map[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[Map[A, B]] = {

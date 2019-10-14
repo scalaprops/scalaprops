@@ -4,7 +4,7 @@ package scalazlaws
 import scalaz._
 import scalaz.std.string._
 
-final class *^*->* private(override val toString: String) {}
+final class *^*->* private (override val toString: String) {}
 
 object *^*->* {
 

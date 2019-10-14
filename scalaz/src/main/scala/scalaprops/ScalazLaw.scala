@@ -2,7 +2,7 @@ package scalaprops
 
 import scalaz._
 
-final class ScalazLaw private(val ord: Int, val fullName: String, val simpleName: String) {
+final class ScalazLaw private (val ord: Int, val fullName: String, val simpleName: String) {
   override def hashCode = ord
   override def toString = simpleName
 }
@@ -11,8 +11,8 @@ object ScalazLaw {
   private[this] val set = scala.collection.mutable.Set.empty[ScalazLaw]
 
   private[this] def law(fullName: String, simpleName: String = ""): ScalazLaw =
-    set.synchronized{
-      val name = if(simpleName == "") fullName else simpleName
+    set.synchronized {
+      val name = if (simpleName == "") fullName else simpleName
       val l = new ScalazLaw(set.size, fullName, name)
       set += l
       l
@@ -22,7 +22,7 @@ object ScalazLaw {
     law(clazz.simpleName + " " + lawName, lawName)
 
   private[this] def all(clazz: ScalazLaw): ScalazLaw =
-    law(clazz.simpleName+ " all", clazz.simpleName)
+    law(clazz.simpleName + " all", clazz.simpleName)
 
   val equal = law("equal")
   val equalCommutativity = law0(equal, "commutativity")
@@ -48,7 +48,6 @@ object ScalazLaw {
   val enumSuccOrder = law0(enum, "succ order")
   val enumPredOrder = law0(enum, "pred order")
 
-
   val semigroup = law("semigroup")
   val semigroupAssociative = law0(semigroup, "associative")
 
@@ -64,7 +63,6 @@ object ScalazLaw {
   val semilattice = law("semilattice")
   val semilatticeAll = all(semilattice)
   val semilatticeCommutative = law0(semilattice, "commutative")
-
 
   val invariantFunctor = law("invariantFunctor")
   val invariantFunctorIdentity = law0(invariantFunctor, "identity")
@@ -223,7 +221,6 @@ object ScalazLaw {
   val arrowUnit = law0(arrow, "unit")
   val arrowAssociation = law0(arrow, "association")
 
-
   val bifunctor = law("bifunctor")
 
   val bifoldable = law("bifoldable")
@@ -234,9 +231,7 @@ object ScalazLaw {
   val bitraverse = law("bitraverse")
   val bitraverseAll = all(bitraverse)
 
-
   val profunctor = law("profunctor")
-
 
   val reducer = law("reducer")
   val reducerConsCorrectness = law0(reducer, "consCorrectness")

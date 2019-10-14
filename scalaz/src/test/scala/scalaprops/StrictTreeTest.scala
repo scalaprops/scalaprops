@@ -16,24 +16,31 @@ object StrictTreeTest extends Scalaprops {
 
   val order = scalazlaws.order.all[StrictTree[Int]]
 
-  val strictTreeGenSized = Property.forAllG(Gen.positiveByte, Gen[Long]){ (n, seed) =>
-    val size = 5
-    val a = ScalapropsScalaz.strictTreeGenSized[Unit](n).samples(
-      listSize = size, seed = seed
-    ).map(Foldable[StrictTree].length)
+  val strictTreeGenSized = Property
+    .forAllG(Gen.positiveByte, Gen[Long]) { (n, seed) =>
+      val size = 5
+      val a = ScalapropsScalaz
+        .strictTreeGenSized[Unit](n)
+        .samples(
+          listSize = size,
+          seed = seed
+        )
+        .map(Foldable[StrictTree].length)
 
-    a == List.fill(size)(n)
-  }.toProperties((), Param.minSuccessful(10))
+      a == List.fill(size)(n)
+    }
+    .toProperties((), Param.minSuccessful(10))
 
   val strictTreeGenSize = {
     val F = Foldable[StrictTree]
     val p = { (size: Int) =>
-      Property.forAll{ tree: StrictTree[Int] =>
+      Property.forAll { tree: StrictTree[Int] =>
         val c = F.count(tree)
         (c <= size) && ((c * 0.7) < F.toIList(tree).distinct.length)
-      }.toProperties(size.toString).andThenParam(
-        Param.maxSize(size)
-      )
+      }.toProperties(size.toString)
+        .andThenParam(
+          Param.maxSize(size)
+        )
     }
 
     Properties.fromProps(

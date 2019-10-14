@@ -82,7 +82,7 @@ object FreeTTest extends Scalaprops {
       scalazlaws.bindRec.laws[F],
       scalazlaws.monad.all[F]
     )
-  }.andThenParamPF{
+  }.andThenParamPF {
     case Or.R(Or.L(ScalazLaw.applyComposition)) =>
       Param.maxSize(2) andThen Param.minSuccessful(10)
   }
@@ -201,7 +201,7 @@ object FreeTTest extends Scalaprops {
       scalazlaws.bindRec.laws[F],
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF{
+  }.andThenParamPF {
     case Or.R(Or.L(ScalazLaw.applyComposition)) =>
       Param.maxSize(2) andThen Param.minSuccessful(10)
   }
@@ -215,7 +215,7 @@ object FreeTTest extends Scalaprops {
       // scalazlaws.bindRec.laws[F],
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF{
+  }.andThenParamPF {
     case Or.R(Or.L(ScalazLaw.applyComposition)) =>
       Param.maxSize(2) andThen Param.minSuccessful(10)
   }
@@ -228,7 +228,7 @@ object FreeTTest extends Scalaprops {
       scalazlaws.bindRec.laws[F],
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF{
+  }.andThenParamPF {
     case Or.R(Or.L(ScalazLaw.applyComposition)) =>
       Param.maxSize(2) andThen Param.minSuccessful(10)
   }
@@ -240,7 +240,7 @@ object FreeTTest extends Scalaprops {
     Properties.list(
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF{
+  }.andThenParamPF {
     case Or.R(Or.L(ScalazLaw.applyComposition)) =>
       Param.maxSize(2) andThen Param.minSuccessful(10)
   }
@@ -251,14 +251,17 @@ object FreeTTest extends Scalaprops {
     type S = Byte
     type G[A] = StateT[IList, S, A]
     type F[A] = FreeT[IList, G, A]
-    Properties.list(
-      scalazlaws.monadState.all[F, S]
-    ).andThenParam(Param.maxSize(3)).andThenParamPF {
-      case Or.R(Or.L(law)) if laws(law) =>
-        Param.maxSize(2).andThen(Param.minSuccessful(10))
-    }
+    Properties
+      .list(
+        scalazlaws.monadState.all[F, S]
+      )
+      .andThenParam(Param.maxSize(3))
+      .andThenParamPF {
+        case Or.R(Or.L(law)) if laws(law) =>
+          Param.maxSize(2).andThen(Param.minSuccessful(10))
+      }
   }
 
-  val monadTransMaybe = scalazlaws.monadTrans.all[({type l[a[_], b] = FreeT[Maybe, a, b]})#l]
-  val monadTransIList = scalazlaws.monadTrans.all[({type l[a[_], b] = FreeT[IList, a, b]})#l]
+  val monadTransMaybe = scalazlaws.monadTrans.all[({ type l[a[_], b] = FreeT[Maybe, a, b] })#l]
+  val monadTransIList = scalazlaws.monadTrans.all[({ type l[a[_], b] = FreeT[IList, a, b] })#l]
 }

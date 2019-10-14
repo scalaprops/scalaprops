@@ -13,12 +13,17 @@ object monadPlus {
     forAll(F.monadPlusLaw.leftZero[X] _)
 
   def laws[F[_]](implicit F: MonadPlus[F], afx: Gen[F[Int]], ef: Equal[F[Int]]): Properties[ScalazLaw] =
-    properties(ScalazLaw.monadPlus) (
+    properties(ScalazLaw.monadPlus)(
       ScalazLaw.monadPlusEmptyMap -> emptyMap[F, Int],
       ScalazLaw.monadPlusLeftZero -> leftZero[F, Int]
     )
 
-  def all[F[_]](implicit F: MonadPlus[F], afx: Gen[F[Int]], afy: Gen[F[Int => Int]], ef: Equal[F[Int]]): Properties[ScalazLaw] =
+  def all[F[_]](
+    implicit F: MonadPlus[F],
+    afx: Gen[F[Int]],
+    afy: Gen[F[Int => Int]],
+    ef: Equal[F[Int]]
+  ): Properties[ScalazLaw] =
     Properties.fromProps(
       ScalazLaw.monadPlusAll,
       monadPlus.laws[F],

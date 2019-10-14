@@ -14,7 +14,7 @@ object plusEmpty {
     forAll(f.plusEmptyLaw.rightPlusIdentity[X] _)
 
   def laws[F[_]](implicit F: PlusEmpty[F], afx: Gen[F[Int]], ef: Equal[F[Int]]) =
-    properties(ScalazLaw.plusEmpty) (
+    properties(ScalazLaw.plusEmpty)(
       ScalazLaw.plusEmptyLeftIdentity -> leftPlusIdentity[F, Int],
       ScalazLaw.plusEmptyRightIdentity -> rightPlusIdentity[F, Int]
     )

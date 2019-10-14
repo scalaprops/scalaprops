@@ -3,10 +3,10 @@ package scalaprops
 import Gen.gen
 import scala.concurrent.Future
 
-final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
+final case class Gen[A] private (f: (Int, Rand) => (Rand, A)) {
 
   def map[B](g: A => B): Gen[B] =
-    gen{ (i, r) =>
+    gen { (i, r) =>
       val (r0, a) = f(i, r)
       (r0, g(a))
     }
@@ -15,7 +15,7 @@ final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
     map(a => g.applyOrElse(a, (_: A) => a))
 
   def flatMap[B](g: A => Gen[B]): Gen[B] =
-    gen{ (i, r) =>
+    gen { (i, r) =>
       val (r0, a) = f(i, r)
       g(a).f(i, r0)
     }
@@ -40,10 +40,7 @@ final case class Gen[A] private(f: (Int, Rand) => (Rand, A)) {
     Gen.infinite(size, Rand.standard(seed), this).toStream
 }
 
-
-sealed abstract class GenInstances0 extends GenInstances1 {
-
-}
+sealed abstract class GenInstances0 extends GenInstances1 {}
 
 object Gen extends GenInstances0 {
   private[scalaprops] val defaultSize = Platform.genSize
@@ -75,7 +72,7 @@ object Gen extends GenInstances0 {
     Z.map(z => () => z)
 
   implicit def f1[A1, Z](implicit A1: Cogen[A1], Z: Gen[Z]): Gen[A1 => Z] =
-    Gen.gen{ (i, r) =>
+    Gen.gen { (i, r) =>
       (r.next, a => A1.cogen(a, CogenState(r, Z)).gen.f(i, r)._2)
     }
 
@@ -104,7 +101,7 @@ object Gen extends GenInstances0 {
         (next, array)
       }
     }
-    gen{ (size, r) =>
+    gen { (size, r) =>
       loop(size, 0, r)
     }
   }
@@ -119,7 +116,7 @@ object Gen extends GenInstances0 {
         (next, acc.reverse)
       }
     }
-    gen{ (size, r) =>
+    gen { (size, r) =>
       loop(size, 0, r, List.empty[A])
     }
   }
@@ -142,13 +139,17 @@ object Gen extends GenInstances0 {
     parameterised((i, _) => f(i))
 
   def chooseLong(from: Long, to: Long): Gen[Long] =
-    gen{ (_, r) => r.chooseLong(from, to) }
+    gen { (_, r) =>
+      r.chooseLong(from, to)
+    }
 
   def choose(from: Int, to: Int): Gen[Int] =
-    gen{ (_, r) => r.choose(from, to) }
+    gen { (_, r) =>
+      r.choose(from, to)
+    }
 
   def chooseR(from: Int, to: Int, r: Rand): Gen[Int] =
-    gen{ (_, _) =>
+    gen { (_, _) =>
       r.choose(from, to)
     }
 
@@ -164,39 +165,39 @@ object Gen extends GenInstances0 {
 
   def lazyFrequency[A](g: (Int, Lazy[Gen[A]]), gs: List[(Int, Lazy[Gen[A]])]): Gen[A] = {
     val x = g :: gs
-    choose(1, x.iterator.map(_._1).sum).flatMap{ i =>
+    choose(1, x.iterator.map(_._1).sum).flatMap { i =>
       pick0(i, x).value
     }
   }
 
-  def frequency[A](g: (Int, Gen[A]), gs: (Int, Gen[A]) *): Gen[A] = {
+  def frequency[A](g: (Int, Gen[A]), gs: (Int, Gen[A])*): Gen[A] = {
     val x = g :: gs.toList
-    choose(1, x.iterator.map(_._1).sum).flatMap{ i =>
+    choose(1, x.iterator.map(_._1).sum).flatMap { i =>
       pick0(i, x)
     }
   }
 
-  def lazyFrequency[A](g: (Int, Lazy[Gen[A]]), gs: (Int, Lazy[Gen[A]]) *): Gen[A] =
+  def lazyFrequency[A](g: (Int, Lazy[Gen[A]]), gs: (Int, Lazy[Gen[A]])*): Gen[A] =
     lazyFrequency(g, gs.toList)
 
   def elemFrequency[A](a: (Int, A), as: List[(Int, A)]): Gen[A] =
-    frequency((a._1, Gen.value(a._2)), as.map{ case (i, a) => i -> Gen.value(a)}: _*)
+    frequency((a._1, Gen.value(a._2)), as.map { case (i, a) => i -> Gen.value(a) }: _*)
 
   def elements[A](a: A, as: A*): Gen[A] = {
     val xs = (a +: as).toArray[Any]
-    choose(0, as.length).map{xs(_).asInstanceOf[A]}
+    choose(0, as.length).map { xs(_).asInstanceOf[A] }
   }
 
   private[this] def listOf_[F[_], A](g: Gen[A], min: Int, f: List[A] => F[A]): Gen[F[A]] =
-    parameterised{ (size, r) =>
-      chooseR(min, size.max(min), r).flatMap{ n =>
+    parameterised { (size, r) =>
+      chooseR(min, size.max(min), r).flatMap { n =>
         sequenceN(n, g, f)
       }
     }
 
   private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], min: Int): Gen[Array[A]] =
-    parameterised{ (size, r) =>
-      chooseR(min, size.max(min), r).flatMap{ n =>
+    parameterised { (size, r) =>
+      chooseR(min, size.max(min), r).flatMap { n =>
         sequenceNArray(n, g)
       }
     }
@@ -205,12 +206,12 @@ object Gen extends GenInstances0 {
     listOf_[List, A](g, min, x => x)
 
   def listOfN[A](maxSize: Int, g: Gen[A]): Gen[List[A]] =
-    choose(0, maxSize).flatMap{ n =>
+    choose(0, maxSize).flatMap { n =>
       sequenceNList(n, g)
     }
 
   def arrayOfN[A: reflect.ClassTag](maxSize: Int, g: Gen[A]): Gen[Array[A]] =
-    choose(0, maxSize).flatMap{ n =>
+    choose(0, maxSize).flatMap { n =>
       sequenceNArray(n, g)
     }
 
@@ -237,15 +238,15 @@ object Gen extends GenInstances0 {
 
   private[this] def pick[A](n: Int, as: List[A]): Gen[List[A]] = {
     val len = as.length
-    if(n < 0 || n > len) {
+    if (n < 0 || n > len) {
       sys.error(s"bug $n $as")
     } else {
-      sequenceNList(n, choose(0, len - 1)).map{ is =>
+      sequenceNList(n, choose(0, len - 1)).map { is =>
         @annotation.tailrec
         def loop(iis: List[Int], aas: List[(A, Int)], acc: List[A]): List[A] =
           (iis, aas) match {
             case (h1 :: t1, h2 :: t2) =>
-              if(h1 == h2._2) loop(t1, t2, acc)
+              if (h1 == h2._2) loop(t1, t2, acc)
               else loop(iis, t2, h2._1 :: acc)
             case _ =>
               acc.reverse
@@ -270,7 +271,6 @@ object Gen extends GenInstances0 {
 
   val genLongAll: Gen[Long] =
     gen((_, r) => r.nextLong)
-
 
   def chooseIntBitsToFloat(from: Int, to: Int): Gen[Float] =
     Choose[Int].withBoundaries(from, to).map(java.lang.Float.intBitsToFloat)
@@ -300,22 +300,22 @@ object Gen extends GenInstances0 {
     Choose[Long].withBoundaries(from, to).map(java.lang.Double.longBitsToDouble)
 
   val negativeDouble: Gen[Double] =
-    chooseLongBitsToDouble(0x8000000000000000L, 0xfff0000000000000L)
+    chooseLongBitsToDouble(0x8000000000000000L, 0xFFF0000000000000L)
 
   val positiveDouble: Gen[Double] =
-    chooseLongBitsToDouble(1L, 0x7ff0000000000000L)
+    chooseLongBitsToDouble(1L, 0x7FF0000000000000L)
 
   val nonNegativeDouble: Gen[Double] =
-    chooseLongBitsToDouble(0L, 0x7ff0000000000000L)
+    chooseLongBitsToDouble(0L, 0x7FF0000000000000L)
 
   val negativeFiniteDouble: Gen[Double] =
-    chooseLongBitsToDouble(0x8000000000000000L, 0xffefffffffffffffL)
+    chooseLongBitsToDouble(0x8000000000000000L, 0xFFEFFFFFFFFFFFFFL)
 
   val positiveFiniteDouble: Gen[Double] =
-    chooseLongBitsToDouble(1L, 0x7fefffffffffffffL)
+    chooseLongBitsToDouble(1L, 0x7FEFFFFFFFFFFFFFL)
 
   val nonNegativeFiniteDouble: Gen[Double] =
-    chooseLongBitsToDouble(0L, 0x7fefffffffffffffL)
+    chooseLongBitsToDouble(0L, 0x7FEFFFFFFFFFFFFFL)
 
   val genFiniteDouble: Gen[Double] =
     Gen.oneOf(negativeFiniteDouble, nonNegativeFiniteDouble)
@@ -476,10 +476,10 @@ object Gen extends GenInstances0 {
       1 -> value(Float.NaN),
       1 -> value(Float.PositiveInfinity),
       1 -> value(Float.NegativeInfinity),
-      1 -> value(0F),
-      1 -> value(-0F),
-      1 -> value(1F),
-      1 -> value(-1F),
+      1 -> value(0f),
+      1 -> value(-0f),
+      1 -> value(1f),
+      1 -> value(-1f),
       1 -> value(Float.MinPositiveValue),
       1 -> value(-Float.MinPositiveValue),
       50 -> genIntAll.map(_.toFloat),
@@ -491,10 +491,10 @@ object Gen extends GenInstances0 {
       1 -> value(Double.NaN),
       1 -> value(Double.PositiveInfinity),
       1 -> value(Double.NegativeInfinity),
-      1 -> value(0F),
-      1 -> value(-0F),
-      1 -> value(1F),
-      1 -> value(-1F),
+      1 -> value(0f),
+      1 -> value(-0f),
+      1 -> value(1f),
+      1 -> value(-1f),
       1 -> value(Double.MinPositiveValue),
       1 -> value(-Double.MinPositiveValue),
       50 -> genLongAll.map(_.toDouble),

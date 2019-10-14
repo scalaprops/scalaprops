@@ -8,10 +8,10 @@ object build {
 
   val modules: List[String] = (
     genName ::
-    coreName ::
-    allName ::
-    scalazName ::
-    scalapropsName ::
-    Nil
+      coreName ::
+      allName ::
+      scalazName ::
+      scalapropsName ::
+      Nil
   )
 }

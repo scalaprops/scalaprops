@@ -30,7 +30,7 @@ object LazyOpt {
     }
   }
 
-  private final case class LazyNone[A] () extends LazyOpt[A]
+  private final case class LazyNone[A]() extends LazyOpt[A]
 
   private[this] val none = LazyNone[Any]
 
@@ -42,6 +42,6 @@ object LazyOpt {
 
   def fromOption[A](oa: Option[A]): LazyOpt[A] = oa match {
     case Some(x) => lazySome(x)
-    case None    => lazyNone[A]
+    case None => lazyNone[A]
   }
 }

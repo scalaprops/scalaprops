@@ -7,7 +7,7 @@ import ScalapropsScalaz._
 object EitherTTest extends Scalaprops {
 
   val iListBindRec =
-    scalazlaws.bindRec.laws[({type l[a] = EitherT[IList, Byte, a]})#l].andThenParam(Param.maxSize(1))
+    scalazlaws.bindRec.laws[({ type l[a] = EitherT[IList, Byte, a] })#l].andThenParam(Param.maxSize(1))
 
   val maybe = {
     type F[A] = EitherT[Maybe, Int, A]
@@ -21,7 +21,7 @@ object EitherTTest extends Scalaprops {
   }
 
   val maybe2 =
-    scalazlaws.bitraverse.all[({type l[a, b] = EitherT[Maybe, a, b]})#l]
+    scalazlaws.bitraverse.all[({ type l[a, b] = EitherT[Maybe, a, b] })#l]
 
   val iList = {
     type F[A] = EitherT[IList, Int, A]
@@ -43,6 +43,6 @@ object EitherTTest extends Scalaprops {
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = EitherT[f, Int, a]})#l]
+  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = EitherT[f, Int, a] })#l]
 
 }

@@ -4,7 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
-object TracedTTest extends Scalaprops{
+object TracedTTest extends Scalaprops {
 
   private[this] val e = new FunctionEqual(10)
   import e._
@@ -13,12 +13,11 @@ object TracedTTest extends Scalaprops{
 
   type Z = IList[Boolean]
 
-  val trans = scalazlaws.comonadTrans.all[({type l[w[_], a] = TracedT[w, Z, a]})#l]
+  val trans = scalazlaws.comonadTrans.all[({ type l[w[_], a] = TracedT[w, Z, a] })#l]
 
-  val contravariantMaybe = scalazlaws.contravariant.all[({type l[a] = TracedT[Maybe, a, Byte]})#l]
-  val contravariantIList = scalazlaws.contravariant.all[({type l[a] = TracedT[IList, a, Byte]})#l]
-  val contravariantTree = scalazlaws.contravariant.all[({type l[a] = TracedT[Tree, a, Byte]})#l]
-
+  val contravariantMaybe = scalazlaws.contravariant.all[({ type l[a] = TracedT[Maybe, a, Byte] })#l]
+  val contravariantIList = scalazlaws.contravariant.all[({ type l[a] = TracedT[IList, a, Byte] })#l]
+  val contravariantTree = scalazlaws.contravariant.all[({ type l[a] = TracedT[Tree, a, Byte] })#l]
 
   val maybe = {
     type F[A] = TracedT[Maybe, Z, A]

@@ -12,7 +12,7 @@ object category {
     forAll(C.categoryLaw.rightIdentity[A, B] _)
 
   def laws[=>:[_, _]](implicit C: Category[=>:], AB: Gen[Int =>: Int], E: Equal[Int =>: Int]) =
-    Properties.properties(ScalazLaw.category) (
+    Properties.properties(ScalazLaw.category)(
       ScalazLaw.categoryLeftIdentity -> leftIdentity[=>:, Int, Int],
       ScalazLaw.categoryRightIdentity -> rightIdentity[=>:, Int, Int]
     )
@@ -25,7 +25,7 @@ object category {
       ScalazLaw.categoryAll,
       category.laws[=>:],
       compose.all[=>:],
-      plusEmpty.all[({type l[a] = a =>: a})#l],
+      plusEmpty.all[({ type l[a] = a =>: a })#l],
       monoid.all[Int =>: Int]
     )
   }

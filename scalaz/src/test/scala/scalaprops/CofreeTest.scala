@@ -8,7 +8,8 @@ import ScalapropsScalaz._
 
 object CofreeTest extends Scalaprops {
 
-  private[this] implicit def cogenCofree[F[_], A](implicit
+  private[this] implicit def cogenCofree[F[_], A](
+    implicit
     A: Cogen[A],
     F: Cogen1[F]
   ): Cogen[Cofree[F, A]] =
@@ -17,15 +18,15 @@ object CofreeTest extends Scalaprops {
         A.cogen(a.head, F.cogen1[Cofree[F, A]].cogen(a.tail, g))
     }
 
-  private[this] implicit def cofreeEqual[F[_], A](implicit
+  private[this] implicit def cofreeEqual[F[_], A](
+    implicit
     F: Eq1[F],
     A: Equal[A]
   ): Equal[Cofree[F, A]] =
-    Equal.equal((a, b) =>
-      A.equal(a.head, b.head) && F.eq1[Cofree[F, A]].equal(a.tail, b.tail)
-    )
+    Equal.equal((a, b) => A.equal(a.head, b.head) && F.eq1[Cofree[F, A]].equal(a.tail, b.tail))
 
-  private[this] implicit def cofreeZipEqual[F[_], A](implicit
+  private[this] implicit def cofreeZipEqual[F[_], A](
+    implicit
     F: Eq1[F],
     A: Equal[A]
   ): Equal[CofreeZip[F, A]] =
@@ -33,7 +34,8 @@ object CofreeTest extends Scalaprops {
 
   private[this] type CofreeZip[F[_], A] = Cofree[F, A] @@ Tags.Zip
 
-  private def cofreeZipTest[F[_]: Applicative](implicit
+  private def cofreeZipTest[F[_]: Applicative](
+    implicit
     F1: Gen[CofreeZip[F, Int]],
     F2: Gen[CofreeZip[F, Int => Int]],
     F3: Equal[CofreeZip[F, Int]]
@@ -74,11 +76,10 @@ object CofreeTest extends Scalaprops {
     cofreeZipTest[F]
   }
 
-
   val testMaybe = {
     implicit def genCofreeMaybe[A: Gen] =
-      Gen[OneAnd[List, A]].map{ list =>
-        Cofree.unfold(list){
+      Gen[OneAnd[List, A]].map { list =>
+        Cofree.unfold(list) {
           case OneAnd(a, h :: t) =>
             (a, Maybe.just(OneAnd(h, t)))
           case OneAnd(a, Nil) =>
@@ -119,15 +120,15 @@ object CofreeTest extends Scalaprops {
   }
 
   private[this] object CofreeGenImplicit {
-    implicit def gen[F[_], A](implicit
+    implicit def gen[F[_], A](
+      implicit
       F: Gen1[F],
       A: Gen[A]
     ): Gen[Cofree[F, A]] =
-      Apply[Gen].apply2(A, F.gen1[Cofree[F, A]])((h, t) =>
-        Cofree(h, t)
-      )
+      Apply[Gen].apply2(A, F.gen1[Cofree[F, A]])((h, t) => Cofree(h, t))
 
-    implicit def genCofreeZip[F[_], A](implicit
+    implicit def genCofreeZip[F[_], A](
+      implicit
       F: Gen1[F],
       A: Gen[A]
     ): Gen[CofreeZip[F, A]] =

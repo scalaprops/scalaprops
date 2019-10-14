@@ -15,7 +15,8 @@ object KleisliTest extends Scalaprops {
     Equal[A => F[B]].contramap(_.run)
   }
 
-  private def kleisliTest[F[_]: MonadPlus: Zip](implicit
+  private def kleisliTest[F[_]: MonadPlus: Zip](
+    implicit
     F: Equal[F[Int]],
     E1: Equal[F[(Int, Int)]],
     E2: Equal[F[(Int, (Int, Int))]],
@@ -42,7 +43,6 @@ object KleisliTest extends Scalaprops {
     }
   )(_ orElse _)
 
-
   val testMaybe = kleisliTest[Maybe]
 
   val disjunctionMonadError = {
@@ -52,7 +52,7 @@ object KleisliTest extends Scalaprops {
     scalazlaws.monadError.laws[F, E]
   }
 
-  val testIList = kleisliTest[IList].andThenParamPF{
+  val testIList = kleisliTest[IList].andThenParamPF {
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
@@ -66,21 +66,21 @@ object KleisliTest extends Scalaprops {
       scalazlaws.zip.all[K1],
       scalazlaws.arrow.all[K2]
     )
-  }.andThenParamPF{
+  }.andThenParamPF {
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = Kleisli[f, Int, a]})#l]
+  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = Kleisli[f, Int, a] })#l]
 
   val kleisliId = {
     type F[A] = Kleisli[Id.Id, Byte, A]
     scalazlaws.bindRec.laws[F]
   }
 
-  val maybeBindRec = scalazlaws.bindRec.laws[({type l[a] = Kleisli[Maybe, Byte, a]})#l]
+  val maybeBindRec = scalazlaws.bindRec.laws[({ type l[a] = Kleisli[Maybe, Byte, a] })#l]
 
   val ilistBindRec = {
-    scalazlaws.bindRec.laws[({type l[a] = Kleisli[IList, Byte, a]})#l]
+    scalazlaws.bindRec.laws[({ type l[a] = Kleisli[IList, Byte, a] })#l]
   }.andThenParam(Param.maxSize(1))
 
 }

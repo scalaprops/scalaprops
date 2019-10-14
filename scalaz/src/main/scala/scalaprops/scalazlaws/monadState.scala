@@ -18,7 +18,8 @@ object monadState {
   def getGet[F[_], S](implicit F: MonadState[F, S], K: Gen[(S, S) => F[Unit]], E: Equal[F[Unit]]): Property =
     forAll(MonadStateLaws[F, S].getGet _)
 
-  def laws[F[_], S](implicit
+  def laws[F[_], S](
+    implicit
     F: MonadState[F, S],
     S: Gen[S],
     K: Gen[(S, S) => F[Unit]],
@@ -31,7 +32,8 @@ object monadState {
     ScalazLaw.monadStateGetGet -> getGet[F, S]
   )
 
-  def all[F[_], S](implicit
+  def all[F[_], S](
+    implicit
     F: MonadState[F, S],
     S: Gen[S],
     G1: Gen[F[Int]],
@@ -41,7 +43,9 @@ object monadState {
     E2: Equal[F[S]],
     E3: Equal[F[Int]]
   ) = Properties.fromProps(
-    ScalazLaw.monadStateAll, monad.all[F], monadState.laws[F, S]
+    ScalazLaw.monadStateAll,
+    monad.all[F],
+    monadState.laws[F, S]
   )
 
 }

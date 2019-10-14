@@ -18,15 +18,19 @@ object applicative {
   def mapApConsistency[F[_], X, Y](implicit ap: Applicative[F], ax: Gen[F[X]], afx: Gen[X => Y], e: Equal[F[Y]]) =
     forAll(ap.applicativeLaw.mapLikeDerived[X, Y] _)
 
-  def laws[F[_]](implicit F: Applicative[F], af: Gen[F[Int]],
-                 aff: Gen[F[Int => Int]], e: Equal[F[Int]]) = properties(ScalazLaw.applicative)(
-    ScalazLaw.applicativeIdentity -> applicative.identity[F, Int],
-    ScalazLaw.applicativeHomomorphism -> applicative.homomorphism[F, Int, Int],
-    ScalazLaw.applicativeInterchange -> applicative.interchange[F, Int, Int],
-    ScalazLaw.applicativeMapConsistentWithAp -> applicative.mapApConsistency[F, Int, Int]
-  )
+  def laws[F[_]](implicit F: Applicative[F], af: Gen[F[Int]], aff: Gen[F[Int => Int]], e: Equal[F[Int]]) =
+    properties(ScalazLaw.applicative)(
+      ScalazLaw.applicativeIdentity -> applicative.identity[F, Int],
+      ScalazLaw.applicativeHomomorphism -> applicative.homomorphism[F, Int, Int],
+      ScalazLaw.applicativeInterchange -> applicative.interchange[F, Int, Int],
+      ScalazLaw.applicativeMapConsistentWithAp -> applicative.mapApConsistency[F, Int, Int]
+    )
 
-  def all[F[_]](implicit F: Applicative[F], af: Gen[F[Int]],
-                aff: Gen[F[Int => Int]], e: Equal[F[Int]]): Properties[ScalazLaw] =
+  def all[F[_]](
+    implicit F: Applicative[F],
+    af: Gen[F[Int]],
+    aff: Gen[F[Int => Int]],
+    e: Equal[F[Int]]
+  ): Properties[ScalazLaw] =
     Properties.fromProps(ScalazLaw.applicativeAll, applicative.laws[F], apply.all[F])
 }

@@ -14,7 +14,7 @@ object foldable1 {
     forAll(F.foldable1Law.rightFM1Consistent[A] _)
 
   def laws[F[_]: Foldable1](implicit fa: Gen[F[Int]]) =
-    Properties.properties(ScalazLaw.foldable1) (
+    Properties.properties(ScalazLaw.foldable1)(
       ScalazLaw.foldable1LeftFM1Consistent -> leftFM1Consistent[F, Int],
       ScalazLaw.foldable1RightFM1Consistent -> rightFM1Consistent[F, Int]
     )

@@ -5,7 +5,7 @@ import scalaz.std.anyVal._
 import scalaz.std.option._
 import ScalapropsScalaz._
 
-object OptionTTest extends Scalaprops{
+object OptionTTest extends Scalaprops {
 
   val disjunction = {
     type E = Byte
@@ -26,7 +26,7 @@ object OptionTTest extends Scalaprops{
     )
   }
 
-  val iListBindRec = scalazlaws.bindRec.laws[({type l[a] = OptionT[IList, a]})#l].andThenParam(Param.maxSize(1))
+  val iListBindRec = scalazlaws.bindRec.laws[({ type l[a] = OptionT[IList, a] })#l].andThenParam(Param.maxSize(1))
 
   val iList = {
     type F[A] = OptionT[IList, A]

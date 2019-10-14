@@ -9,7 +9,7 @@ object IdTTest extends Scalaprops {
 
   val monadTrans = scalazlaws.monadTrans.all[IdT]
 
-  val bindRecIList = scalazlaws.bindRec.laws[({type l[a] = IdT[IList, a]})#l].andThenParam(Param.maxSize(1))
+  val bindRecIList = scalazlaws.bindRec.laws[({ type l[a] = IdT[IList, a] })#l].andThenParam(Param.maxSize(1))
 
   val id = {
     type F[A] = IdT[Id, A]

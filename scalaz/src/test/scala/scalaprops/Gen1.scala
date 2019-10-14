@@ -48,14 +48,14 @@ object Gen1 {
         Gen[Maybe[A]]
     }
 
-  implicit def validation[E: Gen]: Gen1[({type l[a] = Validation[E, a]})#l] =
-    new Gen1[({type l[a] = Validation[E, a]})#l] {
+  implicit def validation[E: Gen]: Gen1[({ type l[a] = Validation[E, a] })#l] =
+    new Gen1[({ type l[a] = Validation[E, a] })#l] {
       def gen1[A: Gen] =
         Gen[Validation[E, A]]
     }
 
-  implicit def disjunction[E: Gen]: Gen1[({type l[a] = E \/ a})#l] =
-    new Gen1[({type l[a] = E \/ a})#l] {
+  implicit def disjunction[E: Gen]: Gen1[({ type l[a] = E \/ a })#l] =
+    new Gen1[({ type l[a] = E \/ a })#l] {
       def gen1[A: Gen] =
         Gen[E \/ A]
     }

@@ -5,12 +5,14 @@ import scalaz.std.anyVal._
 import scalaz.std.tuple._
 import ScalapropsScalaz._
 
-object LensTest extends Scalaprops{
+object LensTest extends Scalaprops {
 
   import FunctionEqual._
   import IndexedStoreTTest.indexedStoreTEqual
 
-  private[this] implicit def lensEqual[A, B, C, D](implicit A: Equal[A => IndexedStore[C, D, B]]): Equal[LensFamily[A, B, C, D]] =
+  private[this] implicit def lensEqual[A, B, C, D](
+    implicit A: Equal[A => IndexedStore[C, D, B]]
+  ): Equal[LensFamily[A, B, C, D]] =
     A.contramap[LensFamily[A, B, C, D]](_.run)
 
   val testCategoryLaw = {

@@ -33,7 +33,7 @@ object CokleisliTest extends Scalaprops {
     )
   }
 
-  val nel1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[NonEmptyList, a, b]})#l]
+  val nel1 = scalazlaws.arrow.all[({ type l[a, b] = Cokleisli[NonEmptyList, a, b] })#l]
   val nel2 = {
     type F[A] = Cokleisli[NonEmptyList, Byte, A]
     Properties.list(
@@ -42,7 +42,7 @@ object CokleisliTest extends Scalaprops {
     )
   }
 
-  val tree1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[Tree, a, b]})#l]
+  val tree1 = scalazlaws.arrow.all[({ type l[a, b] = Cokleisli[Tree, a, b] })#l]
   val tree2 = {
     type F[A] = Cokleisli[Tree, Byte, A]
     Properties.list(
@@ -51,7 +51,7 @@ object CokleisliTest extends Scalaprops {
     )
   }
 
-  val zipper1 = scalazlaws.arrow.all[({type l[a, b] = Cokleisli[Zipper, a, b]})#l]
+  val zipper1 = scalazlaws.arrow.all[({ type l[a, b] = Cokleisli[Zipper, a, b] })#l]
   val zipper2 = {
     type F[A] = Cokleisli[Zipper, Byte, A]
     Properties.list(

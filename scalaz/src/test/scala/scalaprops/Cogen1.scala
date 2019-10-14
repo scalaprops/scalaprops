@@ -16,14 +16,14 @@ object Cogen1 {
         Cogen[Maybe[A]]
     }
 
-  implicit def validation[B: Cogen]: Cogen1[({type l[a] = Validation[B, a]})#l] =
-    new Cogen1[({type l[a] = Validation[B, a]})#l] {
+  implicit def validation[B: Cogen]: Cogen1[({ type l[a] = Validation[B, a] })#l] =
+    new Cogen1[({ type l[a] = Validation[B, a] })#l] {
       def cogen1[A: Cogen] =
         Cogen[Validation[B, A]]
     }
 
-  implicit def disjunction[B: Cogen]: Cogen1[({type l[a] = B \/ a})#l] =
-    new Cogen1[({type l[a] = B \/ a})#l] {
+  implicit def disjunction[B: Cogen]: Cogen1[({ type l[a] = B \/ a })#l] =
+    new Cogen1[({ type l[a] = B \/ a })#l] {
       def cogen1[A: Cogen] =
         Cogen[B \/ A]
     }

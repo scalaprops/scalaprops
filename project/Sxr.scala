@@ -19,9 +19,9 @@ object Sxr {
   private[this] def ifSxrAvailable[A](key: TaskKey[A], value: Def.Initialize[Task[A]]): Setting[Task[A]] =
     key := {
       if (enableSxr.value) {
-        value.value : @sbtUnchecked
+        value.value: @sbtUnchecked
       } else {
-        key.value : @sbtUnchecked
+        key.value: @sbtUnchecked
       }
     }
 
@@ -46,7 +46,7 @@ object Sxr {
 
   val settings2: Seq[Setting[_]] = Defaults.packageTaskSettings(
     sxr in Compile,
-    Def.task{
+    Def.task {
       val dir = (crossTarget in Compile).value
       val _ = (unidoc in Compile).value
       Path.allSubpaths(dir / "unidoc.sxr").toSeq

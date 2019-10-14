@@ -17,19 +17,19 @@ object LazyTupleTest extends Scalaprops {
     scalazlaws.associative.all[LazyTuple2],
     scalazlaws.order.all[LazyTuple2[A, B]],
     scalazlaws.monoid.all[LazyTuple2[A, B]],
-    scalazlaws.monad.all[({type l[a] = LazyTuple2[A, a]})#l]
+    scalazlaws.monad.all[({ type l[a] = LazyTuple2[A, a] })#l]
   )
 
   val testLazyTuple3 = Properties.list(
     scalazlaws.order.all[LazyTuple3[A, B, C]],
     scalazlaws.monoid.all[LazyTuple3[A, B, C]],
-    scalazlaws.monad.all[({type l[a] = LazyTuple3[A, B, a]})#l]
+    scalazlaws.monad.all[({ type l[a] = LazyTuple3[A, B, a] })#l]
   )
 
   val testLazyTuple4 = Properties.list(
     scalazlaws.order.all[LazyTuple4[A, B, C, D]],
     scalazlaws.monoid.all[LazyTuple4[A, B, C, D]],
-    scalazlaws.monad.all[({type l[a] = LazyTuple4[A, B, C, a]})#l]
+    scalazlaws.monad.all[({ type l[a] = LazyTuple4[A, B, C, a] })#l]
   )
 
 }

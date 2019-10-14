@@ -4,15 +4,14 @@ sealed abstract class Or
 
 sealed abstract class :-:[+H, +T <: Or] extends Or
 
-sealed abstract class OrConsInstances {
-}
+sealed abstract class OrConsInstances {}
 
 object :-: extends OrConsInstances {
 
   implicit def orGen[A, B <: Or](implicit A: Gen[A], B: Gen[B]): Gen[A :-: B] = {
-    if(B eq Or.Empty.orEmptyGen){
+    if (B eq Or.Empty.orEmptyGen) {
       A.map[A :-: B](Or.L(_))
-    }else {
+    } else {
       Gen.frequency(
         1 -> A.map[A :-: B](Or.L(_)),
         3 -> B.map[A :-: B](Or.R(_))
@@ -24,11 +23,11 @@ object :-: extends OrConsInstances {
 
 object Or {
 
-  final case class L[+H, +T <: Or](head : H) extends :-:[H, T] {
+  final case class L[+H, +T <: Or](head: H) extends :-:[H, T] {
     override def toString = head.toString
   }
 
-  final case class R[+H, +T <: Or](tail : T) extends :-:[H, T] {
+  final case class R[+H, +T <: Or](tail: T) extends :-:[H, T] {
     override def toString = tail.toString
   }
 

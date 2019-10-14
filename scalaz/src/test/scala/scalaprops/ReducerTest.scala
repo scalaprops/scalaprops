@@ -6,7 +6,7 @@ import scalaz.std.AllInstances._
 import EndoTest.endoEqual
 import ScalapropsScalaz._
 
-object ReducerTest extends Scalaprops{
+object ReducerTest extends Scalaprops {
 
   private[this] implicit def tagGen[A: Gen, B]: Gen[A @@ B] =
     Tag.subst(Gen[A])

@@ -38,7 +38,8 @@ object ScalapropsRunner {
     clazz: Class[_],
     obj: Scalaprops,
     only: List[String],
-    logger: Logger): Properties[_] = {
+    logger: Logger
+  ): Properties[_] = {
     val tests0 = invokeProperty(clazz, obj).map {
       case (name, p) => p.toProperties[Any](name)
     } ::: invokeProperties(clazz, obj)

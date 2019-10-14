@@ -15,7 +15,7 @@ object TheseTest extends Scalaprops {
     )
 
   // TODO bindRec.handleManyBinds
-  val bindRec = scalazlaws.bindRec.tailrecBindConsistency[({type l[a] = Byte \&/ a})#l, Byte]
+  val bindRec = scalazlaws.bindRec.tailrecBindConsistency[({ type l[a] = Byte \&/ a })#l, Byte]
 
   val test1 =
     Properties.list(

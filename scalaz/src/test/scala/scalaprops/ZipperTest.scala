@@ -6,9 +6,8 @@ import ScalapropsScalaz._
 
 object ZipperTest extends Scalaprops {
 
-  val size = Property.forAllG(Gen.choose(1, 300), Gen[Rand]) {
-    (size, rand) =>
-      Foldable[Zipper].length(Gen[Zipper[Unit]].f(size, rand)._2) == size
+  val size = Property.forAllG(Gen.choose(1, 300), Gen[Rand]) { (size, rand) =>
+    Foldable[Zipper].length(Gen[Zipper[Unit]].f(size, rand)._2) == size
   }
 
   val testLaw =
@@ -23,7 +22,7 @@ object ZipperTest extends Scalaprops {
     implicit def zipperEqual[A](implicit A: Equal[A]): Equal[Zipper[A]] = {
       import scalaz.std.stream._
       val n = 1000
-      Equal.equal{ (x, y) =>
+      Equal.equal { (x, y) =>
         A.equal(x.focus, y.focus) &&
         Equal[Stream[A]].equal(x.lefts.take(n), y.lefts.take(n)) &&
         Equal[Stream[A]].equal(x.rights.take(n), y.rights.take(n))

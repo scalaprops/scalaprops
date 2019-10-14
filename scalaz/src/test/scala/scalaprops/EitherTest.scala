@@ -13,7 +13,7 @@ object EitherTest extends Scalaprops {
   val laws1 = {
     type T[A] = Either[Int, A]
     Properties.list(
-      scalazlaws.monadError.all[({type l[a] = Either[Byte, a]})#l, Byte],
+      scalazlaws.monadError.all[({ type l[a] = Either[Byte, a] })#l, Byte],
       scalazlaws.bindRec.all[T],
       scalazlaws.traverse.all[T]
     )

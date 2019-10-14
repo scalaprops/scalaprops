@@ -6,22 +6,25 @@ import ScalapropsScalaz._
 
 object FreeTest extends Scalaprops {
 
-  implicit def freeEqual[F[_]: Functor, A](implicit
+  implicit def freeEqual[F[_]: Functor, A](
+    implicit
     E: Eq1[F],
     A: Equal[A]
   ): Equal[Free[F, A]] =
-    Equal.equal((aa, bb) =>
-      (aa.resume, bb.resume) match {
-        case (-\/(a), -\/(b)) =>
-          E.eq1[Free[F, A]].equal(a, b)
-        case (\/-(a), \/-(b)) =>
-          A.equal(a, b)
-        case _ =>
-          false
-      }
+    Equal.equal(
+      (aa, bb) =>
+        (aa.resume, bb.resume) match {
+          case (-\/(a), -\/(b)) =>
+            E.eq1[Free[F, A]].equal(a, b)
+          case (\/-(a), \/-(b)) =>
+            A.equal(a, b)
+          case _ =>
+            false
+        }
     )
 
-  implicit def freeGen[F[_]: Applicative, A](implicit
+  implicit def freeGen[F[_]: Applicative, A](
+    implicit
     F: Gen[F[A]],
     A: Gen[A]
   ): Gen[Free[F, A]] =
@@ -31,9 +34,8 @@ object FreeTest extends Scalaprops {
       F.map(Free.liftF(_))
     )
 
-
   val bindRecIList =
-    scalazlaws.bindRec.laws[({type l[a] = Free[IList, a]})#l].andThenParam(Param.maxSize(1))
+    scalazlaws.bindRec.laws[({ type l[a] = Free[IList, a] })#l].andThenParam(Param.maxSize(1))
 
   val testMaybe = {
     type F[A] = Free[Maybe, A]

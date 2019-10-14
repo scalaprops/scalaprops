@@ -18,8 +18,8 @@ sealed abstract class Tree[A] {
     def traverseStream[S, A, B](fa: Stream[A])(f: A => State[S, B]): State[S, Stream[B]] = {
       val seed = State[S, Stream[B]](s => (s, Stream.empty[B]))
 
-      fa.foldRight(seed) {
-        (x, ys) => for {
+      fa.foldRight(seed) { (x, ys) =>
+        for {
           b <- f(x)
           bs <- ys
         } yield b #:: bs
@@ -43,19 +43,20 @@ sealed abstract class Tree[A] {
   }
 
   def mapAccumL[S, B](z: S)(f: (S, A) => (S, B)): (S, Tree[B]) =
-    traverseS(z)(a =>
-      for {
-        s1 <- State.init[S]
-        (s2, b) = f(s1, a)
-        _ <- State.put(s2)
-      } yield b
+    traverseS(z)(
+      a =>
+        for {
+          s1 <- State.init[S]
+          (s2, b) = f(s1, a)
+          _ <- State.put(s2)
+        } yield b
     )
 
   private def draw: Stream[String] = {
     def drawSubTrees(s: Stream[Tree[A]]): Stream[String] = s match {
       case Stream.Empty => Stream.Empty
-      case Stream(t)    => "|" #:: shift("`- ", "   ", t.draw)
-      case t #:: ts     => "|" #:: shift("+- ", "|  ", t.draw) append drawSubTrees(ts)
+      case Stream(t) => "|" #:: shift("`- ", "   ", t.draw)
+      case t #:: ts => "|" #:: shift("+- ", "|  ", t.draw) append drawSubTrees(ts)
     }
     def shift(first: String, other: String, s: Stream[String]): Stream[String] =
       (first #:: Stream.continually(other)).zip(s).map {
@@ -112,7 +113,7 @@ object Tree {
   private final case class State[S, A](run: S => (S, A)) {
 
     def map[B](f: A => B): State[S, B] =
-      State(run.andThen{ case (s, a) => (s, f(a)) })
+      State(run.andThen { case (s, a) => (s, f(a)) })
 
     def flatMap[B](f: A => State[S, B]): State[S, B] =
       State[S, B] { s0 =>

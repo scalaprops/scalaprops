@@ -7,7 +7,7 @@ import ScalapropsScalaz._
 
 object WriterTTest extends Scalaprops {
 
-  val bindRecIList = scalazlaws.bindRec.laws[({type l[a] = WriterT[IList, Byte, a]})#l].andThenParam(Param.maxSize(1))
+  val bindRecIList = scalazlaws.bindRec.laws[({ type l[a] = WriterT[IList, Byte, a] })#l].andThenParam(Param.maxSize(1))
 
   val testMaybe1 = {
     type F[A] = WriterT[Maybe, Int, A]
@@ -71,6 +71,6 @@ object WriterTTest extends Scalaprops {
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = WriterT[f, Int, a]})#l]
+  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = WriterT[f, Int, a] })#l]
 
 }

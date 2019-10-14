@@ -21,7 +21,7 @@ object StateTTest extends Scalaprops {
   }
 
   val bindRecIList = {
-    scalazlaws.bindRec.laws[({type l[a] = StateT[IList, Byte, a]})#l]
+    scalazlaws.bindRec.laws[({ type l[a] = StateT[IList, Byte, a] })#l]
   }.andThenParam(Param.maxSize(1))
 
   val testIList = {
@@ -52,8 +52,8 @@ object StateTTest extends Scalaprops {
     )
   }.andThenParam(Param.minSuccessful(20)).composeParam(Param.maxSize(20))
 
-  val bifunctor = scalazlaws.bifunctor.laws[({type l[a, b] = IndexedStateT[Maybe, Int, a, b]})#l]
+  val bifunctor = scalazlaws.bifunctor.laws[({ type l[a, b] = IndexedStateT[Maybe, Int, a, b] })#l]
 
-  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = StateT[f, Int, a]})#l]
+  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = StateT[f, Int, a] })#l]
 
 }

@@ -28,10 +28,16 @@ object bindRec {
         bindRec.tailrecBindConsistency[F, Int]
       ),
       ScalazLaw.bindRecHandleManyBinds -> Check(
-        bindRec.handleManyBinds[F, Int](bindCount), Param.minSuccessful(1)
+        bindRec.handleManyBinds[F, Int](bindCount),
+        Param.minSuccessful(1)
       )
     )
 
-  def all[F[_]: BindRec](implicit G1: Gen[F[Int]], G2: Gen[Int => F[Int]], G3: Gen[F[Int => Int]], e: Equal[F[Int]]): Properties[ScalazLaw] =
+  def all[F[_]: BindRec](
+    implicit G1: Gen[F[Int]],
+    G2: Gen[Int => F[Int]],
+    G3: Gen[F[Int => Int]],
+    e: Equal[F[Int]]
+  ): Properties[ScalazLaw] =
     Properties.fromProps(ScalazLaw.bindRecAll, bindRec.laws[F], bind.all[F])
 }

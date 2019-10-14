@@ -10,7 +10,7 @@ object band {
     forAll(A.bandLaw.idempotency _)
 
   def laws[A: Band: Equal: Gen]: Properties[ScalazLaw] =
-    properties(ScalazLaw.band) (
+    properties(ScalazLaw.band)(
       ScalazLaw.bandIdempotency -> idempotency[A]
     )
 

@@ -32,7 +32,7 @@ object enum {
   def predorder[A](implicit A: Enum[A], G: Gen[A]): Property =
     forAll(A.enumLaw.predorder _)
 
-  def laws[A: Enum : Gen]: Properties[ScalazLaw] =
+  def laws[A: Enum: Gen]: Properties[ScalazLaw] =
     properties(ScalazLaw.enum)(
       ScalazLaw.enumSuccPred -> succpred[A],
       ScalazLaw.enumPredSucc -> predsucc[A],
@@ -44,6 +44,6 @@ object enum {
       ScalazLaw.enumPredOrder -> predorder[A]
     )
 
-  def all[A: Enum : Gen]: Properties[ScalazLaw] =
+  def all[A: Enum: Gen]: Properties[ScalazLaw] =
     Properties.fromProps(ScalazLaw.enumAll, enum.laws[A], order.all[A])
 }

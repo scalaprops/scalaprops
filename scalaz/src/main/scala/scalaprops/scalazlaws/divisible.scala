@@ -11,8 +11,10 @@ object divisible {
   def leftIdentity[F[_], A](implicit F: Divisible[F], G: Gen[F[A]], E: Equal[F[A]]): Property =
     forAll(F.divisibleLaw.leftIdentity[A] _)
 
-  def laws[F[_]: Divisible](implicit
-    G: Gen[F[Int]], E: Equal[F[Int]]
+  def laws[F[_]: Divisible](
+    implicit
+    G: Gen[F[Int]],
+    E: Equal[F[Int]]
   ): Properties[ScalazLaw] =
     Properties.properties(ScalazLaw.divisible)(
       ScalazLaw.divisibleRightIdentity -> this.rightIdentity[F, Int],

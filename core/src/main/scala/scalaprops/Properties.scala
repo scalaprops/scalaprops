@@ -12,7 +12,7 @@ final case class Properties[A] private (props: Tree[(A, Option[Check])]) {
     mapCheck(_.map(p => p.copy(paramEndo = p.paramEndo andThen f)))
 
   def andThenParamPF(f: PartialFunction[A, Endo[Param]]): Properties[A] =
-    Properties(props.map{
+    Properties(props.map {
       case (i, Some(m)) if f.isDefinedAt(i) =>
         i -> Some(Check(m.prop, m.paramEndo andThen f.apply(i)))
       case a => a
@@ -51,7 +51,7 @@ final case class Properties[A] private (props: Tree[(A, Option[Check])]) {
 }
 
 object Properties {
-  def either[A, B](id: A, prop0: Properties[B], props: Properties[B] *): Properties[A :-: B :-: Or.Empty] = {
+  def either[A, B](id: A, prop0: Properties[B], props: Properties[B]*): Properties[A :-: B :-: Or.Empty] = {
     type T = A :-: B :-: Or.Empty
     fromProps[T](
       Or[T](id),
@@ -71,40 +71,50 @@ object Properties {
     Properties(Tree.Leaf(id -> Some(p.toCheck)))
 
   private[this] def properties0[A](id: A, nodes: Stream[Tree[(A, Option[Check])]]): Properties[A] =
-    Properties(distinctTree(Tree.Node(
-      id -> Option.empty[Check], nodes
-    )))
+    Properties(
+      distinctTree(
+        Tree.Node(
+          id -> Option.empty[Check],
+          nodes
+        )
+      )
+    )
 
   private[scalaprops] def noSort[A](tree: Tree[(A, Option[Check])]): Properties[A] =
     Properties(tree)
 
-  def properties[A](id: A)(props: (A, Property) *): Properties[A] =
+  def properties[A](id: A)(props: (A, Property)*): Properties[A] =
     properties0(
-      id, props.map{case (n, p) => Tree.Leaf(n -> Option(p.toCheck))}.toStream
+      id,
+      props.map { case (n, p) => Tree.Leaf(n -> Option(p.toCheck)) }.toStream
     )
 
-  def fromChecks[A](id: A)(checks: (A, Check) *): Properties[A] =
+  def fromChecks[A](id: A)(checks: (A, Check)*): Properties[A] =
     properties0(
-      id, checks.map{case (n, p) => Tree.Leaf(n -> Option(p))}.toStream
+      id,
+      checks.map { case (n, p) => Tree.Leaf(n -> Option(p)) }.toStream
     )
 
-  def fromProps[A](id: A, prop0: Properties[A], props: Properties[A] *): Properties[A] =
+  def fromProps[A](id: A, prop0: Properties[A], props: Properties[A]*): Properties[A] =
     properties0(
-      id, prop0.props #:: props.map(_.props).toStream
+      id,
+      prop0.props #:: props.map(_.props).toStream
     )
 
   private[this] def distinctTree[A](tree: Tree[A]): Tree[A] = {
 
-    val x = tree.mapAccumL(Set.empty[A]) { (set, a) =>
-      if (set.contains(a)) {
-        (set, Option.empty[A])
-      } else {
-        (set + a, Some(a))
+    val x = tree
+      .mapAccumL(Set.empty[A]) { (set, a) =>
+        if (set.contains(a)) {
+          (set, Option.empty[A])
+        } else {
+          (set + a, Some(a))
+        }
       }
-    }._2
+      ._2
 
     def loop(t: Tree[Option[A]]): Option[Tree[A]] =
-      t.rootLabel.map{ root =>
+      t.rootLabel.map { root =>
         Tree.Node(root, t.subForest.map(loop).flatten)
       }
 

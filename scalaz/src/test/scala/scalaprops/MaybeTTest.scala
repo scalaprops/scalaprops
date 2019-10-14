@@ -24,7 +24,7 @@ object MaybeTTest extends Scalaprops {
   }
 
   val bindRecIList =
-    scalazlaws.bindRec.laws[({type l[a] = MaybeT[IList, a]})#l].andThenParam(Param.maxSize(1))
+    scalazlaws.bindRec.laws[({ type l[a] = MaybeT[IList, a] })#l].andThenParam(Param.maxSize(1))
 
   val testLawsIList = {
     type F[A] = MaybeT[IList, A]

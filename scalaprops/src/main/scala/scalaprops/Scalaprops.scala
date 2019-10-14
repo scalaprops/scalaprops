@@ -40,9 +40,7 @@ object Scalaprops {
     ).flatten.map(_.getName)
 
   private[scalaprops] def findTestFields(clazz: Class[_], fieldType: Class[_]): Array[Method] =
-    clazz.getMethods.filter(method =>
-      method.getParameterTypes.length == 0 && method.getReturnType == fieldType
-    )
+    clazz.getMethods.filter(method => method.getParameterTypes.length == 0 && method.getReturnType == fieldType)
 
   private[scalaprops] def logger(loggers: Array[Logger]): Logger = new Logger {
     override def warn(msg: String): Unit =

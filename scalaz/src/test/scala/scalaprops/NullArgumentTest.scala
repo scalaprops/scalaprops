@@ -20,6 +20,6 @@ object NullArgumentTest extends Scalaprops {
   }
 
   val testCompose = scalazlaws.compose.all[NullArgument]
-  val testContravariant = scalazlaws.contravariant.all[({type l[a] = NullArgument[a, Int]})#l]
+  val testContravariant = scalazlaws.contravariant.all[({ type l[a] = NullArgument[a, Int] })#l]
   val testMonoid = scalazlaws.monoid.all[NullArgument[Int, Int]]
 }

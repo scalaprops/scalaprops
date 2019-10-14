@@ -10,7 +10,7 @@ object semilattice {
     forAll(A.semiLatticeLaw.commutative _)
 
   def laws[A: SemiLattice: Equal: Gen]: Properties[ScalazLaw] =
-    properties(ScalazLaw.semilattice) (
+    properties(ScalazLaw.semilattice)(
       ScalazLaw.semilatticeCommutative -> commutative[A]
     )
 

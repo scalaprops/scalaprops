@@ -22,9 +22,11 @@ object TheseTTest extends Scalaprops {
   }
   val iListSemigroup = {
     type F[A] = IList[A]
-    Properties.list(
-      scalazlaws.semigroup.all[TheseT[F, E, E]]
-    ).andThenParam(Param.maxSize(10))
+    Properties
+      .list(
+        scalazlaws.semigroup.all[TheseT[F, E, E]]
+      )
+      .andThenParam(Param.maxSize(10))
   }
   val disjunctionSemigroup = {
     type F[A] = E \/ A
@@ -87,5 +89,5 @@ object TheseTTest extends Scalaprops {
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({type l[f[_], a] = TheseT[f, E, a]})#l]
+  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = TheseT[f, E, a] })#l]
 }

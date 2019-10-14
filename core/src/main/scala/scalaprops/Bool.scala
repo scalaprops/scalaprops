@@ -1,6 +1,6 @@
 package scalaprops
 
-final case class Bool private(b: Boolean) {
+final case class Bool private (b: Boolean) {
   def is = b
   def isNot = !is
   def implies[A](p: => A)(implicit A: AsProperty[A]): Property =
@@ -12,5 +12,5 @@ object Bool {
   private[this] val f = Bool(false)
 
   def bool(b: Boolean): Bool =
-    if(b) t else f
+    if (b) t else f
 }
