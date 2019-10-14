@@ -21,7 +21,7 @@ sudo: false
 script:
   - git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
   - git show --oneline --check
-  - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
+  - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
   - ./sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError compile test:compile scalapropsTestNames scalapropsJS/test scalapropsJVM/test scalazJS/test scalazJVM/test "project /" publishLocal
 before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
@@ -35,7 +35,7 @@ matrix:
       sudo: required
       before_install:
       - curl https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh | bash -x
-      - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
+      - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
       script:
       - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test scalazNative/test
     - scala: 2.12.10
@@ -51,5 +51,5 @@ matrix:
       - curl "https://raw.githubusercontent.com/DanySK/Gravis-CI/c8f400623d8f756ef7c/.install-jdk-travis.sh" --output .install-jdk-travis.sh
       - source .install-jdk-travis.sh
       script:
-      - wget https://raw.githubusercontent.com/paulp/sbt-extras/3c8fcadc3376e/sbt && chmod +x ./sbt
+      - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
       - ./sbt "++ 2.13.1" compile test:compile scalapropsJVM/test scalazJVM/test "project /" publishLocal
