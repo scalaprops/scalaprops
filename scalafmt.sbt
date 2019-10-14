@@ -1,4 +1,4 @@
-def addScalafmtPluginTask(taskName: String, tasks: Seq[String]): Seq[Def.Setting[_]] = {
+def addScalafmtPluginTask(taskName: String, tasks: List[String]): Seq[Def.Setting[_]] = {
   val moduleId = """ "com.lucidchart" % "sbt-scalafmt" % "1.15" """
   val removeCommand = "removeTemporary" + taskName
 
@@ -21,10 +21,10 @@ def addScalafmtPluginTask(taskName: String, tasks: Seq[String]): Seq[Def.Setting
 
 addScalafmtPluginTask(
   "scalafmtCheckAll",
-  Seq("scalafmt::test", "sbt:scalafmt::test", "test:scalafmt::test")
+  List("scalafmt::test", "sbt:scalafmt::test", "test:scalafmt::test")
 )
 
 addScalafmtPluginTask(
   "scalafmtAll",
-  Seq("scalafmt", "sbt:scalafmt", "test:scalafmt")
+  List("scalafmt", "sbt:scalafmt", "test:scalafmt")
 )

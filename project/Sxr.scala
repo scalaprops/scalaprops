@@ -19,9 +19,9 @@ object Sxr {
   private[this] def ifSxrAvailable[A](key: TaskKey[A], value: Def.Initialize[Task[A]]): Setting[Task[A]] =
     key := {
       if (enableSxr.value) {
-        value.value
+        value.value : @sbtUnchecked
       } else {
-        key.value
+        key.value : @sbtUnchecked
       }
     }
 

@@ -11,7 +11,6 @@ addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.3.2")
 scalacOptions ++= (
   "-deprecation" ::
   "-unchecked" ::
-  "-Xlint" ::
   "-language:existentials" ::
   "-language:higherKinds" ::
   "-language:implicitConversions" ::
