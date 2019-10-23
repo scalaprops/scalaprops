@@ -186,6 +186,11 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   ): Cogen[IndexedContsT[W, M, R, O, A]] =
     F.contramap(_.run)
 
+  implicit def cogenSelectT[R, M[_], A](
+    implicit F: Cogen[(A => M[R]) => M[A]]
+  ): Cogen[SelectT[R, M, A]] =
+    F.contramap(_.run)
+
   implicit def cogenEndo[A: Gen: Cogen]: Cogen[scalaz.Endo[A]] =
     Cogen[A => A].contramap(_.run)
 
@@ -529,6 +534,11 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     implicit F: Gen[W[A => M[O]] => M[R]]
   ): Gen[IndexedContsT[W, M, R, O, A]] =
     F.map(IndexedContsT(_))
+
+  implicit def selectTGen[R, M[_], A](
+    implicit F: Gen[(A => M[R]) => M[A]]
+  ): Gen[SelectT[R, M, A]] =
+    F.map(SelectT(_))
 
   implicit def indexedReaderWriterStateTGen[F[_], R, W, S1, S2, A](
     implicit F: Gen[(R, S1) => F[(W, A, S2)]]
