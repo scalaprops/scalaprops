@@ -158,12 +158,7 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
 
 val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
-  publishTo := Some(
-    if (isSnapshot.value)
-      Opts.resolver.sonatypeSnapshots
-    else
-      Opts.resolver.sonatypeStaging
-  ),
+  publishTo := sonatypePublishToBundle.value,
   scalaVersion := Scala212,
   crossScalaVersions := Scala212 :: Scala211 :: "2.10.7" :: "2.13.1" :: Nil,
   organization := "com.github.scalaprops",
@@ -236,9 +231,9 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     ),
     SetScala211,
     releaseStepCommand("rootNative/publishSigned"),
+    releaseStepCommandAndRemaining("sonatypeBundleRelease"),
     setNextVersion,
     commitNextVersion,
-    releaseStepCommand("sonatypeReleaseAll"),
     UpdateReadme.updateReadmeProcess,
     pushChanges
   ),
