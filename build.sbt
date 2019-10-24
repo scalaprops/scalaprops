@@ -5,6 +5,8 @@ import sbtcrossproject.CrossProject
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
+ThisBuild / useSuperShell := false
+
 val scalazVersion = SettingKey[String]("scalazVersion")
 
 // avoid move files
