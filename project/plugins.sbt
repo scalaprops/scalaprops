@@ -9,14 +9,13 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.29")
 addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.3.2")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.2.1")
 
-scalacOptions ++= (
-  "-deprecation" ::
-    "-unchecked" ::
-    "-language:existentials" ::
-    "-language:higherKinds" ::
-    "-language:implicitConversions" ::
-    "-Yno-adapted-args" ::
-    Nil
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-unchecked",
+  "-language:existentials",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-Yno-adapted-args",
 )
 
 fullResolvers ~= { _.filterNot(_.name == "jcenter") }
