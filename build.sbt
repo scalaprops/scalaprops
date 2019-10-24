@@ -3,6 +3,8 @@ import sbtrelease._
 import ReleaseStateTransformations._
 import sbtcrossproject.CrossProject
 
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
 val scalazVersion = SettingKey[String]("scalazVersion")
 
 // avoid move files
