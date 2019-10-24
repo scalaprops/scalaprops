@@ -188,7 +188,7 @@ object Gen extends GenInstances0 {
     choose(0, as.length).map { xs(_).asInstanceOf[A] }
   }
 
-  private[this] def listOf_[F[_], A](g: Gen[A], min: Int, f: List[A] => F[A]): Gen[F[A]] =
+  private[scalaprops] def listOf_[F[_], A](g: Gen[A], min: Int, f: List[A] => F[A]): Gen[F[A]] =
     parameterised { (size, r) =>
       chooseR(min, size.max(min), r).flatMap { n =>
         sequenceN(n, g, f)

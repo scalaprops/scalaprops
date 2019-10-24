@@ -37,7 +37,7 @@ object Gen {
 
 import Gen.f1
 
-abstract class GenInstances private[scalaprops] {
+abstract class GenInstances private[scalaprops] extends GenInstances2 {
 
 ${(2 to 22).map(genF).mkString("\n")}
 }

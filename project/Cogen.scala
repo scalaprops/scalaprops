@@ -58,7 +58,7 @@ object Cogen {
 
     s"""package scalaprops
 
-abstract class CogenInstances private[scalaprops] {
+abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
 
   import Cogen.f1
 

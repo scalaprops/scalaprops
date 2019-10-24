@@ -32,6 +32,18 @@ def module(id: String): CrossProject =
     .settings(
       commonSettings,
       scalazVersion := "7.2.29",
+      Seq(Compile, Test).map { c =>
+        unmanagedSourceDirectories in c += {
+          val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
+          val dir = CrossVersion.partialVersion(scalaVersion.value) match {
+            case Some((2, v)) if v <= 12 =>
+              "scala-2.13-"
+            case _ =>
+              "scala-2.13+"
+          }
+          base / dir
+        }
+      },
       initialCommands in console += {
         "import scalaprops._;" + Seq(
           "Gen",

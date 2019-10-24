@@ -2,7 +2,7 @@ package scalaprops
 
 import Gen.f1
 
-abstract class GenInstances private[scalaprops] {
+abstract class GenInstances private[scalaprops] extends GenInstances2 {
 
   implicit final def f2[A1, A2, Z](implicit A1: Cogen[A1], A2: Cogen[A2], Z: Gen[Z]): Gen[(A1, A2) => Z] =
     f1(A1, f1(A2, Z)).map(f => (a1, a2) => f(a1)(a2))
