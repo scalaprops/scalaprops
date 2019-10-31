@@ -1,7 +1,6 @@
 package scalaprops
 
 object TinyMT32ParameterTest extends Scalaprops {
-
   val testGetThreadLocalParameter = Property.forAll {
     val p0 = TinyMT32Parameter.getThreadLocalParameter(0)
     val p1 = TinyMT32Parameter.getThreadLocalParameter(1)
@@ -37,5 +36,4 @@ object TinyMT32ParameterTest extends Scalaprops {
     assert(delta == p.delta)
     true
   }
-
 }

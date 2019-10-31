@@ -7,7 +7,6 @@ import FunctionEqual._
 import ScalapropsScalaz._
 
 object StateTTest extends Scalaprops {
-
   implicit def stateTEqual[F[_]: Monad, A, B](implicit F: Equal[A => F[(A, B)]]): Equal[StateT[F, A, B]] =
     F.contramap(_.apply _)
 
@@ -55,5 +54,4 @@ object StateTTest extends Scalaprops {
   val bifunctor = scalazlaws.bifunctor.laws[({ type l[a, b] = IndexedStateT[Maybe, Int, a, b] })#l]
 
   val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = StateT[f, Int, a] })#l]
-
 }

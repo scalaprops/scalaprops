@@ -6,7 +6,6 @@ import scalaz.std.either._
 import ScalapropsScalaz._
 
 object LazyEitherTest extends Scalaprops {
-
   implicit def lazyEitherEqual[A: Equal, B: Equal]: Equal[LazyEither[A, B]] =
     Equal[A Either B].contramap(_.toEither)
 
@@ -18,5 +17,4 @@ object LazyEitherTest extends Scalaprops {
 
   val testLaw2 = scalazlaws.bitraverse.all[LazyEither]
   val testLaw3 = scalazlaws.associative.all[LazyEither]
-
 }

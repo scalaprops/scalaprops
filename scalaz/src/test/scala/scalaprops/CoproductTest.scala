@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object CoproductTest extends Scalaprops {
-
   val testCoproductNelNel = {
     type F[A] = Coproduct[NonEmptyList, NonEmptyList, A]
 
@@ -25,5 +24,4 @@ object CoproductTest extends Scalaprops {
       scalazlaws.equal.all[F[Int]]
     )
   }
-
 }

@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object MaybeTTest extends Scalaprops {
-
   val disjunction = {
     type E = Byte
     type G[A] = E \/ A
@@ -46,5 +45,4 @@ object MaybeTTest extends Scalaprops {
   }
 
   val monadTrans = scalazlaws.monadTrans.all[MaybeT]
-
 }

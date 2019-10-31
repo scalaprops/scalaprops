@@ -6,7 +6,6 @@ import scalaz.std.tuple._
 import ScalapropsScalaz._
 
 object WriterTTest extends Scalaprops {
-
   val bindRecIList = scalazlaws.bindRec.laws[({ type l[a] = WriterT[IList, Byte, a] })#l].andThenParam(Param.maxSize(1))
 
   val testMaybe1 = {
@@ -72,5 +71,4 @@ object WriterTTest extends Scalaprops {
   }
 
   val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = WriterT[f, Int, a] })#l]
-
 }

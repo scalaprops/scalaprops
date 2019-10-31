@@ -7,7 +7,6 @@ import scalaz.std.vector._
 import ScalapropsScalaz._
 
 object CofreeTest extends Scalaprops {
-
   private[this] implicit def cogenCofree[F[_], A](
     implicit
     A: Cogen[A],
@@ -107,7 +106,6 @@ object CofreeTest extends Scalaprops {
     }
 
   val stream = {
-
     implicit def gen[A: Gen]: Gen[CofreeStream[A]] =
       Gen[Tree[A]].map(treeToCofreeStream(_))
 

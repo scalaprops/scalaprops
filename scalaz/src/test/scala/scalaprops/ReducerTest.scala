@@ -7,7 +7,6 @@ import EndoTest.endoEqual
 import ScalapropsScalaz._
 
 object ReducerTest extends Scalaprops {
-
   private[this] implicit def tagGen[A: Gen, B]: Gen[A @@ B] =
     Tag.subst(Gen[A])
 
@@ -28,5 +27,4 @@ object ReducerTest extends Scalaprops {
   val optionOptionFirst = scalazlaws.reducer.all[Option[Int], Option[Int] @@ First]
   val optionLast = scalazlaws.reducer.all[Int, Option[Int] @@ Last]
   val optionOptionLast = scalazlaws.reducer.all[Option[Int], Option[Int] @@ Last]
-
 }

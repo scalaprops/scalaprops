@@ -4,7 +4,6 @@ package scalazlaws
 import scalaz._
 
 object profunctor {
-
   def laws[F[_, _]](implicit F: Profunctor[F], A1: Gen[F[Int, Int]], A2: Equal[F[Int, Int]]): Properties[ScalazLaw] = {
     implicit val a = F.covariantInstance[Int]
     implicit val b = F.contravariantInstance[Int]

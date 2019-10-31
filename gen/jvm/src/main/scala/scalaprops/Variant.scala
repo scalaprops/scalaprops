@@ -3,7 +3,6 @@ package scalaprops
 import java.util.WeakHashMap
 
 object Variant {
-
   private[this] final case class LongGen[A](n: Long, state: CogenState[A])
 
   private[this] val variantMemo: VariantCache[LongGen, CogenState] =
@@ -35,5 +34,4 @@ object Variant {
     def get[A](k: K[A]): Option[V[A]] =
       Option(delegate.get(k).asInstanceOf[V[A]])
   }
-
 }

@@ -226,7 +226,6 @@ final case class TinyMT32(
   private val st3: Int,
   private val parameter: TinyMT32Parameter
 ) extends Rand {
-
   private def asMutable: TinyMT32.MutableState =
     TinyMT32.MutableState(
       st0 = st0,

@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object NonEmptyListTest extends Scalaprops {
-
   val testLaws = Properties.list(
     scalazlaws.traverse1.all[NonEmptyList],
     scalazlaws.monad.all[NonEmptyList],
@@ -19,5 +18,4 @@ object NonEmptyListTest extends Scalaprops {
   val size = Property.forAllG(Gen.positiveByte, Gen[Long]) { (s, seed) =>
     Gen[NonEmptyList[Unit]].sample(s, seed).size <= s
   }
-
 }

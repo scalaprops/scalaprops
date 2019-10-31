@@ -15,7 +15,6 @@ abstract class Gen1[F[_]] { self =>
 }
 
 object Gen1 {
-
   @inline def apply[F[_]](implicit F: Gen1[F]): Gen1[F] = F
 
   implicit val list: Gen1[List] =
@@ -68,5 +67,4 @@ object Gen1 {
       def gen1[A: Gen] =
         Gen[NonEmptyList[A]]
     }
-
 }

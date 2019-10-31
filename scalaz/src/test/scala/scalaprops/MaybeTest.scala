@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object MaybeTest extends Scalaprops {
-
   val testLaws = Properties.list(
     scalazlaws.monadPlusStrong.all[Maybe],
     scalazlaws.bindRec.all[Maybe],

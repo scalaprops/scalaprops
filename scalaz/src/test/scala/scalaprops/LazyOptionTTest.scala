@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object LazyOptionTTest extends Scalaprops {
-
   val iList = Properties.list(
     scalazlaws.equal.all[LazyOptionT[IList, Int]],
     scalazlaws.monadPlus.all[({ type l[a] = LazyOptionT[IList, a] })#l]
@@ -21,5 +20,4 @@ object LazyOptionTTest extends Scalaprops {
   )
 
   val monadTrans = scalazlaws.monadTrans.all[LazyOptionT]
-
 }

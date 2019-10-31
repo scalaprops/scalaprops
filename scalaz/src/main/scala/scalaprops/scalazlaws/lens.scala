@@ -5,7 +5,6 @@ import scalaz._
 import scalaprops.Property.forAll
 
 object lens {
-
   def identity[A: Gen: Equal, B](l: Lens[A, B]) =
     forAll(l.lensLaw.identity _)
   def retention[A: Gen, B: Gen: Equal](l: Lens[A, B]) =

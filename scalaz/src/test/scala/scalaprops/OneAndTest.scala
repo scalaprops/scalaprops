@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object OneAndTest extends Scalaprops {
-
   val testIList = {
     type F[A] = OneAnd[IList, A]
 
@@ -54,5 +53,4 @@ object OneAndTest extends Scalaprops {
       scalazlaws.align.all[F]
     )
   }
-
 }

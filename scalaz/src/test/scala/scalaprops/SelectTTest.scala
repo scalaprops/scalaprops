@@ -6,7 +6,6 @@ import ScalapropsScalaz._
 import FunctionEqual._
 
 object SelectTTest extends Scalaprops {
-
   private[this] implicit def selectTEqual[R, M[_], A](
     implicit F: Equal[(A => M[R]) => M[A]]
   ): Equal[SelectT[R, M, A]] =

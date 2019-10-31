@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object TracedTTest extends Scalaprops {
-
   private[this] val e = new FunctionEqual(10)
   import e._
 
@@ -76,5 +75,4 @@ object TracedTTest extends Scalaprops {
       Equal[TracedT[G, Z, Int]]
     )
   }
-
 }

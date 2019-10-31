@@ -7,7 +7,6 @@ import scalaprops.internal._
 
 @EnableReflectiveInstantiation
 trait Scalaprops {
-
   def param: Param = Param.withCurrentTimeSeed()
 
   def listener: ScalapropsListener =
@@ -15,11 +14,9 @@ trait Scalaprops {
 
   def transformProperties[A](properties: List[Properties[A]]): List[Properties[A]] =
     properties.map(Scalaprops.filterUnitEmpty).sortBy(_.id.toString)
-
 }
 
 object Scalaprops {
-
   def filterUnitEmpty[A](p: Properties[A]): Properties[A] = {
     def loop(tree: Tree[(A, Option[Check])]): Tree[(A, Option[Check])] =
       tree match {
@@ -56,5 +53,4 @@ object Scalaprops {
     override def info(msg: String): Unit =
       loggers.foreach(_.info(msg))
   }
-
 }

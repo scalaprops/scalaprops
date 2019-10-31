@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object CodensityTest extends Scalaprops {
-
   private[this] final class CodensityEqual[B] {
     import FunctionEqual._
     implicit def equal[F[_], A](implicit F: Gen[A => F[B]], E: Equal[F[B]]): Equal[Codensity[F, A]] =
@@ -25,5 +24,4 @@ object CodensityTest extends Scalaprops {
     case ScalazLaw.monadTransLaw2IList =>
       Param.maxSize(5)
   }
-
 }

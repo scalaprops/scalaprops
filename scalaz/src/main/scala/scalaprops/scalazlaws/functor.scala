@@ -6,7 +6,6 @@ import scalaprops.Properties.properties
 import scalaz._
 
 object functor {
-
   def identity[F[_], X](implicit F: Functor[F], afx: Gen[F[X]], ef: Equal[F[X]]) =
     forAll(F.functorLaw.identity[X] _)
 

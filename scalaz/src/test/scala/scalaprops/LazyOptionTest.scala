@@ -5,7 +5,6 @@ import scalaz.LazyOption
 import ScalapropsScalaz._
 
 object LazyOptionTest extends Scalaprops {
-
   val laws = Properties.list(
     scalazlaws.monadPlusStrong.all[LazyOption],
     scalazlaws.traverse.all[LazyOption],
@@ -15,5 +14,4 @@ object LazyOptionTest extends Scalaprops {
     scalazlaws.cobind.all[LazyOption],
     scalazlaws.align.all[LazyOption]
   )
-
 }

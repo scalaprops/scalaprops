@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object IndexedContsTTest extends Scalaprops {
-
   private[this] val F = new FunctionEqual(5)
   import F._
 

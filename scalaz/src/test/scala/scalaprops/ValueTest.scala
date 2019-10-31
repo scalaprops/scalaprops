@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object ValueTest extends Scalaprops {
-
   val test = Properties.list(
     scalazlaws.traverse1.all[Value],
     scalazlaws.monad.all[Value],
@@ -14,5 +13,4 @@ object ValueTest extends Scalaprops {
     scalazlaws.align.all[Value],
     scalazlaws.comonad.all[Value]
   )
-
 }

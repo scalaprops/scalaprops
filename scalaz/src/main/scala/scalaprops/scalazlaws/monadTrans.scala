@@ -6,7 +6,6 @@ import Property.forAll
 import ScalapropsScalaz._
 
 object monadTrans {
-
   def law1[F[_[_], _], G[_], A](
     implicit
     M: Monad[({ type l[a] = F[G, a] })#l],
@@ -45,5 +44,4 @@ object monadTrans {
     ScalazLaw.monadTransLaw2Maybe -> law2[F, Maybe, Int, Int],
     ScalazLaw.monadTransLaw2IList -> law2[F, IList, Int, Int]
   )
-
 }

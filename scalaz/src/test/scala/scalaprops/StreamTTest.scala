@@ -10,7 +10,6 @@ import scala.util.Try
 import ScalapropsScalaz._
 
 object StreamTTest extends Scalaprops {
-
   private[this] def iso[F[_]: Monad]: ({ type l[a] = StreamT[F, a] })#l <~> ({ type l[a] = F[Stream[a]] })#l =
     new IsoFunctorTemplate[({ type l[a] = StreamT[F, a] })#l, ({ type l[a] = F[Stream[a]] })#l] {
       override def to[A](fa: StreamT[F, A]) =
@@ -229,5 +228,4 @@ object StreamTTest extends Scalaprops {
   }
 
   val monadTrans = scalazlaws.monadTrans.all[StreamT]
-
 }

@@ -5,7 +5,6 @@ import scalaprops.Property.forAll
 import scalaz._
 
 object arrow {
-
   def identity[=>:[_, _]: Arrow, A](implicit E: Equal[A =>: A]): Property =
     forAll(ArrowLaws[=>:].arrowIdentity[A])
 
@@ -63,5 +62,4 @@ object arrow {
     A4: Equal[(Int, Int) =>: Int],
     A5: Equal[((Int, Int), Int) =>: (Int, (Int, Int))]
   ) = Properties.fromProps(ScalazLaw.arrowAll, arrow.laws[=>:], category.all[=>:], profunctor.all[=>:])
-
 }

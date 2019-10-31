@@ -5,7 +5,6 @@ import scalaprops.Property.forAll
 import scalaz._
 
 object isEmpty {
-
   def emptyIsEmpty[F[_], X](implicit F: IsEmpty[F]) =
     forAll(F.isEmptyLaw.emptyIsEmpty[X])
 

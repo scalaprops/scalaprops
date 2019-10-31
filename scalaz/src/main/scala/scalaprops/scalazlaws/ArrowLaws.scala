@@ -8,7 +8,6 @@ private[scalazlaws] object ArrowLaws {
 }
 
 private[scalazlaws] final class ArrowLaws[=>:[_, _]](implicit F: Arrow[=>:]) {
-
   import F._
   import F.arrowSyntax._
   import std.function._

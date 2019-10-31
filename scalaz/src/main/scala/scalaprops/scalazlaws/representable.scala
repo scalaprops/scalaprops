@@ -6,7 +6,6 @@ import scalaz.std.anyVal._
 import scalaprops.Property.forAll
 
 object representable {
-
   def repUnrep[F[_], X, A](implicit F: Representable[F, X], G: Gen[F[A]], E: Equal[F[A]]): Property =
     forAll(F.representableLaw.repUnrep[A] _)
 
@@ -33,5 +32,4 @@ object representable {
     E: Equal[F[Byte]]
   ) =
     laws[F, X]
-
 }

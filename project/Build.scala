@@ -1,5 +1,4 @@
 object build {
-
   val genName = "scalaprops-gen"
   val coreName = "scalaprops-core"
   val allName = "scalaprops-all"

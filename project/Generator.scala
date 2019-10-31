@@ -1,7 +1,6 @@
 import sbt._, Keys._
 
 object Generator {
-
   private[this] val generateCode = TaskKey[Unit]("generateCode")
   private[this] val generateFiles = SettingKey[Seq[GeneratedCode]]("generateFiles")
   private[this] val checkGenerateCode = TaskKey[Boolean]("checkGenerateCode")

@@ -3,7 +3,6 @@ package scalaprops
 import scalaprops.Property.forAllG
 
 object StringTest extends Scalaprops {
-
   val genString = {
     val g = for {
       min <- Gen.choose(-10, 50)
@@ -17,5 +16,4 @@ object StringTest extends Scalaprops {
   }
 
   val nonEmptyString = forAllG(Gen.nonEmptyString(Gen.asciiChar))(_.nonEmpty)
-
 }

@@ -3,7 +3,6 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseStep
 import sbtrelease.Git
 
 object UpdateReadme {
-
   private val sonatypeURL = "https://oss.sonatype.org/service/local/repositories/"
 
   val updateReadmeTask = { state: State =>

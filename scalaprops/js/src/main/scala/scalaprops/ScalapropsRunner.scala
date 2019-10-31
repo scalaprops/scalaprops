@@ -9,7 +9,6 @@ import scala.collection.mutable.ArrayBuffer
 import scalaprops.internal._
 
 object ScalapropsRunner {
-
   /** call from sbt plugin
    * [[https://github.com/scalaprops/sbt-scalaprops/blob/v0.2.5/src/main/scala/scalaprops/ScalapropsPlugin.scala#L66]]
    */
@@ -109,7 +108,6 @@ final class ScalapropsRunner(
   override val remoteArgs: Array[String],
   testClassLoader: ClassLoader
 ) extends Runner {
-
   private[this] val results = ArrayBuffer.empty[TestResult]
   private[this] val arguments = Arguments.parse(args.toList)
 

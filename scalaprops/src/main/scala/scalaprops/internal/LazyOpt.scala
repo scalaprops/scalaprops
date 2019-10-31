@@ -2,7 +2,6 @@ package scalaprops
 package internal
 
 sealed abstract class LazyOpt[A] extends Product with Serializable {
-
   import LazyOpt._
 
   def fold[X](some: (=> A) => X, none: => X): X =
@@ -21,7 +20,6 @@ sealed abstract class LazyOpt[A] extends Product with Serializable {
 }
 
 object LazyOpt {
-
   private final case class LazySome[A](private var a: () => A) extends LazyOpt[A] {
     lazy val value: A = {
       val x = a()

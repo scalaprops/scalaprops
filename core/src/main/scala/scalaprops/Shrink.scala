@@ -64,7 +64,6 @@ object Shrink {
     }
 
   implicit def list[A](implicit A: Shrink[A]): Shrink[List[A]] = {
-
     def interleave[B](s1: Stream[B], s2: Stream[B]): Stream[B] =
       if (s1.isEmpty) s2
       else s1.head #:: interleave(s2, s1.tail)
@@ -186,5 +185,4 @@ object Shrink {
 
   implicit def shrinkGen[A: Cogen: Gen]: Gen[Shrink[A]] =
     Gen[A => Stream[A]].map(new Shrink(_))
-
 }

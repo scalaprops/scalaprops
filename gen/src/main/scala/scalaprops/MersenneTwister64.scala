@@ -104,7 +104,6 @@ final class MersenneTwister64 private (private val mt0: Array[Long], private val
 }
 
 object MersenneTwister64 {
-
   private final val UpperMask = 0xFFFFFFFF80000000L // = 0xFFFFFFFFFFFFFFFFL ^ Int.MinValue
   private final val LowerMask = 0x7FFFFFFFL // = Int.MinValue
 
@@ -237,5 +236,4 @@ object MersenneTwister64 {
     if (i < n && bb.remaining > 0) out(i) = longFromByteBuffer(bb)
     out
   }
-
 }

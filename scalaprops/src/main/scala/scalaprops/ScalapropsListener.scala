@@ -4,7 +4,6 @@ import sbt.testing.Logger
 import scalaprops.internal._
 
 abstract class ScalapropsListener {
-
   def onStart(obj: Scalaprops, name: String, property: Property, param: Param, logger: Logger): Unit = {}
 
   def onFinish(
@@ -25,7 +24,6 @@ abstract class ScalapropsListener {
   def onError(obj: Scalaprops, name: String, e: Throwable, logger: Logger): Unit = {}
 
   def onCheck(obj: Scalaprops, name: String, property: Property, param: Param, logger: Logger, count: Int): Unit = {}
-
 }
 
 object ScalapropsListener {
@@ -52,7 +50,6 @@ object ScalapropsListener {
   }
 
   class Default extends ScalapropsListener {
-
     private[this] def event2string(event: ScalapropsEvent) =
       event.result match {
         case CheckResultError.Value(r) =>

@@ -1,7 +1,6 @@
 package scalaprops
 
 abstract class Rand {
-
   def nextInt: (Rand, Int)
 
   def nextLong: (Rand, Long)
@@ -94,7 +93,6 @@ abstract class Rand {
 }
 
 object Rand {
-
   implicit val randGen: Gen[Rand] =
     Gen.gen { (_, r) =>
       val next = r.next

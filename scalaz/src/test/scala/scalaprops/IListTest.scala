@@ -6,7 +6,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object IListTest extends Scalaprops {
-
   val testLaws = Properties.list(
     scalazlaws.order.all[IList[Byte]],
     scalazlaws.monadPlusStrong.all[IList],
@@ -32,5 +31,4 @@ object IListTest extends Scalaprops {
   }
 
   val listOf1 = forAllG(Gen.listOf1(Gen[Byte]))(_.nonEmpty)
-
 }

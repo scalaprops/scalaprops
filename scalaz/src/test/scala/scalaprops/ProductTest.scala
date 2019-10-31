@@ -6,7 +6,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object ProductTest extends Scalaprops {
-
   private[this] type DByte[a] = Byte \/ a
 
   val maybeMaybe = {
@@ -145,5 +144,4 @@ object ProductTest extends Scalaprops {
       scalazlaws.align.all[F]
     )
   }
-
 }

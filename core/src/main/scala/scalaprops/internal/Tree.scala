@@ -2,7 +2,6 @@ package scalaprops
 package internal
 
 sealed abstract class Tree[A] {
-
   import Tree._
 
   def rootLabel: A
@@ -71,7 +70,6 @@ sealed abstract class Tree[A] {
 }
 
 object Tree {
-
   object Node {
     def apply[A](root: => A, forest: => Stream[Tree[A]]): Tree[A] = {
       new Tree[A] {
@@ -111,7 +109,6 @@ object Tree {
     }
 
   private final case class State[S, A](run: S => (S, A)) {
-
     def map[B](f: A => B): State[S, B] =
       State(run.andThen { case (s, a) => (s, f(a)) })
 

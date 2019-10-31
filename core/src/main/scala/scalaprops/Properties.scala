@@ -102,7 +102,6 @@ object Properties {
     )
 
   private[this] def distinctTree[A](tree: Tree[A]): Tree[A] = {
-
     val x = tree
       .mapAccumL(Set.empty[A]) { (set, a) =>
         if (set.contains(a)) {

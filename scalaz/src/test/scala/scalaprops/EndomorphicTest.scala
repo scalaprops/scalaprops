@@ -7,7 +7,6 @@ import CokleisliTest.cokleisliEqual
 import ScalapropsScalaz._
 
 object EndomorphicTest extends Scalaprops {
-
   override val param: Param = super.param.copy(maxSize = 10)
 
   private[this] implicit def endomorphicKleisliEqual[F[_], A](
@@ -33,5 +32,4 @@ object EndomorphicTest extends Scalaprops {
 
   val testCokleisliNel =
     scalazlaws.monoid.all[Endomorphic[({ type l[a, b] = Cokleisli[NonEmptyList, a, b] })#l, Int]]
-
 }

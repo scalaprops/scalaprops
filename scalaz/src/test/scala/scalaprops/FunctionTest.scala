@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import FunctionEqual._
 
 object FunctionTest extends Scalaprops {
-
   type A1 = Byte
   type A2 = Byte
   type A3 = Byte

@@ -1,7 +1,6 @@
 package scalaprops
 
 object CaseClassExample {
-
   final case class UserId(value: Long)
   object UserId {
     implicit val gen: Gen[UserId] = Gen.from(apply _)
@@ -19,5 +18,4 @@ object CaseClassExample {
 
   Gen[CaseClass2]
   Cogen[CaseClass2]
-
 }

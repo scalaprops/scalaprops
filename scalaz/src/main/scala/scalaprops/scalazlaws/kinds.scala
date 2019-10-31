@@ -7,7 +7,6 @@ import scalaz.std.string._
 final class *^*->* private (override val toString: String) {}
 
 object *^*->* {
-
   type T = *^*->* :-: Unit :-: Or.Empty
 
   val left = new *^*->*("left")

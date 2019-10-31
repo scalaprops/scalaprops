@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object CoyonedaTest extends Scalaprops {
-
   val testOrderMaybe = scalazlaws.order.all[Coyoneda[Maybe, Int]]
   val testOrderIList = scalazlaws.order.all[Coyoneda[IList, Int]]
 

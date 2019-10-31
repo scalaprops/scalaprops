@@ -6,7 +6,6 @@ import Property.forAll
 import ScalapropsScalaz._
 
 object ISetTest extends Scalaprops {
-
   val testFoldable =
     scalazlaws.foldable.all[ISet]
 
@@ -28,5 +27,4 @@ object ISetTest extends Scalaprops {
     assert((x union y) == a)
     (x.toList, y.toList) == a.toList.partition(p)
   }
-
 }

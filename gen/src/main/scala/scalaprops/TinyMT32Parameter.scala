@@ -8,7 +8,6 @@ package scalaprops
  *
  */
 object TinyMT32Parameter {
-
   /** hexadecimal format. */
   private final val HEX_FORMAT = 16
 
@@ -90,7 +89,6 @@ final case class TinyMT32Parameter(
   weight: Int,
   delta: Int
 ) {
-
   /** private constructor.
    *
    * @param pcharacteristic
@@ -172,5 +170,4 @@ final case class TinyMT32Parameter(
       TinyMT32Parameter.INT_TO_FLOAT_MASK | (tmat >>> TinyMT32Parameter.INT_TO_FLOAT_SHIFT)
     }
   }
-
 }

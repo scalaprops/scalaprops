@@ -1,7 +1,6 @@
 package scalaprops
 
 object ArgumentsTest extends Scalaprops {
-
   val parse = Property.forAll {
     val args = List(
       "--only",
@@ -36,5 +35,4 @@ object ArgumentsTest extends Scalaprops {
     assert(result == expect, result)
     true
   }
-
 }

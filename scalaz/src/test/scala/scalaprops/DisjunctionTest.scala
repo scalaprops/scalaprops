@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object DisjunctionTest extends Scalaprops {
-
   val bitraverse = scalazlaws.bitraverse.all[\/]
   val associative = scalazlaws.associative.all[\/]
   val order = scalazlaws.order.all[Int \/ Int]

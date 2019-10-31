@@ -6,7 +6,6 @@ import scalaprops.Properties.properties
 import scalaz.{Equal, MonadPlus}
 
 object monadPlusStrong {
-
   def rightZero[F[_], X](implicit F: MonadPlus[F], afx: Gen[F[X]], ef: Equal[F[X]]): Property =
     forAll(F.strongMonadPlusLaw.rightZero[X] _)
 

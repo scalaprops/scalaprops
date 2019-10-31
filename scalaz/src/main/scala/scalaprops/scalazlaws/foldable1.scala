@@ -6,7 +6,6 @@ import scalaz._
 import scalaz.std.anyVal._
 
 object foldable1 {
-
   def leftFM1Consistent[F[_], A](implicit F: Foldable1[F], fa: Gen[F[A]], ea: Equal[A]) =
     forAll(F.foldable1Law.leftFM1Consistent[A] _)
 

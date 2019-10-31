@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object FreeTest extends Scalaprops {
-
   implicit def freeEqual[F[_]: Functor, A](
     implicit
     E: Eq1[F],

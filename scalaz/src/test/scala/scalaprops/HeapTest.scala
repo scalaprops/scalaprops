@@ -5,11 +5,9 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object HeapTest extends Scalaprops {
-
   val testMonoid = scalazlaws.monoid.all[Heap[Int]]
 
   val testEqual = scalazlaws.equal.all[Heap[Int]]
 
   val testFoldable = scalazlaws.foldable.all[Heap]
-
 }

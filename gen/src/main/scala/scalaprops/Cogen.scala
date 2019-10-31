@@ -15,7 +15,6 @@ abstract class Cogen[A] { self =>
 }
 
 sealed abstract class CogenInstances0 extends CogenInstances {
-
   implicit def cogenList[A](implicit A: Cogen[A]): Cogen[List[A]] =
     new Cogen[List[A]] {
       def cogen[B](a: List[A], g: CogenState[B]) = a match {
@@ -31,7 +30,6 @@ sealed abstract class CogenInstances0 extends CogenInstances {
 }
 
 object Cogen extends CogenInstances0 {
-
   private[this] val byteArrayToIntList: Array[Byte] => List[Int] = { bytes =>
     val x =
       if (bytes.length % 4 == 0) {

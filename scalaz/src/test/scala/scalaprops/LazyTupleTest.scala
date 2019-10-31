@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object LazyTupleTest extends Scalaprops {
-
   private[this] type A = Int
   private[this] type B = Int
   private[this] type C = Int
@@ -31,5 +30,4 @@ object LazyTupleTest extends Scalaprops {
     scalazlaws.monoid.all[LazyTuple4[A, B, C, D]],
     scalazlaws.monad.all[({ type l[a] = LazyTuple4[A, B, C, a] })#l]
   )
-
 }

@@ -6,7 +6,6 @@ import scalaz.std.tuple._
 import ScalapropsScalaz._
 
 object CokleisliTest extends Scalaprops {
-
   override val param: Param = Param.withCurrentTimeSeed().copy(maxSize = 30)
 
   private[this] val e = new FunctionEqual(3)
@@ -59,5 +58,4 @@ object CokleisliTest extends Scalaprops {
       scalazlaws.bindRec.all[F]
     )
   }
-
 }

@@ -5,7 +5,6 @@ import scalaprops.Property.forAll
 import scalaz._
 
 object monadError {
-
   def raisedErrorsHandled[F[_], E, A](
     implicit me: MonadError[F, E],
     eq: Equal[F[A]],

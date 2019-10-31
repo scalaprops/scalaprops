@@ -6,7 +6,6 @@ import scalaz.std.tuple._
 import ScalapropsScalaz._
 
 object IndexedStoreTTest extends Scalaprops {
-
   private[this] val e = new FunctionEqual(10)
   import e._
 

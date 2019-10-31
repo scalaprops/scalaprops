@@ -7,7 +7,6 @@ import scalaz._
 import scalaz.std.anyVal._
 
 object comonad {
-
   def cobindLeftIdentity[F[_], A](implicit F: Comonad[F], F0: Equal[F[A]], fa: Gen[F[A]]): Property =
     forAll(F.comonadLaw.cobindLeftIdentity[A] _)
 

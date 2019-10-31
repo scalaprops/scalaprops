@@ -4,7 +4,6 @@ import scalaz.std.set._
 import scalaz.std.anyVal._
 
 object SetTest extends Scalaprops {
-
   val testLaws =
     Properties.list(
       scalazlaws.order.all[Set[Int]],

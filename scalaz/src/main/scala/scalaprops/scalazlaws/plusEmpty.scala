@@ -6,7 +6,6 @@ import scalaprops.Properties.properties
 import scalaz._
 
 object plusEmpty {
-
   def leftPlusIdentity[F[_], X](implicit f: PlusEmpty[F], afx: Gen[F[X]], ef: Equal[F[X]]) =
     forAll(f.plusEmptyLaw.leftPlusIdentity[X] _)
 

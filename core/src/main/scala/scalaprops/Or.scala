@@ -7,7 +7,6 @@ sealed abstract class :-:[+H, +T <: Or] extends Or
 sealed abstract class OrConsInstances {}
 
 object :-: extends OrConsInstances {
-
   implicit def orGen[A, B <: Or](implicit A: Gen[A], B: Gen[B]): Gen[A :-: B] = {
     if (B eq Or.Empty.orEmptyGen) {
       A.map[A :-: B](Or.L(_))
@@ -18,11 +17,9 @@ object :-: extends OrConsInstances {
       )
     }
   }
-
 }
 
 object Or {
-
   final case class L[+H, +T <: Or](head: H) extends :-:[H, T] {
     override def toString = head.toString
   }
@@ -44,5 +41,4 @@ object Or {
   }
 
   def apply[C <: Or]: MkOr[C] = new MkOr[C]
-
 }

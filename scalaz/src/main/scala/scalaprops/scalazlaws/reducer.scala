@@ -5,7 +5,6 @@ import scalaz._
 import scalaprops.Property.forAll
 
 object reducer {
-
   def consCorrectness[A: Gen, B: Gen: Equal](implicit R: Reducer[A, B]) =
     forAll(R.reducerLaw.consCorrectness _)
   def snocCorrectness[A: Gen, B: Gen: Equal](implicit R: Reducer[A, B]) =

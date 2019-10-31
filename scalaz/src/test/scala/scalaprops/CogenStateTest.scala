@@ -6,7 +6,6 @@ import GenTest._
 import ScalapropsScalaz._
 
 object CogenStateTest extends Scalaprops {
-
   implicit def cogenStateEqual[A: Equal]: Equal[CogenState[A]] =
     Equal.equal { (x, y) =>
       Equal[Rand].equal(x.rand, y.rand) && Equal[Gen[A]].equal(x.gen, y.gen)
@@ -17,5 +16,4 @@ object CogenStateTest extends Scalaprops {
 
   val laws = scalazlaws.functor.all[CogenState]
   val equal = scalazlaws.equal.all[CogenState[Int]]
-
 }

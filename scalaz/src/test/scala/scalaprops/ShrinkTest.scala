@@ -6,7 +6,6 @@ import scalaz.std.stream._
 import ScalapropsScalaz._
 
 object ShrinkTest extends Scalaprops {
-
   private[this] implicit def equal[A: Gen: Equal]: Equal[Shrink[A]] = {
     import FunctionEqual._
     Equal[A => Stream[A]].contramap(_.f)

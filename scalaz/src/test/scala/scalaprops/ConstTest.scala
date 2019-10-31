@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object ConstTest extends Scalaprops {
-
   val testInt = {
     type F[A] = Const[Int, A]
     Properties.list(
@@ -16,5 +15,4 @@ object ConstTest extends Scalaprops {
       scalazlaws.order.all[Const[Int, Int]]
     )
   }
-
 }

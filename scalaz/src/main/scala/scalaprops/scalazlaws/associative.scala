@@ -5,7 +5,6 @@ import scalaprops.Property.forAll
 import scalaz._
 
 object associative {
-
   def leftRight[=>:[_, _], X, Y, Z](
     implicit F: Associative[=>:],
     af: Gen[X =>: (Y =>: Z)],

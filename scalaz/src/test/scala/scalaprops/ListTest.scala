@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object ListTest extends Scalaprops {
-
   val testLaws = Properties.list(
     scalazlaws.monadPlusStrong.all[List],
     scalazlaws.align.all[List],
@@ -16,5 +15,4 @@ object ListTest extends Scalaprops {
   )
 
   val bindRec = scalazlaws.bindRec.laws[List].andThenParam(Param.maxSize(1))
-
 }

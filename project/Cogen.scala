@@ -65,6 +65,5 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
 ${(1 to 22).map(cogen).mkString("\n")}
 }
 """
-
   }
 }
