@@ -6,7 +6,6 @@ import scala.collection.mutable.ArrayBuffer
 import scala.reflect.NameTransformer
 
 object ScalapropsRunner {
-
   def testFieldNames(clazz: Class[_]): Array[String] =
     Scalaprops.testFieldNames(clazz)
 
@@ -84,7 +83,6 @@ object ScalapropsRunner {
     val obj = getTestObject(fingerprint, testClassName, testClassLoader)
     allProps(clazz, obj, only, logger)
   }
-
 }
 
 final class ScalapropsRunner(
@@ -92,7 +90,6 @@ final class ScalapropsRunner(
   override val remoteArgs: Array[String],
   testClassLoader: ClassLoader
 ) extends Runner {
-
   private[this] val status = TestStatus()
 
   private[this] val results = ArrayBuffer.empty[TestResult]
@@ -115,5 +112,4 @@ Total test count: ${status.all}
 Failed ${status.failure}, Errors ${status.error}, Passed ${status.success}, Ignored ${status.ignored}
 """ + TestResult.formatResults(results, arguments.showDuration)
   }
-
 }

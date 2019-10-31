@@ -5,7 +5,6 @@ import scalaz.std.AllInstances._
 import ScalapropsScalaz._
 
 object StrictTreeTest extends Scalaprops {
-
   val laws = Properties.list(
     scalazlaws.traverse1.all[StrictTree],
     scalazlaws.align.all[StrictTree],
@@ -48,5 +47,4 @@ object StrictTreeTest extends Scalaprops {
       p(1000)
     )
   }.andThenParam(Param.minSuccessful(10))
-
 }

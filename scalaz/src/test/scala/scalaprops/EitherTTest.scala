@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object EitherTTest extends Scalaprops {
-
   val iListBindRec =
     scalazlaws.bindRec.laws[({ type l[a] = EitherT[IList, Byte, a] })#l].andThenParam(Param.maxSize(1))
 
@@ -44,5 +43,4 @@ object EitherTTest extends Scalaprops {
   }
 
   val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = EitherT[f, Int, a] })#l]
-
 }

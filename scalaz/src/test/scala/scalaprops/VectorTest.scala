@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object VectorTest extends Scalaprops {
-
   val bindRec = scalazlaws.bindRec.laws[Vector].andThenParam(Param.maxSize(1))
 
   val testLaws =
@@ -16,5 +15,4 @@ object VectorTest extends Scalaprops {
       scalazlaws.isEmpty.all[Vector],
       scalazlaws.align.all[Vector]
     )
-
 }

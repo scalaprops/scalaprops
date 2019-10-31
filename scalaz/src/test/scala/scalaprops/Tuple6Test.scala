@@ -6,7 +6,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object Tuple6Test extends Scalaprops {
-
   type F[A] = Tuple6[IList[Boolean], IList[Byte], IList[Short], Short, Byte, A]
 
   val bindRec = scalazlaws.bindRec.all[({ type l[a] = (Byte, Byte, Byte, Byte, Byte, a) })#l]
@@ -20,5 +19,4 @@ object Tuple6Test extends Scalaprops {
     scalazlaws.monad.all[F],
     scalazlaws.traverse.all[F]
   )
-
 }

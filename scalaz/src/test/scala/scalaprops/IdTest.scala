@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object IdTest extends Scalaprops {
-
   val test = Properties.list(
     scalazlaws.traverse1.all[Id],
     scalazlaws.monad.all[Id],
@@ -14,5 +13,4 @@ object IdTest extends Scalaprops {
     scalazlaws.align.all[Id],
     scalazlaws.comonad.all[Id]
   )
-
 }

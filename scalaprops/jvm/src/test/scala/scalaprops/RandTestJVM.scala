@@ -3,7 +3,6 @@ package scalaprops
 import scala.util.Random
 
 object RandTestJVM extends Scalaprops {
-
   private[this] def chooseLong(rng: Long => Rand) = Property.forAll(
     Iterator.fill(100000)((Random.nextLong, Random.nextLong, Random.nextLong)).forall {
       case (seed, y, z) =>

@@ -6,7 +6,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object Tuple2Test extends Scalaprops {
-
   val bitraverse = scalazlaws.bitraverse.all[Tuple2]
   val associative = scalazlaws.associative.all[Tuple2]
 
@@ -25,5 +24,4 @@ object Tuple2Test extends Scalaprops {
     scalazlaws.monoid.all[(IList[Boolean], IList[Boolean])],
     scalazlaws.order.all[(Byte, Byte)]
   )
-
 }

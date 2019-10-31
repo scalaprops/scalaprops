@@ -6,7 +6,6 @@ import scalaz.Equal
 import scalaz.Isomorphism._
 
 object iso {
-
   def a2b[A: Gen, B](i: A <=> B)(implicit A: Equal[A]): Property =
     forAll { a: A =>
       A.equal(i.from(i.to(a)), a)
@@ -22,5 +21,4 @@ object iso {
       ScalazLaw.isoA2B -> a2b(i),
       ScalazLaw.isoB2A -> b2a(i)
     )
-
 }

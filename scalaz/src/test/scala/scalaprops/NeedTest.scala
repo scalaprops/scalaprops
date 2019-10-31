@@ -4,7 +4,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object NeedTest extends Scalaprops {
-
   val test = Properties.list(
     scalazlaws.traverse1.all[scalaz.Need],
     scalazlaws.monad.all[scalaz.Need],
@@ -13,5 +12,4 @@ object NeedTest extends Scalaprops {
     scalazlaws.align.all[scalaz.Need],
     scalazlaws.comonad.all[scalaz.Need]
   )
-
 }

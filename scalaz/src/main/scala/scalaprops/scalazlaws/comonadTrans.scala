@@ -7,7 +7,6 @@ import Property.forAll
 import ScalapropsScalaz._
 
 object comonadTrans {
-
   def law1[F[_[_], _], G[_], A](
     implicit
     C: Comonad[({ type l[a] = F[G, a] })#l],
@@ -42,5 +41,4 @@ object comonadTrans {
     ScalazLaw.comonadTransLaw1Nel -> law1[F, NonEmptyList, Int],
     ScalazLaw.comonadTransLaw2Nel -> law2[F, NonEmptyList, Int, Int]
   )
-
 }

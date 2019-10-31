@@ -7,7 +7,6 @@ import scalaz.std.tuple._
 import ScalapropsScalaz._
 
 object GenTest extends Scalaprops {
-
   implicit def genGen[A](implicit A: Gen[A]): Gen[Gen[A]] = {
     val values = Gen[List[A]].sample(size = 100, seed = Random.nextLong())
     Gen.oneOf(
@@ -217,7 +216,6 @@ object GenTest extends Scalaprops {
   }
 
   val functionGenTest = {
-
     def permutations[A](xs: IList[A], n: Int): IList[IList[A]] =
       if (xs.isEmpty) {
         IList.empty
@@ -300,5 +298,4 @@ object GenTest extends Scalaprops {
         .andThenParam(Param.minSuccessful(3))
     )
   }
-
 }

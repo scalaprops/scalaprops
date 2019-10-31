@@ -6,7 +6,6 @@ import scalaz.std.tuple._
 import ScalapropsScalaz._
 
 object LensTest extends Scalaprops {
-
   import FunctionEqual._
   import IndexedStoreTTest.indexedStoreTEqual
 
@@ -25,5 +24,4 @@ object LensTest extends Scalaprops {
   val testCodiag = scalazlaws.lens.all(Lens.codiagLens[Int])
   val testFirst = scalazlaws.lens.all(Lens.firstLens[Int, Int])
   val testSecond = scalazlaws.lens.all(Lens.secondLens[Int, Int])
-
 }

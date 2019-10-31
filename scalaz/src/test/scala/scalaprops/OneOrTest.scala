@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object OneOrTest extends Scalaprops {
-
   val testIList = {
     type F[A] = OneOr[IList, A]
 
@@ -27,5 +26,4 @@ object OneOrTest extends Scalaprops {
       scalazlaws.comonad.all[F]
     )
   }
-
 }

@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import scalaz.std.tuple._
 
 object Function1Test extends Scalaprops {
-
   import FunctionEqual._
 
   val bindRec = scalazlaws.bindRec.laws[({ type l[a] = Byte => a })#l]

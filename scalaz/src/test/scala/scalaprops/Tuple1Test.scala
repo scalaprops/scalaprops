@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object Tuple1Test extends Scalaprops {
-
   val laws0 = Properties.list(
     scalazlaws.order.all[Tuple1[Byte]],
     scalazlaws.monoid.all[Tuple1[Byte]]
@@ -16,5 +15,4 @@ object Tuple1Test extends Scalaprops {
     scalazlaws.monad.all[Tuple1],
     scalazlaws.comonad.all[Tuple1]
   )
-
 }

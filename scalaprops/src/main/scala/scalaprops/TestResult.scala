@@ -10,7 +10,6 @@ private[scalaprops] final case class TestResult(
 }
 
 private[scalaprops] object TestResult {
-
   def formatResults(results: collection.Seq[TestResult], count: Int): String = {
     results
       .sortBy(_.duration)(
@@ -21,5 +20,4 @@ private[scalaprops] object TestResult {
       .map(_.asSimpleString)
       .mkString("\n")
   }
-
 }

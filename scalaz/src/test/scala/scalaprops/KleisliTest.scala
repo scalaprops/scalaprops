@@ -7,7 +7,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object KleisliTest extends Scalaprops {
-
   private[this] val e = new FunctionEqual(3)
 
   implicit def kleisliEqual[F[_], A: Gen, B](implicit E: Equal[F[B]]): Equal[Kleisli[F, A, B]] = {
@@ -82,5 +81,4 @@ object KleisliTest extends Scalaprops {
   val ilistBindRec = {
     scalazlaws.bindRec.laws[({ type l[a] = Kleisli[IList, Byte, a] })#l]
   }.andThenParam(Param.maxSize(1))
-
 }

@@ -3,7 +3,6 @@ import sbtunidoc.BaseUnidocPlugin.autoImport.unidoc
 import sbtunidoc.ScalaUnidocPlugin.autoImport.ScalaUnidoc
 
 object Sxr {
-
   val enableSxr = SettingKey[Boolean]("enableSxr")
   val sxr = TaskKey[File]("packageSxr")
 
@@ -73,5 +72,4 @@ object Sxr {
       Def.setting(Option("sxr"))
     )
   )
-
 }

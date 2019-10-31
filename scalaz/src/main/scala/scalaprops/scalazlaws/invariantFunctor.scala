@@ -6,7 +6,6 @@ import scalaprops.Properties.properties
 import scalaz._
 
 object invariantFunctor {
-
   def identity[F[_], X](implicit F: InvariantFunctor[F], afx: Gen[F[X]], ef: Equal[F[X]]): Property =
     forAll(F.invariantFunctorLaw.invariantIdentity[X] _)
 
@@ -39,5 +38,4 @@ object invariantFunctor {
     ef: Equal[F[Int]]
   ): Properties[ScalazLaw] =
     laws[F]
-
 }

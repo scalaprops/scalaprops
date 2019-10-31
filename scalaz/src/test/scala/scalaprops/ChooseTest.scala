@@ -4,7 +4,6 @@ import scalaz._
 import scalaz.std.anyVal._
 
 object ChooseTest extends Scalaprops {
-
   private[this] def test[A: Choose: Gen: Order: Enum](listSize: Int = 10000) =
     Properties
       .list(
@@ -37,5 +36,4 @@ object ChooseTest extends Scalaprops {
   val int = test[Int]()
   val short = test[Short]()
   val byte = test[Byte]()
-
 }

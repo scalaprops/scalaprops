@@ -3,7 +3,6 @@ package scalaprops
 import java.math.BigInteger
 
 object PolynomialTest extends Scalaprops {
-
   val testPolynomialString = Property.forAll {
     new F2Polynomial("1101").toString() == "1101"
   }

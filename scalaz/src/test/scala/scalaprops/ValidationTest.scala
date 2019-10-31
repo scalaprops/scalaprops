@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object ValidationTest extends Scalaprops {
-
   val testLaws1 = {
     type F[A] = ValidationNel[Int, A]
 

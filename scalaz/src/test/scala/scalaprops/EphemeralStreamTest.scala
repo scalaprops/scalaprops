@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object EphemeralStreamTest extends Scalaprops {
-
   val bindRec = scalazlaws.bindRec.laws[EphemeralStream].andThenParam(Param.maxSize(1))
 
   val laws = Properties.list(
@@ -16,5 +15,4 @@ object EphemeralStreamTest extends Scalaprops {
     scalazlaws.align.all[EphemeralStream],
     scalazlaws.zip.all[EphemeralStream]
   )
-
 }

@@ -6,7 +6,6 @@ import scalaz.std.option._
 import ScalapropsScalaz._
 
 object OptionTTest extends Scalaprops {
-
   val disjunction = {
     type E = Byte
     type G[A] = E \/ A
@@ -48,5 +47,4 @@ object OptionTTest extends Scalaprops {
   }
 
   val monadTrans = scalazlaws.monadTrans.all[OptionT]
-
 }

@@ -5,7 +5,6 @@ import TreeZipper._
 import scala.annotation.tailrec
 
 final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: TreeForest[A], parents: Parents[A]) {
-
   import Tree._
 
   def parent: Option[TreeZipper[A]] = parents match {
@@ -47,7 +46,6 @@ final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: Tree
   }
 
   def cojoin: TreeZipper[TreeZipper[A]] = {
-
     def unfoldStream[X, Y](seed: X)(f: X => Option[(Y, X)]): Stream[Y] =
       f(seed) match {
         case None => Stream.empty
@@ -76,7 +74,6 @@ final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: Tree
   }
 
   private def downParents = (lefts, tree.rootLabel, rights) #:: parents
-
 }
 
 object TreeZipper {

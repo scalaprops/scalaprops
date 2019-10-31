@@ -6,7 +6,6 @@ import Property.forAll
 import ScalapropsScalaz._
 
 object IMapTest extends Scalaprops {
-
   val testLaws =
     Properties.list(
       scalazlaws.bind.all[({ type l[a] = Int ==>> a })#l],
@@ -226,5 +225,4 @@ object IMapTest extends Scalaprops {
       E.equal(IMap.fromList(cc.toList), c)
     }.toProperties((), Param.minSuccessful(5000))
   }
-
 }

@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object TheseTest extends Scalaprops {
-
   private type F[A] = Int \&/ A
 
   val test0 =

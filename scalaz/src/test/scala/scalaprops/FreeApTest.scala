@@ -6,7 +6,6 @@ import scalaz.std.function._
 import ScalapropsScalaz._
 
 object FreeApTest extends Scalaprops {
-
   private[this] implicit def freeApEqual[F[_]: Functor, A](
     implicit
     E: Eq1[F],
@@ -121,5 +120,4 @@ object FreeApTest extends Scalaprops {
       scalazlaws.applicative.all[F]
     )
   }
-
 }

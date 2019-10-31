@@ -6,7 +6,6 @@ import Gen.gen
 import Variant.variantInt
 
 sealed abstract class ScalapropsScalaz0 {
-
   implicit final def cogenEndomorphic[F[_, _], A](implicit F: Cogen[F[A, A]]): Cogen[Endomorphic[F, A]] =
     F.contramap(_.run)
 

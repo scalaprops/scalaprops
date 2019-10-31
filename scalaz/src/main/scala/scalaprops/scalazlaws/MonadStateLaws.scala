@@ -8,7 +8,6 @@ private[scalazlaws] object MonadStateLaws {
 }
 
 private[scalazlaws] class MonadStateLaws[F[_], S] private (F: MonadState[F, S]) {
-
   def putPut(s1: S, s2: S)(implicit E: Equal[F[Unit]]): Boolean =
     E.equal(F.bind(F.put(s1))(_ => F.put(s2)), F.put(s2))
 
@@ -20,5 +19,4 @@ private[scalazlaws] class MonadStateLaws[F[_], S] private (F: MonadState[F, S]) 
 
   def getGet(k: (S, S) => F[Unit])(implicit E: Equal[F[Unit]]): Boolean =
     E.equal(F.bind(F.get)(s => F.bind(F.get)(k(s, _))), F.bind(F.get)(s => k(s, s)))
-
 }

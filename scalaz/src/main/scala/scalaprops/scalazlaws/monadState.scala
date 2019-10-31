@@ -5,7 +5,6 @@ import scalaz._
 import Property.forAll
 
 object monadState {
-
   def putPut[F[_], S](implicit F: MonadState[F, S], S: Gen[S], E: Equal[F[Unit]]): Property =
     forAll(MonadStateLaws[F, S].putPut _)
 
@@ -47,5 +46,4 @@ object monadState {
     monad.all[F],
     monadState.laws[F, S]
   )
-
 }

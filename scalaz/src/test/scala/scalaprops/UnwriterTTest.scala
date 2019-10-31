@@ -6,7 +6,6 @@ import scalaz.std.tuple._
 import ScalapropsScalaz._
 
 object UnwriterTTest extends Scalaprops {
-
   val id = {
     type F[A] = Unwriter[Int, A]
 
@@ -33,5 +32,4 @@ object UnwriterTTest extends Scalaprops {
 
     scalazlaws.bitraverse.all[F]
   }
-
 }

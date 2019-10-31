@@ -7,7 +7,6 @@ final case class Arguments(
 )
 
 object Arguments {
-
   private[this] val keyPrefix = "--"
 
   def objects(args: List[String]): Set[String] = {
@@ -15,7 +14,6 @@ object Arguments {
   }
 
   def parse(args: List[String]): Arguments = {
-
     val only = args.dropWhile((keyPrefix + "only") != _).drop(1).takeWhile(arg => !arg.startsWith(keyPrefix))
 
     def arg(key: String): Seq[String] =

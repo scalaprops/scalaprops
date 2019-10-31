@@ -15,7 +15,6 @@ final class ScalapropsTaskImpl(
   results: ArrayBuffer[TestResult],
   status: TestStatus
 ) extends sbt.testing.Task {
-
   def execute(eventHandler: EventHandler, loggers: Array[Logger], continuation: Array[Task] => Unit): Unit = {
     continuation(execute(eventHandler, loggers))
   }
@@ -60,7 +59,6 @@ final class ScalapropsTaskImpl(
 }
 
 object ScalapropsTaskImpl {
-
   private[this] val emptyThrowable = new OptionalThrowable
 
   def createTree(

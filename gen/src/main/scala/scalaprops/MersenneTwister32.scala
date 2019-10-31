@@ -104,5 +104,4 @@ object MersenneTwister32 {
 
     (MersenneTwister32(mt0, mti), y.toInt)
   }
-
 }

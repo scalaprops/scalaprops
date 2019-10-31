@@ -6,7 +6,6 @@ import scalaz._
 import scalaz.std.anyVal._
 
 object cobind {
-
   def cobindAssociative[F[_], A, B, C, D](
     implicit F: Cobind[F],
     D: Equal[D],

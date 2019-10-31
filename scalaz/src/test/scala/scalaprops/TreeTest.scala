@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object TreeTest extends Scalaprops {
-
   val laws = Properties.list(
     scalazlaws.traverse1.all[scalaz.Tree],
     scalazlaws.align.all[scalaz.Tree],
@@ -91,5 +90,4 @@ object TreeTest extends Scalaprops {
       p(1000)
     )
   }.andThenParam(Param.minSuccessful(10))
-
 }

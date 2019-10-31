@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object EitherTest extends Scalaprops {
-
   val bitraverse = scalazlaws.bitraverse.all[Either]
   val associative = scalazlaws.associative.all[Either]
   val order = scalazlaws.order.all[Int Either Int]
@@ -18,5 +17,4 @@ object EitherTest extends Scalaprops {
       scalazlaws.traverse.all[T]
     )
   }
-
 }

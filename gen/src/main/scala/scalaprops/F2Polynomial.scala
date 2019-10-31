@@ -12,7 +12,6 @@ import scala.annotation.tailrec
  * @author M. Saito
  */
 object F2Polynomial {
-
   /** Polynomial X<sup>1</sup> + 0. */
   private[scalaprops] val X = new F2Polynomial("10")
 
@@ -107,7 +106,6 @@ object F2Polynomial {
 
 /** @param pol internal representation of polynomial. */
 final class F2Polynomial private (private val pol: BigInteger) {
-
   /** constructor from string with radix.
    *
    * @param value

@@ -1,7 +1,6 @@
 package scalaprops
 
 object PropertyTest extends Scalaprops {
-
   val `"forAll(result: => Boolean)" is lazy` = Property.forAll {
     var sideEffect = false
     val p = Property.forAll {

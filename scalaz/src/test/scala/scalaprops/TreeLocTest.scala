@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object TreeLocTest extends Scalaprops {
-
   val laws = Properties.list(
     scalazlaws.order.all[TreeLoc[Byte]],
     scalazlaws.traverse1.all[TreeLoc],
@@ -26,5 +25,4 @@ object TreeLocTest extends Scalaprops {
       a == List.fill(size)(n)
     }
   }.toProperties((), Param.minSuccessful(10))
-
 }

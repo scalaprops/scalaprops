@@ -4,7 +4,6 @@ package scalazlaws
 import scalaz._
 
 object bitraverse {
-
   def laws[F[_, _]](
     implicit
     fa: Gen[F[Int, Int]],
@@ -32,5 +31,4 @@ object bitraverse {
     G1: Gen[F[Int, Maybe[Int]]],
     G2: Gen[F[Maybe[Int], Int]]
   ) = laws[F]
-
 }

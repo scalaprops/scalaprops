@@ -4,7 +4,6 @@ import Gen.gen
 import scala.concurrent.Future
 
 final case class Gen[A] private (f: (Int, Rand) => (Rand, A)) {
-
   def map[B](g: A => B): Gen[B] =
     gen { (i, r) =>
       val (r0, a) = f(i, r)

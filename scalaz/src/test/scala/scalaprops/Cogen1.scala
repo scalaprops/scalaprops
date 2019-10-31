@@ -45,5 +45,4 @@ object Cogen1 {
       def cogen1[A: Cogen] =
         Cogen[IList[A]]
     }
-
 }

@@ -3,7 +3,6 @@ package scalaprops
 import java.util.Arrays
 
 object TinyMT32Test extends Scalaprops {
-
   val testGetDefault = Property.forAll {
     var tiny = TinyMT32.getDefault(1)
     val c_data = List(0x97b6d625, 0x3a86e2e1, 0xdd7305b1, 0x8e4ef1b0, 0xd60a5515, 0xe3b751f6, 0x7e073136, 0x82e5df8b,

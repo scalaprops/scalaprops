@@ -332,5 +332,4 @@ object Property {
           a2 => forall0(A3, S3)(a3 => forall0(A4, S4)(a4 => forall0(A5, S5)(a5 => prop(f(a1, a2, a3, a4, a5)))))
         )
     )
-
 }

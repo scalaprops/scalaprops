@@ -7,7 +7,6 @@ import FunctionEqual._
 import ScalapropsScalaz._
 
 object IndexedReaderWriterStateTTest extends Scalaprops {
-
   private[this] implicit def equal[F[_]: Monad, R, W, S1, S2, A](
     implicit F: Equal[(R, S1) => F[(W, A, S2)]]
   ): Equal[IndexedReaderWriterStateT[F, R, W, S1, S2, A]] =
@@ -52,5 +51,4 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
   }
 
   val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = ReaderWriterStateT[f, Int, Int, Int, a] })#l]
-
 }

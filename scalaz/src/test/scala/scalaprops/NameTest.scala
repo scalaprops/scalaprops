@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object NameTest extends Scalaprops {
-
   val test = Properties.list(
     scalazlaws.traverse1.all[Name],
     scalazlaws.monad.all[Name],
@@ -14,5 +13,4 @@ object NameTest extends Scalaprops {
     scalazlaws.align.all[Name],
     scalazlaws.comonad.all[Name]
   )
-
 }

@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object TheseTTest extends Scalaprops {
-
   private[this] type E = IList[Byte]
 
   val idSemigroup = {

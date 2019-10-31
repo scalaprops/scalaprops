@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object ApTest extends Scalaprops {
-
   val lawsMaybe = Properties.list(
     scalazlaws.equal.all[Ap[Maybe, Int]],
     scalazlaws.monoid.all[Ap[Maybe, Int]]
@@ -15,5 +14,4 @@ object ApTest extends Scalaprops {
     scalazlaws.equal.all[Ap[IList, Int]],
     scalazlaws.monoid.all[Ap[IList, Int]]
   )
-
 }

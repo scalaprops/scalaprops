@@ -5,7 +5,6 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object OptionTest extends Scalaprops {
-
   val testLaws =
     Properties.list(
       scalazlaws.monadPlusStrong.all[Option],
@@ -16,5 +15,4 @@ object OptionTest extends Scalaprops {
       scalazlaws.isEmpty.all[Option],
       scalazlaws.cobind.all[Option]
     )
-
 }
