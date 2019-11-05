@@ -340,7 +340,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
       def contramap[A, B](r: Cogen[A])(f: B => A) =
         r contramap f
       def divide[A, B, C](fa: Cogen[A], fb: Cogen[B])(f: C => (A, B)) =
-        Cogen.devide(fa, fb)(f)
+        Cogen.divide(fa, fb)(f)
     }
 
   implicit val cogenStateInstance: Functor[CogenState] =
