@@ -42,13 +42,12 @@ sealed abstract class Tree[A] {
   }
 
   def mapAccumL[S, B](z: S)(f: (S, A) => (S, B)): (S, Tree[B]) =
-    traverseS(z)(
-      a =>
-        for {
-          s1 <- State.init[S]
-          (s2, b) = f(s1, a)
-          _ <- State.put(s2)
-        } yield b
+    traverseS(z)(a =>
+      for {
+        s1 <- State.init[S]
+        (s2, b) = f(s1, a)
+        _ <- State.put(s2)
+      } yield b
     )
 
   private def draw: Stream[String] = {

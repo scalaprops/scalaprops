@@ -19,49 +19,46 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
 
   def and(p: Property): Property =
     Property.fromGen(
-      Gen.from2(
-        (res1: Result, res2: Result) =>
-          if (res1.isException || res1.isFalsified) {
-            res1
-          } else if (res2.isException || res2.isFalsified) {
-            res2
-          } else if (res1.isProven || res1.isUnfalsified) {
-            res2
-          } else if (res2.isProven || res2.isUnfalsified) {
-            res1
-          } else Result.NoResult
+      Gen.from2((res1: Result, res2: Result) =>
+        if (res1.isException || res1.isFalsified) {
+          res1
+        } else if (res2.isException || res2.isFalsified) {
+          res2
+        } else if (res1.isProven || res1.isUnfalsified) {
+          res2
+        } else if (res2.isProven || res2.isUnfalsified) {
+          res1
+        } else Result.NoResult
       )(gen, p.gen)
     )
 
   def or(p: Property): Property =
     Property.fromGen(
-      Gen.from2(
-        (res1: Result, res2: Result) =>
-          if (res1.isException || res1.isFalsified) {
-            res1
-          } else if (res2.isException || res2.isFalsified) {
-            res2
-          } else if (res1.isProven || res1.isUnfalsified) {
-            res1
-          } else if (res2.isProven || res2.isUnfalsified) {
-            res2
-          } else Result.NoResult
+      Gen.from2((res1: Result, res2: Result) =>
+        if (res1.isException || res1.isFalsified) {
+          res1
+        } else if (res2.isException || res2.isFalsified) {
+          res2
+        } else if (res1.isProven || res1.isUnfalsified) {
+          res1
+        } else if (res2.isProven || res2.isUnfalsified) {
+          res2
+        } else Result.NoResult
       )(gen, p.gen)
     )
 
   def sequence(p: Property): Property =
     Property.fromGen(
-      Gen.from2(
-        (res1: Result, res2: Result) =>
-          if (res1.isException || res1.isProven || res1.isUnfalsified) {
-            res1
-          } else if (res2.isException || res2.isProven || res2.isUnfalsified) {
-            res2
-          } else if (res1.isFalsified) {
-            res2
-          } else if (res2.isFalsified) {
-            res1
-          } else Result.NoResult
+      Gen.from2((res1: Result, res2: Result) =>
+        if (res1.isException || res1.isProven || res1.isUnfalsified) {
+          res1
+        } else if (res2.isException || res2.isProven || res2.isUnfalsified) {
+          res2
+        } else if (res1.isFalsified) {
+          res2
+        } else if (res2.isFalsified) {
+          res1
+        } else Result.NoResult
       )(gen, p.gen)
     )
 
@@ -78,12 +75,13 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
           else sz + (maxSize - sz) / (minSuccessful - s)
         }
 
-        val r = try {
-          Right(f(math.round(size), random))
-        } catch {
-          case e: Throwable =>
-            Left(e)
-        }
+        val r =
+          try {
+            Right(f(math.round(size), random))
+          } catch {
+            case e: Throwable =>
+              Left(e)
+          }
 
         r match {
           case Right((nextRand, Result.NoResult)) =>
@@ -326,10 +324,9 @@ object Property {
     S4: Shrink[A4],
     S5: Shrink[A5]
   ): Property =
-    forall0(A1, S1)(
-      a1 =>
-        forall0(A2, S2)(
-          a2 => forall0(A3, S3)(a3 => forall0(A4, S4)(a4 => forall0(A5, S5)(a5 => prop(f(a1, a2, a3, a4, a5)))))
-        )
+    forall0(A1, S1)(a1 =>
+      forall0(A2, S2)(a2 =>
+        forall0(A3, S3)(a3 => forall0(A4, S4)(a4 => forall0(A5, S5)(a5 => prop(f(a1, a2, a3, a4, a5)))))
+      )
     )
 }

@@ -480,8 +480,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     Gen.oneOf(
       Gen.value(Dequeue.empty[A]),
       A.map(Dequeue.apply(_)),
-      Apply[Gen].apply2(Gen[NonEmptyIList[A]], Gen[NonEmptyIList[A]])(
-        (x, y) => Dequeue.fromFoldable(x) ++ Dequeue.fromFoldable(y)
+      Apply[Gen].apply2(Gen[NonEmptyIList[A]], Gen[NonEmptyIList[A]])((x, y) =>
+        Dequeue.fromFoldable(x) ++ Dequeue.fromFoldable(y)
       )
     )
 

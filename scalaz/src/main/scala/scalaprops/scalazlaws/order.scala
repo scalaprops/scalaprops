@@ -17,8 +17,8 @@ object order {
     forAll(A.orderLaw.orderAndEqualConsistent _)
 
   def scalaOrdering[A: Order: SOrdering: Gen] =
-    ScalazLaw.orderConsistentScalaOrdering -> forAll(
-      (a1: A, a2: A) => Order[A].order(a1, a2) == Ordering.fromInt(SOrdering[A].compare(a1, a2))
+    ScalazLaw.orderConsistentScalaOrdering -> forAll((a1: A, a2: A) =>
+      Order[A].order(a1, a2) == Ordering.fromInt(SOrdering[A].compare(a1, a2))
     )
 
   def laws[A: Order: Gen]: Properties[ScalazLaw] =

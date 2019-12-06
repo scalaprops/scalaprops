@@ -3,6 +3,7 @@ package scalaprops
 import scalaz.std.anyVal._
 
 object TreeTestJVM extends Scalaprops {
+
   /**
    * @see [[https://en.wikipedia.org/wiki/Catalan_number]]
    */
