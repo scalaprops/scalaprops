@@ -105,49 +105,50 @@ object ScalapropsTaskImpl {
 
               val param = arguments.param.merge(check.paramEndo(obj.param))
               val start = System.currentTimeMillis()
-              val r = try {
-                obj.listener.onStart(obj, name, check.prop, param, log)
-                val r = executor.execute(param.timeout) {
-                  check.prop.check(
-                    param, { () =>
-                      cancel.get || ((System.currentTimeMillis() - start) > param.timeout.toMillis)
-                    },
-                    count => obj.listener.onCheck(obj, name, check.prop, param, log, count)
-                  )
-                }
-                val duration = System.currentTimeMillis() - start
-                obj.listener.onFinish(obj, name, check.prop, param, r, log)
-                r match {
-                  case _: CheckResult.Proven | _: CheckResult.Passed =>
-                    event(Status.Success, duration, CheckResultError.Value(r))
-                  case _: CheckResult.Exhausted | _: CheckResult.Falsified =>
-                    event(Status.Failure, duration, CheckResultError.Value(r))
-                  case e: CheckResult.GenException =>
-                    log.trace(e.exception)
-                    event(Status.Error, duration, CheckResultError.Both(e.exception, r))
-                  case e: CheckResult.PropException =>
-                    log.trace(e.exception)
-                    event(Status.Error, duration, CheckResultError.Both(e.exception, r))
-                  case _: CheckResult.Timeout =>
-                    event(Status.Error, duration, CheckResultError.Value(r))
-                  case _: CheckResult.Ignored =>
-                    event(Status.Ignored, duration, CheckResultError.Value(r))
-                }
-              } catch {
-                case e: TimeoutException =>
+              val r =
+                try {
+                  obj.listener.onStart(obj, name, check.prop, param, log)
+                  val r = executor.execute(param.timeout) {
+                    check.prop.check(
+                      param, { () =>
+                        cancel.get || ((System.currentTimeMillis() - start) > param.timeout.toMillis)
+                      },
+                      count => obj.listener.onCheck(obj, name, check.prop, param, log, count)
+                    )
+                  }
                   val duration = System.currentTimeMillis() - start
-                  log.trace(e)
-                  obj.listener.onError(obj, name, e, log)
-                  event(Status.Error, duration, CheckResultError.Err(e))
-                case NonFatal(e) =>
-                  val duration = System.currentTimeMillis() - start
-                  log.trace(e)
-                  obj.listener.onError(obj, name, e, log)
-                  event(Status.Error, duration, CheckResultError.Err(e))
-              } finally {
-                cancel.set(true)
-                testStatus.all.incrementAndGet()
-              }
+                  obj.listener.onFinish(obj, name, check.prop, param, r, log)
+                  r match {
+                    case _: CheckResult.Proven | _: CheckResult.Passed =>
+                      event(Status.Success, duration, CheckResultError.Value(r))
+                    case _: CheckResult.Exhausted | _: CheckResult.Falsified =>
+                      event(Status.Failure, duration, CheckResultError.Value(r))
+                    case e: CheckResult.GenException =>
+                      log.trace(e.exception)
+                      event(Status.Error, duration, CheckResultError.Both(e.exception, r))
+                    case e: CheckResult.PropException =>
+                      log.trace(e.exception)
+                      event(Status.Error, duration, CheckResultError.Both(e.exception, r))
+                    case _: CheckResult.Timeout =>
+                      event(Status.Error, duration, CheckResultError.Value(r))
+                    case _: CheckResult.Ignored =>
+                      event(Status.Ignored, duration, CheckResultError.Value(r))
+                  }
+                } catch {
+                  case e: TimeoutException =>
+                    val duration = System.currentTimeMillis() - start
+                    log.trace(e)
+                    obj.listener.onError(obj, name, e, log)
+                    event(Status.Error, duration, CheckResultError.Err(e))
+                  case NonFatal(e) =>
+                    val duration = System.currentTimeMillis() - start
+                    log.trace(e)
+                    obj.listener.onError(obj, name, e, log)
+                    event(Status.Error, duration, CheckResultError.Err(e))
+                } finally {
+                  cancel.set(true)
+                  testStatus.all.incrementAndGet()
+                }
               eventHandler.handle(r)
               results += TestResult(
                 name = fullName,

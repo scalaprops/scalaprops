@@ -199,9 +199,7 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenMap[A: Cogen, B: Cogen]: Cogen[Map[A, B]] =
     Cogen[List[(A, B)]].contramap(
-      _.iterator.foldLeft(List.empty[(A, B)])(
-        (list, keyValue) => keyValue :: list
-      )
+      _.iterator.foldLeft(List.empty[(A, B)])((list, keyValue) => keyValue :: list)
     )
 
   implicit def cogenSet[A: Cogen]: Cogen[Set[A]] =
@@ -219,12 +217,11 @@ object Cogen extends CogenInstances0 {
   implicit def cogenFuture[A](implicit F: Cogen[A]): Cogen[Future[A]] = {
     import scala.concurrent.duration._
     val ec = scala.concurrent.ExecutionContext.global
-    cogenEither(conquer[Throwable], F).contramap(
-      f =>
-        Await.result(
-          f.map(Right(_))(ec).recover { case e => Left(e) }(ec),
-          5.seconds
-        )
+    cogenEither(conquer[Throwable], F).contramap(f =>
+      Await.result(
+        f.map(Right(_))(ec).recover { case e => Left(e) }(ec),
+        5.seconds
+      )
     )
   }
 

@@ -12,18 +12,15 @@ object GenTest extends Scalaprops {
     Gen.oneOf(
       Gen.value(A),
       List(
-        values.map(
-          x => Gen.value(Gen.value(x))
-        ),
+        values.map(x => Gen.value(Gen.value(x))),
         List.fill(100)(Random.nextInt(Int.MaxValue - 1) + 1).map(x => Gen.value(A.resize(x))),
         List
           .fill(100)(Random.nextInt(Int.MaxValue - 1) + 1)
-          .map(
-            x =>
-              Gen.value(Gen.gen { (i, r) =>
-                val (r0, a) = A.f(i, r)
-                (r0.reseed(x), a)
-              })
+          .map(x =>
+            Gen.value(Gen.gen { (i, r) =>
+              val (r0, a) = A.f(i, r)
+              (r0.reseed(x), a)
+            })
           )
       ).flatten: _*
     )

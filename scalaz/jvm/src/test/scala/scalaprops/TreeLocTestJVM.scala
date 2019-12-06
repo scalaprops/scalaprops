@@ -3,6 +3,7 @@ package scalaprops
 import scalaz.std.anyVal._
 
 object TreeLocTestJVM extends Scalaprops {
+
   /**
    * @see [[https://oeis.org/A001791]]
    */

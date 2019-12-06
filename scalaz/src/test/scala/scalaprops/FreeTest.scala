@@ -10,16 +10,15 @@ object FreeTest extends Scalaprops {
     E: Eq1[F],
     A: Equal[A]
   ): Equal[Free[F, A]] =
-    Equal.equal(
-      (aa, bb) =>
-        (aa.resume, bb.resume) match {
-          case (-\/(a), -\/(b)) =>
-            E.eq1[Free[F, A]].equal(a, b)
-          case (\/-(a), \/-(b)) =>
-            A.equal(a, b)
-          case _ =>
-            false
-        }
+    Equal.equal((aa, bb) =>
+      (aa.resume, bb.resume) match {
+        case (-\/(a), -\/(b)) =>
+          E.eq1[Free[F, A]].equal(a, b)
+        case (\/-(a), \/-(b)) =>
+          A.equal(a, b)
+        case _ =>
+          false
+      }
     )
 
   implicit def freeGen[F[_]: Applicative, A](
