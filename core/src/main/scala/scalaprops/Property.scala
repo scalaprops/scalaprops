@@ -70,8 +70,8 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
       if (cancel()) {
         CheckResult.Timeout(s, discarded, seed)
       } else {
-        val size = {
-          if (s == 0 && discarded == 0) minSize
+        val size: Float = {
+          if (s == 0 && discarded == 0) minSize.toFloat
           else sz + (maxSize - sz) / (minSuccessful - s)
         }
 
