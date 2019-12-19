@@ -108,7 +108,7 @@ final case class TinyMT32Parameter(
    * @param pdelta
    * parameter delta
    */
-  private def this(pcharacteristic: String, pid: Int, pmat1: Int, pmat2: Int, ptmat: Int, pweight: Int, pdelta: Int) {
+  private def this(pcharacteristic: String, pid: Int, pmat1: Int, pmat2: Int, ptmat: Int, pweight: Int, pdelta: Int) = {
     this(
       characteristic = new F2Polynomial(pcharacteristic, TinyMT32Parameter.HEX_FORMAT),
       id = pid,

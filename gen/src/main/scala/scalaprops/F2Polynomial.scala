@@ -115,7 +115,7 @@ final class F2Polynomial private (private val pol: BigInteger) {
    * @param radix
    * radix of the number of val
    */
-  def this(value: String, radix: Int) {
+  def this(value: String, radix: Int) = {
     this(new BigInteger(value, radix))
   }
 
@@ -124,7 +124,7 @@ final class F2Polynomial private (private val pol: BigInteger) {
    * @param value
    * a string consists of 0 and 1
    */
-  def this(value: String) {
+  def this(value: String) = {
     this(new BigInteger(value, 2))
   }
 
