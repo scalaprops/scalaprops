@@ -30,6 +30,10 @@ before_cache:
 
 matrix:
   include:
+    - name: dotty
+      scala: 0.21.0-RC1
+      script:
+      - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
     - scala: SCALA_NATIVE
       jdk: openjdk8
       sudo: required

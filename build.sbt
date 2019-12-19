@@ -8,6 +8,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 ThisBuild / useSuperShell := false
 
 val scalazVersion = SettingKey[String]("scalazVersion")
+val DottyVersion = "0.21.0-RC1"
 
 // avoid move files
 val CustomCrossType = new sbtcrossproject.CrossType {
@@ -93,7 +94,8 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value,
+    libraryDependencies := libraryDependencies.value.map(_.withDottyCompat(scalaVersion.value)),
   )
   .dependsOn(
     core,
@@ -163,6 +165,22 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
 val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
+  sources in Test := {
+    val old = (sources in Test).value
+    if (isDotty.value) {
+      val exclude = Set(
+        "CaseClassExample",
+        "CogenStateTest",
+        "FreeTTest",
+        "GenTest",
+        "IdTest",
+        "StreamTTest",
+      ).map(_ + ".scala")
+      old.filterNot(f => exclude(f.getName))
+    } else {
+      old
+    }
+  },
   scalaVersion := Scala212,
   crossScalaVersions := Scala212 :: Scala211 :: "2.10.7" :: "2.13.1" :: Nil,
   organization := "com.github.scalaprops",
@@ -176,12 +194,19 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
   },
   scalacOptions in (Compile, doc) ++= {
     val tag = tagOrHash.value
-    Seq(
-      "-sourcepath",
-      (baseDirectory in LocalRootProject).value.getAbsolutePath,
-      "-doc-source-url",
-      s"https://github.com/scalaprops/scalaprops/tree/${tag}€{FILE_PATH}.scala"
-    )
+    if (isDotty.value) {
+      Seq(
+        "-siteroot",
+        baseDirectory.value.getAbsolutePath,
+      )
+    } else {
+      Seq(
+        "-sourcepath",
+        (baseDirectory in LocalRootProject).value.getAbsolutePath,
+        "-doc-source-url",
+        s"https://github.com/scalaprops/scalaprops/tree/${tag}€{FILE_PATH}.scala"
+      )
+    }
   },
   pomExtra := (
     <developers>
@@ -233,6 +258,8 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     ),
     SetScala211,
     releaseStepCommand("rootNative/publishSigned"),
+    releaseStepCommand("++" + DottyVersion + "!"),
+    releaseStepCommand("rootJVM/publishSigned"),
     releaseStepCommandAndRemaining("sonatypeBundleRelease"),
     setNextVersion,
     commitNextVersion,
