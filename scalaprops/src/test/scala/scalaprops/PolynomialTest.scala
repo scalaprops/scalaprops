@@ -59,7 +59,6 @@ object PolynomialTest extends Scalaprops {
   val testEquals = Property.forAll {
     assert(new F2Polynomial("11010") == new F2Polynomial("11010"))
     assert(new F2Polynomial("11010") != new F2Polynomial("11011"))
-    assert(new F2Polynomial("11010") != new BigInteger("11010", 2))
     val p = new F2Polynomial("101")
     assert(p == p)
     true
