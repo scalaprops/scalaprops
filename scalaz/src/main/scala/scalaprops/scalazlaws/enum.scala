@@ -5,7 +5,7 @@ import scalaprops.Property.{forAll, forAllG}
 import scalaprops.Properties.properties
 import scalaz._
 
-object enum {
+object `enum` {
   def succpred[A: Gen](implicit A: Enum[A]): Property =
     forAll(A.enumLaw.succpred _)
 
@@ -33,7 +33,7 @@ object enum {
     forAll(A.enumLaw.predorder _)
 
   def laws[A: Enum: Gen]: Properties[ScalazLaw] =
-    properties(ScalazLaw.enum)(
+    properties(ScalazLaw.`enum`)(
       ScalazLaw.enumSuccPred -> succpred[A],
       ScalazLaw.enumPredSucc -> predsucc[A],
       ScalazLaw.enumMinMaxPred -> minmaxpred[A],
@@ -45,5 +45,5 @@ object enum {
     )
 
   def all[A: Enum: Gen]: Properties[ScalazLaw] =
-    Properties.fromProps(ScalazLaw.enumAll, enum.laws[A], order.all[A])
+    Properties.fromProps(ScalazLaw.enumAll, `enum`.laws[A], order.all[A])
 }
