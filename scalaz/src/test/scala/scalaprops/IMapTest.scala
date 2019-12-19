@@ -25,8 +25,8 @@ object IMapTest extends Scalaprops {
     implicit def imapConjunctionGen[A: Gen: Order, B: Gen]: Gen[((A ==>> B) @@ Tags.Conjunction)] =
       Tag.subst(Gen[A ==>> B])
 
-    implicit val s = IMap.mapIntersection[Int, Int] // poor type inference...
-    implicit val e = Tags.Conjunction.subst(Equal[Int ==>> Int])
+    implicit val s: Semigroup[(Int ==>> Int) @@ Tags.Conjunction] = IMap.mapIntersection[Int, Int]
+    implicit val e: Equal[(Int ==>> Int) @@ Tags.Conjunction] = Tags.Conjunction.subst(Equal[Int ==>> Int])
 
     scalazlaws.semigroup.all[(Int ==>> Int) @@ Tags.Conjunction]
   }

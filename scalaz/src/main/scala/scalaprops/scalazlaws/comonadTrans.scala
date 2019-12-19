@@ -14,7 +14,7 @@ object comonadTrans {
     G: Comonad[G],
     A: Gen[F[G, A]],
     E: Equal[A]
-  ): Property = forAll { a: F[G, A] =>
+  ): Property = forAll { (a: F[G, A]) =>
     E.equal(G.copoint(F.lower(a)), C.copoint(a))
   }
 

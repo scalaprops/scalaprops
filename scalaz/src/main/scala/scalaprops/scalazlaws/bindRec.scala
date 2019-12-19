@@ -9,7 +9,7 @@ object bindRec {
     forAll(F.bindRecLaw.tailrecBindConsistency[A] _)
 
   def handleManyBinds[F[_], A](bindCount: Int)(implicit F: BindRec[F], G: Gen[F[A]]) =
-    forAll { fa: F[A] =>
+    forAll { (fa: F[A]) =>
       F.tailrecM[Int, A] { i =>
         if (i < bindCount)
           F.map(fa)(_ => \/.left(i + 1))

@@ -19,7 +19,7 @@ object FutureTest extends Scalaprops {
     override def toString = s"SomeFailure($n)"
   }
 
-  private[this] implicit val singleThreadExecutionContext = new ExecutionContext {
+  private[this] implicit val singleThreadExecutionContext: ExecutionContext = new ExecutionContext {
     def execute(runnable: Runnable): Unit = runnable.run
     def reportFailure(cause: Throwable): Unit = cause.printStackTrace
   }

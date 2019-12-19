@@ -4,7 +4,7 @@ import java.math.BigInteger
 
 object PolynomialTest extends Scalaprops {
   val testPolynomialString = Property.forAll {
-    new F2Polynomial("1101").toString() == "1101"
+    new F2Polynomial("1101").toString == "1101"
   }
 
   val testPolynomialStringInt = Property.forAll {
@@ -47,7 +47,7 @@ object PolynomialTest extends Scalaprops {
   }
 
   val testToString = Property.forAll {
-    assert("101" == new F2Polynomial("101").toString())
+    assert("101" == new F2Polynomial("101").toString)
     assert("5" == new F2Polynomial("101").toString(16))
     true
   }

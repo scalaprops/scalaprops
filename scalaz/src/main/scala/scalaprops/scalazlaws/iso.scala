@@ -7,12 +7,12 @@ import scalaz.Isomorphism._
 
 object iso {
   def a2b[A: Gen, B](i: A <=> B)(implicit A: Equal[A]): Property =
-    forAll { a: A =>
+    forAll { (a: A) =>
       A.equal(i.from(i.to(a)), a)
     }
 
   def b2a[A, B: Gen](i: A <=> B)(implicit B: Equal[B]): Property =
-    forAll { b: B =>
+    forAll { (b: B) =>
       B.equal(i.to(i.from(b)), b)
     }
 

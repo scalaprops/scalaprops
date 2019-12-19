@@ -10,7 +10,7 @@ object ChooseTest extends Scalaprops {
         Property.forAll { (from: A, to: A, seed: Long) =>
           val values = Choose[A].choose(from, to).samples(seed = seed, listSize = listSize)
           import scalaz.syntax.order._
-          implicit val o = Order[A].toScalaOrdering
+          implicit val o: scala.Ordering[A] = Order[A].toScalaOrdering
           assert(values.max <= Order[A].max(from, to))
           assert(values.min >= Order[A].min(from, to))
           true

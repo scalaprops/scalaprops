@@ -16,7 +16,7 @@ object ShrinkTest extends Scalaprops {
   val int = {
     val x = 128
 
-    Property.property { seed: Int =>
+    Property.property { (seed: Int) =>
       val param0 = super.param.copy(
         seed = Seed.IntSeed(seed)
       )
@@ -24,7 +24,7 @@ object ShrinkTest extends Scalaprops {
       val m = 6
       val g = Gen.choose(List.fill(m)(2).product, Int.MaxValue)
 
-      Property.forAllG(Gen.choose(1, x)) { n: Int =>
+      Property.forAllG(Gen.choose(1, x)) { (n: Int) =>
         val result = Property
           .property1[Int] { i =>
             Property.prop(i < n)

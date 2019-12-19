@@ -40,7 +40,7 @@ object CofreeTest extends Scalaprops {
     F3: Equal[CofreeZip[F, Int]]
   ) = {
     type G[A] = CofreeZip[F, A]
-    implicit val a = Cofree.cofreeZipApplicative[F]
+    implicit val a: Applicative[({ type l[a] = Cofree[F, a] @@ Tags.Zip })#l] = Cofree.cofreeZipApplicative[F]
     scalazlaws.apply.all[G]
   }
 
@@ -76,7 +76,7 @@ object CofreeTest extends Scalaprops {
   }
 
   val testMaybe = {
-    implicit def genCofreeMaybe[A: Gen] =
+    implicit def genCofreeMaybe[A: Gen]: Gen[Cofree[Maybe, A]] =
       Gen[OneAnd[List, A]].map { list =>
         Cofree.unfold(list) {
           case OneAnd(a, h :: t) =>

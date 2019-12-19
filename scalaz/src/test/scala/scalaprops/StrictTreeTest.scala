@@ -33,7 +33,7 @@ object StrictTreeTest extends Scalaprops {
   val strictTreeGenSize = {
     val F = Foldable[StrictTree]
     val p = { (size: Int) =>
-      Property.forAll { tree: StrictTree[Int] =>
+      Property.forAll { (tree: StrictTree[Int]) =>
         val c = F.count(tree)
         (c <= size) && ((c * 0.7) < F.toIList(tree).distinct.length)
       }.toProperties(size.toString)

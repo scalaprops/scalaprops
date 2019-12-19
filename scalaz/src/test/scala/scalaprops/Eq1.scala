@@ -53,7 +53,7 @@ object Eq1 {
   implicit def writerTEq1[F[_], W](implicit F: Eq1[F], W: Equal[W]): Eq1[({ type l[a] = WriterT[F, W, a] })#l] =
     new Eq1[({ type l[a] = WriterT[F, W, a] })#l] {
       def eq1[A: Equal] = {
-        implicit val e = F.eq1[(W, A)]
+        implicit val e: Equal[F[(W, A)]] = F.eq1[(W, A)]
         Equal[WriterT[F, W, A]]
       }
     }
@@ -87,7 +87,7 @@ object Eq1 {
     new Eq1[({ type l[a] = StateT[F, S, a] })#l] {
       import FunctionEqual._
       def eq1[A: Equal] = {
-        implicit val e = Eq1[F].eq1[(S, A)]
+        implicit val e: Equal[F[(S, A)]] = Eq1[F].eq1[(S, A)]
         StateTTest.stateTEqual[F, S, A]
       }
     }

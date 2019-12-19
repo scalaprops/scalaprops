@@ -81,7 +81,7 @@ object RandTest extends Scalaprops {
     true
   }
 
-  val chooseLong3 = Property.forAll { seed: Long =>
+  val chooseLong3 = Property.forAll { (seed: Long) =>
     def boundaries(x: Int): List[Long] = {
       val a: Long = List.fill(x)(2L).product
       List(-a - 1, -a, -a + 1, 0, a - 1, a, a + 1)

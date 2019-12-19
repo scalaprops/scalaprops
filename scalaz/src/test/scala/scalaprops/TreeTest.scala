@@ -58,7 +58,7 @@ object TreeTest extends Scalaprops {
 
     val tests = sizes.map {
       case (n, i) =>
-        Property.forAll { seed: Long =>
+        Property.forAll { (seed: Long) =>
           val s = f(i, seed)
           distinctStream(s) match {
             case -\/(x) =>
@@ -76,7 +76,7 @@ object TreeTest extends Scalaprops {
   val treeGenSize = {
     val F = Foldable[scalaz.Tree]
     val p = { (size: Int) =>
-      Property.forAll { tree: scalaz.Tree[Int] =>
+      Property.forAll { (tree: scalaz.Tree[Int]) =>
         val c = F.count(tree)
         (c <= size) && ((c * 0.7) < F.toIList(tree).distinct.length)
       }.toProperties(size.toString)
