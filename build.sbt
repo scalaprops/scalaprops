@@ -200,9 +200,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
-    "-language:existentials",
-    "-language:higherKinds",
-    "-language:implicitConversions"
+    "-language:existentials,higherKinds,implicitConversions",
   ),
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
