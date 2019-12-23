@@ -5,7 +5,7 @@ import scalaz.Isomorphism._
 import Gen.gen
 import Variant.variantInt
 
-sealed abstract class ScalapropsScalaz0 {
+sealed abstract class ScalapropsScalaz0 extends ScalapropsScalaz1 {
   implicit final def cogenEndomorphic[F[_, _], A](implicit F: Cogen[F[A, A]]): Cogen[Endomorphic[F, A]] =
     F.contramap(_.run)
 

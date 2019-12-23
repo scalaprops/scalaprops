@@ -5,32 +5,9 @@ import scalaz.std.anyVal._
 import scalaz.std.stream._
 import scalaz.std.vector._
 import ScalapropsScalaz._
+import CofreeTestInstances._
 
 object CofreeTest extends Scalaprops {
-  private[this] implicit def cogenCofree[F[_], A](
-    implicit
-    A: Cogen[A],
-    F: Cogen1[F]
-  ): Cogen[Cofree[F, A]] =
-    new Cogen[Cofree[F, A]] {
-      override def cogen[B](a: Cofree[F, A], g: CogenState[B]) =
-        A.cogen(a.head, F.cogen1[Cofree[F, A]].cogen(a.tail, g))
-    }
-
-  private[this] implicit def cofreeEqual[F[_], A](
-    implicit
-    F: Eq1[F],
-    A: Equal[A]
-  ): Equal[Cofree[F, A]] =
-    Equal.equal((a, b) => A.equal(a.head, b.head) && F.eq1[Cofree[F, A]].equal(a.tail, b.tail))
-
-  private[this] implicit def cofreeZipEqual[F[_], A](
-    implicit
-    F: Eq1[F],
-    A: Equal[A]
-  ): Equal[CofreeZip[F, A]] =
-    Tags.Zip.subst(cofreeEqual[F, A])
-
   private[this] type CofreeZip[F[_], A] = Cofree[F, A] @@ Tags.Zip
 
   private def cofreeZipTest[F[_]: Applicative](
@@ -115,22 +92,6 @@ object CofreeTest extends Scalaprops {
       scalazlaws.traverse1.all[CofreeStream],
       scalazlaws.equal.all[CofreeStream[Int]]
     )
-  }
-
-  private[this] object CofreeGenImplicit {
-    implicit def gen[F[_], A](
-      implicit
-      F: Gen1[F],
-      A: Gen[A]
-    ): Gen[Cofree[F, A]] =
-      Apply[Gen].apply2(A, F.gen1[Cofree[F, A]])((h, t) => Cofree(h, t))
-
-    implicit def genCofreeZip[F[_], A](
-      implicit
-      F: Gen1[F],
-      A: Gen[A]
-    ): Gen[CofreeZip[F, A]] =
-      Tags.Zip.subst(gen[F, A])
   }
 
   val disjunction = {
