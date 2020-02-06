@@ -1,6 +1,6 @@
 package scalaprops
 
-import org.scalajs.testinterface.TestUtils
+import scala.scalajs.reflect.Reflect
 import sbt.testing._
 import scala.reflect.NameTransformer
 import scala.scalajs._
@@ -81,8 +81,8 @@ object ScalapropsRunner {
     fingerprint match {
       case f: SubclassFingerprint if f.superclassName() == "scalaprops.Scalaprops" =>
         if (f.isModule) {
-          TestUtils.loadModule(testClassName, testClassLoader) match {
-            case m: Scalaprops => m
+          Reflect.lookupLoadableModuleClass(testClassName + "$").map(_.loadModule()) match {
+            case Some(m: Scalaprops) => m
             case x => throw new Exception(s"Cannot test $testClassName of type: $x")
           }
         } else {
