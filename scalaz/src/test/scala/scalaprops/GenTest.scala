@@ -232,15 +232,6 @@ object GenTest extends Scalaprops {
 
     val defaultSize = 10000
 
-    // https://github.com/scala/bug/issues/10883
-    implicit class Scala_2_13_Stream_Bug[A](self: Stream[A]) {
-      def take_scala_10883_workaround(n: Int): Stream[A] = {
-        if (n <= 0 || self.isEmpty) Stream.empty
-        else if (n == 1) Stream.cons(self.head, Stream.empty)
-        else Stream.cons(self.head, self.tail take_scala_10883_workaround n - 1)
-      }
-    }
-
     def test[A: Cogen: Order, B: Gen: Order](
       domain: IList[A],
       codomain: IList[B],
@@ -258,9 +249,9 @@ object GenTest extends Scalaprops {
               .map { f =>
                 IMap.fromFoldable(domain.map(a => a -> f(a)))
               }
-              .take_scala_10883_workaround(streamSize)
+              .take(streamSize)
               .distinct
-              .take_scala_10883_workaround(size)
+              .take(size)
           )
           .sorted
 
