@@ -55,21 +55,14 @@ final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: Tree
     val lft = (_: TreeZipper[A]).left
     val rgt = (_: TreeZipper[A]).right
     def dwn[A](tz: TreeZipper[A]): (TreeZipper[A], () => Stream[TreeZipper[A]]) = {
-      val f = () =>
-        unfoldStream(tz.firstChild) { o =>
-          for (c <- o) yield (c, c.right)
-        }
+      val f = () => unfoldStream(tz.firstChild) { o => for (c <- o) yield (c, c.right) }
       (tz, f)
     }
     def uf[A](a: TreeZipper[A], f: TreeZipper[A] => Option[TreeZipper[A]]): Stream[Tree[TreeZipper[A]]] = {
-      unfoldStream(f(a)) { o =>
-        for (c <- o) yield (Tree.unfoldTree(c)(dwn[A](_: TreeZipper[A])), f(c))
-      }
+      unfoldStream(f(a)) { o => for (c <- o) yield (Tree.unfoldTree(c)(dwn[A](_: TreeZipper[A])), f(c)) }
     }
 
-    val p = unfoldStream(parent) { o =>
-      for (z <- o) yield ((uf(z, lft), z, uf(z, rgt)), z.parent)
-    }
+    val p = unfoldStream(parent) { o => for (z <- o) yield ((uf(z, lft), z, uf(z, rgt)), z.parent) }
     TreeZipper(Tree.unfoldTree(this)(dwn[A](_: TreeZipper[A])), uf(this, lft), uf(this, rgt), p)
   }
 

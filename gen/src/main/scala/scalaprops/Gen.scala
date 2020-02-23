@@ -71,9 +71,7 @@ object Gen extends GenInstances0 {
     Z.map(z => () => z)
 
   implicit def f1[A1, Z](implicit A1: Cogen[A1], Z: Gen[Z]): Gen[A1 => Z] =
-    Gen.gen { (i, r) =>
-      (r.next, a => A1.cogen(a, CogenState(r, Z)).gen.f(i, r)._2)
-    }
+    Gen.gen { (i, r) => (r.next, a => A1.cogen(a, CogenState(r, Z)).gen.f(i, r)._2) }
 
   def oneOf[A](x: Gen[A], xs: Gen[A]*): Gen[A] = {
     val array = (x +: xs).toArray[Any]
@@ -100,9 +98,7 @@ object Gen extends GenInstances0 {
         (next, array)
       }
     }
-    gen { (size, r) =>
-      loop(size, 0, r)
-    }
+    gen { (size, r) => loop(size, 0, r) }
   }
 
   def sequenceNList[A](n: Int, g: Gen[A]): Gen[List[A]] = {
@@ -115,9 +111,7 @@ object Gen extends GenInstances0 {
         (next, acc.reverse)
       }
     }
-    gen { (size, r) =>
-      loop(size, 0, r, List.empty[A])
-    }
+    gen { (size, r) => loop(size, 0, r, List.empty[A]) }
   }
 
   def infinite[A](genSize: Int, r: Rand, g: Gen[A]): Iterator[A] =
@@ -138,19 +132,13 @@ object Gen extends GenInstances0 {
     parameterised((i, _) => f(i))
 
   def chooseLong(from: Long, to: Long): Gen[Long] =
-    gen { (_, r) =>
-      r.chooseLong(from, to)
-    }
+    gen { (_, r) => r.chooseLong(from, to) }
 
   def choose(from: Int, to: Int): Gen[Int] =
-    gen { (_, r) =>
-      r.choose(from, to)
-    }
+    gen { (_, r) => r.choose(from, to) }
 
   def chooseR(from: Int, to: Int, r: Rand): Gen[Int] =
-    gen { (_, _) =>
-      r.choose(from, to)
-    }
+    gen { (_, _) => r.choose(from, to) }
 
   @annotation.tailrec
   private[this] def pick0[B](n: Int, gs: List[(Int, B)]): B = gs match {
@@ -164,16 +152,12 @@ object Gen extends GenInstances0 {
 
   def lazyFrequency[A](g: (Int, Lazy[Gen[A]]), gs: List[(Int, Lazy[Gen[A]])]): Gen[A] = {
     val x = g :: gs
-    choose(1, x.iterator.map(_._1).sum).flatMap { i =>
-      pick0(i, x).value
-    }
+    choose(1, x.iterator.map(_._1).sum).flatMap { i => pick0(i, x).value }
   }
 
   def frequency[A](g: (Int, Gen[A]), gs: (Int, Gen[A])*): Gen[A] = {
     val x = g :: gs.toList
-    choose(1, x.iterator.map(_._1).sum).flatMap { i =>
-      pick0(i, x)
-    }
+    choose(1, x.iterator.map(_._1).sum).flatMap { i => pick0(i, x) }
   }
 
   def lazyFrequency[A](g: (Int, Lazy[Gen[A]]), gs: (Int, Lazy[Gen[A]])*): Gen[A] =
@@ -188,31 +172,19 @@ object Gen extends GenInstances0 {
   }
 
   private[scalaprops] def listOf_[F[_], A](g: Gen[A], min: Int, f: List[A] => F[A]): Gen[F[A]] =
-    parameterised { (size, r) =>
-      chooseR(min, size.max(min), r).flatMap { n =>
-        sequenceN(n, g, f)
-      }
-    }
+    parameterised { (size, r) => chooseR(min, size.max(min), r).flatMap { n => sequenceN(n, g, f) } }
 
   private[this] def arrayOf[A: reflect.ClassTag](g: Gen[A], min: Int): Gen[Array[A]] =
-    parameterised { (size, r) =>
-      chooseR(min, size.max(min), r).flatMap { n =>
-        sequenceNArray(n, g)
-      }
-    }
+    parameterised { (size, r) => chooseR(min, size.max(min), r).flatMap { n => sequenceNArray(n, g) } }
 
   def listOf[A](g: Gen[A], min: Int = 0): Gen[List[A]] =
     listOf_[List, A](g, min, x => x)
 
   def listOfN[A](maxSize: Int, g: Gen[A]): Gen[List[A]] =
-    choose(0, maxSize).flatMap { n =>
-      sequenceNList(n, g)
-    }
+    choose(0, maxSize).flatMap { n => sequenceNList(n, g) }
 
   def arrayOfN[A: reflect.ClassTag](maxSize: Int, g: Gen[A]): Gen[Array[A]] =
-    choose(0, maxSize).flatMap { n =>
-      sequenceNArray(n, g)
-    }
+    choose(0, maxSize).flatMap { n => sequenceNArray(n, g) }
 
   implicit def vector[A](implicit A: Gen[A]): Gen[Vector[A]] =
     listOf_[Vector, A](A, 0, _.toVector)

@@ -13,9 +13,7 @@ object monadTrans {
     G: Monad[G],
     A: Gen[A],
     E: Equal[F[G, A]]
-  ): Property = forAll { (a: A) =>
-    E.equal(F.liftM(Monad[G].point(a)), M.point(a))
-  }
+  ): Property = forAll { (a: A) => E.equal(F.liftM(Monad[G].point(a)), M.point(a)) }
 
   def law2[F[_[_], _], G[_], A, B](
     implicit

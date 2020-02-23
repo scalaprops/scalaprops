@@ -40,9 +40,7 @@ object TreeTest extends Scalaprops {
             if (seen.contains(h)) {
               loop(seen, t, i + 1)
             } else {
-              loop(seen insert h, t, 0).map { x =>
-                Stream.cons(h, x)
-              }
+              loop(seen insert h, t, 0).map { x => Stream.cons(h, x) }
             }
           case _ =>
             // stream is finite !?

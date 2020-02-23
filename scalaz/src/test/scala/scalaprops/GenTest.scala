@@ -64,14 +64,10 @@ object GenTest extends Scalaprops {
     val b = 20000
 
     Property.forAllG(
-      Gen.choose(min, max).flatMap { size =>
-        Gen.sequenceNList(size, Gen.choose(a, b)).map(size -> _)
-      }
+      Gen.choose(min, max).flatMap { size => Gen.sequenceNList(size, Gen.choose(a, b)).map(size -> _) }
     ) {
       case (size, values) =>
-        (values.length == size) && (min <= size && size <= max) && values.forall { x =>
-          a <= x && x <= b
-        }
+        (values.length == size) && (min <= size && size <= max) && values.forall { x => a <= x && x <= b }
     }
   }
 
@@ -129,12 +125,8 @@ object GenTest extends Scalaprops {
   val posByte = Property.forAllG(Gen.positiveByte) { _ > 0 }
   val posFloat = Property.forAllG(Gen.positiveFloat) { _ > 0.0f }
   val posDouble = Property.forAllG(Gen.positiveDouble) { _ > 0.0d }
-  val posFiniteFloat = Property.forAllG(Gen.positiveFiniteFloat) { f =>
-    f > 0.0f && !f.isInfinity
-  }
-  val posFiniteDouble = Property.forAllG(Gen.positiveFiniteDouble) { d =>
-    d > 0.0d && !d.isInfinity
-  }
+  val posFiniteFloat = Property.forAllG(Gen.positiveFiniteFloat) { f => f > 0.0f && !f.isInfinity }
+  val posFiniteDouble = Property.forAllG(Gen.positiveFiniteDouble) { d => d > 0.0d && !d.isInfinity }
 
   val negLong = Property.forAllG(Gen.negativeLong) { _ < 0 }
   val negInt = Property.forAllG(Gen.negativeInt) { _ < 0 }
@@ -142,23 +134,15 @@ object GenTest extends Scalaprops {
   val negByte = Property.forAllG(Gen.negativeByte) { _ < 0 }
   val negFloat = Property.forAllG(Gen.negativeFloat) { _.compare(0.0f) < 0 }
   val negDouble = Property.forAllG(Gen.negativeDouble) { _.compare(0.0d) < 0 }
-  val negFiniteFloat = Property.forAllG(Gen.negativeFiniteFloat) { f =>
-    f.compare(0.0f) < 0 && !f.isInfinity
-  }
-  val negFiniteDouble = Property.forAllG(Gen.negativeFiniteDouble) { d =>
-    d.compare(0.0d) < 0 && !d.isInfinity
-  }
+  val negFiniteFloat = Property.forAllG(Gen.negativeFiniteFloat) { f => f.compare(0.0f) < 0 && !f.isInfinity }
+  val negFiniteDouble = Property.forAllG(Gen.negativeFiniteDouble) { d => d.compare(0.0d) < 0 && !d.isInfinity }
 
   val nonNegLong = Property.forAllG(Gen.nonNegativeLong) { 0 <= _ }
   val nonNegInt = Property.forAllG(Gen.nonNegativeInt) { 0 <= _ }
   val nonNegShort = Property.forAllG(Gen.nonNegativeShort) { 0 <= _ }
   val nonNegByte = Property.forAllG(Gen.nonNegativeByte) { 0 <= _ }
-  val nonNegFloat = Property.forAllG(Gen.nonNegativeFloat) { f =>
-    f.compare(0.0f) >= 0 && !f.isNaN
-  }
-  val nonNegDouble = Property.forAllG(Gen.nonNegativeDouble) { f =>
-    f.compare(0.0d) >= 0 && !f.isNaN
-  }
+  val nonNegFloat = Property.forAllG(Gen.nonNegativeFloat) { f => f.compare(0.0f) >= 0 && !f.isNaN }
+  val nonNegDouble = Property.forAllG(Gen.nonNegativeDouble) { f => f.compare(0.0d) >= 0 && !f.isNaN }
   val nonNegFiniteFloat = Property.forAllG(Gen.nonNegativeFiniteFloat) { f =>
     f.compare(0.0f) >= 0 && !f.isInfinity && !f.isNaN
   }
@@ -166,12 +150,8 @@ object GenTest extends Scalaprops {
     d.compare(0.0d) >= 0 && !d.isInfinity && !d.isNaN
   }
 
-  val finiteFloat = Property.forAllG(Gen.genFiniteFloat) { f =>
-    !f.isInfinity && !f.isNaN
-  }
-  val finiteDouble = Property.forAllG(Gen.genFiniteDouble) { d =>
-    !d.isInfinity && !d.isNaN
-  }
+  val finiteFloat = Property.forAllG(Gen.genFiniteFloat) { f => !f.isInfinity && !f.isNaN }
+  val finiteDouble = Property.forAllG(Gen.genFiniteDouble) { d => !d.isInfinity && !d.isNaN }
 
   val genFunction = {
     def test1[A: Gen: Cogen](name: String) =
@@ -246,9 +226,7 @@ object GenTest extends Scalaprops {
           .fromFoldable(
             Gen[A => B]
               .infiniteStream(seed = seed)
-              .map { f =>
-                IMap.fromFoldable(domain.map(a => a -> f(a)))
-              }
+              .map { f => IMap.fromFoldable(domain.map(a => a -> f(a))) }
               .take(streamSize)
               .distinct
               .take(size)

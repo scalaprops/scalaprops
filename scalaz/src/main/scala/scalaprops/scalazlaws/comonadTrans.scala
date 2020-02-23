@@ -14,9 +14,7 @@ object comonadTrans {
     G: Comonad[G],
     A: Gen[F[G, A]],
     E: Equal[A]
-  ): Property = forAll { (a: F[G, A]) =>
-    E.equal(G.copoint(F.lower(a)), C.copoint(a))
-  }
+  ): Property = forAll { (a: F[G, A]) => E.equal(G.copoint(F.lower(a)), C.copoint(a)) }
 
   def law2[F[_[_], _], G[_], A, B](
     implicit
