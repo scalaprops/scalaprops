@@ -352,11 +352,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   val isoReaderState: Gen <~> ({ type x[a] = Kleisli[({ type y[b] = scalaz.State[Rand, b] })#y, Int, a] })#x =
     new IsoFunctorTemplate[Gen, ({ type x[a] = Kleisli[({ type y[b] = scalaz.State[Rand, b] })#y, Int, a] })#x] {
       override def to[A](fa: Gen[A]) =
-        Kleisli[({ type l[a] = scalaz.State[Rand, a] })#l, Int, A] { size =>
-          scalaz.State { rand =>
-            fa.f(size, rand)
-          }
-        }
+        Kleisli[({ type l[a] = scalaz.State[Rand, a] })#l, Int, A] { size => scalaz.State { rand => fa.f(size, rand) } }
       override def from[A](ga: Kleisli[({ type l[a] = scalaz.State[Rand, a] })#l, Int, A]) =
         gen((size, rand) => ga.run(size).run(rand))
     }
@@ -364,11 +360,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   val isoStateReader: Gen <~> ({ type x[a] = StateT[({ type y[b] = Reader[Int, b] })#y, Rand, a] })#x =
     new IsoFunctorTemplate[Gen, ({ type x[a] = StateT[({ type y[b] = Reader[Int, b] })#y, Rand, a] })#x] {
       override def to[A](fa: Gen[A]) =
-        StateT[({ type l[a] = Reader[Int, a] })#l, Rand, A] { rand =>
-          Reader { size =>
-            fa.f(size, rand)
-          }
-        }
+        StateT[({ type l[a] = Reader[Int, a] })#l, Rand, A] { rand => Reader { size => fa.f(size, rand) } }
       override def from[A](ga: StateT[({ type y[b] = Reader[Int, b] })#y, Rand, A]) =
         gen((size, rand) => ga.run(rand).run(size))
     }
@@ -674,9 +666,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
             )
         }
       case _ =>
-        withSize(size - 1)(strictTreeGenSized[A]).flatMap { as =>
-          A.map(a => StrictTree.Node(a, as.toVector))
-        }
+        withSize(size - 1)(strictTreeGenSized[A]).flatMap { as => A.map(a => StrictTree.Node(a, as.toVector)) }
     }
 
   implicit def strictTreeGen[A](implicit A: Gen[A]): Gen[StrictTree[A]] =
@@ -726,9 +716,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
             )
         }
       case _ =>
-        withSize(size - 1)(treeGenSized[A]).flatMap { as =>
-          A.map(a => Tree.Node(a, as))
-        }
+        withSize(size - 1)(treeGenSized[A]).flatMap { as => A.map(a => Tree.Node(a, as)) }
     }
   }
 

@@ -113,9 +113,7 @@ object Properties {
       ._2
 
     def loop(t: Tree[Option[A]]): Option[Tree[A]] =
-      t.rootLabel.map { root =>
-        Tree.Node(root, t.subForest.map(loop).flatten)
-      }
+      t.rootLabel.map { root => Tree.Node(root, t.subForest.map(loop).flatten) }
 
     loop(x).get
   }

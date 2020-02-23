@@ -37,9 +37,7 @@ object KleisliTest extends Scalaprops {
       ScalazLaw.composeAssociative,
       ScalazLaw.plusAssociative,
       ScalazLaw.semigroupAssociative
-    ).map { law =>
-      { case `law` => Param.maxSize(30) }: PartialFunction[ScalazLaw, Endo[Param]]
-    }
+    ).map { law => { case `law` => Param.maxSize(30) }: PartialFunction[ScalazLaw, Endo[Param]] }
   )(_ orElse _)
 
   val testMaybe = kleisliTest[Maybe]

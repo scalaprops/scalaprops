@@ -189,9 +189,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
   homepage := Some(url("https://github.com/scalaprops/scalaprops")),
   licenses := Seq("MIT License" -> url("https://opensource.org/licenses/mit-license")),
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
-  stripPom { node =>
-    node.label == "dependency" && (node \ "scope").text == "test"
-  },
+  stripPom { node => node.label == "dependency" && (node \ "scope").text == "test" },
   scalacOptions in (Compile, doc) ++= {
     val tag = tagOrHash.value
     if (isDotty.value) {

@@ -17,9 +17,7 @@ object ISetTest extends Scalaprops {
     scalazlaws.semilattice.all[ISet[Int]]
   )
 
-  val filter = forAll { (a: ISet[Int], p: Int => Boolean) =>
-    (a filter p).toList == a.toList.filter(p)
-  }
+  val filter = forAll { (a: ISet[Int], p: Int => Boolean) => (a filter p).toList == a.toList.filter(p) }
 
   val partition = forAll { (a: ISet[Int], p: Int => Boolean) =>
     val (x, y) = a partition p

@@ -41,9 +41,7 @@ object IMapTest extends Scalaprops {
     type KEY = Short
     type VALUE = Byte
 
-    forAll { (a: KEY ==>> VALUE, f: KEY => KEY) =>
-      a.mapKeys(f) == ==>>.fromList(a.toList.map(x => (f(x._1), x._2)))
-    }
+    forAll { (a: KEY ==>> VALUE, f: KEY => KEY) => a.mapKeys(f) == ==>>.fromList(a.toList.map(x => (f(x._1), x._2))) }
   }
 
   val insertWithKey = {
