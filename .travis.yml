@@ -11,6 +11,7 @@ cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/launchers
+    - $HOME/.cache/coursier/v1
 
 jdk:
   - openjdk8
