@@ -5,7 +5,7 @@ dist: xenial
 scala:
   - 2.11.12
   - 2.12.11
-  - 2.13.1
+  - 2.13.2
 
 cache:
   directories:
@@ -56,4 +56,4 @@ matrix:
       - source .install-jdk-travis.sh
       script:
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
-      - ./sbt "++ 2.13.1" compile test:compile scalapropsJVM/test scalazJVM/test "project /" publishLocal
+      - ./sbt "++ 2.13.2" compile test:compile scalapropsJVM/test scalazJVM/test "project /" publishLocal
