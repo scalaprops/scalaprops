@@ -149,7 +149,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     Cogen[Stream[A]].contramap(CorecursiveList.streamIso.from.apply _)
 
   implicit def cogenHeap[A: Cogen]: Cogen[Heap[A]] =
-    Cogen[Stream[A]].contramap(_.toUnsortedStream)
+    Cogen[EphemeralStream[A]].contramap(_.toUnsortedStream)
 
   implicit def cogenDequeue[A: Cogen]: Cogen[Dequeue[A]] =
     Cogen[IList[A]].contramap(_.toIList)
@@ -182,7 +182,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   implicit def cogenIndexedContsT[W[_], M[_], R, O, A](
     implicit F: Cogen[W[A => M[O]] => M[R]]
-  ): Cogen[IndexedContsT[W, M, R, O, A]] =
+  ): Cogen[IndexedContsT[W, R, O, M, A]] =
     F.contramap(_.run)
 
   implicit def cogenSelectT[R, M[_], A](
@@ -215,7 +215,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   ): Cogen[ContravariantCoyoneda[F, A]] =
     Cogen[F[A]].contramap(_.run)
 
-  implicit def cogenEitherT[F[_], A, B](implicit F: Cogen[F[A \/ B]]): Cogen[EitherT[F, A, B]] =
+  implicit def cogenEitherT[F[_], A, B](implicit F: Cogen[F[A \/ B]]): Cogen[EitherT[A, F, B]] =
     F.contramap(_.run)
 
   implicit def cogenLazyEitherT[F[_], A, B](implicit F: Cogen[F[LazyEither[A, B]]]): Cogen[LazyEitherT[F, A, B]] =
@@ -241,15 +241,15 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   implicit def cogenIndexedReaderWriterStateT[F[_]: Monad, R, W, S1, S2, A](
     implicit F: Cogen[(R, S1) => F[(W, A, S2)]]
-  ): Cogen[IndexedReaderWriterStateT[F, R, W, S1, S2, A]] =
+  ): Cogen[IndexedReaderWriterStateT[R, W, S1, S2, F, A]] =
     F.contramap(_.run)
 
   implicit def cogenIndexedStateT[F[_]: Monad, S1, S2, A](
     implicit F: Cogen[S1 => F[(S2, A)]]
-  ): Cogen[IndexedStateT[F, S1, S2, A]] =
+  ): Cogen[IndexedStateT[S1, S2, F, A]] =
     F.contramap(s => s.apply(_))
 
-  implicit def cogenWriterT[F[_], A, B](implicit F: Cogen[F[(A, B)]]): Cogen[WriterT[F, A, B]] =
+  implicit def cogenWriterT[F[_], A, B](implicit F: Cogen[F[(A, B)]]): Cogen[WriterT[A, F, B]] =
     F.contramap(_.run)
 
   implicit def cogenUnwriterT[F[_], A, B](implicit F: Cogen[F[(A, B)]]): Cogen[UnwriterT[F, A, B]] =
@@ -258,7 +258,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def cogenTree[A: Cogen]: Cogen[scalaz.Tree[A]] =
     new Cogen[scalaz.Tree[A]] {
       def cogen[B](a: scalaz.Tree[A], g: CogenState[B]) =
-        Cogen[(A, Stream[scalaz.Tree[A]])].cogen((a.rootLabel, a.subForest), g)
+        Cogen[(A, EphemeralStream[scalaz.Tree[A]])].cogen((a.rootLabel, a.subForest), g)
     }
 
   implicit def cogenTreeLoc[A: Cogen]: Cogen[scalaz.TreeLoc[A]] =
@@ -335,11 +335,11 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   implicit val cogenInstance: Divisible[Cogen] =
     new Divisible[Cogen] {
-      def conquer[A] =
+      override def conquer[A] =
         Cogen.conquer[A]
-      def contramap[A, B](r: Cogen[A])(f: B => A) =
+      override def contramap[A, B](r: Cogen[A])(f: B => A) =
         r contramap f
-      def divide[A, B, C](fa: Cogen[A], fb: Cogen[B])(f: C => (A, B)) =
+      override def divide2[A, B, C](fa: => Cogen[A], fb: => Cogen[B])(f: C => (A, B)) =
         Cogen.divide(fa, fb)(f)
     }
 
@@ -357,11 +357,11 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
         gen((size, rand) => ga.run(size).run(rand))
     }
 
-  val isoStateReader: Gen <~> ({ type x[a] = StateT[({ type y[b] = Reader[Int, b] })#y, Rand, a] })#x =
-    new IsoFunctorTemplate[Gen, ({ type x[a] = StateT[({ type y[b] = Reader[Int, b] })#y, Rand, a] })#x] {
+  val isoStateReader: Gen <~> ({ type x[a] = StateT[Rand, ({ type y[b] = Reader[Int, b] })#y, a] })#x =
+    new IsoFunctorTemplate[Gen, ({ type x[a] = StateT[Rand, ({ type y[b] = Reader[Int, b] })#y, a] })#x] {
       override def to[A](fa: Gen[A]) =
-        StateT[({ type l[a] = Reader[Int, a] })#l, Rand, A] { rand => Reader { size => fa.f(size, rand) } }
-      override def from[A](ga: StateT[({ type y[b] = Reader[Int, b] })#y, Rand, A]) =
+        StateT[Rand, ({ type l[a] = Reader[Int, a] })#l, A] { rand => Reader { size => fa.f(size, rand) } }
+      override def from[A](ga: StateT[Rand, ({ type y[b] = Reader[Int, b] })#y, A]) =
         gen((size, rand) => ga.run(rand).run(size))
     }
 
@@ -400,9 +400,9 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
         Gen.value(a)
       type F[a] = scalaz.State[Rand, a]
       private[this] val F = Kleisli.kleisliBindRec[F, Int]
-      override def tailrecM[A, B](f: A => Gen[A \/ B])(a: A): Gen[B] = {
+      override def tailrecM[A, B](a: A)(f: A => Gen[A \/ B]): Gen[B] = {
         val g = f.andThen(isoReaderState.to(_))
-        isoReaderState.from(F.tailrecM(g)(a))
+        isoReaderState.from(F.tailrecM(a)(g))
       }
     }
 
@@ -472,7 +472,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     Gen.oneOf(
       Gen.value(Dequeue.empty[A]),
       A.map(Dequeue.apply(_)),
-      Apply[Gen].apply2(Gen[NonEmptyIList[A]], Gen[NonEmptyIList[A]])((x, y) =>
+      Apply[Gen].apply2(Gen[NonEmptyList[A]], Gen[NonEmptyList[A]])((x, y) =>
         Dequeue.fromFoldable(x) ++ Dequeue.fromFoldable(y)
       )
     )
@@ -486,7 +486,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def lazyEitherTGen[F[_], A, B](implicit F: Gen[F[LazyEither[A, B]]]): Gen[LazyEitherT[F, A, B]] =
     F.map(LazyEitherT(_))
 
-  implicit def eitherTGen[F[_], A, B](implicit F: Gen[F[A \/ B]]): Gen[EitherT[F, A, B]] =
+  implicit def eitherTGen[F[_], A, B](implicit F: Gen[F[A \/ B]]): Gen[EitherT[A, F, B]] =
     F.map(EitherT(_))
 
   implicit def theseTGen[F[_], A, B](implicit F: Gen[F[A \&/ B]]): Gen[TheseT[F, A, B]] =
@@ -510,7 +510,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def constGen[A, B](implicit A: Gen[A]): Gen[Const[A, B]] =
     A.map(Const(_))
 
-  implicit def writerTGen[F[_], A, B](implicit F: Gen[F[(A, B)]]): Gen[WriterT[F, A, B]] =
+  implicit def writerTGen[F[_], A, B](implicit F: Gen[F[(A, B)]]): Gen[WriterT[A, F, B]] =
     F.map(WriterT(_))
 
   implicit def unwriterTGen[F[_], A, B](implicit F: Gen[F[(A, B)]]): Gen[UnwriterT[F, A, B]] =
@@ -518,12 +518,12 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   implicit def indexedStateTGen[F[_]: Monad, S1, S2, A](
     implicit F: Gen[S1 => F[(S2, A)]]
-  ): Gen[IndexedStateT[F, S1, S2, A]] =
+  ): Gen[IndexedStateT[S1, S2, F, A]] =
     F.map(IndexedStateT(_))
 
   implicit def indexedContsTGen[W[_], M[_], R, O, A](
     implicit F: Gen[W[A => M[O]] => M[R]]
-  ): Gen[IndexedContsT[W, M, R, O, A]] =
+  ): Gen[IndexedContsT[W, R, O, M, A]] =
     F.map(IndexedContsT(_))
 
   implicit def selectTGen[R, M[_], A](
@@ -533,7 +533,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   implicit def indexedReaderWriterStateTGen[F[_], R, W, S1, S2, A](
     implicit F: Gen[(R, S1) => F[(W, A, S2)]]
-  ): Gen[IndexedReaderWriterStateT[F, R, W, S1, S2, A]] =
+  ): Gen[IndexedReaderWriterStateT[R, W, S1, S2, F, A]] =
     F.map(IndexedReaderWriterStateT.apply)
 
   implicit def streamTGen[F[_]: Applicative, A](implicit F: Gen[F[Stream[A]]]): Gen[StreamT[F, A]] =
@@ -546,7 +546,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
       Apply[Gen].apply2(A, B)(\&/.Both.apply)
     )
 
-  implicit def listTGen[F[_], A](implicit F: Gen[F[List[A]]]): Gen[ListT[F, A]] =
+  implicit def listTGen[F[_], A](implicit F: Gen[F[IList[A]]]): Gen[ListT[F, A]] =
     F.map(ListT.apply(_))
 
   implicit def dlistGen[A: Gen]: Gen[DList[A]] =
@@ -578,7 +578,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     )
 
   implicit def validationGen[A: Gen, B: Gen]: Gen[Validation[A, B]] =
-    Gen[A \/ B].map(_.validation)
+    Gen[A \/ B].map(_.toValidation)
 
   implicit def zipperGen[A: Gen]: Gen[Zipper[A]] =
     Gen.sized {
@@ -641,7 +641,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def contravariantCoyonedaGen[F[_], A](implicit F: Gen[F[A]]): Gen[ContravariantCoyoneda[F, A]] =
     F.map(ContravariantCoyoneda.lift)
 
-  implicit def fingerGen[V, A](implicit A: Gen[A], R: Reducer[A, V]): Gen[Finger[V, A]] =
+  implicit def fingerGen[V: Monoid, A](implicit A: Gen[A], R: Reducer[A, V]): Gen[FingerTree.Finger[V, A]] =
     Gen.oneOf(
       A.map(FingerTree.one[V, A]),
       Apply[Gen].apply2(A, A)(FingerTree.two[V, A]),
@@ -705,18 +705,18 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
       case 2 =>
         Gen[(A, A)].map {
           case (a1, a2) =>
-            Tree.Node(a1, Stream(Tree.Leaf(a2)))
+            Tree.Node(a1, EphemeralStream(Tree.Leaf(a2)))
         }
       case 3 =>
         Gen[(A, A, A)].flatMap {
           case (a1, a2, a3) =>
             Gen.elements(
-              Tree.Node(a1, Stream(Tree.Leaf(a2), Tree.Leaf(a3))),
-              Tree.Node(a1, Stream(Tree.Node(a2, Stream(Tree.Leaf(a3)))))
+              Tree.Node(a1, EphemeralStream(Tree.Leaf(a2), Tree.Leaf(a3))),
+              Tree.Node(a1, EphemeralStream(Tree.Node(a2, EphemeralStream(Tree.Leaf(a3)))))
             )
         }
       case _ =>
-        withSize(size - 1)(treeGenSized[A]).flatMap { as => A.map(a => Tree.Node(a, as)) }
+        withSize(size - 1)(treeGenSized[A]).flatMap { as => A.map(a => Tree.Node(a, EphemeralStream.fromStream(as))) }
     }
   }
 
@@ -727,7 +727,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   private[scalaprops] def treeLocGenSized[A](size: Int)(implicit A: Gen[A]): Gen[scalaz.TreeLoc[A]] = {
     import scalaz.TreeLoc
     def forest(n: Int): Gen[TreeLoc.TreeForest[A]] =
-      withSize(n)(treeGenSized[A])
+      withSize(n)(treeGenSized[A]).map(EphemeralStream.fromStream(_))
 
     val parent: Int => Gen[TreeLoc.Parent[A]] = { n =>
       Gen.choose(0, n - 1).flatMap { x1 =>
@@ -748,7 +748,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
         treeGenSized[A](aa),
         forest(a - aa),
         forest(ba),
-        withSize(b - ba)(parent)
+        withSize(b - ba)(parent).map(EphemeralStream.fromStream(_))
       )(TreeLoc.apply[A])
     } yield t
   }

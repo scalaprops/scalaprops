@@ -36,7 +36,7 @@ def module(id: String): CrossProject =
     .crossType(CustomCrossType)
     .settings(
       commonSettings,
-      scalazVersion := "7.2.30",
+      scalazVersion := "7.3.0",
       Seq(Compile, Test).map { c =>
         unmanagedSourceDirectories in c += {
           val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
@@ -230,6 +230,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       case Some((2, v)) if v <= 12 =>
         Seq(
           "-Yno-adapted-args",
+          "-Ypartial-unification",
           "-Xfuture"
         )
     }

@@ -12,7 +12,7 @@ object FreeTTest extends Scalaprops {
     new Equal[FreeT[S, M, A]] {
       def equal(a: FreeT[S, M, A], b: FreeT[S, M, A]) = {
         implicit val s = Eq1[S].eq1(freeTEqual[S, M, A])
-        Eq1[M].eq1[A \/ S[FreeT[S, M, A]]].equal(a.resume, b.resume)
+        Eq1[M].eq1[S[FreeT[S, M, A]] \/ A].equal(a.resume, b.resume)
       }
     }
 
@@ -103,6 +103,9 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlus.all[F]
     )
+  }.andThenParamPF {
+    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+      Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val iListMaybe = {
@@ -112,6 +115,9 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlus.all[F]
     )
+  }.andThenParamPF {
+    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+      Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val iListIList = {
@@ -121,6 +127,9 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlus.all[F]
     )
+  }.andThenParamPF {
+    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+      Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val disjunctionDisjunction = {
@@ -155,6 +164,9 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadError.all[F, E]
     )
+  }.andThenParamPF {
+    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+      Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val freeMaybe_Disjunction = {
@@ -208,7 +220,7 @@ object FreeTTest extends Scalaprops {
 
   val idStateMaybe = {
     type S = Byte
-    type G[A] = StateT[Maybe, S, A]
+    type G[A] = StateT[S, Maybe, A]
     type F[A] = FreeT[Id, G, A]
     Properties.list(
       // TODO diverging implicit expansion for type scalaprops.Gen[Int => F[Int]]
@@ -235,7 +247,7 @@ object FreeTTest extends Scalaprops {
 
   val maybeStateIList = {
     type S = Byte
-    type G[A] = StateT[IList, S, A]
+    type G[A] = StateT[S, IList, A]
     type F[A] = FreeT[Maybe, G, A]
     Properties.list(
       scalazlaws.monadState.all[F, S]
@@ -249,7 +261,7 @@ object FreeTTest extends Scalaprops {
     val laws = Set(ScalazLaw.bindAssociativity, ScalazLaw.applyComposition)
 
     type S = Byte
-    type G[A] = StateT[IList, S, A]
+    type G[A] = StateT[S, IList, A]
     type F[A] = FreeT[IList, G, A]
     Properties
       .list(

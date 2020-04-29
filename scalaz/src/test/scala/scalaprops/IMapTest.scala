@@ -1,7 +1,10 @@
 package scalaprops
 
 import scalaz._
+import scalaz.Id.Id
+import scalaz.Maybe.Just
 import scalaz.std.anyVal._
+import scalaz.syntax.equal._
 import Property.forAll
 import ScalapropsScalaz._
 
@@ -79,17 +82,17 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.forAll { (a: KEY ==>> VAL, k: KEY, f: (KEY, VAL) => Option[VAL]) =>
+    Property.forAll { (a: KEY ==>> VAL, k: KEY, f: (KEY, VAL) => Maybe[VAL]) =>
       val r = a.updateWithKey(k, f)
       a.lookup(k) match {
-        case Some(v1) =>
+        case Just(v1) =>
           f(k, v1) match {
-            case Some(v2) =>
+            case Just(v2) =>
               E.equal(a.delete(k).insert(k, v2), r)
-            case None =>
+            case Maybe.Empty() =>
               E.equal(a.delete(k), r)
           }
-        case None =>
+        case Maybe.Empty() =>
           E.equal(a, r)
       }
     }.toProperties((), Param.minSuccessful(5000))
@@ -100,19 +103,19 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.forAll { (a: KEY ==>> VAL, k: KEY, f: (KEY, VAL) => Option[VAL]) =>
+    Property.forAll { (a: KEY ==>> VAL, k: KEY, f: (KEY, VAL) => Maybe[VAL]) =>
       val (o, r) = a.updateLookupWithKey(k, f)
       assert(E.equal(r, a.updateWithKey(k, f)))
 
       a.lookup(k) match {
-        case Some(v1) =>
+        case Just(v1) =>
           f(k, v1) match {
-            case Some(v2) =>
-              E.equal(a.delete(k).insert(k, v2), r) && (Some(v2) == o)
-            case None =>
-              E.equal(a.delete(k), r) && (Some(v1) == o)
+            case Just(v2) =>
+              E.equal(a.delete(k).insert(k, v2), r) && (Maybe.just(v2) === o)
+            case Maybe.Empty() =>
+              E.equal(a.delete(k), r) && (Maybe.just(v1) === o)
           }
-        case None =>
+        case Maybe.Empty() =>
           E.equal(a, r) && o.isEmpty
       }
     }.toProperties((), Param.minSuccessful(5000))
@@ -123,21 +126,21 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.forAll { (a: KEY ==>> VAL, k: KEY, f: Option[VAL] => Option[VAL]) =>
+    Property.forAll { (a: KEY ==>> VAL, k: KEY, f: Maybe[VAL] => Maybe[VAL]) =>
       val r = a.alter(k, f)
       a.lookup(k) match {
-        case Some(v1) =>
-          f(Some(v1)) match {
-            case Some(v2) =>
+        case Just(v1) =>
+          f(Maybe.just(v1)) match {
+            case Just(v2) =>
               E.equal(a.insert(k, v2), r)
-            case None =>
+            case Maybe.Empty() =>
               E.equal(a.delete(k), r)
           }
-        case None =>
-          f(None) match {
-            case Some(v2) =>
+        case Maybe.Empty() =>
+          f(Maybe.empty) match {
+            case Just(v2) =>
               E.equal(a.insert(k, v2), r)
-            case None =>
+            case Maybe.Empty() =>
               E.equal(a, r)
           }
       }
@@ -149,19 +152,19 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.NoShrink.property2 { (a0: NonEmptyList[(KEY, VAL)], f: (KEY, VAL) => Option[VAL]) =>
+    Property.NoShrink.property2 { (a0: NonEmptyList[(KEY, VAL)], f: (KEY, VAL) => Maybe[VAL]) =>
       val a = IMap.fromFoldable(a0)
       Property.forAllG(Gen.choose(0, a.size - 1)) { i =>
         val r = a.updateAt(i, f)
         a.elemAt(i) match {
-          case Some((k, v1)) =>
+          case Just((k, v1)) =>
             f(k, v1) match {
-              case Some(v2) =>
-                E.equal(r, a.update(k, _ => Some(v2)))
-              case None =>
+              case Just(v2) =>
+                E.equal(r, a.update(k, _ => Maybe.just(v2)))
+              case Maybe.Empty() =>
                 E.equal(a.deleteAt(i), r) && E.equal(a.delete(k), r)
             }
-          case None =>
+          case Maybe.Empty() =>
             E.equal(a, r)
         }
       }
@@ -173,17 +176,17 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.forAll { (a: (KEY ==>> VAL), f: (KEY, VAL) => Option[VAL]) =>
+    Property.forAll { (a: (KEY ==>> VAL), f: (KEY, VAL) => Maybe[VAL]) =>
       val b = a.updateMinWithKey(f)
       a.minViewWithKey match {
-        case Some(((k, v1), c)) =>
+        case Just(((k, v1), c)) =>
           f(k, v1) match {
-            case Some(v2) =>
+            case Just(v2) =>
               (a.size == b.size) && E.equal(b, c.insert(k, v2))
-            case None =>
+            case Maybe.Empty() =>
               ((a.size - 1) == b.size) && E.equal(b, c)
           }
-        case None =>
+        case Maybe.Empty() =>
           a.isEmpty && b.isEmpty
       }
     }.toProperties((), Param.minSuccessful(5000))
@@ -194,17 +197,17 @@ object IMapTest extends Scalaprops {
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
 
-    Property.forAll { (a: (KEY ==>> VAL), f: (KEY, VAL) => Option[VAL]) =>
+    Property.forAll { (a: (KEY ==>> VAL), f: (KEY, VAL) => Maybe[VAL]) =>
       val b = a.updateMaxWithKey(f)
       a.maxViewWithKey match {
-        case Some(((k, v1), c)) =>
+        case Just(((k, v1), c)) =>
           f(k, v1) match {
-            case Some(v2) =>
+            case Just(v2) =>
               (a.size == b.size) && E.equal(b, c.insert(k, v2))
-            case None =>
+            case Maybe.Empty() =>
               ((a.size - 1) == b.size) && E.equal(b, c)
           }
-        case None =>
+        case Maybe.Empty() =>
           a.isEmpty && b.isEmpty
       }
     }.toProperties((), Param.minSuccessful(5000))
@@ -222,5 +225,43 @@ object IMapTest extends Scalaprops {
       val cc = scalaz.std.map.unionWithKey(aa, bb)(f)
       E.equal(IMap.fromList(cc.toList), c)
     }.toProperties((), Param.minSuccessful(5000))
+  }
+
+  val traverseWithKey = {
+    type KEY = Byte
+    type VAL = Int
+    type C = Short
+    val T = Traverse[({ type l[a] = KEY ==>> a })#l]
+
+    def test[F[_]: Applicative](implicit E: Equal[F[KEY ==>> C]], G: Gen[F[C]]) =
+      Property.forAll { (a: KEY ==>> VAL, f: VAL => F[C]) =>
+        val g: (KEY, VAL) => F[C] = (_, v) => f(v)
+        val x = T.traverse(a)(f)
+        val y = a.traverseWithKey(g)
+        E.equal(x, y)
+      }
+
+    Properties
+      .list(
+        test[Id].toProperties("Id"),
+        test[Maybe].toProperties("Maybe"),
+        test[IList].toProperties("IList", Param.maxSize(5))
+      )
+      .andThenParam(Param.minSuccessful(5000))
+  }
+
+  val foldMapWithKey = {
+    type KEY = Byte
+    type VAL = Int
+    type C = IList[Byte]
+    val F = Foldable[({ type l[a] = KEY ==>> a })#l]
+
+    Property.forAll { (a: KEY ==>> VAL, f: VAL => C) =>
+      val g: (KEY, VAL) => C = (_, v) => f(v)
+      val x = F.foldMap(a)(f)
+      val y = a.foldMapWithKey(g)
+      val z = Foldable[IList].foldMap(a.values)(f)
+      Equal[C].equal(x, y) && Equal[C].equal(y, z)
+    }.toProperties((), Param.minSuccessful(5000) andThen Param.maxSize(3))
   }
 }

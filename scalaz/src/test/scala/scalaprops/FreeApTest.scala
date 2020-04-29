@@ -104,7 +104,7 @@ object FreeApTest extends Scalaprops {
   }
 
   val writerMaybe = {
-    type G[A] = WriterT[Maybe, Short, A]
+    type G[A] = WriterT[Short, Maybe, A]
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],
@@ -113,7 +113,7 @@ object FreeApTest extends Scalaprops {
   }
 
   val writerIList = {
-    type G[A] = WriterT[IList, Short, A]
+    type G[A] = WriterT[Short, IList, A]
     type F[A] = FreeAp[G, A]
     Properties.list(
       scalazlaws.equal.all[F[Byte]],

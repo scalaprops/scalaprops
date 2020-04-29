@@ -15,6 +15,7 @@ object ReducerTest extends Scalaprops {
 
   val list = scalazlaws.reducer.all[Int, List[Int]]
   val ilist = scalazlaws.reducer.all[Int, IList[Int]]
+  val nel = scalazlaws.reducer.all[Int, NonEmptyList[Int]]
   val stream = scalazlaws.reducer.all[Int, Stream[Int]]
   val vector = scalazlaws.reducer.all[Int, Vector[Int]]
   val boolean = scalazlaws.reducer.all[Boolean, Boolean]

@@ -6,12 +6,12 @@ import ScalapropsScalaz._
 
 object EitherTTest extends Scalaprops {
   val iListBindRec =
-    scalazlaws.bindRec.laws[({ type l[a] = EitherT[IList, Byte, a] })#l].andThenParam(Param.maxSize(1))
+    scalazlaws.bindRec.laws[({ type l[a] = EitherT[Byte, IList, a] })#l].andThenParam(Param.maxSize(1))
 
   val maybe = {
-    type F[A] = EitherT[Maybe, Int, A]
+    type F[A] = EitherT[Int, Maybe, A]
     Properties.list(
-      scalazlaws.equal.all[EitherT[Maybe, Int, Int]],
+      scalazlaws.equal.all[EitherT[Int, Maybe, Int]],
       scalazlaws.monadPlus.all[F],
       scalazlaws.bindRec.all[F],
       scalazlaws.monadError.all[F, Int],
@@ -20,12 +20,12 @@ object EitherTTest extends Scalaprops {
   }
 
   val maybe2 =
-    scalazlaws.bitraverse.all[({ type l[a, b] = EitherT[Maybe, a, b] })#l]
+    scalazlaws.bitraverse.all[({ type l[a, b] = EitherT[a, Maybe, b] })#l]
 
   val iList = {
-    type F[A] = EitherT[IList, Int, A]
+    type F[A] = EitherT[Int, IList, A]
     Properties.list(
-      scalazlaws.equal.all[EitherT[IList, Int, Int]],
+      scalazlaws.equal.all[EitherT[Int, IList, Int]],
       scalazlaws.monadPlus.all[F],
       scalazlaws.monadError.all[F, Int],
       scalazlaws.traverse.all[F]
@@ -33,14 +33,14 @@ object EitherTTest extends Scalaprops {
   }
 
   val nel = {
-    type F[A] = EitherT[NonEmptyList, Int, A]
+    type F[A] = EitherT[Int, NonEmptyList, A]
     Properties.list(
-      scalazlaws.equal.all[EitherT[NonEmptyList, Int, Int]],
+      scalazlaws.equal.all[EitherT[Int, NonEmptyList, Int]],
       scalazlaws.monadPlus.all[F],
       scalazlaws.monadError.all[F, Int],
       scalazlaws.traverse.all[F]
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = EitherT[f, Int, a] })#l]
+  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = EitherT[Int, f, a] })#l]
 }

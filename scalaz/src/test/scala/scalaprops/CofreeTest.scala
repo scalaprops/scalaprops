@@ -79,7 +79,7 @@ object CofreeTest extends Scalaprops {
   private[this] val treeToCofreeStream: Tree ~> CofreeStream =
     new (Tree ~> CofreeStream) { self =>
       def apply[A](tree: Tree[A]) =
-        Cofree(tree.rootLabel, tree.subForest.map(self.apply))
+        Cofree(tree.rootLabel, Foldable[EphemeralStream].toStream(tree.subForest.map(self.apply)))
     }
 
   val stream = {

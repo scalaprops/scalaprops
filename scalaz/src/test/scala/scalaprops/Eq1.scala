@@ -50,11 +50,11 @@ object Eq1 {
       def eq1[A: Equal] = Equal[NonEmptyList[A]]
     }
 
-  implicit def writerTEq1[F[_], W](implicit F: Eq1[F], W: Equal[W]): Eq1[({ type l[a] = WriterT[F, W, a] })#l] =
-    new Eq1[({ type l[a] = WriterT[F, W, a] })#l] {
+  implicit def writerTEq1[F[_], W](implicit F: Eq1[F], W: Equal[W]): Eq1[({ type l[a] = WriterT[W, F, a] })#l] =
+    new Eq1[({ type l[a] = WriterT[W, F, a] })#l] {
       def eq1[A: Equal] = {
         implicit val e: Equal[F[(W, A)]] = F.eq1[(W, A)]
-        Equal[WriterT[F, W, A]]
+        Equal[WriterT[W, F, A]]
       }
     }
 
@@ -83,8 +83,8 @@ object Eq1 {
       }
     }
 
-  implicit def stateEq1[F[_]: Monad: Eq1, S: Cogen: Gen: Equal]: Eq1[({ type l[a] = StateT[F, S, a] })#l] =
-    new Eq1[({ type l[a] = StateT[F, S, a] })#l] {
+  implicit def stateEq1[F[_]: Monad: Eq1, S: Cogen: Gen: Equal]: Eq1[({ type l[a] = StateT[S, F, a] })#l] =
+    new Eq1[({ type l[a] = StateT[S, F, a] })#l] {
       import FunctionEqual._
       def eq1[A: Equal] = {
         implicit val e: Equal[F[(S, A)]] = Eq1[F].eq1[(S, A)]

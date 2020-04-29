@@ -10,16 +10,16 @@ object IndexedContsTTest extends Scalaprops {
 
   private[this] implicit def indexedContsTEqual[W[_], M[_], R, O, A](
     implicit F: Equal[W[A => M[O]] => M[R]]
-  ): Equal[IndexedContsT[W, M, R, O, A]] =
+  ): Equal[IndexedContsT[W, R, O, M, A]] =
     F.contramap(_.run)
 
   private[this] def bindTest[W[_]: Cobind, M[_]](
     implicit
-    G1: Gen[ContsT[W, M, Int, Int]],
-    G2: Gen[ContsT[W, M, Int, Int => Int]],
-    E1: Equal[ContsT[W, M, Int, Int]]
+    G1: Gen[ContsT[W, Int, M, Int]],
+    G2: Gen[ContsT[W, Int, M, Int => Int]],
+    E1: Equal[ContsT[W, Int, M, Int]]
   ) = {
-    type F[A] = ContsT[W, M, Int, A]
+    type F[A] = ContsT[W, Int, M, A]
     scalazlaws.bind.all[F].andThenParam(Param.maxSize(3))
   }
 
@@ -29,17 +29,17 @@ object IndexedContsTTest extends Scalaprops {
   val iListMaybe = bindTest[IList, Maybe]
 
   val testContsTMaybe = {
-    type F[A] = ContsT[NonEmptyList, Maybe, Int, A]
+    type F[A] = ContsT[NonEmptyList, Int, Maybe, A]
     scalazlaws.monadPlus.all[F].andThenParam(Param.maxSize(4))
   }
 
   val contsTTreeMaybe = {
-    type F[A] = ContsT[Tree, Maybe, Int, A]
+    type F[A] = ContsT[Tree, Int, Maybe, A]
     scalazlaws.monadPlus.all[F].andThenParam(Param.maxSize(4))
   }
 
   val testContsTIList = {
-    type F[A] = ContsT[NonEmptyList, IList, Int, A]
+    type F[A] = ContsT[NonEmptyList, Int, IList, A]
     scalazlaws.monadPlus.all[F]
   }
 
@@ -49,20 +49,20 @@ object IndexedContsTTest extends Scalaprops {
   }
 
   val testBifunctorMaybeMaybe =
-    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, Maybe, A, Int, B] })#F]
+    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, A, Int, Maybe, B] })#F]
 
   val testBifunctorMaybeIList =
-    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, IList, A, Int, B] })#F]
+    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, A, Int, IList, B] })#F]
 
   val testBifunctorIListMaybe =
-    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[IList, Maybe, A, Int, B] })#F]
+    scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[IList, A, Int, Maybe, B] })#F]
 
   val testContravariantMaybeMaybe =
-    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, Maybe, Int, A, Int] })#F]
+    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, Int, A, Maybe, Int] })#F]
 
   val testContravariantMaybeIList =
-    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, IList, Int, A, Int] })#F]
+    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, Int, A, IList, Int] })#F]
 
   val testContravariantIListMaybe =
-    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[IList, Maybe, Int, A, Int] })#F]
+    scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[IList, Int, A, Maybe, Int] })#F]
 }
