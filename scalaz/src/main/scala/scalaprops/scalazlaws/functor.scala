@@ -9,8 +9,8 @@ object functor {
   def identity[F[_], X](implicit F: Functor[F], afx: Gen[F[X]], ef: Equal[F[X]]) =
     forAll(F.functorLaw.identity[X] _)
 
-  def composite[F[_], X, Y, Z](
-    implicit F: Functor[F],
+  def composite[F[_], X, Y, Z](implicit
+    F: Functor[F],
     af: Gen[F[X]],
     axy: Gen[X => Y],
     ayz: Gen[Y => Z],

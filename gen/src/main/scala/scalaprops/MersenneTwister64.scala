@@ -88,8 +88,8 @@ final class MersenneTwister64 private (private val mt0: Array[Long], private val
 
     // Tempering
     x ^= (x >>> 29) & 0x5555555555555555L
-    x ^= (x << 17) & 0x71D67FFFEDA60000L
-    x ^= (x << 37) & 0xFFF7EEE000000000L
+    x ^= (x << 17) & 0x71d67fffeda60000L
+    x ^= (x << 37) & 0xfff7eee000000000L
     x ^= (x >>> 43)
 
     (new MersenneTwister64(mt1, mti), x)
@@ -104,8 +104,8 @@ final class MersenneTwister64 private (private val mt0: Array[Long], private val
 }
 
 object MersenneTwister64 {
-  private final val UpperMask = 0xFFFFFFFF80000000L // = 0xFFFFFFFFFFFFFFFFL ^ Int.MinValue
-  private final val LowerMask = 0x7FFFFFFFL // = Int.MinValue
+  private final val UpperMask = 0xffffffff80000000L // = 0xFFFFFFFFFFFFFFFFL ^ Int.MinValue
+  private final val LowerMask = 0x7fffffffL // = Int.MinValue
 
   private final val N = 312
   private final val M = 156
@@ -119,7 +119,7 @@ object MersenneTwister64 {
   private final val BYTES = N * 8 + 4
 
   @inline private def mag01(x: Long) =
-    if ((x & 1) == 0) 0L else 0xB5026F5AA96619EL
+    if ((x & 1) == 0) 0L else 0xb5026f5aa96619eL
 
   def fromSeed(mt: Array[Long], mti: Int): MersenneTwister64 = {
     assert(mt.length == N)

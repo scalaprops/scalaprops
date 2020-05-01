@@ -110,7 +110,8 @@ object ScalapropsTaskImpl {
                   obj.listener.onStart(obj, name, check.prop, param, log)
                   val r = executor.execute(param.timeout) {
                     check.prop.check(
-                      param, { () => cancel.get || ((System.currentTimeMillis() - start) > param.timeout.toMillis) },
+                      param,
+                      { () => cancel.get || ((System.currentTimeMillis() - start) > param.timeout.toMillis) },
                       count => obj.listener.onCheck(obj, name, check.prop, param, log, count)
                     )
                   }

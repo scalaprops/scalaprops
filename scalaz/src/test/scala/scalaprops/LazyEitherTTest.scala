@@ -6,8 +6,8 @@ import LazyEitherTest.lazyEitherEqual
 import ScalapropsScalaz._
 
 object LazyEitherTTest extends Scalaprops {
-  private[this] implicit def lazyEitherTEqual[F[_], A, B](
-    implicit F: Equal[F[LazyEither[A, B]]]
+  private[this] implicit def lazyEitherTEqual[F[_], A, B](implicit
+    F: Equal[F[LazyEither[A, B]]]
   ): Equal[LazyEitherT[F, A, B]] =
     F.contramap(_.run)
 

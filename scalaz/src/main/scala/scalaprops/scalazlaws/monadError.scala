@@ -5,8 +5,8 @@ import scalaprops.Property.forAll
 import scalaz._
 
 object monadError {
-  def raisedErrorsHandled[F[_], E, A](
-    implicit me: MonadError[F, E],
+  def raisedErrorsHandled[F[_], E, A](implicit
+    me: MonadError[F, E],
     eq: Equal[F[A]],
     ae: Gen[E],
     afea: Gen[E => F[A]]
@@ -26,8 +26,8 @@ object monadError {
       ScalazLaw.monadErrorErrorsStopComputation -> errorsStopComputation[F, E, Int]
     )
 
-  def all[F[_], E: Gen](
-    implicit A1: MonadError[F, E],
+  def all[F[_], E: Gen](implicit
+    A1: MonadError[F, E],
     A2: Gen[F[Int]],
     A3: Gen[F[Int => Int]],
     A4: Equal[F[Int]],

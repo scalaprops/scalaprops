@@ -38,8 +38,9 @@ object LazyOpt {
   def lazyNone[A]: LazyOpt[A] =
     none.asInstanceOf[LazyOpt[A]]
 
-  def fromOption[A](oa: Option[A]): LazyOpt[A] = oa match {
-    case Some(x) => lazySome(x)
-    case None => lazyNone[A]
-  }
+  def fromOption[A](oa: Option[A]): LazyOpt[A] =
+    oa match {
+      case Some(x) => lazySome(x)
+      case None => lazyNone[A]
+    }
 }

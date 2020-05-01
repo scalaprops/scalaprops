@@ -4,8 +4,8 @@ package scalazlaws
 import scalaz._
 
 object applicativePlus {
-  def all[F[_]](
-    implicit F: ApplicativePlus[F],
+  def all[F[_]](implicit
+    F: ApplicativePlus[F],
     af: Gen[F[Int]],
     aff: Gen[F[Int => Int]],
     e: Equal[F[Int]]

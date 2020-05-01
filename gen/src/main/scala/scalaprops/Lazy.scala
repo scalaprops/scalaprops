@@ -7,12 +7,13 @@ final class Lazy[A] private (private var a: () => A) {
     x
   }
 
-  override def equals(other: Any): Boolean = other match {
-    case that: Lazy[_] =>
-      value == that.value
-    case _ =>
-      false
-  }
+  override def equals(other: Any): Boolean =
+    other match {
+      case that: Lazy[_] =>
+        value == that.value
+      case _ =>
+        false
+    }
 
   override def hashCode: Int =
     value.##

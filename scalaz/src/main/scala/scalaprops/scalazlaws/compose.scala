@@ -6,8 +6,8 @@ import scalaprops.Properties.properties
 import scalaz._
 
 object compose {
-  def associative[=>:[_, _], A, B, C, D](
-    implicit ab: Gen[A =>: B],
+  def associative[=>:[_, _], A, B, C, D](implicit
+    ab: Gen[A =>: B],
     bc: Gen[B =>: C],
     cd: Gen[C =>: D],
     C: Compose[=>:],

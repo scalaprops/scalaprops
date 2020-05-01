@@ -95,16 +95,17 @@ final class ScalapropsRunner(
   private[this] val results = ArrayBuffer.empty[TestResult]
   private[this] val arguments = Arguments.parse(args.toList)
 
-  override def tasks(taskDefs: Array[TaskDef]) = taskDefs.map { taskDef =>
-    new ScalapropsTaskImpl(
-      taskDef = taskDef,
-      testClassLoader = testClassLoader,
-      args = args,
-      arguments = arguments,
-      results = results,
-      status = status
-    )
-  }
+  override def tasks(taskDefs: Array[TaskDef]) =
+    taskDefs.map { taskDef =>
+      new ScalapropsTaskImpl(
+        taskDef = taskDef,
+        testClassLoader = testClassLoader,
+        args = args,
+        arguments = arguments,
+        results = results,
+        status = status
+      )
+    }
 
   override def done() = {
     s"""done

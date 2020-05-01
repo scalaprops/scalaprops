@@ -5,8 +5,8 @@ import scalaprops.Property.forAll
 import scalaz._
 
 object apply {
-  def composition[F[_], X, Y, Z](
-    implicit ap: Apply[F],
+  def composition[F[_], X, Y, Z](implicit
+    ap: Apply[F],
     afx: Gen[F[X]],
     au: Gen[F[Y => Z]],
     av: Gen[F[X => Y]],
@@ -14,8 +14,8 @@ object apply {
   ) =
     forAll(ap.applyLaw.composition[X, Y, Z] _)
 
-  def laws[F[_]](
-    implicit F: Apply[F],
+  def laws[F[_]](implicit
+    F: Apply[F],
     af: Gen[F[Int]],
     aff: Gen[F[Int => Int]],
     e: Equal[F[Int]]
@@ -27,8 +27,8 @@ object apply {
       )
     )
 
-  def all[F[_]](
-    implicit F: Apply[F],
+  def all[F[_]](implicit
+    F: Apply[F],
     af: Gen[F[Int]],
     aff: Gen[F[Int => Int]],
     e: Equal[F[Int]]

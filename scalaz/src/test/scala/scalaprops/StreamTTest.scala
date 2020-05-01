@@ -24,8 +24,7 @@ object StreamTTest extends Scalaprops {
   val unconsRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       E: Equal[F[Option[(A, StreamT[F, A])]]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] => s.uncons === s.unconsRec }
@@ -41,8 +40,7 @@ object StreamTTest extends Scalaprops {
   val isEmptyRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       E: Equal[F[Boolean]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] => s.isEmpty === s.isEmptyRec }
@@ -58,8 +56,7 @@ object StreamTTest extends Scalaprops {
   val headOptionRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       E: Equal[F[Option[A]]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] => s.headOption === s.headOptionRec }
@@ -75,8 +72,7 @@ object StreamTTest extends Scalaprops {
   val tailMRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       E: Equal[F[StreamT[F, A]]],
       G: Gen[StreamT[F, A]]
     ) = forAll { s: StreamT[F, A] => Try(s.tailM).toOption === Try(s.tailMRec).toOption }
@@ -92,8 +88,7 @@ object StreamTTest extends Scalaprops {
   val foldLeftRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[A]]
     ) = forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) => s.foldLeft(z)(f) === s.foldLeftRec(z)(f) }
@@ -109,13 +104,13 @@ object StreamTTest extends Scalaprops {
   val foldRightRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[A]]
-    ) = forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) =>
-      s.foldRight(z)((x, y) => f(x, y)) === s.foldRightRec(z)((x, y) => f(x, y))
-    }
+    ) =
+      forAll { (s: StreamT[F, A], z: A, f: (A, A) => A) =>
+        s.foldRight(z)((x, y) => f(x, y)) === s.foldRightRec(z)((x, y) => f(x, y))
+      }
 
     Properties.properties("foldRightRec")(
       "Id" -> test[Id],
@@ -128,8 +123,7 @@ object StreamTTest extends Scalaprops {
   val toStreamRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[Stream[A]]]
     ) = forAll { s: StreamT[F, A] => s.toStream === s.toStreamRec }
@@ -145,8 +139,7 @@ object StreamTTest extends Scalaprops {
   val lengthRec = {
     type A = Byte
 
-    def test[F[_]: Monad: BindRec](
-      implicit
+    def test[F[_]: Monad: BindRec](implicit
       G: Gen[StreamT[F, A]],
       E: Equal[F[Int]]
     ) = forAll { s: StreamT[F, A] => s.length === s.lengthRec }

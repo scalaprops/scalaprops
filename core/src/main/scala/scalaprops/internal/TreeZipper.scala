@@ -7,10 +7,11 @@ import scala.annotation.tailrec
 final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: TreeForest[A], parents: Parents[A]) {
   import Tree._
 
-  def parent: Option[TreeZipper[A]] = parents match {
-    case (pls, v, prs) #:: ps => Some(TreeZipper(Node(v, combChildren(lefts, tree, rights)), pls, prs, ps))
-    case Stream.Empty => None
-  }
+  def parent: Option[TreeZipper[A]] =
+    parents match {
+      case (pls, v, prs) #:: ps => Some(TreeZipper(Node(v, combChildren(lefts, tree, rights)), pls, prs, ps))
+      case Stream.Empty => None
+    }
 
   @tailrec
   def root: TreeZipper[A] =
@@ -19,20 +20,23 @@ final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: Tree
       case None => this
     }
 
-  private def left: Option[TreeZipper[A]] = lefts match {
-    case t #:: ts => Some(TreeZipper(t, ts, tree #:: rights, parents))
-    case Stream.Empty => None
-  }
+  private def left: Option[TreeZipper[A]] =
+    lefts match {
+      case t #:: ts => Some(TreeZipper(t, ts, tree #:: rights, parents))
+      case Stream.Empty => None
+    }
 
-  private def right: Option[TreeZipper[A]] = rights match {
-    case t #:: ts => Some(TreeZipper(t, tree #:: lefts, ts, parents))
-    case Stream.Empty => None
-  }
+  private def right: Option[TreeZipper[A]] =
+    rights match {
+      case t #:: ts => Some(TreeZipper(t, tree #:: lefts, ts, parents))
+      case Stream.Empty => None
+    }
 
-  private def firstChild: Option[TreeZipper[A]] = tree.subForest match {
-    case t #:: ts => Some(TreeZipper(t, Stream.Empty, ts, downParents))
-    case Stream.Empty => None
-  }
+  private def firstChild: Option[TreeZipper[A]] =
+    tree.subForest match {
+      case t #:: ts => Some(TreeZipper(t, Stream.Empty, ts, downParents))
+      case Stream.Empty => None
+    }
 
   def toTree: Tree[A] = root.tree
 
@@ -40,9 +44,14 @@ final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: Tree
 
   def map[B](f: A => B): TreeZipper[B] = {
     val ff = (_: Tree[A]).map(f)
-    TreeZipper(tree map f, lefts map ff, rights map ff, parents.map {
-      case (l, t, r) => (l map ff, f(t), r map ff)
-    })
+    TreeZipper(
+      tree map f,
+      lefts map ff,
+      rights map ff,
+      parents.map {
+        case (l, t, r) => (l map ff, f(t), r map ff)
+      }
+    )
   }
 
   def cojoin: TreeZipper[TreeZipper[A]] = {

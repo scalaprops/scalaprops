@@ -33,8 +33,8 @@ object bindRec {
       )
     )
 
-  def all[F[_]: BindRec](
-    implicit G1: Gen[F[Int]],
+  def all[F[_]: BindRec](implicit
+    G1: Gen[F[Int]],
     G2: Gen[Int => F[Int]],
     G3: Gen[F[Int => Int]],
     e: Equal[F[Int]]

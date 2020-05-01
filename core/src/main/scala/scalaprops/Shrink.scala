@@ -92,12 +92,13 @@ object Shrink {
           )
       }
 
-    def shrinkOne(as: List[A]): Stream[List[A]] = as match {
-      case h :: t =>
-        A(h).map(_ :: t) #::: shrinkOne(t).map(h :: _)
-      case _ =>
-        Stream.Empty
-    }
+    def shrinkOne(as: List[A]): Stream[List[A]] =
+      as match {
+        case h :: t =>
+          A(h).map(_ :: t) #::: shrinkOne(t).map(h :: _)
+        case _ =>
+          Stream.Empty
+      }
 
     shrink(as => removeChunks(as.length, as) #::: shrinkOne(as))
   }
@@ -125,8 +126,8 @@ object Shrink {
         } yield (x1, x2, x3)
     }
 
-  implicit def tuple4[A1, A2, A3, A4](
-    implicit A1: Shrink[A1],
+  implicit def tuple4[A1, A2, A3, A4](implicit
+    A1: Shrink[A1],
     A2: Shrink[A2],
     A3: Shrink[A3],
     A4: Shrink[A4]
@@ -152,12 +153,13 @@ object Shrink {
     def list2array(list: List[A]) = {
       val array = new Array[A](list.length)
       @annotation.tailrec
-      def loop(xs: List[A], i: Int): Unit = xs match {
-        case h :: t =>
-          array(i) = h
-          loop(t, i + 1)
-        case _ =>
-      }
+      def loop(xs: List[A], i: Int): Unit =
+        xs match {
+          case h :: t =>
+            array(i) = h
+            loop(t, i + 1)
+          case _ =>
+        }
       loop(list, 0)
       array
     }

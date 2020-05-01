@@ -11,12 +11,13 @@ sealed abstract class ScalapropsScalaz0 extends ScalapropsScalaz1 {
 
   implicit def cogenIList[A](implicit A: Cogen[A]): Cogen[IList[A]] =
     new Cogen[IList[A]] {
-      def cogen[B](a: IList[A], g: CogenState[B]) = a match {
-        case ICons(h, t) =>
-          variantInt(1, A.cogen(h, cogen(t, g)))
-        case INil() =>
-          g
-      }
+      def cogen[B](a: IList[A], g: CogenState[B]) =
+        a match {
+          case ICons(h, t) =>
+            variantInt(1, A.cogen(h, cogen(t, g)))
+          case INil() =>
+            g
+        }
     }
 
   implicit final def endomorphicGen[F[_, _], A](implicit F: Gen[F[A, A]]): Gen[Endomorphic[F, A]] =
@@ -74,12 +75,13 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   private[this] val byteIListToByteArray: IList[Byte] => Array[Byte] = { list =>
     val array = new Array[Byte](list.length)
     @annotation.tailrec
-    def loop(i: Int, xs: IList[Byte]): Unit = xs match {
-      case ICons(h, t) =>
-        array(i) = h
-        loop(i + 1, t)
-      case _ =>
-    }
+    def loop(i: Int, xs: IList[Byte]): Unit =
+      xs match {
+        case ICons(h, t) =>
+          array(i) = h
+          loop(i + 1, t)
+        case _ =>
+      }
     loop(0, list)
     array
   }
@@ -120,11 +122,12 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   implicit val cogenOrdering: Cogen[Ordering] =
     new Cogen[Ordering] {
-      def cogen[B](a: Ordering, g: CogenState[B]) = a match {
-        case Ordering.GT => variantInt(0, g)
-        case Ordering.EQ => variantInt(1, g)
-        case Ordering.LT => variantInt(2, g)
-      }
+      def cogen[B](a: Ordering, g: CogenState[B]) =
+        a match {
+          case Ordering.GT => variantInt(0, g)
+          case Ordering.EQ => variantInt(1, g)
+          case Ordering.LT => variantInt(2, g)
+        }
     }
 
   implicit def cogenOneOr[F[_], A: Cogen](implicit F: Cogen[F[A]]): Cogen[OneOr[F, A]] =
@@ -175,26 +178,26 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def cogenTracedT[W[_], A, B](implicit W: Cogen[W[A => B]]): Cogen[TracedT[W, A, B]] =
     W.contramap(_.run)
 
-  implicit def cogenIndexedStoreT[F[_], I: Cogen, A, B](
-    implicit F: Cogen[F[A => B]]
+  implicit def cogenIndexedStoreT[F[_], I: Cogen, A, B](implicit
+    F: Cogen[F[A => B]]
   ): Cogen[IndexedStoreT[F, I, A, B]] =
     Cogen[(F[A => B], I)].contramap(_.run)
 
-  implicit def cogenIndexedContsT[W[_], M[_], R, O, A](
-    implicit F: Cogen[W[A => M[O]] => M[R]]
+  implicit def cogenIndexedContsT[W[_], M[_], R, O, A](implicit
+    F: Cogen[W[A => M[O]] => M[R]]
   ): Cogen[IndexedContsT[W, R, O, M, A]] =
     F.contramap(_.run)
 
-  implicit def cogenSelectT[R, M[_], A](
-    implicit F: Cogen[(A => M[R]) => M[A]]
+  implicit def cogenSelectT[R, M[_], A](implicit
+    F: Cogen[(A => M[R]) => M[A]]
   ): Cogen[SelectT[R, M, A]] =
     F.contramap(_.run)
 
   implicit def cogenEndo[A: Gen: Cogen]: Cogen[scalaz.Endo[A]] =
     Cogen[A => A].contramap(_.run)
 
-  implicit def cogenEndomorphicKleisliLike[G[_[_], _, _], F[_], A](
-    implicit F: Cogen[G[F, A, A]]
+  implicit def cogenEndomorphicKleisliLike[G[_[_], _, _], F[_], A](implicit
+    F: Cogen[G[F, A, A]]
   ): Cogen[Endomorphic[({ type l[a, b] = G[F, a, b] })#l, A]] =
     F.contramap(_.run)
 
@@ -210,8 +213,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def cogenNullArgument[A: Gen, B: Cogen]: Cogen[NullArgument[A, B]] =
     Cogen[Option[A] => B].contramap(_.apply)
 
-  implicit def cogenContravariantCoyoneda[F[_]: Contravariant, A](
-    implicit F: Cogen[F[A]]
+  implicit def cogenContravariantCoyoneda[F[_]: Contravariant, A](implicit
+    F: Cogen[F[A]]
   ): Cogen[ContravariantCoyoneda[F, A]] =
     Cogen[F[A]].contramap(_.run)
 
@@ -239,13 +242,13 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def cogenIdT[F[_], A](implicit F: Cogen[F[A]]): Cogen[IdT[F, A]] =
     F.contramap(_.run)
 
-  implicit def cogenIndexedReaderWriterStateT[F[_]: Monad, R, W, S1, S2, A](
-    implicit F: Cogen[(R, S1) => F[(W, A, S2)]]
+  implicit def cogenIndexedReaderWriterStateT[F[_]: Monad, R, W, S1, S2, A](implicit
+    F: Cogen[(R, S1) => F[(W, A, S2)]]
   ): Cogen[IndexedReaderWriterStateT[R, W, S1, S2, F, A]] =
     F.contramap(_.run)
 
-  implicit def cogenIndexedStateT[F[_]: Monad, S1, S2, A](
-    implicit F: Cogen[S1 => F[(S2, A)]]
+  implicit def cogenIndexedStateT[F[_]: Monad, S1, S2, A](implicit
+    F: Cogen[S1 => F[(S2, A)]]
   ): Cogen[IndexedStateT[S1, S2, F, A]] =
     F.contramap(s => s.apply(_))
 
@@ -301,8 +304,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
         A1.cogen(t._1, A2.cogen(t._2, g))
     }
 
-  implicit def cogenLazyTuple3[A1, A2, A3](
-    implicit A1: Cogen[A1],
+  implicit def cogenLazyTuple3[A1, A2, A3](implicit
+    A1: Cogen[A1],
     A2: Cogen[A2],
     A3: Cogen[A3]
   ): Cogen[LazyTuple3[A1, A2, A3]] =
@@ -311,8 +314,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
         A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, g)))
     }
 
-  implicit def cogenLazyTuple4[A1, A2, A3, A4](
-    implicit A1: Cogen[A1],
+  implicit def cogenLazyTuple4[A1, A2, A3, A4](implicit
+    A1: Cogen[A1],
     A2: Cogen[A2],
     A3: Cogen[A3],
     A4: Cogen[A4]
@@ -322,8 +325,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
         A1.cogen(t._1, A2.cogen(t._2, A3.cogen(t._3, A4.cogen(t._4, g))))
     }
 
-  implicit def cogenBijectionT[F[_], G[_], A, B](
-    implicit A: Gen[A],
+  implicit def cogenBijectionT[F[_], G[_], A, B](implicit
+    A: Gen[A],
     B: Gen[B],
     F: Cogen[F[B]],
     G: Cogen[G[A]]
@@ -421,8 +424,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def lazyTuple3Gen[A1, A2, A3](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3]): Gen[LazyTuple3[A1, A2, A3]] =
     Apply[Gen].apply3(A1, A2, A3)(LazyTuple3(_, _, _))
 
-  implicit def lazyTuple4Gen[A1, A2, A3, A4](
-    implicit A1: Gen[A1],
+  implicit def lazyTuple4Gen[A1, A2, A3, A4](implicit
+    A1: Gen[A1],
     A2: Gen[A2],
     A3: Gen[A3],
     A4: Gen[A4]
@@ -516,23 +519,23 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def unwriterTGen[F[_], A, B](implicit F: Gen[F[(A, B)]]): Gen[UnwriterT[F, A, B]] =
     F.map(UnwriterT(_))
 
-  implicit def indexedStateTGen[F[_]: Monad, S1, S2, A](
-    implicit F: Gen[S1 => F[(S2, A)]]
+  implicit def indexedStateTGen[F[_]: Monad, S1, S2, A](implicit
+    F: Gen[S1 => F[(S2, A)]]
   ): Gen[IndexedStateT[S1, S2, F, A]] =
     F.map(IndexedStateT(_))
 
-  implicit def indexedContsTGen[W[_], M[_], R, O, A](
-    implicit F: Gen[W[A => M[O]] => M[R]]
+  implicit def indexedContsTGen[W[_], M[_], R, O, A](implicit
+    F: Gen[W[A => M[O]] => M[R]]
   ): Gen[IndexedContsT[W, R, O, M, A]] =
     F.map(IndexedContsT(_))
 
-  implicit def selectTGen[R, M[_], A](
-    implicit F: Gen[(A => M[R]) => M[A]]
+  implicit def selectTGen[R, M[_], A](implicit
+    F: Gen[(A => M[R]) => M[A]]
   ): Gen[SelectT[R, M, A]] =
     F.map(SelectT(_))
 
-  implicit def indexedReaderWriterStateTGen[F[_], R, W, S1, S2, A](
-    implicit F: Gen[(R, S1) => F[(W, A, S2)]]
+  implicit def indexedReaderWriterStateTGen[F[_], R, W, S1, S2, A](implicit
+    F: Gen[(R, S1) => F[(W, A, S2)]]
   ): Gen[IndexedReaderWriterStateT[R, W, S1, S2, F, A]] =
     F.map(IndexedReaderWriterStateT.apply)
 
@@ -633,8 +636,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def scalazEndoGen[A: Gen: Cogen]: Gen[scalaz.Endo[A]] =
     Gen[A => A].map(scalaz.Endo(_))
 
-  implicit def kleisliLikeEndoGen[G[_[_], _, _], F[_], A](
-    implicit F: Gen[G[F, A, A]]
+  implicit def kleisliLikeEndoGen[G[_[_], _, _], F[_], A](implicit
+    F: Gen[G[F, A, A]]
   ): Gen[Endomorphic[({ type l[a, b] = G[F, a, b] })#l, A]] =
     endomorphicGen[({ type l[a, b] = G[F, a, b] })#l, A]
 
@@ -683,13 +686,14 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
           .traverseS(s) { n =>
             for {
               sum <- State.get[Int]
-              r <- if (sum >= size) {
-                State.state[Int, Option[Int]](None)
-              } else if ((sum + n) > size) {
-                State((s: Int) => (s + n) -> Option(size - sum))
-              } else {
-                State((s: Int) => (s + n) -> Option(n))
-              }
+              r <-
+                if (sum >= size) {
+                  State.state[Int, Option[Int]](None)
+                } else if ((sum + n) > size) {
+                  State((s: Int) => (s + n) -> Option(size - sum))
+                } else {
+                  State((s: Int) => (s + n) -> Option(n))
+                }
             } yield r
           }
           .eval(0)
@@ -756,16 +760,15 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def treeLocGen[A: Gen]: Gen[scalaz.TreeLoc[A]] =
     Gen.sized(treeLocGenSized(_))
 
-  implicit def bijectionTGen[F[_], G[_], A, B](
-    implicit A: Cogen[A],
+  implicit def bijectionTGen[F[_], G[_], A, B](implicit
+    A: Cogen[A],
     B: Cogen[B],
     F: Gen[F[B]],
     G: Gen[G[A]]
   ): Gen[BijectionT[F, G, A, B]] =
     Gen[(A => F[B], B => G[A])].map { case (f, g) => BijectionT.bijection(f, g) }
 
-  implicit def freeTGen[S[_]: Functor, M[_]: Applicative, A: Gen](
-    implicit
+  implicit def freeTGen[S[_]: Functor, M[_]: Applicative, A: Gen](implicit
     G1: Gen[S[A]],
     G2: Gen[M[A]]
   ): Gen[FreeT[S, M, A]] =

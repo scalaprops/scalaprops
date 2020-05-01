@@ -11,8 +11,8 @@ object zip {
   def zipSymmetric[F[_], X, Y](implicit F: Zip[F], FF: Functor[F], afx: Gen[F[X]], afy: Gen[F[Y]], ef: Equal[F[X]]) =
     forAll(F.zipLaw.zipSymmetric[X, Y] _)
 
-  def zipApply[F[_]: Functor, X, Y, Z](
-    implicit F: Zip[F],
+  def zipApply[F[_]: Functor, X, Y, Z](implicit
+    F: Zip[F],
     afx: Gen[F[X]],
     au: Gen[F[Y => Z]],
     av: Gen[F[X => Y]],

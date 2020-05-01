@@ -51,11 +51,12 @@ sealed abstract class Tree[A] {
     )
 
   private def draw: Stream[String] = {
-    def drawSubTrees(s: Stream[Tree[A]]): Stream[String] = s match {
-      case Stream.Empty => Stream.Empty
-      case Stream(t) => "|" #:: shift("`- ", "   ", t.draw)
-      case t #:: ts => "|" #:: shift("+- ", "|  ", t.draw) append drawSubTrees(ts)
-    }
+    def drawSubTrees(s: Stream[Tree[A]]): Stream[String] =
+      s match {
+        case Stream.Empty => Stream.Empty
+        case Stream(t) => "|" #:: shift("`- ", "   ", t.draw)
+        case t #:: ts => "|" #:: shift("+- ", "|  ", t.draw) append drawSubTrees(ts)
+      }
     def shift(first: String, other: String, s: Stream[String]): Stream[String] =
       (first #:: Stream.continually(other)).zip(s).map {
         case (a, b) => a + b

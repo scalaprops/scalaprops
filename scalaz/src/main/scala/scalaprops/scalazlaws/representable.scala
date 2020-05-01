@@ -12,8 +12,8 @@ object representable {
   def unrepRep[F[_], X, A](implicit F: Representable[F, X], G1: Gen[X => A], G2: Gen[X], E: Equal[A]): Property =
     forAll(F.representableLaw.unrepRep[A] _)
 
-  def laws[F[_], X](
-    implicit F: Representable[F, X],
+  def laws[F[_], X](implicit
+    F: Representable[F, X],
     G1: Gen[X => Byte],
     G2: Gen[F[Byte]],
     G3: Gen[X],
@@ -24,8 +24,8 @@ object representable {
       ScalazLaw.representableUnrepRep -> unrepRep[F, X, Byte]
     )
 
-  def all[F[_], X](
-    implicit F: Representable[F, X],
+  def all[F[_], X](implicit
+    F: Representable[F, X],
     G1: Gen[X => Byte],
     G2: Gen[F[Byte]],
     G3: Gen[X],

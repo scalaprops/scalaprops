@@ -10,8 +10,7 @@ import CofreeTestInstances._
 object CofreeTest extends Scalaprops {
   private[this] type CofreeZip[F[_], A] = Cofree[F, A] @@ Tags.Zip
 
-  private def cofreeZipTest[F[_]: Applicative](
-    implicit
+  private def cofreeZipTest[F[_]: Applicative](implicit
     F1: Gen[CofreeZip[F, Int]],
     F2: Gen[CofreeZip[F, Int => Int]],
     F3: Equal[CofreeZip[F, Int]]

@@ -13,7 +13,7 @@ abstract class Rand {
   protected[this] final def nextLongFromNextInt: (Rand, Long) = {
     val (_, n1) = nextInt
     val (r, n2) = nextInt
-    val x = ((n1 & 0xFFFFFFFFL) << 32) | (n2 & 0xFFFFFFFFL)
+    val x = ((n1 & 0xffffffffL) << 32) | (n2 & 0xffffffffL)
     (r, x)
   }
 
@@ -116,9 +116,9 @@ object Rand {
   // Generates a random Double in the interval [0, 1)
   def nextDouble(state: Rand): (Rand, Double) = {
     val x = state.nextInt
-    val a: Long = (x._2.toLong & 0xFFFFFFFFL) >>> 5
+    val a: Long = (x._2.toLong & 0xffffffffL) >>> 5
     val y = x._1.nextInt
-    val b: Long = (y._2.toLong & 0xFFFFFFFFL) >>> 6
+    val b: Long = (y._2.toLong & 0xffffffffL) >>> 6
     val r = (a * 67108864.0 + b) / 9007199254740992.0
     (y._1, r)
   }

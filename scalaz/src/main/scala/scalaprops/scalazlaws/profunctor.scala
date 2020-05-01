@@ -8,8 +8,8 @@ object profunctor {
   def identity[F[_, _], A1, A2](implicit F: Profunctor[F], G: Gen[F[A1, A2]], E: Equal[F[A1, A2]]): Property =
     forAll(F.profunctorLaw.identity[A1, A2] _)
 
-  def composite[F[_, _], A1: Gen, A2: Gen: Cogen, A3: Cogen, A4: Cogen, A5: Gen: Cogen, A6: Gen](
-    implicit F: Profunctor[F],
+  def composite[F[_, _], A1: Gen, A2: Gen: Cogen, A3: Cogen, A4: Cogen, A5: Gen: Cogen, A6: Gen](implicit
+    F: Profunctor[F],
     G: Gen[F[A1, A4]],
     E: Equal[F[A3, A6]]
   ): Property =

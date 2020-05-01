@@ -4,8 +4,8 @@ package scalazlaws
 import scalaz._
 
 object bifunctor {
-  def laws[F[_, _]](
-    implicit F: Bifunctor[F],
+  def laws[F[_, _]](implicit
+    F: Bifunctor[F],
     E: Equal[F[Int, Int]],
     af: Gen[F[Int, Int]],
     axy: Gen[Int => Int]

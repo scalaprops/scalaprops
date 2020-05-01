@@ -14,8 +14,8 @@ object monadPlusStrong {
       ScalazLaw.monadPlusRightZero -> rightZero[F, Int]
     )
 
-  def all[F[_]](
-    implicit F: MonadPlus[F],
+  def all[F[_]](implicit
+    F: MonadPlus[F],
     afx: Gen[F[Int]],
     afy: Gen[F[Int => Int]],
     ef: Equal[F[Int]]

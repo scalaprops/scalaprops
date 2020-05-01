@@ -11,8 +11,8 @@ object traverse1 {
   def identityTraverse1[F[_], X, Y](implicit f: Traverse1[F], afx: Gen[F[X]], axy: Gen[X => Y], ef: Equal[F[Y]]) =
     forAll(f.traverse1Law.identityTraverse1[X, Y] _)
 
-  def sequentialFusion1[F[_], N[_], M[_], A, B, C](
-    implicit fa: Gen[F[A]],
+  def sequentialFusion1[F[_], N[_], M[_], A, B, C](implicit
+    fa: Gen[F[A]],
     amb: Gen[A => M[B]],
     bnc: Gen[B => N[C]],
     F: Traverse1[F],
@@ -27,8 +27,8 @@ object traverse1 {
   )(implicit fma: Gen[F[M[A]]], F: Traverse1[F], N: Apply[N], M: Apply[M], NFA: Equal[N[F[A]]]) =
     forAll(F.traverse1Law.naturality1[N, M, A](nat) _)
 
-  def parallelFusion1[F[_], N[_], M[_], A, B](
-    implicit fa: Gen[F[A]],
+  def parallelFusion1[F[_], N[_], M[_], A, B](implicit
+    fa: Gen[F[A]],
     amb: Gen[A => M[B]],
     anb: Gen[A => N[B]],
     F: Traverse1[F],
@@ -38,8 +38,8 @@ object traverse1 {
   ) =
     forAll(F.traverse1Law.parallelFusion1[N, M, A, B] _)
 
-  def laws[F[_]](
-    implicit fa: Gen[F[Int]],
+  def laws[F[_]](implicit
+    fa: Gen[F[Int]],
     F: Traverse1[F],
     EF: Equal[F[Int]],
     GI: Gen[F[Maybe[Int]]],
@@ -62,8 +62,8 @@ object traverse1 {
       )
     )
 
-  def all[F[_]](
-    implicit fa: Gen[F[Int]],
+  def all[F[_]](implicit
+    fa: Gen[F[Int]],
     F: Traverse1[F],
     EF: Equal[F[Int]],
     GI: Gen[F[Maybe[Int]]],

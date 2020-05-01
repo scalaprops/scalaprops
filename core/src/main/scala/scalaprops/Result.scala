@@ -8,21 +8,23 @@ sealed abstract class Result extends Product with Serializable {
   def isIgnored = this.isInstanceOf[Result.Ignored]
   def isNoResult = this.isInstanceOf[Result.NoResult.type]
 
-  final def toOption: Option[HasResult] = this match {
-    case r: HasResult => Some(r)
-    case Result.NoResult => None
-  }
+  final def toOption: Option[HasResult] =
+    this match {
+      case r: HasResult => Some(r)
+      case Result.NoResult => None
+    }
 
   final def failed: Boolean = isFalsified || isException
 }
 
 sealed abstract class HasResult extends Result {
-  final def provenAsUnfalsified: AddArgs = this match {
-    case Result.Proven =>
-      Result.Unfalsified(List.empty)
-    case a: AddArgs =>
-      a
-  }
+  final def provenAsUnfalsified: AddArgs =
+    this match {
+      case Result.Proven =>
+        Result.Unfalsified(List.empty)
+      case a: AddArgs =>
+        a
+    }
 }
 
 sealed abstract class AddArgs extends HasResult {

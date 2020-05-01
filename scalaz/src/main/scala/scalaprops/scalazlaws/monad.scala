@@ -18,8 +18,8 @@ object monad {
       ScalazLaw.monadLeftIdentity -> monad.leftIdentity[M, Int, Int]
     )
 
-  def all[M[_]](
-    implicit a: Monad[M],
+  def all[M[_]](implicit
+    a: Monad[M],
     am: Gen[M[Int]],
     af: Gen[Int => M[Int]],
     ag: Gen[M[Int => Int]],

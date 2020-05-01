@@ -9,14 +9,12 @@ import ScalapropsScalaz._
 object EndomorphicTest extends Scalaprops {
   override val param: Param = super.param.copy(maxSize = 10)
 
-  private[this] implicit def endomorphicKleisliEqual[F[_], A](
-    implicit
+  private[this] implicit def endomorphicKleisliEqual[F[_], A](implicit
     F: Equal[Kleisli[F, A, A]]
   ): Equal[Endomorphic[({ type l[a, b] = Kleisli[F, a, b] })#l, A]] =
     F.contramap(_.run)
 
-  private[this] implicit def endomorphicCokleisliEqual[F[_], A](
-    implicit
+  private[this] implicit def endomorphicCokleisliEqual[F[_], A](implicit
     F: Equal[Cokleisli[F, A, A]]
   ): Equal[Endomorphic[({ type l[a, b] = Cokleisli[F, a, b] })#l, A]] =
     F.contramap(_.run)

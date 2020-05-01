@@ -32,14 +32,15 @@ object ScalapropsListener {
   val default: ScalapropsListener = new Default
 
   def drawTree[A](tree: Tree[A]): Stream[(String, A)] = {
-    def drawSubTrees(s: Stream[Tree[A]]): Stream[(String, A)] = s match {
-      case Stream.Empty =>
-        Stream.Empty
-      case Stream(t) =>
-        shift("`- ", "  ", drawTree(t))
-      case t #:: ts =>
-        shift("+- ", "| ", drawTree(t)) ++ drawSubTrees(ts)
-    }
+    def drawSubTrees(s: Stream[Tree[A]]): Stream[(String, A)] =
+      s match {
+        case Stream.Empty =>
+          Stream.Empty
+        case Stream(t) =>
+          shift("`- ", "  ", drawTree(t))
+        case t #:: ts =>
+          shift("+- ", "| ", drawTree(t)) ++ drawSubTrees(ts)
+      }
     def shift(first: String, other: String, s: Stream[(String, A)]): Stream[(String, A)] =
       (first #:: Stream.continually(other)).zip(s).map {
         case (a, (b, c)) =>
