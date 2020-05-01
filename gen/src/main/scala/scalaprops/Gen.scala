@@ -141,14 +141,15 @@ object Gen extends GenInstances0 {
     gen { (_, _) => r.choose(from, to) }
 
   @annotation.tailrec
-  private[this] def pick0[B](n: Int, gs: List[(Int, B)]): B = gs match {
-    case h :: t =>
-      val k = h._1
-      if (n <= k) h._2
-      else pick0(n - k, t)
-    case _ =>
-      sys.error(s"bug? $n $gs")
-  }
+  private[this] def pick0[B](n: Int, gs: List[(Int, B)]): B =
+    gs match {
+      case h :: t =>
+        val k = h._1
+        if (n <= k) h._2
+        else pick0(n - k, t)
+      case _ =>
+        sys.error(s"bug? $n $gs")
+    }
 
   def lazyFrequency[A](g: (Int, Lazy[Gen[A]]), gs: List[(Int, Lazy[Gen[A]])]): Gen[A] = {
     val x = g :: gs
@@ -271,22 +272,22 @@ object Gen extends GenInstances0 {
     Choose[Long].withBoundaries(from, to).map(java.lang.Double.longBitsToDouble)
 
   val negativeDouble: Gen[Double] =
-    chooseLongBitsToDouble(0x8000000000000000L, 0xFFF0000000000000L)
+    chooseLongBitsToDouble(0x8000000000000000L, 0xfff0000000000000L)
 
   val positiveDouble: Gen[Double] =
-    chooseLongBitsToDouble(1L, 0x7FF0000000000000L)
+    chooseLongBitsToDouble(1L, 0x7ff0000000000000L)
 
   val nonNegativeDouble: Gen[Double] =
-    chooseLongBitsToDouble(0L, 0x7FF0000000000000L)
+    chooseLongBitsToDouble(0L, 0x7ff0000000000000L)
 
   val negativeFiniteDouble: Gen[Double] =
-    chooseLongBitsToDouble(0x8000000000000000L, 0xFFEFFFFFFFFFFFFFL)
+    chooseLongBitsToDouble(0x8000000000000000L, 0xffefffffffffffffL)
 
   val positiveFiniteDouble: Gen[Double] =
-    chooseLongBitsToDouble(1L, 0x7FEFFFFFFFFFFFFFL)
+    chooseLongBitsToDouble(1L, 0x7fefffffffffffffL)
 
   val nonNegativeFiniteDouble: Gen[Double] =
-    chooseLongBitsToDouble(0L, 0x7FEFFFFFFFFFFFFFL)
+    chooseLongBitsToDouble(0L, 0x7fefffffffffffffL)
 
   val genFiniteDouble: Gen[Double] =
     Gen.oneOf(negativeFiniteDouble, nonNegativeFiniteDouble)

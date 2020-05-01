@@ -5,8 +5,8 @@ import scalaprops.Property.forAll
 import scalaz._
 
 object bind {
-  def associativity[M[_], X, Y, Z](
-    implicit M: Bind[M],
+  def associativity[M[_], X, Y, Z](implicit
+    M: Bind[M],
     amx: Gen[M[X]],
     af: Gen[X => M[Y]],
     ag: Gen[Y => M[Z]],
@@ -17,8 +17,8 @@ object bind {
   def bindApConsistency[M[_], X, Y](implicit M: Bind[M], amx: Gen[M[X]], af: Gen[M[X => Y]], emy: Equal[M[Y]]) =
     forAll(M.bindLaw.apLikeDerived[X, Y] _)
 
-  def laws[M[_]](
-    implicit a: Bind[M],
+  def laws[M[_]](implicit
+    a: Bind[M],
     am: Gen[M[Int]],
     af: Gen[Int => M[Int]],
     ag: Gen[M[Int => Int]],
@@ -35,8 +35,8 @@ object bind {
       )
     )
 
-  def all[M[_]](
-    implicit a: Bind[M],
+  def all[M[_]](implicit
+    a: Bind[M],
     am: Gen[M[Int]],
     af: Gen[Int => M[Int]],
     ag: Gen[M[Int => Int]],

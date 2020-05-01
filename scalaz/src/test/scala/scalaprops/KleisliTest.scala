@@ -14,8 +14,7 @@ object KleisliTest extends Scalaprops {
     Equal[A => F[B]].contramap(_.run)
   }
 
-  private def kleisliTest[F[_]: MonadPlus: Zip](
-    implicit
+  private def kleisliTest[F[_]: MonadPlus: Zip](implicit
     F: Equal[F[Int]],
     E1: Equal[F[(Int, Int)]],
     E2: Equal[F[(Int, (Int, Int))]],

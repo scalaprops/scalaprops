@@ -5,8 +5,7 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
 object FreeTest extends Scalaprops {
-  implicit def freeEqual[F[_]: Functor, A](
-    implicit
+  implicit def freeEqual[F[_]: Functor, A](implicit
     E: Eq1[F],
     A: Equal[A]
   ): Equal[Free[F, A]] =
@@ -21,8 +20,7 @@ object FreeTest extends Scalaprops {
       }
     )
 
-  implicit def freeGen[F[_]: Applicative, A](
-    implicit
+  implicit def freeGen[F[_]: Applicative, A](implicit
     F: Gen[F[A]],
     A: Gen[A]
   ): Gen[Free[F, A]] =

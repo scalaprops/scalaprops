@@ -9,8 +9,8 @@ object invariantFunctor {
   def identity[F[_], X](implicit F: InvariantFunctor[F], afx: Gen[F[X]], ef: Equal[F[X]]): Property =
     forAll(F.invariantFunctorLaw.invariantIdentity[X] _)
 
-  def composite[F[_], X, Y, Z](
-    implicit F: InvariantFunctor[F],
+  def composite[F[_], X, Y, Z](implicit
+    F: InvariantFunctor[F],
     af: Gen[F[X]],
     axy: Gen[X => Y],
     ayz: Gen[Y => Z],
@@ -20,8 +20,8 @@ object invariantFunctor {
   ): Property =
     forAll(F.invariantFunctorLaw.invariantComposite[X, Y, Z] _)
 
-  def laws[F[_]](
-    implicit F: InvariantFunctor[F],
+  def laws[F[_]](implicit
+    F: InvariantFunctor[F],
     af: Gen[F[Int]],
     axy: Gen[Int => Int],
     ef: Equal[F[Int]]
@@ -31,8 +31,8 @@ object invariantFunctor {
       ScalazLaw.invariantFunctorComposite -> composite[F, Int, Int, Int]
     )
 
-  def all[F[_]](
-    implicit F: InvariantFunctor[F],
+  def all[F[_]](implicit
+    F: InvariantFunctor[F],
     af: Gen[F[Int]],
     axy: Gen[Int => Int],
     ef: Equal[F[Int]]

@@ -13,8 +13,8 @@ object traverse {
   def purity[F[_], G[_], X](implicit f: Traverse[F], afx: Gen[F[X]], G: Applicative[G], ef: Equal[G[F[X]]]) =
     forAll(f.traverseLaw.purity[G, X] _)
 
-  def sequentialFusion[F[_], N[_], M[_], A, B, C](
-    implicit fa: Gen[F[A]],
+  def sequentialFusion[F[_], N[_], M[_], A, B, C](implicit
+    fa: Gen[F[A]],
     amb: Gen[A => M[B]],
     bnc: Gen[B => N[C]],
     F: Traverse[F],
@@ -29,8 +29,8 @@ object traverse {
   )(implicit fma: Gen[F[M[A]]], F: Traverse[F], N: Applicative[N], M: Applicative[M], NFA: Equal[N[F[A]]]): Property =
     forAll(F.traverseLaw.naturality[N, M, A](nat) _)
 
-  def parallelFusion[F[_], N[_], M[_], A, B](
-    implicit fa: Gen[F[A]],
+  def parallelFusion[F[_], N[_], M[_], A, B](implicit
+    fa: Gen[F[A]],
     amb: Gen[A => M[B]],
     anb: Gen[A => N[B]],
     F: Traverse[F],

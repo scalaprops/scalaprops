@@ -6,15 +6,13 @@ import scalaz.std.function._
 import ScalapropsScalaz._
 
 object FreeApTest extends Scalaprops {
-  private[this] implicit def freeApEqual[F[_]: Functor, A](
-    implicit
+  private[this] implicit def freeApEqual[F[_]: Functor, A](implicit
     E: Eq1[F],
     A: Equal[A]
   ): Equal[FreeAp[F, A]] =
     FreeTest.freeEqual[F, A].contramap(_.monadic)
 
-  private[this] def freeApGen0[F[_]: Functor, A](
-    implicit
+  private[this] def freeApGen0[F[_]: Functor, A](implicit
     G1: Gen[A],
     G2: Gen[F[A]]
   ): Gen[FreeAp[F, A]] =
@@ -23,15 +21,15 @@ object FreeApTest extends Scalaprops {
       G2.map(FreeAp.lift(_))
     )
 
-  private[this] implicit def freeApGen[F[_]: Functor, A: Gen](
-    implicit
+  private[this] implicit def freeApGen[F[_]: Functor, A: Gen](implicit
     G1: Gen[F[A]],
     G2: Gen[F[Byte]],
     G3: Gen[F[Byte => A]]
-  ): Gen[FreeAp[F, A]] = Gen.oneOf(
-    freeApGen0[F, A],
-    Apply[Gen].apply2(G2, freeApGen0[F, Byte => A])(FreeAp.apply[F, Byte, A](_, _))
-  )
+  ): Gen[FreeAp[F, A]] =
+    Gen.oneOf(
+      freeApGen0[F, A],
+      Apply[Gen].apply2(G2, freeApGen0[F, Byte => A])(FreeAp.apply[F, Byte, A](_, _))
+    )
 
   val id = {
     type F[A] = FreeAp[Id.Id, A]

@@ -17,12 +17,13 @@ abstract class Cogen[A] { self =>
 sealed abstract class CogenInstances0 extends CogenInstances {
   implicit def cogenList[A](implicit A: Cogen[A]): Cogen[List[A]] =
     new Cogen[List[A]] {
-      def cogen[B](a: List[A], g: CogenState[B]) = a match {
-        case h :: t =>
-          variantInt(1, A.cogen(h, cogen(t, g)))
-        case _ =>
-          g
-      }
+      def cogen[B](a: List[A], g: CogenState[B]) =
+        a match {
+          case h :: t =>
+            variantInt(1, A.cogen(h, cogen(t, g)))
+          case _ =>
+            g
+        }
     }
 
   implicit def cogenArray[A](implicit A: Cogen[A]): Cogen[Array[A]] =
@@ -41,23 +42,23 @@ object Cogen extends CogenInstances0 {
     val len = ints.length + x
     var i = 0
     while (i < len) {
-      ints ::= ((bytes(i + 0) & 0xFF) << 24) |
-        ((bytes(i + 1) & 0xFF) << 16) |
-        ((bytes(i + 2) & 0xFF) << 8) |
-        ((bytes(i + 3) & 0xFF) << 0)
+      ints ::= ((bytes(i + 0) & 0xff) << 24) |
+        ((bytes(i + 1) & 0xff) << 16) |
+        ((bytes(i + 2) & 0xff) << 8) |
+        ((bytes(i + 3) & 0xff) << 0)
       i += 1
     }
     if (x != 0) {
       (bytes.length % 4) match {
         case 1 =>
-          ints ::= ((bytes(i + 0) & 0xFF) << 24)
+          ints ::= ((bytes(i + 0) & 0xff) << 24)
         case 2 =>
-          ints ::= ((bytes(i + 0) & 0xFF) << 24) |
-            ((bytes(i + 1) & 0xFF) << 16)
+          ints ::= ((bytes(i + 0) & 0xff) << 24) |
+            ((bytes(i + 1) & 0xff) << 16)
         case 3 =>
-          ints ::= ((bytes(i + 0) & 0xFF) << 24) |
-            ((bytes(i + 1) & 0xFF) << 16) |
-            ((bytes(i + 2) & 0xFF) << 8)
+          ints ::= ((bytes(i + 0) & 0xff) << 24) |
+            ((bytes(i + 1) & 0xff) << 16) |
+            ((bytes(i + 2) & 0xff) << 8)
       }
     }
     ints
@@ -171,22 +172,24 @@ object Cogen extends CogenInstances0 {
 
   implicit def cogenOption[A](implicit A: Cogen[A]): Cogen[Option[A]] =
     new Cogen[Option[A]] {
-      def cogen[B](a: Option[A], g: CogenState[B]) = a match {
-        case Some(o) =>
-          variantInt(1, A.cogen(o, g))
-        case None =>
-          variantInt(g.rand.nextInt._2, g)
-      }
+      def cogen[B](a: Option[A], g: CogenState[B]) =
+        a match {
+          case Some(o) =>
+            variantInt(1, A.cogen(o, g))
+          case None =>
+            variantInt(g.rand.nextInt._2, g)
+        }
     }
 
   implicit def cogenEither[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[Either[A, B]] =
     new Cogen[Either[A, B]] {
-      def cogen[Z](a: Either[A, B], g: CogenState[Z]) = a match {
-        case Right(x) =>
-          variantInt(1, B.cogen(x, g))
-        case Left(x) =>
-          variantInt(0, A.cogen(x, g.copy(rand = g.rand.next)))
-      }
+      def cogen[Z](a: Either[A, B], g: CogenState[Z]) =
+        a match {
+          case Right(x) =>
+            variantInt(1, B.cogen(x, g))
+          case Left(x) =>
+            variantInt(0, A.cogen(x, g.copy(rand = g.rand.next)))
+        }
     }
 
   implicit def cogenVector[A: Cogen]: Cogen[Vector[A]] = {

@@ -8,8 +8,8 @@ object contravariant {
   def identity[F[_], X](implicit F: Contravariant[F], afx: Gen[F[X]], ef: Equal[F[X]]) =
     forAll(F.contravariantLaw.identity[X] _)
 
-  def composite[F[_], X, Y, Z](
-    implicit F: Contravariant[F],
+  def composite[F[_], X, Y, Z](implicit
+    F: Contravariant[F],
     af: Gen[F[Z]],
     axy: Gen[X => Y],
     ayz: Gen[Y => Z],

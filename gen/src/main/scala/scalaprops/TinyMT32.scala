@@ -80,10 +80,10 @@ object TinyMT32 {
   private val HEXA_DECIMAL_BASE: Int = 16
 
   /** int to unsigned long mask. */
-  private val INT_TO_LONG_MASK: Long = 0xFFFFFFFFL
+  private val INT_TO_LONG_MASK: Long = 0xffffffffL
 
   /** long to double mask. */
-  private val LONG_TO_DOUBLE_MASK: Long = 0x3FF0000000000000L
+  private val LONG_TO_DOUBLE_MASK: Long = 0x3ff0000000000000L
 
   /** basic jump step.
    * every jump step is a multiple of this step.

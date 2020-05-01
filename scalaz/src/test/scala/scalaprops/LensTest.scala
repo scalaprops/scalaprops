@@ -9,8 +9,8 @@ object LensTest extends Scalaprops {
   import FunctionEqual._
   import IndexedStoreTTest.indexedStoreTEqual
 
-  private[this] implicit def lensEqual[A, B, C, D](
-    implicit A: Equal[A => IndexedStore[C, D, B]]
+  private[this] implicit def lensEqual[A, B, C, D](implicit
+    A: Equal[A => IndexedStore[C, D, B]]
   ): Equal[LensFamily[A, B, C, D]] =
     A.contramap[LensFamily[A, B, C, D]](_.run)
 

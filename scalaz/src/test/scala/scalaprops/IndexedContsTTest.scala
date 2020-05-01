@@ -8,13 +8,12 @@ object IndexedContsTTest extends Scalaprops {
   private[this] val F = new FunctionEqual(5)
   import F._
 
-  private[this] implicit def indexedContsTEqual[W[_], M[_], R, O, A](
-    implicit F: Equal[W[A => M[O]] => M[R]]
+  private[this] implicit def indexedContsTEqual[W[_], M[_], R, O, A](implicit
+    F: Equal[W[A => M[O]] => M[R]]
   ): Equal[IndexedContsT[W, R, O, M, A]] =
     F.contramap(_.run)
 
-  private[this] def bindTest[W[_]: Cobind, M[_]](
-    implicit
+  private[this] def bindTest[W[_]: Cobind, M[_]](implicit
     G1: Gen[ContsT[W, Int, M, Int]],
     G2: Gen[ContsT[W, Int, M, Int => Int]],
     E1: Equal[ContsT[W, Int, M, Int]]

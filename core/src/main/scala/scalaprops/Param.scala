@@ -16,9 +16,10 @@ final case class Param(
 }
 
 object Param {
-  def withCurrentTimeSeed(): Param = Param(
-    seed = Seed.LongSeed(System.nanoTime())
-  )
+  def withCurrentTimeSeed(): Param =
+    Param(
+      seed = Seed.LongSeed(System.nanoTime())
+    )
 
   def rand(rand: Rand): Endo[Param] =
     Endo(_.copy(seed = Seed.RandSeed(rand)))

@@ -6,8 +6,8 @@ import scalaz._
 import scalaz.std.anyVal._
 
 object cobind {
-  def cobindAssociative[F[_], A, B, C, D](
-    implicit F: Cobind[F],
+  def cobindAssociative[F[_], A, B, C, D](implicit
+    F: Cobind[F],
     D: Equal[D],
     fa: Gen[F[A]],
     f: Gen[F[A] => B],
@@ -24,8 +24,8 @@ object cobind {
       )
     )
 
-  def all[F[_]](
-    implicit a: Cobind[F],
+  def all[F[_]](implicit
+    a: Cobind[F],
     am: Gen[F[Int]],
     e: Equal[F[Int]],
     g: Gen[F[Int] => Int]

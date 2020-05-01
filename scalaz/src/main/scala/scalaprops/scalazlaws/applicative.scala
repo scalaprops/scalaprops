@@ -26,8 +26,8 @@ object applicative {
       ScalazLaw.applicativeMapConsistentWithAp -> applicative.mapApConsistency[F, Int, Int]
     )
 
-  def all[F[_]](
-    implicit F: Applicative[F],
+  def all[F[_]](implicit
+    F: Applicative[F],
     af: Gen[F[Int]],
     aff: Gen[F[Int => Int]],
     e: Equal[F[Int]]
