@@ -225,6 +225,16 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     "-unchecked",
     "-language:existentials,higherKinds,implicitConversions",
   ),
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((0 | 3, _)) =>
+        Seq(
+          "-Ykind-projector",
+        )
+      case _ =>
+        Nil
+    }
+  },
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
       case Some((2, v)) if v <= 12 =>
