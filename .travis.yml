@@ -57,3 +57,8 @@ matrix:
       script:
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
       - ./sbt "++ 2.13.2" compile test:compile scalapropsJVM/test scalazJVM/test "project /" publishLocal
+    - name: dotty-nightly
+      script:
+      - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck SetDottyNightlyVersion checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
+  allow_failures:
+  - name: dotty-nightly
