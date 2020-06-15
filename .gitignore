@@ -6,3 +6,7 @@ target
 .DS_Store
 .idea
 _site
+.bloop/
+.metals/
+.vscode/
+project/metals.sbt
