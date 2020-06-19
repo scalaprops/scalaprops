@@ -3,7 +3,8 @@ package scalaprops
 import java.math.BigInteger
 import scala.annotation.tailrec
 
-/** Polynomial over the field of two elements. <b>F</b><sub>2</sub>[t]
+/**
+ * Polynomial over the field of two elements. <b>F</b><sub>2</sub>[t]
  *
  * This class is immutable.
  *
@@ -32,7 +33,8 @@ object F2Polynomial {
     }
   }
 
-  /** Multiplication of BigIntegers which represents coefficient of polynomials.
+  /**
+   * Multiplication of BigIntegers which represents coefficient of polynomials.
    *
    * @param x
    * polynomial
@@ -81,7 +83,8 @@ object F2Polynomial {
     }
   }
 
-  /** returns x<sup>pow</sup> % mod.
+  /**
+   * returns x<sup>pow</sup> % mod.
    *
    * @param x polynomial
    * @param power exponent
@@ -108,7 +111,8 @@ object F2Polynomial {
 /** @param pol internal representation of polynomial. */
 final class F2Polynomial private (private val pol: BigInteger) {
 
-  /** constructor from string with radix.
+  /**
+   * constructor from string with radix.
    *
    * @param value
    * a string consists of numbers of radix
@@ -119,7 +123,8 @@ final class F2Polynomial private (private val pol: BigInteger) {
     this(new BigInteger(value, radix))
   }
 
-  /** constructor from string of 0 and 1.
+  /**
+   * constructor from string of 0 and 1.
    *
    * @param value
    * a string consists of 0 and 1
@@ -128,14 +133,16 @@ final class F2Polynomial private (private val pol: BigInteger) {
     this(new BigInteger(value, 2))
   }
 
-  /** If zero, this method returns -1, otherwise, returns the degree of polynomial.
+  /**
+   * If zero, this method returns -1, otherwise, returns the degree of polynomial.
    *
    * @return degree of this polynomial
    */
   def degree: Int =
     F2Polynomial.degree(pol)
 
-  /** Addition over <b>F<sub>2</sub></b>[t].
+  /**
+   * Addition over <b>F<sub>2</sub></b>[t].
    *
    * @param that Polynomial
    * @return result of addition
@@ -143,7 +150,8 @@ final class F2Polynomial private (private val pol: BigInteger) {
   def add(that: F2Polynomial): F2Polynomial =
     new F2Polynomial(this.pol.xor(that.pol))
 
-  /** Multiplication over <b>F<sub>2</sub></b>[t].
+  /**
+   * Multiplication over <b>F<sub>2</sub></b>[t].
    *
    * @param that Polynomial
    * @return result of multiplication
@@ -155,7 +163,8 @@ final class F2Polynomial private (private val pol: BigInteger) {
       new F2Polynomial(F2Polynomial.mul(that.pol, this.pol))
     }
 
-  /** return coefficient of specified term, returned value is zero or one.
+  /**
+   * return coefficient of specified term, returned value is zero or one.
    *
    * @param index degree of term
    * @return coefficient of specified term
@@ -177,7 +186,8 @@ final class F2Polynomial private (private val pol: BigInteger) {
   def mod(that: F2Polynomial): F2Polynomial =
     new F2Polynomial(F2Polynomial.mod(this.pol, that.pol))
 
-  /** power of this polynomial, this<sup>pow</sup>.
+  /**
+   * power of this polynomial, this<sup>pow</sup>.
    *
    * @param pow exponent
    * @return this<sup>pow</sup>
@@ -185,7 +195,8 @@ final class F2Polynomial private (private val pol: BigInteger) {
   def power(pow: BigInteger): F2Polynomial =
     new F2Polynomial(power(this.pol, pow))
 
-  /** power of polynomial x, x<sup>pow</sup>.
+  /**
+   * power of polynomial x, x<sup>pow</sup>.
    *
    * @param x polynomial
    * @param power exponent
@@ -205,7 +216,8 @@ final class F2Polynomial private (private val pol: BigInteger) {
     z
   }
 
-  /** returns this<sup>pow</sup> % mod.
+  /**
+   * returns this<sup>pow</sup> % mod.
    *
    * @param pow exponent
    * @param mod polynomial
@@ -215,14 +227,16 @@ final class F2Polynomial private (private val pol: BigInteger) {
     new F2Polynomial(F2Polynomial.powerMod(this.pol, pow, mod.pol))
   }
 
-  /** return binary format representation of polynomial.
+  /**
+   * return binary format representation of polynomial.
    *
    * @return binary format string
    */
   override def toString: String =
     toString(2)
 
-  /** return base format representation of polynomial.
+  /**
+   * return base format representation of polynomial.
    *
    * @param base base of format
    * @return base format string
