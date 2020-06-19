@@ -174,12 +174,11 @@ object StreamTTest extends Scalaprops {
       scalazlaws.equal.all[F[Int]]
     )
   }.andThenParam(
-      Param.maxSize(2)
-    )
-    .andThenParamPF {
-      case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
-        Param.minSuccessful(1)
-    }
+    Param.maxSize(2)
+  ).andThenParamPF {
+    case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
+      Param.minSuccessful(1)
+  }
 
   val testMaybe = {
     type G[A] = Maybe[A]

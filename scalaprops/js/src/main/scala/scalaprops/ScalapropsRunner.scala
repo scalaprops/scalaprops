@@ -10,7 +10,8 @@ import scalaprops.internal._
 
 object ScalapropsRunner {
 
-  /** call from sbt plugin
+  /**
+   * call from sbt plugin
    * [[https://github.com/scalaprops/sbt-scalaprops/blob/v0.2.5/src/main/scala/scalaprops/ScalapropsPlugin.scala#L66]]
    */
   def testFieldNames(clazz: Class[_]): Array[String] =

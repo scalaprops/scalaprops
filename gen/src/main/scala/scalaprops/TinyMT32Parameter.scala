@@ -5,7 +5,6 @@ package scalaprops
  * from resource file.
  *
  * @author M. Saito
- *
  */
 object TinyMT32Parameter {
 
@@ -47,7 +46,8 @@ object TinyMT32Parameter {
     new TinyMT32Parameter("e04a99bcc12b07a661440bef54402207", 1, 0x926c124c, 0xf498fd27, 0x01bbff5f, 53, 0)
   )
 
-  /** returns default parameter of TinyMT32.
+  /**
+   * returns default parameter of TinyMT32.
    *
    * @return default parameter
    */
@@ -91,7 +91,8 @@ final case class TinyMT32Parameter(
   delta: Int
 ) {
 
-  /** private constructor.
+  /**
+   * private constructor.
    *
    * @param pcharacteristic
    * hexadecimal format of characteristic polynomial
@@ -120,7 +121,8 @@ final case class TinyMT32Parameter(
     )
   }
 
-  /** return mat1 when x is odd number.
+  /**
+   * return mat1 when x is odd number.
    *
    * @param x number
    * @return mat1 when x is odd else 0
@@ -133,7 +135,8 @@ final case class TinyMT32Parameter(
     }
   }
 
-  /** return mat2 when x is odd number.
+  /**
+   * return mat2 when x is odd number.
    *
    * @param x integer
    * @return mat1 if x is odd else 0
@@ -146,7 +149,8 @@ final case class TinyMT32Parameter(
     }
   }
 
-  /** return tmat if x is odd number.
+  /**
+   * return tmat if x is odd number.
    *
    * @param x integer
    * @return return tmat if x is odd else 0
@@ -159,7 +163,8 @@ final case class TinyMT32Parameter(
     }
   }
 
-  /** return bit pattern depends on x is odd or not.
+  /**
+   * return bit pattern depends on x is odd or not.
    *
    * @param x
    * integer
