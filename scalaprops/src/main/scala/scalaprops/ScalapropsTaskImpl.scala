@@ -25,12 +25,12 @@ final class ScalapropsTaskImpl(
     val testClassName = taskDef.fullyQualifiedName()
 
     val obj = ScalapropsRunner.getTestObject(
-      fingerprint = taskDef.fingerprint,
+      fingerprint = taskDef.fingerprint(),
       testClassName = testClassName,
       testClassLoader = testClassLoader
     )
     val tests = ScalapropsRunner.findTests(
-      fingerprint = taskDef.fingerprint,
+      fingerprint = taskDef.fingerprint(),
       testClassName = testClassName,
       testClassLoader = testClassLoader,
       only = arguments.only,

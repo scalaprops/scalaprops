@@ -81,7 +81,7 @@ object ScalapropsRunner {
   ): Scalaprops = {
     fingerprint match {
       case f: SubclassFingerprint if f.superclassName() == "scalaprops.Scalaprops" =>
-        if (f.isModule) {
+        if (f.isModule()) {
           Reflect.lookupLoadableModuleClass(testClassName + "$").map(_.loadModule()) match {
             case Some(m: Scalaprops) => m
             case x => throw new Exception(s"Cannot test $testClassName of type: $x")

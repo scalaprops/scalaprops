@@ -144,7 +144,7 @@ object Shrink {
 
   implicit def map[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[Map[A, B]] = {
     Shrink[List[(A, B)]].xmap(
-      _.foldLeft(Map.newBuilder[A, B])(_ += _).result,
+      _.foldLeft(Map.newBuilder[A, B])(_ += _).result(),
       _.foldRight(List.empty[(A, B)])(_ :: _)
     )
   }
