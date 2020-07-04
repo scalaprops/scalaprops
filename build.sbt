@@ -224,6 +224,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     </scm>
   ),
   scalacOptions ++= Seq(
+    "-Xsource:3",
     "-deprecation",
     "-unchecked",
     "-language:existentials,higherKinds,implicitConversions",
