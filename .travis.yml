@@ -4,7 +4,7 @@ dist: xenial
 
 scala:
   - 2.11.12
-  - 2.12.11
+  - 2.12.12
   - 2.13.3
 
 cache:
@@ -45,7 +45,7 @@ matrix:
       - wget https://raw.githubusercontent.com/paulp/sbt-extras/aa4425cc96aee/sbt && chmod +x ./sbt
       script:
       - ./sbt -J-Xmx5G rootNative/compile scalapropsNative/test scalazNative/test
-    - scala: 2.12.11
+    - scala: 2.12.12
       name: jdk11
       env:
       - JDK="adopt@1.11.0-7"
