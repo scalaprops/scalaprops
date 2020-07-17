@@ -8,7 +8,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 ThisBuild / useSuperShell := false
 
 val scalazVersion = SettingKey[String]("scalazVersion")
-val DottyVersion = "0.24.0-RC1"
+val DottyVersion = "0.25.0-RC2"
 
 // avoid move files
 val CustomCrossType = new sbtcrossproject.CrossType {
