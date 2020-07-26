@@ -33,7 +33,7 @@ before_install:
 matrix:
   include:
     - name: dotty
-      scala: 0.25.0-RC2
+      scala: 0.26.0-RC1
       script:
       - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
     - scala: SCALA_NATIVE
