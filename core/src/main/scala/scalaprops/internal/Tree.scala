@@ -58,8 +58,8 @@ sealed abstract class Tree[A] {
         case t #:: ts => "|" #:: shift("+- ", "|  ", t.draw) append drawSubTrees(ts)
       }
     def shift(first: String, other: String, s: Stream[String]): Stream[String] =
-      (first #:: Stream.continually(other)).zip(s).map {
-        case (a, b) => a + b
+      (first #:: Stream.continually(other)).zip(s).map { case (a, b) =>
+        a + b
       }
 
     rootLabel.toString #:: drawSubTrees(subForest)

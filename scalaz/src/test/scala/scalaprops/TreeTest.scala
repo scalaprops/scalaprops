@@ -54,18 +54,17 @@ object TreeTest extends Scalaprops {
   def sizeTest[A: Order](numbers: List[Int], f: (Int, Long) => Stream[A]) = {
     val sizes = numbers.zipWithIndex.map(t => t.copy(_2 = t._2 + 1))
 
-    val tests = sizes.map {
-      case (n, i) =>
-        Property.forAll { (seed: Long) =>
-          val s = f(i, seed)
-          distinctStream(s) match {
-            case -\/(x) =>
-              assert(x == n, s"$x $n")
-              true
-            case \/-(x) =>
-              sys.error(x.size.toString)
-          }
-        }.toProperties(i.toString, Param.minSuccessful(1))
+    val tests = sizes.map { case (n, i) =>
+      Property.forAll { (seed: Long) =>
+        val s = f(i, seed)
+        distinctStream(s) match {
+          case -\/(x) =>
+            assert(x == n, s"$x $n")
+            true
+          case \/-(x) =>
+            sys.error(x.size.toString)
+        }
+      }.toProperties(i.toString, Param.minSuccessful(1))
     }
 
     Properties.list(tests.head, tests.tail: _*)

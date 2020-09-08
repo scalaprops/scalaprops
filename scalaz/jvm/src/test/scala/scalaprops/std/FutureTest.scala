@@ -28,8 +28,8 @@ object FutureTest extends Scalaprops {
     Gen[Byte].map(SomeFailure)
 
   private[this] implicit val cogenThrowable: Cogen[Throwable] =
-    Cogen[Byte].contramap {
-      case SomeFailure(n) => n
+    Cogen[Byte].contramap { case SomeFailure(n) =>
+      n
     }
 
   private[this] implicit def futureEqual[A](implicit A: Equal[A]): Equal[Future[A]] =

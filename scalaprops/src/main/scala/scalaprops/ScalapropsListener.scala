@@ -42,9 +42,8 @@ object ScalapropsListener {
           shift("+- ", "| ", drawTree(t)) ++ drawSubTrees(ts)
       }
     def shift(first: String, other: String, s: Stream[(String, A)]): Stream[(String, A)] =
-      (first #:: Stream.continually(other)).zip(s).map {
-        case (a, (b, c)) =>
-          (a + b, c)
+      (first #:: Stream.continually(other)).zip(s).map { case (a, (b, c)) =>
+        (a + b, c)
       }
 
     ("" -> tree.rootLabel) #:: drawSubTrees(tree.subForest)
@@ -66,32 +65,29 @@ object ScalapropsListener {
       result: Tree[(Any, LazyOpt[(Property, Param, ScalapropsEvent)])],
       logger: Logger
     ): Unit = {
-      val tree = drawTree(result.map {
-        case (name, x) =>
-          name.toString -> x.map {
-            case (prop, param, event) =>
-              val str = event2string(event)
-              if (logger.ansiCodesSupported()) {
-                event.result.value match {
-                  case Some(_: CheckResult.Proven | _: CheckResult.Passed) =>
-                    Console.GREEN + str + Console.RESET
-                  case Some(_: CheckResult.Ignored) =>
-                    Console.BLUE + str + Console.RESET
-                  case _ =>
-                    Console.RED + str + Console.RESET
-                }
-              } else {
-                str
-              }
+      val tree = drawTree(result.map { case (name, x) =>
+        name.toString -> x.map { case (prop, param, event) =>
+          val str = event2string(event)
+          if (logger.ansiCodesSupported()) {
+            event.result.value match {
+              case Some(_: CheckResult.Proven | _: CheckResult.Passed) =>
+                Console.GREEN + str + Console.RESET
+              case Some(_: CheckResult.Ignored) =>
+                Console.BLUE + str + Console.RESET
+              case _ =>
+                Console.RED + str + Console.RESET
+            }
+          } else {
+            str
           }
+        }
       })
       println()
       val start = System.currentTimeMillis()
       // TODO ugly
-      tree.foreach {
-        case (treeLabel, (name, r)) =>
-          print(treeLabel + name + " ")
-          println(r.map(" " + _).getOrElse(""))
+      tree.foreach { case (treeLabel, (name, r)) =>
+        print(treeLabel + name + " ")
+        println(r.map(" " + _).getOrElse(""))
       }
       val name = tree.head._1 + tree.head._2._1
       logger.info(name + " " + (System.currentTimeMillis() - start) + " ms")

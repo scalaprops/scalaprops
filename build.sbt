@@ -280,9 +280,8 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     pushChanges
   ),
   credentials ++= PartialFunction
-    .condOpt(sys.env.get("SONATYPE_USER") -> sys.env.get("SONATYPE_PASSWORD")) {
-      case (Some(user), Some(pass)) =>
-        Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
+    .condOpt(sys.env.get("SONATYPE_USER") -> sys.env.get("SONATYPE_PASSWORD")) { case (Some(user), Some(pass)) =>
+      Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
     }
     .toList
 ) ++ Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value)

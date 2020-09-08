@@ -24,8 +24,8 @@ object IListTest extends Scalaprops {
       xs <- Gen.listOf(Gen[Byte], min)
     } yield (min, xs)
 
-    val p = forAllG(g) {
-      case (min, xs) => xs.length >= min
+    val p = forAllG(g) { case (min, xs) =>
+      xs.length >= min
     }
     p.toProperties("minimum length")
   }

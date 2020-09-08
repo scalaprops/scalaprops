@@ -18,40 +18,36 @@ object ScalapropsRunner {
     Scalaprops.testFieldNames(clazz)
 
   private[this] def findTestFields[A](obj: js.Dictionary[A], fieldType: Class[_]): WrappedDictionary[A] =
-    obj.filter {
-      case (k, v) =>
-        fieldType.isInstance(v)
-    }.map {
-      case (k, v) =>
-        val k0 = NameTransformer.decode(k)
-        val k1 = k0.split('$').toSeq match {
-          case init :+ _ => init.mkString("$")
-          case _ => k0
-        }
-        k1 -> v
+    obj.filter { case (k, v) =>
+      fieldType.isInstance(v)
+    }.map { case (k, v) =>
+      val k0 = NameTransformer.decode(k)
+      val k1 = k0.split('$').toSeq match {
+        case init :+ _ => init.mkString("$")
+        case _ => k0
+      }
+      k1 -> v
     }
 
   private[this] def invokeProperty[A](obj: js.Dictionary[A]): List[(String, Property)] =
-    findTestFields(obj, classOf[Property]).map {
-      case (k, v) =>
-        k -> v.asInstanceOf[Property]
+    findTestFields(obj, classOf[Property]).map { case (k, v) =>
+      k -> v.asInstanceOf[Property]
     }.toList
 
   private[this] def invokeProperties[A](obj: js.Dictionary[A]): List[Properties[Any]] =
-    findTestFields(obj, classOf[Properties[_]]).map {
-      case (name, properties) =>
-        val props = properties.asInstanceOf[Properties[Any]].props
-        Properties.noSort[Any](
-          Tree.Node(
-            name -> Option.empty,
-            props #:: Stream.empty
-          )
+    findTestFields(obj, classOf[Properties[_]]).map { case (name, properties) =>
+      val props = properties.asInstanceOf[Properties[Any]].props
+      Properties.noSort[Any](
+        Tree.Node(
+          name -> Option.empty,
+          props #:: Stream.empty
         )
+      )
     }.toList
 
   def allProps(obj: Scalaprops, only: List[String], logger: Logger): Properties[_] = {
-    val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[_]]).map {
-      case (name, p) => p.toProperties[Any](name)
+    val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[_]]).map { case (name, p) =>
+      p.toProperties[Any](name)
     } ::: invokeProperties(obj.asInstanceOf[js.Dictionary[_]])
 
     val tests = only match {

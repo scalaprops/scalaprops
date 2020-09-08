@@ -62,14 +62,13 @@ object TinyMT32Test extends Scalaprops {
       Vector(0xd15c9d16, 0xa767e149, 0xe9c73b4b, 0xaf69de00, 0x8319be3b, 0xecc79680, 0x8ab49653, 0x9bf1d861, 0x04c7dab6,
         0xb0d5cf24)
     )
-    c_data.zipWithIndex.foreach {
-      case (data, i) =>
-        val output = (0 until data.size).map { _ =>
-          val temp = tiny(i).nextInt
-          tiny(i) = temp._1
-          temp._2
-        }
-        assert(output == data, s"$i $output $data")
+    c_data.zipWithIndex.foreach { case (data, i) =>
+      val output = (0 until data.size).map { _ =>
+        val temp = tiny(i).nextInt
+        tiny(i) = temp._1
+        temp._2
+      }
+      assert(output == data, s"$i $output $data")
     }
     true
   }
@@ -89,14 +88,13 @@ object TinyMT32Test extends Scalaprops {
         0x521237a7, 0xbfcd41ad)
     )
 
-    c_data.zipWithIndex.foreach {
-      case (data, i) =>
-        val output = (0 until data.size).map { _ =>
-          val temp = tiny(i).nextInt
-          tiny(i) = temp._1
-          temp._2
-        }
-        assert(output == data, i)
+    c_data.zipWithIndex.foreach { case (data, i) =>
+      val output = (0 until data.size).map { _ =>
+        val temp = tiny(i).nextInt
+        tiny(i) = temp._1
+        temp._2
+      }
+      assert(output == data, i)
     }
     true
   }

@@ -9,8 +9,8 @@ object StringTest extends Scalaprops {
       s <- Gen.genString(Gen.asciiChar, min)
     } yield (min, s)
 
-    val p = forAllG(g) {
-      case (min, s) => s.length >= min
+    val p = forAllG(g) { case (min, s) =>
+      s.length >= min
     }
     p.toProperties("minimum length")
   }
