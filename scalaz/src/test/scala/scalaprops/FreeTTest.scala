@@ -82,9 +82,8 @@ object FreeTTest extends Scalaprops {
       scalazlaws.bindRec.laws[F],
       scalazlaws.monad.all[F]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.applyComposition)) =>
-      Param.maxSize(2) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.applyComposition)) =>
+    Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
   val maybeMaybe = {
@@ -103,9 +102,8 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlus.all[F]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
-      Param.maxSize(20) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+    Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val iListMaybe = {
@@ -115,9 +113,8 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlus.all[F]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
-      Param.maxSize(20) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+    Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val iListIList = {
@@ -127,9 +124,8 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadPlus.all[F]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
-      Param.maxSize(20) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+    Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val disjunctionDisjunction = {
@@ -164,9 +160,8 @@ object FreeTTest extends Scalaprops {
       scalazlaws.traverse.all[F],
       scalazlaws.monadError.all[F, E]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
-      Param.maxSize(20) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.bindRecTailrecBindConsistency)) =>
+    Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
   val freeMaybe_Disjunction = {
@@ -213,9 +208,8 @@ object FreeTTest extends Scalaprops {
       scalazlaws.bindRec.laws[F],
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.applyComposition)) =>
-      Param.maxSize(2) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.applyComposition)) =>
+    Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
   val idStateMaybe = {
@@ -227,9 +221,8 @@ object FreeTTest extends Scalaprops {
       // scalazlaws.bindRec.laws[F],
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.applyComposition)) =>
-      Param.maxSize(2) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.applyComposition)) =>
+    Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
   val maybeState = {
@@ -240,9 +233,8 @@ object FreeTTest extends Scalaprops {
       scalazlaws.bindRec.laws[F],
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.applyComposition)) =>
-      Param.maxSize(2) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.applyComposition)) =>
+    Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
   val maybeStateIList = {
@@ -252,9 +244,8 @@ object FreeTTest extends Scalaprops {
     Properties.list(
       scalazlaws.monadState.all[F, S]
     )
-  }.andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.applyComposition)) =>
-      Param.maxSize(2) andThen Param.minSuccessful(10)
+  }.andThenParamPF { case Or.R(Or.L(ScalazLaw.applyComposition)) =>
+    Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
   val iListStateIList = {

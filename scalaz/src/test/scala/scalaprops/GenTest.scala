@@ -28,10 +28,9 @@ object GenTest extends Scalaprops {
 
   implicit def genEqual[A](implicit A: Equal[A]): Equal[Gen[A]] =
     Equal.equal { (x, y) =>
-      Iterator.fill(100)((Random.nextInt(), Random.nextLong())).forall {
-        case (size, seed) =>
-          val r = Rand.standard(seed)
-          Equal[(Rand, A)].equal(x.f(size, r), y.f(size, r))
+      Iterator.fill(100)((Random.nextInt(), Random.nextLong())).forall { case (size, seed) =>
+        val r = Rand.standard(seed)
+        Equal[(Rand, A)].equal(x.f(size, r), y.f(size, r))
       }
     }
 
@@ -65,9 +64,8 @@ object GenTest extends Scalaprops {
 
     Property.forAllG(
       Gen.choose(min, max).flatMap { size => Gen.sequenceNList(size, Gen.choose(a, b)).map(size -> _) }
-    ) {
-      case (size, values) =>
-        (values.length == size) && (min <= size && size <= max) && values.forall { x => a <= x && x <= b }
+    ) { case (size, values) =>
+      (values.length == size) && (min <= size && size <= max) && values.forall { x => a <= x && x <= b }
     }
   }
 
@@ -204,9 +202,8 @@ object GenTest extends Scalaprops {
 
     def combinations[A: Order, B](as: IList[A], bs: IList[B]): IList[A ==>> B] = {
       val xs = permutations(bs, as.length)
-      IList.fill(xs.length)(as).zip(xs).map {
-        case (keys, values) =>
-          keys.zip(values).toMap
+      IList.fill(xs.length)(as).zip(xs).map { case (keys, values) =>
+        keys.zip(values).toMap
       }
     }
 

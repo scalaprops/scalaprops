@@ -656,17 +656,15 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
       case n if n <= 1 =>
         A.map(a => StrictTree.Leaf(a))
       case 2 =>
-        Gen[(A, A)].map {
-          case (a1, a2) =>
-            StrictTree.Node(a1, Vector(StrictTree.Leaf(a2)))
+        Gen[(A, A)].map { case (a1, a2) =>
+          StrictTree.Node(a1, Vector(StrictTree.Leaf(a2)))
         }
       case 3 =>
-        Gen[(A, A, A)].flatMap {
-          case (a1, a2, a3) =>
-            Gen.elements(
-              StrictTree.Node(a1, Vector(StrictTree.Leaf(a2), StrictTree.Leaf(a3))),
-              StrictTree.Node(a1, Vector(StrictTree.Node(a2, Vector(StrictTree.Leaf(a3)))))
-            )
+        Gen[(A, A, A)].flatMap { case (a1, a2, a3) =>
+          Gen.elements(
+            StrictTree.Node(a1, Vector(StrictTree.Leaf(a2), StrictTree.Leaf(a3))),
+            StrictTree.Node(a1, Vector(StrictTree.Node(a2, Vector(StrictTree.Leaf(a3)))))
+          )
         }
       case _ =>
         withSize(size - 1)(strictTreeGenSized[A]).flatMap { as => A.map(a => StrictTree.Node(a, as.toVector)) }
@@ -707,17 +705,15 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
       case n if n <= 1 =>
         A.map(a => Tree.Leaf(a))
       case 2 =>
-        Gen[(A, A)].map {
-          case (a1, a2) =>
-            Tree.Node(a1, EphemeralStream(Tree.Leaf(a2)))
+        Gen[(A, A)].map { case (a1, a2) =>
+          Tree.Node(a1, EphemeralStream(Tree.Leaf(a2)))
         }
       case 3 =>
-        Gen[(A, A, A)].flatMap {
-          case (a1, a2, a3) =>
-            Gen.elements(
-              Tree.Node(a1, EphemeralStream(Tree.Leaf(a2), Tree.Leaf(a3))),
-              Tree.Node(a1, EphemeralStream(Tree.Node(a2, EphemeralStream(Tree.Leaf(a3)))))
-            )
+        Gen[(A, A, A)].flatMap { case (a1, a2, a3) =>
+          Gen.elements(
+            Tree.Node(a1, EphemeralStream(Tree.Leaf(a2), Tree.Leaf(a3))),
+            Tree.Node(a1, EphemeralStream(Tree.Node(a2, EphemeralStream(Tree.Leaf(a3)))))
+          )
         }
       case _ =>
         withSize(size - 1)(treeGenSized[A]).flatMap { as => A.map(a => Tree.Node(a, EphemeralStream.fromStream(as))) }

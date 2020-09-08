@@ -175,9 +175,8 @@ object StreamTTest extends Scalaprops {
     )
   }.andThenParam(
     Param.maxSize(2)
-  ).andThenParamPF {
-    case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
-      Param.minSuccessful(1)
+  ).andThenParamPF { case Or.R(Or.L(ScalazLaw.applyComposition | ScalazLaw.bindAssociativity)) =>
+    Param.minSuccessful(1)
   }
 
   val testMaybe = {

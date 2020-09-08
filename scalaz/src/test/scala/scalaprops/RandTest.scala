@@ -7,12 +7,11 @@ object RandTest extends Scalaprops {
   val testEqualLaw = scalazlaws.equal.all[Rand]
 
   val testRandChoose: Property = Property.forAll(
-    List.fill(10000)((Random.nextLong, Random.nextInt, Random.nextInt)).forall {
-      case (seed, y, z) =>
-        val r = Rand.standard(seed).choose(y, z)._2
-        val min = math.min(y, z)
-        val max = math.max(y, z)
-        (min <= r) && (r <= max)
+    List.fill(10000)((Random.nextLong, Random.nextInt, Random.nextInt)).forall { case (seed, y, z) =>
+      val r = Rand.standard(seed).choose(y, z)._2
+      val min = math.min(y, z)
+      val max = math.max(y, z)
+      (min <= r) && (r <= max)
     }
   )
 
@@ -24,16 +23,15 @@ object RandTest extends Scalaprops {
       val x = g
         .samples(listSize = size, seed = seed)
         .groupBy(identity)
-        .map {
-          case (k, v) => k -> v.size
+        .map { case (k, v) =>
+          k -> v.size
         }
         .toList
         .sortBy(_._2)
       val min = (size / count) * 0.8
       val max = (size / count) * 1.3
-      x.foreach {
-        case (_, a) =>
-          assert(min < a && a < max, x)
+      x.foreach { case (_, a) =>
+        assert(min < a && a < max, x)
       }
       true
     }

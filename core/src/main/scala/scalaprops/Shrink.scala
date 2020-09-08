@@ -108,22 +108,20 @@ object Shrink {
   }
 
   implicit def tuple2[A1, A2](implicit A1: Shrink[A1], A2: Shrink[A2]): Shrink[(A1, A2)] =
-    shrink {
-      case (a1, a2) =>
-        for {
-          x1 <- A1(a1)
-          x2 <- A2(a2)
-        } yield (x1, x2)
+    shrink { case (a1, a2) =>
+      for {
+        x1 <- A1(a1)
+        x2 <- A2(a2)
+      } yield (x1, x2)
     }
 
   implicit def tuple3[A1, A2, A3](implicit A1: Shrink[A1], A2: Shrink[A2], A3: Shrink[A3]): Shrink[(A1, A2, A3)] =
-    shrink {
-      case (a1, a2, a3) =>
-        for {
-          x1 <- A1(a1)
-          x2 <- A2(a2)
-          x3 <- A3(a3)
-        } yield (x1, x2, x3)
+    shrink { case (a1, a2, a3) =>
+      for {
+        x1 <- A1(a1)
+        x2 <- A2(a2)
+        x3 <- A3(a3)
+      } yield (x1, x2, x3)
     }
 
   implicit def tuple4[A1, A2, A3, A4](implicit
@@ -132,14 +130,13 @@ object Shrink {
     A3: Shrink[A3],
     A4: Shrink[A4]
   ): Shrink[(A1, A2, A3, A4)] =
-    shrink {
-      case (a1, a2, a3, a4) =>
-        for {
-          x1 <- A1(a1)
-          x2 <- A2(a2)
-          x3 <- A3(a3)
-          x4 <- A4(a4)
-        } yield (x1, x2, x3, x4)
+    shrink { case (a1, a2, a3, a4) =>
+      for {
+        x1 <- A1(a1)
+        x2 <- A2(a2)
+        x3 <- A3(a3)
+        x4 <- A4(a4)
+      } yield (x1, x2, x3, x4)
     }
 
   implicit def map[A, B](implicit A: Shrink[A], B: Shrink[B]): Shrink[Map[A, B]] = {

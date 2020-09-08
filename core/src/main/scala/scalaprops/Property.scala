@@ -156,10 +156,9 @@ object Property {
   def forall0[A](g: Gen[A], shrink: Shrink[A])(f: A => Property): Property =
     Property((i, r) => {
       def first(as: Stream[(Rand, A)], shrinks: Int): Option[(A, Result, Rand)] = {
-        as.map {
-          case (rr, a) =>
-            val x = exception(f(a)).f(i, rr)
-            x._2.toOption.map(result => (a, result.provenAsUnfalsified.addArg(Arg(a, shrinks)): Result, x._1))
+        as.map { case (rr, a) =>
+          val x = exception(f(a)).f(i, rr)
+          x._2.toOption.map(result => (a, result.provenAsUnfalsified.addArg(Arg(a, shrinks)): Result, x._1))
         } match {
           case Stream() =>
             Option.empty
