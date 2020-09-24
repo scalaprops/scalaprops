@@ -35,7 +35,17 @@ matrix:
     - name: dotty
       scala: 0.27.0-RC1
       script:
-      - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck "++${TRAVIS_SCALA_VERSION}!" checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
+      - sbt
+        scalafmtCheckAll
+        scalafmtSbtCheck
+        "++${TRAVIS_SCALA_VERSION}!"
+        checkGenerateCodeError
+        scalapropsJVM/test
+        scalazJVM/test
+        rootJVM/publishLocal
+        scalapropsJS/test
+        scalazJS/test
+        rootJS/publishLocal
     - scala: SCALA_NATIVE
       sudo: required
       before_install:
@@ -59,6 +69,16 @@ matrix:
       - ./sbt "++ 2.13.3" compile test:compile scalapropsJVM/test scalazJVM/test "project /" publishLocal
     - name: dotty-nightly
       script:
-      - sbt scalafmtCheck scalafmtSbtCheck test:scalafmtCheck SetDottyNightlyVersion checkGenerateCodeError scalapropsJVM/test:compile scalapropsJVM/test scalazJVM/test rootJVM/publishLocal
+      - sbt
+        scalafmtCheckAll
+        scalafmtSbtCheck
+        SetDottyNightlyVersion
+        checkGenerateCodeError
+        scalapropsJVM/test
+        scalazJVM/test
+        rootJVM/publishLocal
+        scalapropsJS/test
+        scalazJS/test
+        rootJS/publishLocal
   allow_failures:
   - name: dotty-nightly

@@ -58,10 +58,14 @@ def module(id: String): CrossProject =
       }
     )
     .jsSettings(
-      scalacOptions += {
+      scalacOptions ++= {
         val a = (baseDirectory in LocalRootProject).value.toURI.toString
         val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + tagOrHash.value
-        s"-P:scalajs:mapSourceURI:$a->$g/"
+        if (isDottyJS.value) {
+          Nil
+        } else {
+          Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
+        }
       }
     )
     .nativeSettings(
@@ -94,8 +98,7 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value,
-    libraryDependencies := libraryDependencies.value.map(_.withDottyCompat(scalaVersion.value)),
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value withDottyCompat scalaVersion.value,
   )
   .dependsOn(
     core,
@@ -118,7 +121,7 @@ lazy val scalaprops = module(scalapropsName)
     }
   )
   .jsSettings(
-    libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion
+    libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion withDottyCompat scalaVersion.value
   )
   .nativeSettings(
     libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion
