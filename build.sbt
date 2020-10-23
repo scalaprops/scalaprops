@@ -187,7 +187,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       old
     }
   },
-  scalaVersion := Scala212,
+  scalaVersion := "2.13.3",
   crossScalaVersions := Scala212 :: Scala211 :: "2.13.3" :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
