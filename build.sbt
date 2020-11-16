@@ -8,7 +8,6 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 ThisBuild / useSuperShell := false
 
 val scalazVersion = SettingKey[String]("scalazVersion")
-val DottyVersion = "0.27.0-RC1"
 
 // avoid move files
 val CustomCrossType = new sbtcrossproject.CrossType {
@@ -188,7 +187,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     }
   },
   scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala211 :: "2.13.3" :: Nil,
+  crossScalaVersions := Scala212 :: Scala211 :: "2.13.3" :: "3.0.0-M1" :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
@@ -274,8 +273,6 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     ),
     SetScala211,
     releaseStepCommand("rootNative/publishSigned"),
-    releaseStepCommand("++" + DottyVersion + "!"),
-    releaseStepCommand("rootJVM/publishSigned"),
     releaseStepCommandAndRemaining("sonatypeBundleRelease"),
     setNextVersion,
     commitNextVersion,
