@@ -227,7 +227,6 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     </scm>
   ),
   scalacOptions ++= Seq(
-    "-Xsource:3",
     "-deprecation",
     "-unchecked",
     "-language:existentials,higherKinds,implicitConversions",
@@ -239,7 +238,9 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
           "-Ykind-projector",
         )
       case _ =>
-        Nil
+        Seq(
+          "-Xsource:3",
+        )
     }
   },
   scalacOptions ++= PartialFunction
