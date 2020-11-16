@@ -168,7 +168,7 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
 val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
-  commands += Command.command("SetDottyNightlyVersion") {
+  commands += Command.command("SetScala3NightlyVersion") {
     s"""++ ${dottyLatestNightlyBuild.get}!""" :: _
   },
   sources in Test := {

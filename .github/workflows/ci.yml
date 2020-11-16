@@ -46,7 +46,7 @@ jobs:
             sbt -v \
             scalafmtCheckAll \
             scalafmtSbtCheck \
-            SetDottyNightlyVersion \
+            SetScala3NightlyVersion \
             checkGenerateCodeError \
             scalapropsJVM/test \
             scalazJVM/test \
