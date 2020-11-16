@@ -369,6 +369,7 @@ val root = Project("root", file("."))
     ScalaUnidocPlugin
   )
   .settings(
+    publish / skip := isDotty.value,
     name := allName,
     artifacts := Nil,
     unidocProjectFilter in (ScalaUnidoc, unidoc) := {
