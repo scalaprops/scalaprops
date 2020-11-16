@@ -1,0 +1,61 @@
+name: CI
+on:
+  pull_request:
+  push:
+  schedule:
+  - cron: '0 6 * * 3'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: jvm-js
+          - name: scala-native
+          - name: scala-3
+    steps:
+    - uses: actions/checkout@v1
+    - uses: olafurpg/setup-scala@v10
+      with:
+        java-version: "adopt@1.8"
+    - uses: coursier/cache-action@v5
+    - run: if [[ "${{ matrix.name }}" == "scala-native" ]] ; then ./.github/scala-native-setup.sh ; fi
+    - run: git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
+    - run: git show --oneline --check
+    - run: |
+        case ${{ matrix.name }} in
+          "jvm-js")
+            sbt -v \
+            scalafmtCheckAll \
+            scalafmtSbtCheck \
+            checkGenerateCodeError \
+            "+ test:compile" \
+            "+ scalapropsTestNames" \
+            "+ scalapropsJS/test" \
+            "+ scalapropsJVM/test" \
+            "+ scalazJS/test" \
+            "+ scalazJVM/test" \
+            "project /" \
+            "+ publishLocal"
+            ;;
+          "scala-native")
+            sbt -v rootNative/compile scalapropsNative/test scalazNative/test
+            ;;
+          "scala-3")
+            sbt -v \
+            scalafmtCheckAll \
+            scalafmtSbtCheck \
+            SetDottyNightlyVersion \
+            checkGenerateCodeError \
+            scalapropsJVM/test \
+            scalazJVM/test \
+            rootJVM/publishLocal \
+            scalapropsJS/test \
+            scalazJS/test \
+            rootJS/publishLocal \
+            ;;
+          *)
+            echo "unknown job-name"
+            exit 1
+        esac

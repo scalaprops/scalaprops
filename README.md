@@ -1,6 +1,5 @@
 # scalaprops
 
-[![Build Status](https://travis-ci.com/scalaprops/scalaprops.svg?branch=master)](https://travis-ci.com/scalaprops/scalaprops)
 [![Scala.js](https://www.scala-js.org/assets/badges/scalajs-1.0.0.svg)](https://www.scala-js.org)
 [![scaladoc](https://javadoc-badge.appspot.com/com.github.scalaprops/scalaprops-all_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/com.github.scalaprops/scalaprops-all_2.12/scalaprops/index.html?javadocio=true)
 
