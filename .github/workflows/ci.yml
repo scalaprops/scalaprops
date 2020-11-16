@@ -13,7 +13,7 @@ jobs:
         include:
           - name: jvm-js
           - name: scala-native
-          - name: scala-3
+          - name: scala-3-nightly
     steps:
     - uses: actions/checkout@v1
     - uses: olafurpg/setup-scala@v10
@@ -42,7 +42,7 @@ jobs:
           "scala-native")
             sbt -v rootNative/compile scalapropsNative/test scalazNative/test
             ;;
-          "scala-3")
+          "scala-3-nightly")
             sbt -v \
             scalafmtCheckAll \
             scalafmtSbtCheck \
