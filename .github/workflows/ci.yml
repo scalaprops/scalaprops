@@ -28,6 +28,7 @@ jobs:
         case ${{ matrix.name }} in
           "jvm-js")
             sbt -v \
+            -sbt-opts .github/workflows/.sbtopts \
             scalafmtCheckAll \
             scalafmtSbtCheck \
             checkGenerateCodeError \
@@ -41,10 +42,15 @@ jobs:
             "+ publishLocal"
             ;;
           "scala-native")
-            sbt -v rootNative/compile scalapropsNative/test scalazNative/test
+            sbt -v \
+            -sbt-opts .github/workflows/.sbtopts \
+            rootNative/compile \
+            scalapropsNative/test \
+            scalazNative/test
             ;;
           "scala-3-nightly")
             sbt -v \
+            -sbt-opts .github/workflows/.sbtopts \
             scalafmtCheckAll \
             scalafmtSbtCheck \
             SetScala3NightlyVersion \
@@ -54,7 +60,7 @@ jobs:
             rootJVM/publishLocal \
             scalapropsJS/test \
             scalazJS/test \
-            rootJS/publishLocal \
+            rootJS/publishLocal
             ;;
           *)
             echo "unknown job-name"
