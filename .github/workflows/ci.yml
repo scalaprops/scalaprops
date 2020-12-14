@@ -14,7 +14,8 @@ jobs:
         include:
           - name: jvm-js
           - name: scala-native
-          - name: scala-3-nightly
+          # TODO re-enable https://github.com/lampepfl/dotty/issues/10772
+          # - name: scala-3-nightly
     steps:
     - uses: actions/checkout@v2.3.4
     - uses: olafurpg/setup-scala@v10
