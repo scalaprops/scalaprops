@@ -187,7 +187,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     }
   },
   scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala211 :: "2.13.4" :: "3.0.0-M2" :: Nil,
+  crossScalaVersions := Scala212 :: Scala211 :: "2.13.4" :: "3.0.0-M3" :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
