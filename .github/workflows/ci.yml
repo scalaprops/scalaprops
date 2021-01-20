@@ -57,10 +57,8 @@ jobs:
             checkGenerateCodeError \
             scalapropsJVM/test \
             scalazJVM/test \
-            rootJVM/publishLocal \
             scalapropsJS/test \
-            scalazJS/test \
-            rootJS/publishLocal
+            scalazJS/test
             ;;
           *)
             echo "unknown job-name"
