@@ -35,7 +35,7 @@ def module(id: String): CrossProject =
     .crossType(CustomCrossType)
     .settings(
       commonSettings,
-      scalazVersion := "7.3.2",
+      scalazVersion := "7.3.3",
       Seq(Compile, Test).map { c =>
         unmanagedSourceDirectories in c += {
           val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
