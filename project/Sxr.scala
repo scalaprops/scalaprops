@@ -28,7 +28,7 @@ object Sxr {
     enableSxr := {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, v)) =>
-          v <= 12
+          v <= 11
         case _ =>
           false
       }
