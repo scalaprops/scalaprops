@@ -50,4 +50,12 @@ final class ScalapropsRunner(
     println(result)
     result
   }
+
+  override def receiveMessage(msg: String) = None
+
+  override def serializeTask(task: sbt.testing.Task, serializer: TaskDef => String) =
+    serializer(task.taskDef())
+
+  override def deserializeTask(task: String, deserializer: String => TaskDef) =
+    taskdef2task(deserializer(task))
 }

@@ -69,8 +69,7 @@ def module(id: String): CrossProject =
     )
     .nativeSettings(
       scalapropsNativeSettings,
-      scalaVersion := Scala211,
-      crossScalaVersions := Seq(Scala211),
+      crossScalaVersions -= Scala3_0,
       nativeGC := "immix"
     )
 
@@ -151,7 +150,7 @@ val unusedWarnings = Def.setting {
 
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.13"
-val SetScala211 = releaseStepCommand("++" + Scala211)
+val Scala3_0 = "3.0.0-M3"
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
   pomPostProcess := { node =>
@@ -187,7 +186,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     }
   },
   scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala211 :: "2.13.4" :: "3.0.0-M3" :: Nil,
+  crossScalaVersions := Scala212 :: Scala211 :: "2.13.4" :: Scala3_0 :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
@@ -272,8 +271,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       },
       enableCrossBuild = true
     ),
-    SetScala211,
-    releaseStepCommand("rootNative/publishSigned"),
+    releaseStepCommandAndRemaining("+ rootNative/publishSigned"),
     releaseStepCommandAndRemaining("sonatypeBundleRelease"),
     setNextVersion,
     commitNextVersion,

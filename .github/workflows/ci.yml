@@ -21,7 +21,6 @@ jobs:
       with:
         java-version: "adopt@1.8"
     - uses: coursier/cache-action@v5
-    - run: if [[ "${{ matrix.name }}" == "scala-native" ]] ; then ./.github/scala-native-setup.sh ; fi
     - run: git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
     - run: git show --oneline --check
     - run: |
@@ -44,9 +43,9 @@ jobs:
           "scala-native")
             sbt -v \
             -sbt-opts .github/workflows/.sbtopts \
-            rootNative/compile \
-            scalapropsNative/test \
-            scalazNative/test
+            "+ rootNative/test:nativeLink" \
+            "+ scalapropsNative/test" \
+            "+ scalazNative/test"
             ;;
           "scala-3-nightly")
             sbt -v \
