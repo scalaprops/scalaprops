@@ -1,6 +1,8 @@
 package scalaprops
 
 object ShrinkTest extends Scalaprops {
+  override val param: Param = super.param.copy(maxSize = 30)
+
   def law[A](a: A)(implicit s: Shrink[A]): Boolean =
     !s(a).contains(a)
 
