@@ -2,7 +2,7 @@ package scalaprops
 
 import scalaprops.internal._
 
-final case class Properties[A] private (props: Tree[(A, Option[Check])]) {
+final case class Properties[A] private[scalaprops] (props: Tree[(A, Option[Check])]) {
   def id: A = props.rootLabel._1
 
   private[this] def map[B](f: (A, Option[Check]) => (B, Option[Check])): Properties[B] =
