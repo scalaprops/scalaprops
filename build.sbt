@@ -37,7 +37,7 @@ def module(id: String): CrossProject =
       commonSettings,
       scalazVersion := "7.3.3",
       Seq(Compile, Test).map { c =>
-        unmanagedSourceDirectories in c += {
+        (c / unmanagedSourceDirectories) += {
           val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
           val dir = CrossVersion.partialVersion(scalaVersion.value) match {
             case Some((2, v)) if v <= 12 =>
@@ -48,7 +48,7 @@ def module(id: String): CrossProject =
           base / dir
         }
       },
-      initialCommands in console += {
+      (console / initialCommands) += {
         "import scalaprops._;" + Seq(
           "Gen",
           "Cogen",
@@ -58,7 +58,7 @@ def module(id: String): CrossProject =
     )
     .jsSettings(
       scalacOptions ++= {
-        val a = (baseDirectory in LocalRootProject).value.toURI.toString
+        val a = (LocalRootProject / baseDirectory).value.toURI.toString
         val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + tagOrHash.value
         if (isDottyJS.value) {
           Nil
@@ -79,7 +79,7 @@ lazy val gen = module("gen")
     description := "pure functional random value generator"
   )
   .platformsSettings(JSPlatform, NativePlatform)(
-    unmanagedSourceDirectories in Compile += {
+    (Compile / unmanagedSourceDirectories) += {
       baseDirectory.value.getParentFile / "js_native/src/main/scala/"
     }
   )
@@ -114,7 +114,7 @@ lazy val scalaprops = module(scalapropsName)
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
   )
   .platformsSettings(JVMPlatform, NativePlatform)(
-    unmanagedSourceDirectories in Compile += {
+    (Compile / unmanagedSourceDirectories) += {
       baseDirectory.value.getParentFile / "jvm_native/src/main/scala/"
     }
   )
@@ -126,7 +126,7 @@ lazy val scalaprops = module(scalapropsName)
   )
 
 val tagName = Def.setting {
-  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value
+  s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value
   else version.value}"
 }
 val tagOrHash = Def.setting {
@@ -164,13 +164,13 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
   }
 
 val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
-  unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
+  (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
   commands += Command.command("SetScala3NightlyVersion") {
     s"""++ ${dottyLatestNightlyBuild.get}!""" :: _
   },
-  sources in Test := {
-    val old = (sources in Test).value
+  (Test / sources) := {
+    val old = (Test / sources).value
     if (isDotty.value) {
       val exclude = Set(
         "CaseClassExample",
@@ -194,7 +194,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
   licenses := Seq("MIT License" -> url("https://opensource.org/licenses/mit-license")),
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
   stripPom { node => node.label == "dependency" && (node \ "scope").text == "test" },
-  scalacOptions in (Compile, doc) ++= {
+  (Compile / doc / scalacOptions) ++= {
     val tag = tagOrHash.value
     if (isDotty.value) {
       Seq(
@@ -204,7 +204,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     } else {
       Seq(
         "-sourcepath",
-        (baseDirectory in LocalRootProject).value.getAbsolutePath,
+        (LocalRootProject / baseDirectory).value.getAbsolutePath,
         "-doc-source-url",
         s"https://github.com/scalaprops/scalaprops/tree/${tag}€{FILE_PATH}.scala"
       )
@@ -283,7 +283,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
     }
     .toList
-) ++ Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value)
+) ++ Seq(Compile, Test).flatMap(c => (c / console / scalacOptions) --= unusedWarnings.value)
 
 lazy val notPublish = Seq(
   publishArtifact := false,
@@ -362,7 +362,7 @@ val root = Project("root", file("."))
         scalapropsJVM ::
         scalazJVM ::
         Nil
-    ).map(p => libraryDependencies ++= (libraryDependencies in p).value)
+    ).map(p => libraryDependencies ++= (p / libraryDependencies).value)
   )
   .enablePlugins(
     ScalaUnidocPlugin
@@ -371,18 +371,18 @@ val root = Project("root", file("."))
     publish / skip := isDotty.value,
     name := allName,
     artifacts := Nil,
-    unidocProjectFilter in (ScalaUnidoc, unidoc) := {
+    ScalaUnidoc / unidoc / unidocProjectFilter := {
       (jsProjects ++ nativeProjects).foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
     },
     packagedArtifacts := Map.empty,
-    artifacts ++= Classpaths.artifactDefs(Seq(packageDoc in Compile)).value,
-    packagedArtifacts ++= Classpaths.packaged(Seq(packageDoc in Compile)).value,
+    artifacts ++= Classpaths.artifactDefs(Seq(Compile / packageDoc)).value,
+    packagedArtifacts ++= Classpaths.packaged(Seq(Compile / packageDoc)).value,
     description := "scalaprops unidoc",
     stripPom { _.label == "dependencies" },
     Sxr.settings1,
     Defaults.packageTaskSettings(
-      packageDoc in Compile,
-      (unidoc in Compile).map { _.flatMap(Path.allSubpaths) }
+      (Compile / packageDoc),
+      (Compile / unidoc).map { _.flatMap(Path.allSubpaths) }
     ),
     Sxr.settings2
   )

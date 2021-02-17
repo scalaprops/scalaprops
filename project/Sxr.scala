@@ -34,20 +34,20 @@ object Sxr {
       }
     },
     ifSxrAvailable(
-      scalacOptions in unidoc,
+      (unidoc / scalacOptions),
       Def.task {
-        (scalacOptions in unidoc).value ++ Seq(
-          "-P:sxr:base-directory:" + (sources in unidoc in ScalaUnidoc).value.mkString(":")
+        (unidoc / scalacOptions).value ++ Seq(
+          "-P:sxr:base-directory:" + (ScalaUnidoc / unidoc / sources).value.mkString(":")
         )
       }
     )
   )
 
   val settings2: Seq[Setting[_]] = Defaults.packageTaskSettings(
-    sxr in Compile,
+    (Compile / sxr),
     Def.task {
-      val dir = (crossTarget in Compile).value
-      val _ = (unidoc in Compile).value
+      val dir = (Compile / crossTarget).value
+      val _ = (Compile / unidoc).value
       Path.allSubpaths(dir / "unidoc.sxr").toSeq
     }
   ) ++ Seq[Setting[_]](
@@ -61,14 +61,14 @@ object Sxr {
     ),
     ifSxrAvailable(
       packagedArtifacts,
-      Def.task(packagedArtifacts.value ++ Classpaths.packaged(Seq(sxr in Compile)).value)
+      Def.task(packagedArtifacts.value ++ Classpaths.packaged(Seq(Compile / sxr)).value)
     ),
     ifSxrAvailable(
       artifacts,
-      Def.setting(artifacts.value ++ Classpaths.artifactDefs(Seq(sxr in Compile)).value)
+      Def.setting(artifacts.value ++ Classpaths.artifactDefs(Seq(Compile / sxr)).value)
     ),
     ifSxrAvailable(
-      artifactClassifier in sxr,
+      sxr / artifactClassifier,
       Def.setting(Option("sxr"))
     )
   )
