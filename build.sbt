@@ -148,7 +148,7 @@ val unusedWarnings = Def.setting {
     .flatten
 }
 
-val Scala211 = "2.11.12"
+val Scala211 = "2.13.5"
 val Scala212 = "2.12.13"
 val Scala3_0 = "3.0.0-RC1"
 
