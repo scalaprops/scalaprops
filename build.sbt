@@ -150,7 +150,7 @@ val unusedWarnings = Def.setting {
 
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.13"
-val Scala3_0 = "3.0.0-RC1"
+val Scala3_0 = "3.0.0-RC2"
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
   pomPostProcess := { node =>
