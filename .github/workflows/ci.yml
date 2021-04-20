@@ -14,7 +14,6 @@ jobs:
         include:
           - name: jvm-js
           - name: scala-native
-          - name: scala-3-nightly
     steps:
     - uses: actions/checkout@v2.3.4
     - uses: olafurpg/setup-scala@v10
@@ -46,18 +45,6 @@ jobs:
             "+ rootNative/test:nativeLink" \
             "+ scalapropsNative/test" \
             "+ scalazNative/test"
-            ;;
-          "scala-3-nightly")
-            sbt -v \
-            -sbt-opts .github/workflows/.sbtopts \
-            scalafmtCheckAll \
-            scalafmtSbtCheck \
-            SetScala3NightlyVersion \
-            checkGenerateCodeError \
-            scalapropsJVM/test \
-            scalazJVM/test \
-            scalapropsJS/test \
-            scalazJS/test
             ;;
           *)
             echo "unknown job-name"
