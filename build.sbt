@@ -3,6 +3,10 @@ import sbtrelease._
 import ReleaseStateTransformations._
 import sbtcrossproject.CrossProject
 
+val isScala3 = Def.setting(
+  CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
+)
+
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / useSuperShell := false
@@ -57,14 +61,17 @@ def module(id: String): CrossProject =
       }
     )
     .jsSettings(
-      scalacOptions ++= {
+      scalacOptions += {
         val a = (LocalRootProject / baseDirectory).value.toURI.toString
         val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + tagOrHash.value
-        if (isDottyJS.value) {
-          Nil
-        } else {
-          Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
+        val key = {
+          if (isScala3.value) {
+            "-scalajs-mapSourceURI"
+          } else {
+            "-P:scalajs:mapSourceURI"
+          }
         }
+        s"${key}:$a->$g/"
       }
     )
     .nativeSettings(
@@ -96,7 +103,7 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value withDottyCompat scalaVersion.value,
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value cross CrossVersion.for3Use2_13,
   )
   .dependsOn(
     core,
@@ -119,7 +126,7 @@ lazy val scalaprops = module(scalapropsName)
     }
   )
   .jsSettings(
-    libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion withDottyCompat scalaVersion.value
+    libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion cross CrossVersion.for3Use2_13
   )
   .nativeSettings(
     libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion
@@ -166,12 +173,9 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
 val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
-  commands += Command.command("SetScala3NightlyVersion") {
-    s"""++ ${dottyLatestNightlyBuild.get}!""" :: _
-  },
   (Test / sources) := {
     val old = (Test / sources).value
-    if (isDotty.value) {
+    if (isScala3.value) {
       val exclude = Set(
         "CaseClassExample",
         "CogenStateTest",
@@ -196,7 +200,7 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
   stripPom { node => node.label == "dependency" && (node \ "scope").text == "test" },
   (Compile / doc / scalacOptions) ++= {
     val tag = tagOrHash.value
-    if (isDotty.value) {
+    if (isScala3.value) {
       Seq(
         "-siteroot",
         baseDirectory.value.getAbsolutePath,
@@ -368,7 +372,7 @@ val root = Project("root", file("."))
     ScalaUnidocPlugin
   )
   .settings(
-    publish / skip := isDotty.value,
+    publish / skip := isScala3.value,
     name := allName,
     artifacts := Nil,
     ScalaUnidoc / unidoc / unidocProjectFilter := {
