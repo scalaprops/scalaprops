@@ -11,9 +11,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: jvm-js
-          - name: scala-native
+        name: [jvm, js, native]
+        scala: [2_11, 2_12, 2_13, 3_0]
+        exclude:
+          - name: native
+            scala: 3_0
     steps:
     - uses: actions/checkout@v2.3.4
     - uses: olafurpg/setup-scala@v10
@@ -24,27 +26,35 @@ jobs:
     - run: git show --oneline --check
     - run: |
         case ${{ matrix.name }} in
-          "jvm-js")
+          "jvm")
             sbt -v \
             -sbt-opts .github/workflows/.sbtopts \
-            "+ scalafmtCheckAll" \
+            "SetScala${{ matrix.scala }}" \
+            scalafmtCheckAll \
             scalafmtSbtCheck \
             checkGenerateCodeError \
-            "+ Test/compile" \
-            "+ scalapropsTestNames" \
-            "+ scalapropsJS/test" \
-            "+ scalapropsJVM/test" \
-            "+ scalazJS/test" \
-            "+ scalazJVM/test" \
-            "project /" \
-            "+ publishLocal"
+            "rootJVM/Test/compile" \
+            "scalapropsTestNames" \
+            "scalapropsJVM/test" \
+            "scalazJVM/test" \
+            "rootJVM/publishLocal" \
             ;;
-          "scala-native")
+          "js")
             sbt -v \
             -sbt-opts .github/workflows/.sbtopts \
-            "+ rootNative/Test/nativeLink" \
-            "+ scalapropsNative/test" \
-            "+ scalazNative/test"
+            "SetScala${{ matrix.scala }}" \
+            "rootJS/Test/compile" \
+            "scalapropsJS/test" \
+            "scalazJS/test" \
+            "rootJS/publishLocal"
+            ;;
+          "native")
+            sbt -v \
+            -sbt-opts .github/workflows/.sbtopts \
+            "SetScala${{ matrix.scala }}" \
+            "scalapropsNative/test" \
+            "scalazNative/test" \
+            "rootNative/publishLocal"
             ;;
           *)
             echo "unknown job-name"

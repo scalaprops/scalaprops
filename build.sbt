@@ -154,6 +154,7 @@ val unusedWarnings = Def.setting {
 
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.13"
+val Scala213 = "2.13.5"
 val Scala3_0 = "3.0.0-RC3"
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
@@ -167,7 +168,8 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
     new RuleTransformer(rule).transform(node)(0)
   }
 
-val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings ++ Seq(
+val commonSettings = Def.settings(
+  _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings,
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
   (Test / sources) := {
@@ -184,7 +186,11 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     }
   },
   scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala211 :: "2.13.5" :: Scala3_0 :: Nil,
+  crossScalaVersions := Scala212 :: Scala211 :: Scala213 :: Scala3_0 :: Nil,
+  addCommandAlias("SetScala2_11", s"++ ${Scala211}! -v"),
+  addCommandAlias("SetScala2_12", s"++ ${Scala212}! -v"),
+  addCommandAlias("SetScala2_13", s"++ ${Scala213}! -v"),
+  addCommandAlias("SetScala3_0", s"++ ${Scala3_0}! -v"),
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
