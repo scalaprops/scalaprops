@@ -50,3 +50,4 @@ jobs:
             echo "unknown job-name"
             exit 1
         esac
+    - run: rm -rf "$HOME/.ivy2/local"
