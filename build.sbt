@@ -11,8 +11,6 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / useSuperShell := false
 
-val scalazVersion = SettingKey[String]("scalazVersion")
-
 // avoid move files
 val CustomCrossType = new sbtcrossproject.CrossType {
   override def projectDir(crossBase: File, projectType: String) =
@@ -39,7 +37,6 @@ def module(id: String): CrossProject =
     .crossType(CustomCrossType)
     .settings(
       commonSettings,
-      scalazVersion := "7.3.3",
       Seq(Compile, Test).map { c =>
         (c / unmanagedSourceDirectories) += {
           val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
@@ -103,7 +100,7 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % scalazVersion.value cross CrossVersion.for3Use2_13,
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.3" cross CrossVersion.for3Use2_13,
   )
   .dependsOn(
     core,
