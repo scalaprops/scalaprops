@@ -13,8 +13,7 @@ abstract class ScalapropsScalaz1 {
   implicit def cofreeZipGen[F[_], A](implicit a: Gen[A], f: => Gen[F[Cofree[F, A]]]): Gen[Cofree[F, A] @@ Tags.Zip] =
     Tag.subst(cofreeGen[F, A](a, f))
 
-  implicit def cogenCofree[F[_], A](
-    implicit
+  implicit def cogenCofree[F[_], A](implicit
     a: Cogen[A],
     f: => Cogen[F[Cofree[F, A]]]
   ): Cogen[Cofree[F, A]] =
@@ -23,8 +22,7 @@ abstract class ScalapropsScalaz1 {
         a.cogen(x.head, f.cogen(x.tail, g))
     }
 
-  implicit def cogenCofreeZip[F[_], A](
-    implicit
+  implicit def cogenCofreeZip[F[_], A](implicit
     a: Cogen[A],
     f: => Cogen[F[Cofree[F, A]]]
   ): Cogen[Cofree[F, A] @@ Tags.Zip] =
