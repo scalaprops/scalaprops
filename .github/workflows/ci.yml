@@ -30,7 +30,7 @@ jobs:
             scalafmtCheckAll \
             scalafmtSbtCheck \
             checkGenerateCodeError \
-            "+ test:compile" \
+            "+ Test/compile" \
             "+ scalapropsTestNames" \
             "+ scalapropsJS/test" \
             "+ scalapropsJVM/test" \
@@ -42,7 +42,7 @@ jobs:
           "scala-native")
             sbt -v \
             -sbt-opts .github/workflows/.sbtopts \
-            "+ rootNative/test:nativeLink" \
+            "+ rootNative/Test/nativeLink" \
             "+ scalapropsNative/test" \
             "+ scalazNative/test"
             ;;
