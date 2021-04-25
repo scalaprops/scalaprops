@@ -27,7 +27,7 @@ jobs:
           "jvm-js")
             sbt -v \
             -sbt-opts .github/workflows/.sbtopts \
-            scalafmtCheckAll \
+            "+ scalafmtCheckAll" \
             scalafmtSbtCheck \
             checkGenerateCodeError \
             "+ Test/compile" \
