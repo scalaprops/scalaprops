@@ -106,7 +106,7 @@ object GenTest extends Scalaprops {
     result <= size
   }
 
-  val listOfN_2 = Property.forAll { seed: Long =>
+  val listOfN_2 = Property.forAll { (seed: Long) =>
     val size = 3
     Gen.listOfN(size, Gen[Unit]).map(_.size).samples(seed = seed, listSize = 100).distinct.size == (size + 1)
   }
@@ -156,7 +156,7 @@ object GenTest extends Scalaprops {
       test[A, A](s"$name => $name")
 
     def test[A: Gen: Cogen, B: Gen](name: String) =
-      Property.forAll { seed: Int =>
+      Property.forAll { (seed: Int) =>
         val size = 10
         val as = Gen[A].infiniteStream(seed = seed).distinct.take(5).toList
         val values = Gen[A => B].samples(listSize = size, seed = seed).map(as.map(_))
@@ -218,7 +218,7 @@ object GenTest extends Scalaprops {
       import scalaz.std.stream._
       val size = List.fill(domain.length)(codomain.length).product
 
-      Property.forAll { seed: Long =>
+      Property.forAll { (seed: Long) =>
         val x = IList
           .fromFoldable(
             Gen[A => B]
