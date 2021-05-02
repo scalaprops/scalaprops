@@ -38,6 +38,17 @@ def module(id: String): CrossProject =
     .settings(
       commonSettings,
       Seq(Compile, Test).map { c =>
+        c / unmanagedSourceDirectories ++= {
+          val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
+          CrossVersion.partialVersion(scalaVersion.value) match {
+            case Some((v, _)) =>
+              Seq(base / s"scala-${v}")
+            case _ =>
+              Nil
+          }
+        }
+      },
+      Seq(Compile, Test).map { c =>
         (c / unmanagedSourceDirectories) += {
           val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
           val dir = CrossVersion.partialVersion(scalaVersion.value) match {
@@ -172,17 +183,6 @@ val commonSettings = Def.settings(
   _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings,
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
-  (Test / sources) := {
-    val old = (Test / sources).value
-    if (isScala3.value) {
-      val exclude = Set(
-        "CaseClassExample",
-      ).map(_ + ".scala")
-      old.filterNot(f => exclude(f.getName))
-    } else {
-      old
-    }
-  },
   scalaVersion := Scala212,
   crossScalaVersions := Scala212 :: Scala211 :: Scala213 :: Scala3_0 :: Nil,
   addCommandAlias("SetScala2_11", s"++ ${Scala211}! -v"),
