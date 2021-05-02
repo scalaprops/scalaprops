@@ -175,7 +175,6 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
     if (isScala3.value) {
       val exclude = Set(
         "CaseClassExample",
-        "CogenStateTest",
         "FreeTTest",
         "IdTest",
         "StreamTTest",
