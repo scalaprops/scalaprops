@@ -177,8 +177,6 @@ val commonSettings = Def.settings(
     if (isScala3.value) {
       val exclude = Set(
         "CaseClassExample",
-        "FreeTTest",
-        "StreamTTest",
       ).map(_ + ".scala")
       old.filterNot(f => exclude(f.getName))
     } else {
@@ -238,6 +236,8 @@ val commonSettings = Def.settings(
       case Some((0 | 3, _)) =>
         Seq(
           "-Ykind-projector",
+          "-source",
+          "3.0-migration",
         )
       case _ =>
         Seq(
