@@ -1,6 +1,7 @@
 package scalaprops
 
 import scalaz.Id.Id
+import scalaz.idInstance
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 

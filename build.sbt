@@ -176,7 +176,6 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
       val exclude = Set(
         "CaseClassExample",
         "FreeTTest",
-        "IdTest",
         "StreamTTest",
       ).map(_ + ".scala")
       old.filterNot(f => exclude(f.getName))
