@@ -177,7 +177,6 @@ val commonSettings = _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCor
         "CaseClassExample",
         "CogenStateTest",
         "FreeTTest",
-        "GenTest",
         "IdTest",
         "StreamTTest",
       ).map(_ + ".scala")

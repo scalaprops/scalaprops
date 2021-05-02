@@ -203,7 +203,7 @@ object GenTest extends Scalaprops {
     def combinations[A: Order, B](as: IList[A], bs: IList[B]): IList[A ==>> B] = {
       val xs = permutations(bs, as.length)
       IList.fill(xs.length)(as).zip(xs).map { case (keys, values) =>
-        keys.zip(values).toMap
+        ==>>.fromIList(keys.zip(values))
       }
     }
 
