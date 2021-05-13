@@ -410,5 +410,6 @@ lazy val rootNative = project
   .aggregate(nativeProjects: _*)
   .settings(
     commonSettings,
+    crossScalaVersions -= Scala3_0,
     notPublish
   )
