@@ -33,18 +33,18 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false // currently, does not support parallel execution
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.8.2" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.8.3" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.8.2" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.8.3" % "test"
 ```
 
 </details>
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.8.2/scalaprops-all_2.12-0.8.2-javadoc.jar/!/scalaprops/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.8.2/scalaprops-all_2.12-0.8.2-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.8.3/scalaprops-all_2.12-0.8.3-javadoc.jar/!/scalaprops/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.8.3/scalaprops-all_2.12-0.8.3-sxr.jar/!/index.html)
 
 
 ![screencast](screencast.gif)
