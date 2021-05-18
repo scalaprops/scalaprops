@@ -44,7 +44,6 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.8.3" 
 
 
 - [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.8.3/scalaprops-all_2.12-0.8.3-javadoc.jar/!/scalaprops/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.8.3/scalaprops-all_2.12-0.8.3-sxr.jar/!/index.html)
 
 
 ![screencast](screencast.gif)

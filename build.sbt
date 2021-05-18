@@ -383,12 +383,10 @@ val root = Project("root", file("."))
     packagedArtifacts ++= Classpaths.packaged(Seq(Compile / packageDoc)).value,
     description := "scalaprops unidoc",
     stripPom { _.label == "dependencies" },
-    Sxr.settings1,
     Defaults.packageTaskSettings(
       (Compile / packageDoc),
       (Compile / unidoc).map { _.flatMap(Path.allSubpaths) }
     ),
-    Sxr.settings2
   )
   .aggregate(
     jvmProjects ++ jsProjects: _* // ignore native
