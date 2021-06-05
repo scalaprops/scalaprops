@@ -166,7 +166,7 @@ val unusedWarnings = Def.setting {
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.14"
 val Scala213 = "2.13.6"
-val Scala3_0 = "3.0.0"
+val Scala3_0 = "3.0.1-RC1"
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
   pomPostProcess := { node =>
@@ -183,7 +183,7 @@ val commonSettings = Def.settings(
   _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings,
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
-  scalaVersion := Scala212,
+  scalaVersion := Scala3_0,
   crossScalaVersions := Scala212 :: Scala211 :: Scala213 :: Scala3_0 :: Nil,
   addCommandAlias("SetScala2_11", s"++ ${Scala211}! -v"),
   addCommandAlias("SetScala2_12", s"++ ${Scala212}! -v"),
