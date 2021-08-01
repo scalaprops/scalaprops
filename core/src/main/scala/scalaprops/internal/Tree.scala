@@ -32,7 +32,7 @@ sealed abstract class Tree[A] {
         for {
           h <- f(rootLabel)
           t <- traverseStream(xs)(_.traverse(f))
-        } yield Node(h, t.toStream)
+        } yield Node(h, t)
     }
   }
 

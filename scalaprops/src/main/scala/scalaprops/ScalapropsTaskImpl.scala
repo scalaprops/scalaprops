@@ -99,7 +99,7 @@ object ScalapropsTaskImpl {
                 case Some(e) => new OptionalThrowable(e)
                 case None => emptyThrowable
               }
-              ScalapropsEvent(fullName.toString, fingerprint, selector, status, err, duration, result0)
+              ScalapropsEvent(fullName, fingerprint, selector, status, err, duration, result0)
             }
 
             val param = arguments.param.merge(check.paramEndo(obj.param))
