@@ -119,7 +119,7 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.7",
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.4.0-M13",
   )
   .dependsOn(
     core,
@@ -173,8 +173,6 @@ val unusedWarnings = Def.setting {
     .flatten
 }
 
-val Scala211 = "2.11.12"
-val Scala212 = "2.12.17"
 val Scala213 = "2.13.10"
 val Scala3 = "3.2.2"
 
@@ -193,8 +191,8 @@ val commonSettings = Def.settings(
   _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings,
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
-  scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala211 :: Scala213 :: Scala3 :: Nil,
+  scalaVersion := Scala3,
+  crossScalaVersions := Scala213 :: Scala3 :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },

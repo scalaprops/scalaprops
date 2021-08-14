@@ -10,13 +10,13 @@ import scala.util.Try
 import ScalapropsScalaz._
 
 object StreamTTest extends Scalaprops {
-  private[this] def iso[F[_]: Monad]: ({ type l[a] = StreamT[F, a] })#l <~> ({ type l[a] = F[Stream[a]] })#l =
-    new IsoFunctorTemplate[({ type l[a] = StreamT[F, a] })#l, ({ type l[a] = F[Stream[a]] })#l] {
-      override def to[A](fa: StreamT[F, A]) =
-        fa.toStream
+  private[this] def iso[F[_]: Monad]: ({ type l[a] = StreamT[F, a] })#l <~> ({ type l[a] = F[LazyList[a]] })#l =
+    new IsoFunctorTemplate[({ type l[a] = StreamT[F, a] })#l, ({ type l[a] = F[LazyList[a]] })#l] {
+      override def to_[A](fa: StreamT[F, A]) =
+        fa.toLazyList
 
-      override def from[A](ga: F[Stream[A]]) =
-        StreamT.fromStream(ga)
+      override def from_[A](ga: F[LazyList[A]]) =
+        StreamT.fromLazyList(ga)
     }
 
   private[this] type EitherByte[A] = Byte \/ A
@@ -125,8 +125,8 @@ object StreamTTest extends Scalaprops {
 
     def test[F[_]: Monad: BindRec](implicit
       G: Gen[StreamT[F, A]],
-      E: Equal[F[Stream[A]]]
-    ) = forAll { (s: StreamT[F, A]) => s.toStream === s.toStreamRec }
+      E: Equal[F[LazyList[A]]]
+    ) = forAll { (s: StreamT[F, A]) => s.toLazyList === s.toLazyListRec }
 
     Properties.properties("toStreamRec")(
       "Id" -> test[Id],

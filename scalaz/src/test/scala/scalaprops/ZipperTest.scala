@@ -19,12 +19,12 @@ object ZipperTest extends Scalaprops {
 
   val applicative = {
     implicit def zipperEqual[A](implicit A: Equal[A]): Equal[Zipper[A]] = {
-      import scalaz.std.stream._
+      import scalaz.std.lazylist._
       val n = 1000
       Equal.equal { (x, y) =>
         A.equal(x.focus, y.focus) &&
-        Equal[Stream[A]].equal(x.lefts.take(n), y.lefts.take(n)) &&
-        Equal[Stream[A]].equal(x.rights.take(n), y.rights.take(n))
+        Equal[LazyList[A]].equal(x.lefts.take(n), y.lefts.take(n)) &&
+        Equal[LazyList[A]].equal(x.rights.take(n), y.rights.take(n))
       }
     }
     scalazlaws.applicative.laws[Zipper]

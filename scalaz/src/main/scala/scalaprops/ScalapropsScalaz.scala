@@ -57,8 +57,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   val shrinkFunctionIso: Shrink <~> ({ type l[a] = a => Stream[a] })#l =
     new IsoFunctorTemplate[Shrink, ({ type l[a] = a => Stream[a] })#l] {
-      def to[A](fa: Shrink[A]) = fa.f
-      def from[A](ga: A => Stream[A]) = new Shrink(ga)
+      def to_[A](fa: Shrink[A]) = fa.f
+      def from_[A](ga: A => Stream[A]) = new Shrink(ga)
     }
 
   implicit val chooseInstance: InvariantFunctor[Choose] =
@@ -149,7 +149,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     Cogen[List[A]].contramap(_.toList)
 
   implicit def cogenCorecursiveList[A: Cogen]: Cogen[CorecursiveList[A]] =
-    Cogen[Stream[A]].contramap(CorecursiveList.streamIso.from.apply _)
+    Cogen[LazyList[A]].contramap(CorecursiveList.lazyListIso.from.apply _)
 
   implicit def cogenHeap[A: Cogen]: Cogen[Heap[A]] =
     Cogen[EphemeralStream[A]].contramap(_.toUnsortedStream)
@@ -173,7 +173,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     A.contramap(_.getConst)
 
   implicit def cogenZipper[A](implicit A: Cogen[A]): Cogen[Zipper[A]] =
-    Cogen[(Stream[A], A, Stream[A])].contramap(z => (z.lefts, z.focus, z.rights))
+    Cogen[(LazyList[A], A, LazyList[A])].contramap(z => (z.lefts, z.focus, z.rights))
 
   implicit def cogenTracedT[W[_], A, B](implicit W: Cogen[W[A => B]]): Cogen[TracedT[W, A, B]] =
     W.contramap(_.run)
@@ -230,8 +230,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def cogenMaybeT[F[_], A](implicit F: Cogen[F[Maybe[A]]]): Cogen[MaybeT[F, A]] =
     F.contramap(_.run)
 
-  implicit def cogenStreamT[F[_]: Monad, A](implicit F: Cogen[F[Stream[A]]]): Cogen[StreamT[F, A]] =
-    F.contramap(_.toStream)
+  implicit def cogenStreamT[F[_]: Monad, A](implicit F: Cogen[F[LazyList[A]]]): Cogen[StreamT[F, A]] =
+    F.contramap(_.toLazyList)
 
   implicit def cogenOptionT[F[_], A](implicit F: Cogen[F[Option[A]]]): Cogen[OptionT[F, A]] =
     F.contramap(_.run)
@@ -358,28 +358,28 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   val isoReaderState: Gen <~> ({ type x[a] = Kleisli[({ type y[b] = scalaz.State[Rand, b] })#y, Int, a] })#x =
     new IsoFunctorTemplate[Gen, ({ type x[a] = Kleisli[({ type y[b] = scalaz.State[Rand, b] })#y, Int, a] })#x] {
-      override def to[A](fa: Gen[A]) =
+      override def to_[A](fa: Gen[A]) =
         Kleisli[({ type l[a] = scalaz.State[Rand, a] })#l, Int, A] { size => scalaz.State { rand => fa.f(size, rand) } }
-      override def from[A](ga: Kleisli[({ type l[a] = scalaz.State[Rand, a] })#l, Int, A]) =
+      override def from_[A](ga: Kleisli[({ type l[a] = scalaz.State[Rand, a] })#l, Int, A]) =
         gen((size, rand) => ga.run(size).run(rand))
     }
 
   val isoStateReader: Gen <~> ({ type x[a] = StateT[Rand, ({ type y[b] = Reader[Int, b] })#y, a] })#x =
     new IsoFunctorTemplate[Gen, ({ type x[a] = StateT[Rand, ({ type y[b] = Reader[Int, b] })#y, a] })#x] {
-      override def to[A](fa: Gen[A]) =
+      override def to_[A](fa: Gen[A]) =
         StateT[Rand, ({ type l[a] = Reader[Int, a] })#l, A] { rand => Reader { size => fa.f(size, rand) } }
-      override def from[A](ga: StateT[Rand, ({ type y[b] = Reader[Int, b] })#y, A]) =
+      override def from_[A](ga: StateT[Rand, ({ type y[b] = Reader[Int, b] })#y, A]) =
         gen((size, rand) => ga.run(rand).run(size))
     }
 
   val isoRWS: Gen <~> ({ type l[a] = RWS[Int, Unit, Rand, a] })#l =
     new IsoFunctorTemplate[Gen, ({ type l[a] = RWS[Int, Unit, Rand, a] })#l] {
-      override def to[A](fa: Gen[A]) =
+      override def to_[A](fa: Gen[A]) =
         RWS { (size, rand) =>
           val a = fa.f(size, rand)
           ((), a._2, a._1)
         }
-      override def from[A](ga: RWS[Int, Unit, Rand, A]) =
+      override def from_[A](ga: RWS[Int, Unit, Rand, A]) =
         Gen.gen { (size, rand) =>
           val a = ga.run(size, rand)
           (a._3, a._2)
@@ -388,8 +388,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
 
   val isoFunction: Gen <~> ({ type l[a] = (Int, Rand) => (Rand, a) })#l =
     new IsoFunctorTemplate[Gen, ({ type l[a] = (Int, Rand) => (Rand, a) })#l] {
-      override def to[A](fa: Gen[A]) = fa.f
-      override def from[A](ga: (Int, Rand) => (Rand, A)) = Gen.gen(ga)
+      override def to_[A](fa: Gen[A]) = fa.f
+      override def from_[A](ga: (Int, Rand) => (Rand, A)) = Gen.gen(ga)
     }
 
   implicit def ilistGen[A](implicit A: Gen[A]): Gen[IList[A]] = {
@@ -543,8 +543,8 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   ): Gen[IndexedReaderWriterStateT[R, W, S1, S2, F, A]] =
     F.map(IndexedReaderWriterStateT.apply)
 
-  implicit def streamTGen[F[_]: Applicative, A](implicit F: Gen[F[Stream[A]]]): Gen[StreamT[F, A]] =
-    F.map(StreamT.fromStream(_))
+  implicit def streamTGen[F[_]: Applicative, A](implicit F: Gen[F[LazyList[A]]]): Gen[StreamT[F, A]] =
+    F.map(StreamT.fromLazyList(_))
 
   implicit def theseGen[A, B](implicit A: Gen[A], B: Gen[B]): Gen[A \&/ B] =
     Gen.oneOf(
@@ -566,7 +566,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     Gen[Stream[A]].map(EphemeralStream.fromStream(_))
 
   implicit def corecursiveListGen[A: Gen]: Gen[CorecursiveList[A]] =
-    Gen[Stream[A]].map(CorecursiveList.fromStream)
+    Gen[LazyList[A]].map(CorecursiveList.fromLazyList)
 
   implicit def monoidCoproduct[A: Gen, B: Gen]: Gen[A :+: B] =
     Gen[Vector[A \/ B]].map(new :+:(_))
@@ -590,15 +590,15 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def zipperGen[A: Gen]: Gen[Zipper[A]] =
     Gen.sized {
       case n if n <= 1 =>
-        Gen[A].map(a => Zipper(Stream.Empty, a, Stream.Empty))
+        Gen[A].map(a => Zipper(LazyList.empty, a, LazyList.empty))
       case n =>
         val z = n - 1
         Gen.choose(0, z).flatMap { rSize =>
           val lSize = z - rSize
           Apply[Gen].apply3(
-            Gen.sequenceNList(lSize, Gen[A]).map(_.toStream),
+            Gen.sequenceNList(lSize, Gen[A]).map(_.to(LazyList)),
             Gen[A],
-            Gen.sequenceNList(rSize, Gen[A]).map(_.toStream)
+            Gen.sequenceNList(rSize, Gen[A]).map(_.to(LazyList))
           )(Zipper(_, _, _))
         }
     }
