@@ -1,0 +1,13 @@
+{
+  "name": "scala-workspace",
+  "context": "..",
+  "dockerFile": "Dockerfile",
+  "extensions": [
+    "scalameta.metals"
+  ],
+  "settings": {
+    "editor.defaultFormatter": "scalameta.metals",
+    "editor.formatOnSave": true
+  },
+  "appPort": [8001]
+}
