@@ -29,7 +29,7 @@ abstract class NativeTestHelper {
   private[this] val events = new ArrayBuffer[Event]
 
   private[this] val eventHandler = new EventHandler {
-    override def handle(event: Event) = synchronized{
+    override def handle(event: Event) = synchronized {
       events += event
     }
   }
@@ -43,14 +43,22 @@ abstract class NativeTestHelper {
   private[this] val results = ArrayBuffer.empty[TestResult]
   private[this] val status = TestStatus()
 
-  protected[this] def test(className: String, obj: Scalaprops, objects: Set[String], args: Arguments, props: (String, Properties[_])*): Unit = {
+  protected[this] def test(
+    className: String,
+    obj: Scalaprops,
+    objects: Set[String],
+    args: Arguments,
+    props: (String, Properties[_])*
+  ): Unit = {
     val testsOpt = {
-      if(objects.isEmpty || objects.contains(className)) {
-        val tests = props.map{ case (id, p) =>
-          Properties(Tree.Node(
-            NameTransformer.decode(id) -> Option.empty[Check],
-            Stream(p.widen[Any].props)
-          ))
+      if (objects.isEmpty || objects.contains(className)) {
+        val tests = props.map { case (id, p) =>
+          Properties(
+            Tree.Node(
+              NameTransformer.decode(id) -> Option.empty[Check],
+              Stream(p.widen[Any].props)
+            )
+          )
         }.toList
 
         args.only match {
@@ -76,10 +84,12 @@ abstract class NativeTestHelper {
 
     testsOpt.foreach { tests =>
       val tree = ScalapropsTaskImpl.createTree(
-        tests = Properties(Tree.Node(
-          className -> Option.empty[Check],
-          obj.transformProperties(tests).toStream.map(_.props)
-        )),
+        tests = Properties(
+          Tree.Node(
+            className -> Option.empty[Check],
+            obj.transformProperties(tests).toStream.map(_.props)
+          )
+        ),
         testClassName = className,
         arguments = args,
         results = results,
@@ -97,14 +107,14 @@ abstract class NativeTestHelper {
   protected[this] def finish(count: Int): Unit = {
     println(resultString(count))
     println()
-    events.toList.withFilter{ e =>
+    events.toList.withFilter { e =>
       val s = e.status()
       Status.Error == s || Status.Failure == s
-    }.foreach{ e =>
+    }.foreach { e =>
       println(Console.RED + e.fullyQualifiedName() + Console.RESET)
     }
     println()
-    if(status.failure.get + status.error.get > 0) sys.error("test failed")
+    if (status.failure.get + status.error.get > 0) sys.error("test failed")
   }
 
   protected[this] def resultString(count: Int): String = {
@@ -117,7 +127,7 @@ Failed ${status.failure}, Errors ${status.error}, Passed ${status.success}, Igno
   }
 
   protected[this] def maybeNativeEnvironment(): Boolean = {
-    (new Throwable).getStackTrace.forall{ s =>
+    (new Throwable).getStackTrace.forall { s =>
       (s.getFileName == null) && (s.getLineNumber == 0)
     }
   }
@@ -125,13 +135,13 @@ Failed ${status.failure}, Errors ${status.error}, Passed ${status.success}, Igno
   private[this] val notNativeEnvMessage = "Maybe this is not scala-native environment!"
 
   protected[this] def warnIfNotNativeEnvironment(): Unit = {
-    if(maybeNativeEnvironment == false) {
+    if (maybeNativeEnvironment == false) {
       Console.err.println(Console.RED + notNativeEnvMessage + Console.RESET)
     }
   }
 
   protected[this] def throwIfNotNativeEnvironment(): Unit = {
-    if(maybeNativeEnvironment == false) {
+    if (maybeNativeEnvironment == false) {
       sys.error(notNativeEnvMessage)
     }
   }
