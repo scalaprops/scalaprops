@@ -236,8 +236,6 @@ val commonSettings = Def.settings(
       case Some((0 | 3, _)) =>
         Seq(
           "-Ykind-projector",
-          "-source",
-          "3.0-migration",
         )
       case _ =>
         Seq(
