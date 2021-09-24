@@ -1,0 +1,3 @@
+-Xmx5G
+-Xss6M
+-XX:+UseG1GC

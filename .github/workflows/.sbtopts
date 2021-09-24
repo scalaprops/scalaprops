@@ -1,4 +1,0 @@
--J-Xmx5G
--J-Xss6M
--J-XX:MaxPermSize=1024M
--J-XX:+UseG1GC
