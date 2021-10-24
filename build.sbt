@@ -370,7 +370,6 @@ val root = Project("root", file("."))
     ScalaUnidocPlugin
   )
   .settings(
-    publish / skip := isScala3.value,
     name := allName,
     artifacts := Nil,
     ScalaUnidoc / unidoc / unidocProjectFilter := {
