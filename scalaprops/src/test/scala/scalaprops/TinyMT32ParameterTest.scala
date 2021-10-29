@@ -11,7 +11,7 @@ object TinyMT32ParameterTest extends Scalaprops {
 
   val testGetDefaultParameter = Property.forAll {
     val p = TinyMT32Parameter.getDefaultParameter
-    //d8524022ed8dff4a8dcc50c798faba43,32,0,8f7011ee,fc78ff1f,3793fdff,63,0
+    // d8524022ed8dff4a8dcc50c798faba43,32,0,8f7011ee,fc78ff1f,3793fdff,63,0
     val pol = new F2Polynomial("d8524022ed8dff4a8dcc50c798faba43", 16)
     val id = 0
     val mat1 = 0x8f7011ee
