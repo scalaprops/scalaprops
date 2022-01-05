@@ -84,7 +84,7 @@ def module(id: String): CrossProject =
     )
     .nativeSettings(
       scalapropsNativeSettings,
-      crossScalaVersions -= Scala3_0,
+      crossScalaVersions -= Scala3,
       nativeGC := "immix"
     )
 
@@ -166,7 +166,7 @@ val unusedWarnings = Def.setting {
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.15"
 val Scala213 = "2.13.7"
-val Scala3_0 = "3.1.0"
+val Scala3 = "3.1.0"
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
   pomPostProcess := { node =>
@@ -184,11 +184,11 @@ val commonSettings = Def.settings(
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := sonatypePublishToBundle.value,
   scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala211 :: Scala213 :: Scala3_0 :: Nil,
+  crossScalaVersions := Scala212 :: Scala211 :: Scala213 :: Scala3 :: Nil,
   addCommandAlias("SetScala2_11", s"++ ${Scala211}! -v"),
   addCommandAlias("SetScala2_12", s"++ ${Scala212}! -v"),
   addCommandAlias("SetScala2_13", s"++ ${Scala213}! -v"),
-  addCommandAlias("SetScala3_0", s"++ ${Scala3_0}! -v"),
+  addCommandAlias("SetScala3", s"++ ${Scala3}! -v"),
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   fullResolvers ~= { _.filterNot(_.name == "jcenter") },
@@ -405,6 +405,6 @@ lazy val rootNative = project
   .aggregate(nativeProjects: _*)
   .settings(
     commonSettings,
-    crossScalaVersions -= Scala3_0,
+    crossScalaVersions -= Scala3,
     notPublish
   )
