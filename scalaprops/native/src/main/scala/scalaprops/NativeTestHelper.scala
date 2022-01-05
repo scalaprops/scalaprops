@@ -135,13 +135,13 @@ Failed ${status.failure}, Errors ${status.error}, Passed ${status.success}, Igno
   private[this] val notNativeEnvMessage = "Maybe this is not scala-native environment!"
 
   protected[this] def warnIfNotNativeEnvironment(): Unit = {
-    if (maybeNativeEnvironment == false) {
+    if (maybeNativeEnvironment() == false) {
       Console.err.println(Console.RED + notNativeEnvMessage + Console.RESET)
     }
   }
 
   protected[this] def throwIfNotNativeEnvironment(): Unit = {
-    if (maybeNativeEnvironment == false) {
+    if (maybeNativeEnvironment() == false) {
       sys.error(notNativeEnvMessage)
     }
   }
