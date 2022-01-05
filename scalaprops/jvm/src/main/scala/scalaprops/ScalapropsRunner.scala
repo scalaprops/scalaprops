@@ -98,7 +98,7 @@ final class ScalapropsRunner(
   override def tasks(taskDefs: Array[TaskDef]) =
     taskDefs.map { taskDef =>
       new ScalapropsTaskImpl(
-        taskDef = taskDef,
+        taskDef0 = taskDef,
         testClassLoader = testClassLoader,
         args = args,
         arguments = arguments,

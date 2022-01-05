@@ -32,9 +32,11 @@ object ScalapropsRunner {
 
 final class ScalapropsRunner(
   override val args: Array[String],
-  override val remoteArgs: Array[String],
+  remoteArgs0: Array[String],
   testClassLoader: ClassLoader
 ) extends Runner {
+
+  override def remoteArgs(): Array[String] = remoteArgs0
 
   private[this] val results = ArrayBuffer.empty[TestResult]
   private[this] val arguments = Arguments.parse(args.toList)

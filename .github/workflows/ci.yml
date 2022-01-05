@@ -14,9 +14,6 @@ jobs:
         name: [jvm, js, native]
         scala: [2_11, 2_12, 2_13, 3]
         java: [8]
-        exclude:
-          - name: native
-            scala: 3
         include:
           - name: jvm
             scala: 2_13

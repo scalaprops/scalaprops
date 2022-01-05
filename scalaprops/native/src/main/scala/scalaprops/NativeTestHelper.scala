@@ -12,7 +12,7 @@ object NativeTestHelper {
     override def debug(msg: String): Unit =
       println(msg)
     override def error(msg: String): Unit = {}
-    override val ansiCodesSupported: Boolean =
+    override def ansiCodesSupported(): Boolean =
       true
     override def warn(msg: String): Unit =
       println(msg)

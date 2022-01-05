@@ -8,13 +8,16 @@ import scala.util.control.NonFatal
 import scalaprops.internal._
 
 final class ScalapropsTaskImpl(
-  override val taskDef: TaskDef,
+  taskDef0: TaskDef,
   testClassLoader: ClassLoader,
   args: Array[String],
   arguments: Arguments,
   results: ArrayBuffer[TestResult],
   status: TestStatus
 ) extends sbt.testing.Task {
+
+  def taskDef(): TaskDef = taskDef0
+
   def execute(eventHandler: EventHandler, loggers: Array[Logger], continuation: Array[Task] => Unit): Unit = {
     continuation(execute(eventHandler, loggers))
   }
@@ -22,15 +25,15 @@ final class ScalapropsTaskImpl(
   override def execute(eventHandler: EventHandler, loggers: Array[Logger]) = {
     val log = Scalaprops.logger(loggers)
 
-    val testClassName = taskDef.fullyQualifiedName()
+    val testClassName = taskDef().fullyQualifiedName()
 
     val obj = ScalapropsRunner.getTestObject(
-      fingerprint = taskDef.fingerprint(),
+      fingerprint = taskDef().fingerprint(),
       testClassName = testClassName,
       testClassLoader = testClassLoader
     )
     val tests = ScalapropsRunner.findTests(
-      fingerprint = taskDef.fingerprint(),
+      fingerprint = taskDef().fingerprint(),
       testClassName = testClassName,
       testClassLoader = testClassLoader,
       only = arguments.only,
@@ -47,7 +50,7 @@ final class ScalapropsTaskImpl(
         eventHandler = eventHandler,
         log = log,
         obj = obj,
-        fingerprint = taskDef.fingerprint(),
+        fingerprint = taskDef().fingerprint(),
         executor = executor
       )
       obj.listener.onFinishAll(obj, result, log)
@@ -99,7 +102,7 @@ object ScalapropsTaskImpl {
                 case Some(e) => new OptionalThrowable(e)
                 case None => emptyThrowable
               }
-              ScalapropsEvent(fullName, fingerprint, selector, status, err, duration, result0)
+              new ScalapropsEvent(fullName, fingerprint, selector, status, err, duration, result0)
             }
 
             val param = arguments.param.merge(check.paramEndo(obj.param))
@@ -150,7 +153,7 @@ object ScalapropsTaskImpl {
             eventHandler.handle(r)
             results += TestResult(
               name = fullName,
-              duration = r.duration,
+              duration = r.duration(),
               maxSize = param.maxSize,
               minSuccessful = param.minSuccessful
             )

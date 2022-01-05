@@ -51,13 +51,13 @@ object ScalapropsListener {
 
   class Default extends ScalapropsListener {
     private[this] def event2string(event: ScalapropsEvent) =
-      event.result match {
+      event.result() match {
         case CheckResultError.Value(r) =>
-          r.toString + " " + event.duration + "ms"
+          r.toString + " " + event.duration() + "ms"
         case CheckResultError.Both(_, r) =>
-          r.toString + " " + event.duration + "ms"
+          r.toString + " " + event.duration() + "ms"
         case CheckResultError.Err(e) =>
-          e.toString + " " + event.duration + "ms"
+          e.toString + " " + event.duration() + "ms"
       }
 
     override def onFinishAll(
@@ -69,7 +69,7 @@ object ScalapropsListener {
         name.toString -> x.map { case (prop, param, event) =>
           val str = event2string(event)
           if (logger.ansiCodesSupported()) {
-            event.result.value match {
+            event.result().value match {
               case Some(_: CheckResult.Proven | _: CheckResult.Passed) =>
                 Console.GREEN + str + Console.RESET
               case Some(_: CheckResult.Ignored) =>

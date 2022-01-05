@@ -3,6 +3,33 @@ import sbtrelease._
 import ReleaseStateTransformations._
 import sbtcrossproject.CrossProject
 
+lazy val disableScala3 = Def.settings(
+  libraryDependencies := {
+    if (scalaBinaryVersion.value == "3") {
+      Nil
+    } else {
+      libraryDependencies.value
+    }
+  },
+  Seq(Compile, Test).map { x =>
+    (x / sources) := {
+      if (scalaBinaryVersion.value == "3") {
+        Nil
+      } else {
+        (x / sources).value
+      }
+    }
+  },
+  Test / test := {
+    if (scalaBinaryVersion.value == "3") {
+      ()
+    } else {
+      (Test / test).value
+    }
+  },
+  publish / skip := scalaBinaryVersion.value == "3",
+)
+
 val isScala3 = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
 )
@@ -84,7 +111,15 @@ def module(id: String): CrossProject =
     )
     .nativeSettings(
       scalapropsNativeSettings,
-      crossScalaVersions -= Scala3,
+      Compile / doc / scalacOptions --= {
+        // TODO remove this workaround
+        // https://github.com/scala-native/scala-native/issues/2503
+        if (scalaBinaryVersion.value == "3") {
+          (Compile / doc / scalacOptions).value.filter(_.contains("-Xplugin"))
+        } else {
+          Nil
+        }
+      },
       nativeGC := "immix"
     )
 
@@ -117,6 +152,9 @@ lazy val scalaz = module("scalaz")
     core,
     scalaprops % "test"
   )
+  .nativeSettings(
+    disableScala3,
+  )
 
 lazy val scalaprops = module(scalapropsName)
   .settings(
@@ -137,7 +175,21 @@ lazy val scalaprops = module(scalapropsName)
     libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion cross CrossVersion.for3Use2_13
   )
   .nativeSettings(
-    libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion
+    libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion,
+    Test / sources := {
+      // TODO
+      val exclude = Set(
+        "PropertyTest.scala",
+      )
+      val list = (Test / sources).value
+      if (scalaBinaryVersion.value == "3") {
+        list.filterNot { src =>
+          exclude.contains(src.getName)
+        }
+      } else {
+        list
+      }
+    },
   )
 
 val tagName = Def.setting {
@@ -405,6 +457,5 @@ lazy val rootNative = project
   .aggregate(nativeProjects: _*)
   .settings(
     commonSettings,
-    crossScalaVersions -= Scala3,
     notPublish
   )
