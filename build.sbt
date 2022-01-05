@@ -176,20 +176,6 @@ lazy val scalaprops = module(scalapropsName)
   )
   .nativeSettings(
     libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion,
-    Test / sources := {
-      // TODO
-      val exclude = Set(
-        "PropertyTest.scala",
-      )
-      val list = (Test / sources).value
-      if (scalaBinaryVersion.value == "3") {
-        list.filterNot { src =>
-          exclude.contains(src.getName)
-        }
-      } else {
-        list
-      }
-    },
   )
 
 val tagName = Def.setting {
