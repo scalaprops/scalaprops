@@ -414,8 +414,8 @@ val root = Project("root", file("."))
       (jsProjects ++ nativeProjects).foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
     },
     packagedArtifacts := Map.empty,
-    artifacts ++= Classpaths.artifactDefs(Seq(Compile / packageDoc)).value,
-    packagedArtifacts ++= Classpaths.packaged(Seq(Compile / packageDoc)).value,
+    artifacts ++= Classpaths.artifactDefs(Seq(Compile / packageDoc, Compile / makePom)).value,
+    packagedArtifacts ++= Classpaths.packaged(Seq(Compile / packageDoc, Compile / makePom)).value,
     description := "scalaprops unidoc",
     stripPom { _.label == "dependencies" },
     Defaults.packageTaskSettings(
