@@ -3,33 +3,6 @@ import sbtrelease._
 import ReleaseStateTransformations._
 import sbtcrossproject.CrossProject
 
-lazy val disableScala3 = Def.settings(
-  libraryDependencies := {
-    if (scalaBinaryVersion.value == "3") {
-      Nil
-    } else {
-      libraryDependencies.value
-    }
-  },
-  Seq(Compile, Test).map { x =>
-    (x / sources) := {
-      if (scalaBinaryVersion.value == "3") {
-        Nil
-      } else {
-        (x / sources).value
-      }
-    }
-  },
-  Test / test := {
-    if (scalaBinaryVersion.value == "3") {
-      ()
-    } else {
-      (Test / test).value
-    }
-  },
-  publish / skip := scalaBinaryVersion.value == "3",
-)
-
 val isScala3 = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
 )
@@ -146,14 +119,11 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.5" cross CrossVersion.for3Use2_13,
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.6",
   )
   .dependsOn(
     core,
     scalaprops % "test"
-  )
-  .nativeSettings(
-    disableScala3,
   )
 
 lazy val scalaprops = module(scalapropsName)
