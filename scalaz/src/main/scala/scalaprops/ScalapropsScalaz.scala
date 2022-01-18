@@ -264,8 +264,12 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
         Cogen[(A, EphemeralStream[scalaz.Tree[A]])].cogen((a.rootLabel, a.subForest), g)
     }
 
-  implicit def cogenTreeLoc[A: Cogen]: Cogen[scalaz.TreeLoc[A]] =
-    Cogen.from4(scalaz.TreeLoc.unapply)
+  implicit def cogenTreeLoc[A: Cogen]: Cogen[scalaz.TreeLoc[A]] = {
+    import scalaz.TreeLoc._
+    Cogen[(Tree[A], TreeForest[A], TreeForest[A], Parents[A])].contramap { a =>
+      (a.tree, a.lefts, a.rights, a.parents)
+    }
+  }
 
   implicit def cogenStrictTree[A: Cogen]: Cogen[StrictTree[A]] =
     new Cogen[StrictTree[A]] {
