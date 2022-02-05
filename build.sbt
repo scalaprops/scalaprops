@@ -150,7 +150,7 @@ lazy val scalaprops = module(scalapropsName)
 
 val tagName = Def.setting {
   s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value
-  else version.value}"
+    else version.value}"
 }
 val tagOrHash = Def.setting {
   if (isSnapshot.value) gitHash() else tagName.value
