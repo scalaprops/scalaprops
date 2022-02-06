@@ -18,8 +18,8 @@ object Gen {
         s"final def $name[$t, $Z]($ff: ($t) => $Z)(implicit ${as.map(a => s"$a: Gen[$a]").mkString(", ")}): Gen[$Z] ="
 
       s"""  implicit final def f$i[$t, $Z](implicit ${as
-        .map(a => s"$a: Cogen[$a]")
-        .mkString(", ")}, $Z: Gen[$Z]): Gen[$f] =
+          .map(a => s"$a: Cogen[$a]")
+          .mkString(", ")}, $Z: Gen[$Z]): Gen[$f] =
     ${as.foldRight(Z)((a, s) => s"f1($a, $s)")}.map(f => (${aa.mkString(", ")}) => f(${aa.mkString(")(")}))
 
   implicit final def tuple$i[$t](implicit ${as.map(a => s"$a: Gen[$a]").mkString(", ")}): Gen[Tuple$i[$t]] =
