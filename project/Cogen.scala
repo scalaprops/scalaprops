@@ -15,8 +15,8 @@ object Cogen {
 
       val function =
         s"""  implicit final def f$i[$t, $Z](implicit ${as
-          .map(a => s"$a: Gen[$a]")
-          .mkString(", ")}, $Z: $C[$Z]): $tpeF =
+            .map(a => s"$a: Gen[$a]")
+            .mkString(", ")}, $Z: $C[$Z]): $tpeF =
     new $tpeF {
       def cogen[$X](f: $f, g: CogenState[$X]) =
         ${as.foldRight(Z)((a, s) => s"f1($a, $s)") + ".cogen(f.curried, g)"}
@@ -34,8 +34,8 @@ object Cogen {
 
       def fromDef(name: String) =
         s"""final def $name[$t, $Z](f: $Z => Option[Tuple$i[$t]])(implicit ${as
-          .map(a => s"$a: Cogen[$a]")
-          .mkString(", ")}): Cogen[$Z] ="""
+            .map(a => s"$a: Cogen[$a]")
+            .mkString(", ")}): Cogen[$Z] ="""
 
       val fromN =
         s"""
