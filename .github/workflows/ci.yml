@@ -12,11 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         name: [jvm, js, native]
-        scala: [2_11, 2_12, 2_13, 3]
+        scala: ["2.11.*", "2.12.*", "2.13.*", "3.*"]
         java: [8]
         include:
           - name: jvm
-            scala: 2_13
+            scala: "2.13.*"
             java: 17
     steps:
     - uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
           "jvm")
             ./sbt -v \
             -jvm-opts .github/workflows/.jvmopts \
-            "SetScala${{ matrix.scala }}" \
+            "++ ${{ matrix.scala }}" \
             scalafmtCheckAll \
             scalafmtSbtCheck \
             checkGenerateCodeError \
@@ -48,7 +48,7 @@ jobs:
           "js")
             ./sbt -v \
             -jvm-opts .github/workflows/.jvmopts \
-            "SetScala${{ matrix.scala }}" \
+            "++ ${{ matrix.scala }}" \
             "rootJS/Test/compile" \
             "scalapropsJS/test" \
             "scalazJS/test" \
@@ -57,7 +57,7 @@ jobs:
           "native")
             ./sbt -v \
             -jvm-opts .github/workflows/.jvmopts \
-            "SetScala${{ matrix.scala }}" \
+            "++ ${{ matrix.scala }}" \
             "scalapropsNative/test" \
             "scalazNative/test" \
             "rootNative/publishLocal"
