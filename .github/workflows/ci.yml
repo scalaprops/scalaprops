@@ -27,13 +27,10 @@ jobs:
     - uses: coursier/cache-action@74993c01044a73362482c2b2ea8c1ce61f870592
     - run: git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
     - run: git show --oneline --check
-    - shell: bash
-      name: install sbt
-      run: curl -Ls https://raw.githubusercontent.com/dwijnand/sbt-extras/787e7a6c0523cbd995708aec2815a21917315079/sbt > ./sbt && chmod 0755 ./sbt
     - run: |
         case ${{ matrix.name }} in
           "jvm")
-            ./sbt -v \
+            sbt -v \
             -jvm-opts .github/workflows/.jvmopts \
             "++ ${{ matrix.scala }}" \
             scalafmtCheckAll \
@@ -46,7 +43,7 @@ jobs:
             "rootJVM/publishLocal" \
             ;;
           "js")
-            ./sbt -v \
+            sbt -v \
             -jvm-opts .github/workflows/.jvmopts \
             "++ ${{ matrix.scala }}" \
             "rootJS/Test/compile" \
@@ -55,7 +52,7 @@ jobs:
             "rootJS/publishLocal"
             ;;
           "native")
-            ./sbt -v \
+            sbt -v \
             -jvm-opts .github/workflows/.jvmopts \
             "++ ${{ matrix.scala }}" \
             "scalapropsNative/test" \
