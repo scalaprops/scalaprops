@@ -24,7 +24,7 @@ jobs:
       with:
         java-version: ${{matrix.java}}
         distribution: temurin
-    - uses: coursier/cache-action@60455feeb7a70875fc37e0228606262bbf361990
+    - uses: coursier/cache-action@60455feeb7a70875fc37e0228606262bbf361990 # v6.4.1
     - run: git config core.whitespace tab-in-indent,trailing-space,space-before-tab,cr-at-eol
     - run: git show --oneline --check
     - shell: bash
