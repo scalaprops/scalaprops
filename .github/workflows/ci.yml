@@ -71,7 +71,7 @@ jobs:
       with:
         report_paths: '**/target/test-reports/*.xml'
         require_tests: true
-        check_name: "${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}"
+        check_name: "${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.name }}"
     - uses: test-summary/action@v2
       if: always()
       with:
