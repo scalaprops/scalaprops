@@ -25,7 +25,7 @@ object FutureTest extends Scalaprops {
   }
 
   private[this] implicit val genThrowable: Gen[Throwable] =
-    Gen[Byte].map(SomeFailure)
+    Gen[Byte].map(SomeFailure.apply)
 
   private[this] implicit val cogenThrowable: Cogen[Throwable] =
     Cogen[Byte].contramap { case SomeFailure(n) =>
