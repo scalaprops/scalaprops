@@ -165,7 +165,7 @@ val unusedWarnings = Def.setting {
 }
 
 val Scala212 = "2.12.18"
-val Scala213 = "2.13.10"
+val Scala213 = "2.13.11"
 val Scala3 = "3.3.0"
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
