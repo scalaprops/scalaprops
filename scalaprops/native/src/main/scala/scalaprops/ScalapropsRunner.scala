@@ -53,7 +53,7 @@ final class ScalapropsRunner(
     result
   }
 
-  override def receiveMessage(msg: String) = None
+  override def receiveMessage(msg: String): Option[String] = None
 
   override def serializeTask(task: sbt.testing.Task, serializer: TaskDef => String) =
     serializer(task.taskDef())
