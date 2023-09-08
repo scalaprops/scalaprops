@@ -12,7 +12,7 @@ object Eq1 {
 
   implicit def freeEq1[F[_]: Functor](implicit F: Eq1[F]): Eq1[({ type l[a] = Free[F, a] })#l] =
     new Eq1[({ type l[a] = Free[F, a] })#l] {
-      def eq1[A: Equal] =
+      def eq1[A: Equal]: Equal[Free[F, A]] =
         new Equal[Free[F, A]] {
           def equal(a: Free[F, A], b: Free[F, A]) = {
             implicit val s: Equal[F[Free[F, A]]] = F.eq1[Free[F, A]](freeEq1[F].eq1)

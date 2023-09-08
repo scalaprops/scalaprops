@@ -8,7 +8,11 @@ class ScalapropsFramework extends Framework {
   override def fingerprints() =
     Array[Fingerprint](ScalapropsFingerprint)
 
-  override def runner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader) =
+  override def runner(
+    args: Array[String],
+    remoteArgs: Array[String],
+    testClassLoader: ClassLoader
+  ): sbt.testing.Runner =
     new ScalapropsRunner(args, remoteArgs, testClassLoader)
 
   def slaveRunner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader, send: String => Unit) =
