@@ -165,7 +165,7 @@ val unusedWarnings = Def.setting {
 }
 
 val Scala212 = "2.12.18"
-val Scala213 = "2.13.11"
+val Scala213 = "2.13.12"
 val Scala3 = "3.3.1"
 
 def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
@@ -227,6 +227,13 @@ val commonSettings = Def.settings(
     "-unchecked",
     "-language:existentials,higherKinds,implicitConversions",
   ),
+  scalacOptions ++= {
+    if (scalaBinaryVersion.value == "2.13") {
+      Seq("-Wconf:msg=constructor modifiers are assumed by synthetic:info")
+    } else {
+      Nil
+    }
+  },
   scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((0 | 3, _)) =>
