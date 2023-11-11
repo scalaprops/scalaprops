@@ -110,7 +110,7 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.7",
+    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.8",
   )
   .dependsOn(
     core,
