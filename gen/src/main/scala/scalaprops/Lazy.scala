@@ -9,7 +9,7 @@ final class Lazy[A] private (private var a: () => A) {
 
   override def equals(other: Any): Boolean =
     other match {
-      case that: Lazy[_] =>
+      case that: Lazy[?] =>
         value == that.value
       case _ =>
         false

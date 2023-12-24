@@ -67,7 +67,7 @@ object TreeTest extends Scalaprops {
       }.toProperties(i.toString, Param.minSuccessful(1))
     }
 
-    Properties.list(tests.head, tests.tail: _*)
+    Properties.list(tests.head, tests.tail*)
   }
 
   val treeGenSize = {

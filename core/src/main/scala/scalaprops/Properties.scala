@@ -56,12 +56,12 @@ object Properties {
     fromProps[T](
       Or[T](id),
       prop0.mapId(Or[T]._apply),
-      props.map(_.mapId(Or[T]._apply)): _*
+      props.map(_.mapId(Or[T]._apply))*
     )
   }
 
   def list[A](prop0: Properties[A], props: Properties[A]*): Properties[Unit :-: A :-: Or.Empty] = {
-    either((), prop0, props: _*)
+    either((), prop0, props*)
   }
 
   def single[A](id: A, c: Check): Properties[A] =

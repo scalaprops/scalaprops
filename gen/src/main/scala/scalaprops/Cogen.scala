@@ -211,7 +211,7 @@ object Cogen extends CogenInstances0 {
   implicit val cogenString: Cogen[String] =
     new Cogen[String] {
       def cogen[B](a: String, g: CogenState[B]) =
-        cogenList(cogenChar).cogen(List(a.toCharArray: _*), g)
+        cogenList(cogenChar).cogen(List(a.toCharArray*), g)
     }
 
   implicit val cogenSymbol: Cogen[Symbol] =

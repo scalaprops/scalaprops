@@ -65,7 +65,7 @@ object ScalapropsTaskImpl {
   private[this] val emptyThrowable = new OptionalThrowable
 
   def createTree(
-    tests: Properties[_],
+    tests: Properties[?],
     testClassName: String,
     arguments: Arguments,
     results: ArrayBuffer[TestResult],

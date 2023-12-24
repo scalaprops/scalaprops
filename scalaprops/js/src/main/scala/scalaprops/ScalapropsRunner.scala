@@ -14,10 +14,10 @@ object ScalapropsRunner {
    * call from sbt plugin
    * [[https://github.com/scalaprops/sbt-scalaprops/blob/v0.2.5/src/main/scala/scalaprops/ScalapropsPlugin.scala#L66]]
    */
-  def testFieldNames(clazz: Class[_]): Array[String] =
+  def testFieldNames(clazz: Class[?]): Array[String] =
     Scalaprops.testFieldNames(clazz)
 
-  private[this] def findTestFields[A](obj: js.Dictionary[A], fieldType: Class[_]): WrappedDictionary[A] =
+  private[this] def findTestFields[A](obj: js.Dictionary[A], fieldType: Class[?]): WrappedDictionary[A] =
     obj.filter { case (k, v) =>
       fieldType.isInstance(v)
     }.map { case (k, v) =>
@@ -45,7 +45,7 @@ object ScalapropsRunner {
       )
     }.toList
 
-  def allProps(obj: Scalaprops, only: List[String], logger: Logger): Properties[_] = {
+  def allProps(obj: Scalaprops, only: List[String], logger: Logger): Properties[?] = {
     val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[_]]).map { case (name, p) =>
       p.toProperties[Any](name)
     } ::: invokeProperties(obj.asInstanceOf[js.Dictionary[_]])
@@ -95,7 +95,7 @@ object ScalapropsRunner {
     testClassLoader: ClassLoader,
     only: List[String],
     logger: Logger
-  ): Properties[_] = {
+  ): Properties[?] = {
     val obj = getTestObject(fingerprint, testClassName, testClassLoader)
     allProps(obj, only, logger)
   }

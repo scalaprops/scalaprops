@@ -262,7 +262,7 @@ object ScalazLaw {
 
   implicit val scalazLawGen: Gen[ScalazLaw] = {
     val h :: t = values
-    Gen.elements(h, t: _*)
+    Gen.elements(h, t*)
   }
 
   implicit val scalazLawOrder: Order[ScalazLaw] = {

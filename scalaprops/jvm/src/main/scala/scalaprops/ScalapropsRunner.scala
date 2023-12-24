@@ -6,10 +6,10 @@ import scala.collection.mutable.ArrayBuffer
 import scala.reflect.NameTransformer
 
 object ScalapropsRunner {
-  def testFieldNames(clazz: Class[_]): Array[String] =
+  def testFieldNames(clazz: Class[?]): Array[String] =
     Scalaprops.testFieldNames(clazz)
 
-  private[this] def invokeProperty(clazz: Class[_], obj: Scalaprops): List[(String, Property)] =
+  private[this] def invokeProperty(clazz: Class[?], obj: Scalaprops): List[(String, Property)] =
     Scalaprops
       .findTestFields(clazz, classOf[Property])
       .map { method =>
@@ -18,7 +18,7 @@ object ScalapropsRunner {
       }
       .toList
 
-  private[this] def invokeProperties(clazz: Class[_], obj: Scalaprops): List[Properties[Any]] =
+  private[this] def invokeProperties(clazz: Class[?], obj: Scalaprops): List[Properties[Any]] =
     Scalaprops
       .findTestFields(clazz, classOf[Properties[_]])
       .map { method =>
@@ -34,11 +34,11 @@ object ScalapropsRunner {
       .toList
 
   private[scalaprops] def allProps(
-    clazz: Class[_],
+    clazz: Class[?],
     obj: Scalaprops,
     only: List[String],
     logger: Logger
-  ): Properties[_] = {
+  ): Properties[?] = {
     val tests0 = invokeProperty(clazz, obj).map { case (name, p) =>
       p.toProperties[Any](name)
     } ::: invokeProperties(clazz, obj)
@@ -78,7 +78,7 @@ object ScalapropsRunner {
     testClassLoader: ClassLoader,
     only: List[String],
     logger: Logger
-  ): Properties[_] = {
+  ): Properties[?] = {
     val clazz = testClassLoader.loadClass(testClassName + "$")
     val obj = getTestObject(fingerprint, testClassName, testClassLoader)
     allProps(clazz, obj, only, logger)

@@ -22,7 +22,7 @@ object GenTest extends Scalaprops {
               (r0.reseed(x), a)
             })
           )
-      ).flatten: _*
+      ).flatten*
     )
   }
 
@@ -49,7 +49,7 @@ object GenTest extends Scalaprops {
         Gen.sequenceNList(10000, Gen[Rand]),
         Gen.sequenceNList(N, Gen[Int])
       ) { (rs, xs) =>
-        val g = Gen.elements(xs.head, xs.tail: _*)
+        val g = Gen.elements(xs.head, xs.tail*)
         val r = rs.map(r => g.f(Int.MaxValue, r)._2)
         (r.toSet == xs.toSet) && (xs.toSet.size == N)
       }
