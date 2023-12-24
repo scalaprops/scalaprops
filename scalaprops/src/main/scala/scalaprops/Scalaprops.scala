@@ -30,13 +30,13 @@ object Scalaprops {
     Properties.noSort(loop(p.props))
   }
 
-  private[scalaprops] def testFieldNames(clazz: Class[_]): Array[String] =
+  private[scalaprops] def testFieldNames(clazz: Class[?]): Array[String] =
     Array(
       findTestFields(clazz, classOf[Property]),
       findTestFields(clazz, classOf[Properties[_]])
     ).flatten.map(_.getName)
 
-  private[scalaprops] def findTestFields(clazz: Class[_], fieldType: Class[_]): Array[Method] =
+  private[scalaprops] def findTestFields(clazz: Class[?], fieldType: Class[?]): Array[Method] =
     clazz.getMethods.filter(method => method.getParameterTypes.length == 0 && method.getReturnType == fieldType)
 
   private[scalaprops] def logger(loggers: Array[Logger]): Logger =

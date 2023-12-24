@@ -140,10 +140,8 @@ lazy val scalaprops = module(scalapropsName)
   )
 
 val tagName = Def.setting {
-  s"v${
-      if (releaseUseGlobalVersion.value) (ThisBuild / version).value
-      else version.value
-    }"
+  s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value
+    else version.value}"
 }
 val tagOrHash = Def.setting {
   if (isSnapshot.value) gitHash() else tagName.value
@@ -168,7 +166,7 @@ val Scala212 = "2.12.18"
 val Scala213 = "2.13.12"
 val Scala3 = "3.3.1"
 
-def stripPom(filter: scala.xml.Node => Boolean): Setting[_] =
+def stripPom(filter: scala.xml.Node => Boolean): Setting[?] =
   pomPostProcess := { node =>
     import scala.xml._
     import scala.xml.transform._
@@ -393,19 +391,19 @@ val root = Project("root", file("."))
   )
 
 lazy val rootJS = project
-  .aggregate(jsProjects: _*)
+  .aggregate(jsProjects*)
   .settings(
     commonSettings,
     notPublish
   )
 lazy val rootJVM = project
-  .aggregate(jvmProjects: _*)
+  .aggregate(jvmProjects*)
   .settings(
     commonSettings,
     notPublish
   )
 lazy val rootNative = project
-  .aggregate(nativeProjects: _*)
+  .aggregate(nativeProjects*)
   .settings(
     commonSettings,
     notPublish

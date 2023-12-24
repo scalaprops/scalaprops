@@ -165,7 +165,7 @@ object Gen extends GenInstances0 {
     lazyFrequency(g, gs.toList)
 
   def elemFrequency[A](a: (Int, A), as: List[(Int, A)]): Gen[A] =
-    frequency((a._1, Gen.value(a._2)), as.map { case (i, a) => i -> Gen.value(a) }: _*)
+    frequency((a._1, Gen.value(a._2)), as.map { case (i, a) => i -> Gen.value(a) }*)
 
   def elements[A](a: A, as: A*): Gen[A] = {
     val xs = (a +: as).toArray[Any]
