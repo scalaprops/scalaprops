@@ -84,7 +84,6 @@ def module(id: String): CrossProject =
     )
     .nativeSettings(
       scalapropsNativeSettings,
-      nativeGC := "immix"
     )
 
 lazy val gen = module("gen")
