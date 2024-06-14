@@ -33,7 +33,7 @@ sealed abstract class CogenInstances0 extends CogenInstances {
 object Cogen extends CogenInstances0 {
   private[this] val byteArrayToIntList: Array[Byte] => List[Int] = { bytes =>
     val x =
-      if (bytes.length % 4 == 0) {
+      if bytes.length % 4 == 0 then {
         0
       } else {
         -1
@@ -41,14 +41,14 @@ object Cogen extends CogenInstances0 {
     var ints = List.empty[Int]
     val len = ints.length + x
     var i = 0
-    while (i < len) {
+    while i < len do {
       ints ::= ((bytes(i + 0) & 0xff) << 24) |
         ((bytes(i + 1) & 0xff) << 16) |
         ((bytes(i + 2) & 0xff) << 8) |
         ((bytes(i + 3) & 0xff) << 0)
       i += 1
     }
-    if (x != 0) {
+    if x != 0 then {
       (bytes.length % 4) match {
         case 1 =>
           ints ::= ((bytes(i + 0) & 0xff) << 24)
@@ -79,7 +79,7 @@ object Cogen extends CogenInstances0 {
   implicit val cogenBoolean: Cogen[Boolean] =
     new Cogen[Boolean] {
       def cogen[B](a: Boolean, g: CogenState[B]) =
-        variantInt(if (a) 0 else 1, g)
+        variantInt(if a then 0 else 1, g)
     }
 
   implicit val cogenUnit: Cogen[Unit] =
@@ -90,25 +90,25 @@ object Cogen extends CogenInstances0 {
   implicit val cogenInt: Cogen[Int] =
     new Cogen[Int] {
       def cogen[B](a: Int, g: CogenState[B]) =
-        variantInt(if (a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if a >= 0 then 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenByte: Cogen[Byte] =
     new Cogen[Byte] {
       def cogen[B](a: Byte, g: CogenState[B]) =
-        variantInt(if (a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if a >= 0 then 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenShort: Cogen[Short] =
     new Cogen[Short] {
       def cogen[B](a: Short, g: CogenState[B]) =
-        variantInt(if (a >= 0) 2 * a else -2 * a + 1, g)
+        variantInt(if a >= 0 then 2 * a else -2 * a + 1, g)
     }
 
   implicit val cogenLong: Cogen[Long] =
     new Cogen[Long] {
       def cogen[B](a: Long, g: CogenState[B]) =
-        Variant.variant(if (a >= 0L) 2L * a else -2L * a + 1L, g)
+        Variant.variant(if a >= 0L then 2L * a else -2L * a + 1L, g)
     }
 
   implicit val cogenChar: Cogen[Char] =

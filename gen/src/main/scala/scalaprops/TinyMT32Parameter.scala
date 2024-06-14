@@ -65,7 +65,7 @@ object TinyMT32Parameter {
   def getThreadLocalParameter(threadId: Long): TinyMT32Parameter = {
     val length = THREAD_LOCAL_PARAMETER.length
     var no: Int = (threadId % length).toInt
-    if (no < 0) {
+    if no < 0 then {
       no = -no
     }
     THREAD_LOCAL_PARAMETER(no)
@@ -128,7 +128,7 @@ final case class TinyMT32Parameter(
    * @return mat1 when x is odd else 0
    */
   def getMat1(x: Int): Int = {
-    if ((x & 1) == 0) {
+    if (x & 1) == 0 then {
       0
     } else {
       mat1
@@ -142,7 +142,7 @@ final case class TinyMT32Parameter(
    * @return mat1 if x is odd else 0
    */
   def getMat2(x: Int): Int = {
-    if ((x & 1) == 0) {
+    if (x & 1) == 0 then {
       0
     } else {
       mat2
@@ -156,7 +156,7 @@ final case class TinyMT32Parameter(
    * @return return tmat if x is odd else 0
    */
   def getTmat(x: Int): Int = {
-    if ((x & 1) == 0) {
+    if (x & 1) == 0 then {
       0
     } else {
       tmat
@@ -171,7 +171,7 @@ final case class TinyMT32Parameter(
    * @return bit pattern depends on x is odd or not.
    */
   def getTmatFloat(x: Int): Int = {
-    if ((x & 1) == 0) {
+    if (x & 1) == 0 then {
       TinyMT32Parameter.INT_TO_FLOAT_MASK
     } else {
       TinyMT32Parameter.INT_TO_FLOAT_MASK | (tmat >>> TinyMT32Parameter.INT_TO_FLOAT_SHIFT)

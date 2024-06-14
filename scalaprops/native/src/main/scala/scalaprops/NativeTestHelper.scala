@@ -48,10 +48,10 @@ abstract class NativeTestHelper {
     obj: Scalaprops,
     objects: Set[String],
     args: Arguments,
-    props: (String, Properties[_])*
+    props: (String, Properties[?])*
   ): Unit = {
     val testsOpt = {
-      if (objects.isEmpty || objects.contains(className)) {
+      if objects.isEmpty || objects.contains(className) then {
         val tests = props.map { case (id, p) =>
           Properties(
             Tree.Node(
@@ -114,7 +114,7 @@ abstract class NativeTestHelper {
       println(Console.RED + e.fullyQualifiedName() + Console.RESET)
     }
     println()
-    if (status.failure.get + status.error.get > 0) sys.error("test failed")
+    if status.failure.get + status.error.get > 0 then sys.error("test failed")
   }
 
   protected[this] def resultString(count: Int): String = {
@@ -135,13 +135,13 @@ Failed ${status.failure}, Errors ${status.error}, Passed ${status.success}, Igno
   private[this] val notNativeEnvMessage = "Maybe this is not scala-native environment!"
 
   protected[this] def warnIfNotNativeEnvironment(): Unit = {
-    if (maybeNativeEnvironment() == false) {
+    if maybeNativeEnvironment() == false then {
       Console.err.println(Console.RED + notNativeEnvMessage + Console.RESET)
     }
   }
 
   protected[this] def throwIfNotNativeEnvironment(): Unit = {
-    if (maybeNativeEnvironment() == false) {
+    if maybeNativeEnvironment() == false then {
       sys.error(notNativeEnvMessage)
     }
   }

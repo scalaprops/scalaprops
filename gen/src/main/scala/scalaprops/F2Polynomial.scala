@@ -26,7 +26,7 @@ object F2Polynomial {
    * @return degree of polynomial pol
    */
   private def degree(pol: BigInteger): Int = {
-    if (pol == BigInteger.ZERO) {
+    if pol == BigInteger.ZERO then {
       -1
     } else {
       pol.bitLength - 1
@@ -44,8 +44,8 @@ object F2Polynomial {
    */
   private def mul(x: BigInteger, y: BigInteger): BigInteger = {
     @tailrec def loop(z: BigInteger, v: BigInteger, w: BigInteger): BigInteger = {
-      if (w != BigInteger.ZERO) {
-        val z0 = if (w.and(BigInteger.ONE).testBit(0)) {
+      if w != BigInteger.ZERO then {
+        val z0 = if w.and(BigInteger.ONE).testBit(0) then {
           z.xor(v)
         } else z
         loop(z0, v.shiftLeft(1), w.shiftRight(1))
@@ -65,16 +65,16 @@ object F2Polynomial {
   private def mod(y: BigInteger, that: BigInteger): BigInteger = {
     val deg = degree(that)
     val diff = degree(y) - deg
-    if (diff < 0) {
+    if diff < 0 then {
       y
-    } else if (diff == 0) {
+    } else if diff == 0 then {
       y.xor(that)
     } else {
       var z: BigInteger = y
       var x: BigInteger = that.shiftLeft(diff)
       z = z.xor(x)
       var zdeg: Int = z.bitLength - 1
-      while (zdeg >= deg) {
+      while zdeg >= deg do {
         x = x.shiftRight(x.bitLength - 1 - zdeg)
         z = z.xor(x)
         zdeg = z.bitLength - 1
@@ -95,8 +95,8 @@ object F2Polynomial {
     var z: BigInteger = BigInteger.ONE
     var s: BigInteger = x
     var pow: BigInteger = power
-    while (!(pow == BigInteger.ZERO)) {
-      if (pow.and(BigInteger.ONE).testBit(0)) {
+    while !(pow == BigInteger.ZERO) do {
+      if pow.and(BigInteger.ONE).testBit(0) then {
         z = mul(z, s)
         z = this.mod(z, mod)
       }
@@ -157,7 +157,7 @@ final class F2Polynomial private (private val pol: BigInteger) {
    * @return result of multiplication
    */
   def mul(that: F2Polynomial): F2Polynomial =
-    if (this.degree >= that.degree) {
+    if this.degree >= that.degree then {
       new F2Polynomial(F2Polynomial.mul(this.pol, that.pol))
     } else {
       new F2Polynomial(F2Polynomial.mul(that.pol, this.pol))
@@ -170,7 +170,7 @@ final class F2Polynomial private (private val pol: BigInteger) {
    * @return coefficient of specified term
    */
   def getCoefficient(index: Int): Int =
-    if (pol.testBit(index)) {
+    if pol.testBit(index) then {
       1
     } else {
       0
@@ -206,8 +206,8 @@ final class F2Polynomial private (private val pol: BigInteger) {
     var z: BigInteger = BigInteger.ONE
     var v: BigInteger = x
     var pow: BigInteger = power
-    while (!(pow == BigInteger.ZERO)) {
-      if (pow.and(BigInteger.ONE).testBit(0)) {
+    while !(pow == BigInteger.ZERO) do {
+      if pow.and(BigInteger.ONE).testBit(0) then {
         z = F2Polynomial.mul(z, v)
       }
       v = F2Polynomial.mul(v, v)

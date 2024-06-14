@@ -21,30 +21,30 @@ abstract class Rand {
     Rand.nextDouble(this)
 
   def chooseLong(from: Long, to: Long): (Rand, Long) = {
-    if (from == to) {
+    if from == to then {
       (this.nextInt._1, from)
     } else {
       val min = math.min(from, to)
       val max = math.max(from, to)
 
-      if (Int.MinValue <= min && max <= Int.MaxValue) {
+      if Int.MinValue <= min && max <= Int.MaxValue then {
         val (r, i) = choose(min.asInstanceOf[Int], max.asInstanceOf[Int])
         (r, i)
       } else {
         val diff: Long = (max: Long) - (min: Long)
         // `0 < diff` is necessary to check subtraction underflow.
-        if (0 < diff && diff < Int.MaxValue) {
+        if 0 < diff && diff < Int.MaxValue then {
           val (r, i) = choose(0, diff.asInstanceOf[Int])
           (r, min + i)
         } else {
           @annotation.tailrec
           def loop(state: Rand): (Rand, Long) = {
             val next = state.nextLong
-            if (min <= next._2 && next._2 <= max) {
+            if min <= next._2 && next._2 <= max then {
               next
-            } else if (0 < diff) {
+            } else if 0 < diff then {
               val x = (next._2 % (max - min + 1)) + min
-              if (min <= x && x <= max) {
+              if min <= x && x <= max then {
                 (next._1, x)
               } else {
                 loop(next._1)
@@ -60,7 +60,7 @@ abstract class Rand {
   }
 
   def choose(from: Int, to: Int): (Rand, Int) = {
-    if (from == to) {
+    if from == to then {
       (this.nextInt._1, from)
     } else {
       val min = math.min(from, to)
@@ -68,11 +68,11 @@ abstract class Rand {
       @annotation.tailrec
       def loop(state: Rand): (Rand, Int) = {
         val next = state.nextInt
-        if (min <= next._2 && next._2 <= max) {
+        if min <= next._2 && next._2 <= max then {
           next
-        } else if (0 < (max - min)) {
+        } else if 0 < (max - min) then {
           val x = (next._2 % (max - min + 2)) + min - 1
-          if (min <= x && x <= max) {
+          if min <= x && x <= max then {
             (next._1, x)
           } else {
             loop(next._1)

@@ -50,7 +50,7 @@ object MersenneTwister32 {
   private[scalaprops] val default: MersenneTwister32 = fromSeed0(Rand.defaultSeed)
 
   def fromSeed(seed: Int = Rand.defaultSeed): MersenneTwister32 = {
-    if (seed == Rand.defaultSeed) {
+    if seed == Rand.defaultSeed then {
       default
     } else {
       fromSeed0(seed)
@@ -61,7 +61,7 @@ object MersenneTwister32 {
     val mt = new Array[Long](N)
     mt(0) = seed
     var i = 1
-    while (i < N) {
+    while i < N do {
       mt(i) = (1812433253L * (mt(i - 1) ^ (mt(i - 1) >>> 30)) + i) & 0xffffffffL
       i += 1
     }
@@ -72,17 +72,17 @@ object MersenneTwister32 {
     var mti = state.mti
     var y = 0L
 
-    val mt0 = if (mti >= N) {
+    val mt0 = if mti >= N then {
       val mt = state.newArray
       val mag01 = Array(0L, MatrixA)
 
       var kk = 0
-      while (kk < N - M) {
+      while kk < N - M do {
         y = (mt(kk) & UpperMask) | (mt(kk + 1) & LowerMask)
         mt(kk) = mt(kk + M) ^ (y >>> 1) ^ mag01(y.toInt & 0x1)
         kk += 1
       }
-      while (kk < N - 1) {
+      while kk < N - 1 do {
         y = (mt(kk) & UpperMask) | (mt(kk + 1) & LowerMask)
         mt(kk) = mt(kk + (M - N)) ^ (y >>> 1) ^ mag01(y.toInt & 0x1)
         kk += 1

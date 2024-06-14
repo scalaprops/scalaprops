@@ -121,7 +121,7 @@ object TinyMT32Test extends Scalaprops {
       0x0c73d703, 0x7b174b03, 0x7ddb6aaf)
 
     var i = 0
-    while (i < output.length) {
+    while i < output.length do {
       val temp = tiny.nextInt
       output(i) = temp._2
       tiny = temp._1
@@ -134,7 +134,7 @@ object TinyMT32Test extends Scalaprops {
       0xa41ea287, 0x263e62d3, 0x94a5d5d1)
 
     i = 0
-    while (i < output.length) {
+    while i < output.length do {
       val temp = tiny.nextInt
       output(i) = temp._2
       tiny = temp._1
@@ -151,7 +151,7 @@ object TinyMT32Test extends Scalaprops {
       0x8ac7a201, 0x7443b188, 0x0b7c6501)
 
     var i: Int = 0
-    while (i < output.length) {
+    while i < output.length do {
       val temp = tiny.nextInt
       output(i) = temp._2
       tiny = temp._1
@@ -167,7 +167,7 @@ object TinyMT32Test extends Scalaprops {
       0.4922972322f, 0.5113201141f, 0.6480515003f, 0.1780070662f)
 
     var i = 0
-    while (i < c_data.length) {
+    while i < c_data.length do {
       val temp = tiny.nextFloat
       tiny = temp._1
       assert(math.abs(temp._2 - c_data(i)) < 0.00001, i)
@@ -182,7 +182,7 @@ object TinyMT32Test extends Scalaprops {
       0.2052537946, 0.8592087870, 0.6802024140, 0.9528347664)
 
     var i = 0
-    while (i < c_data.length) {
+    while i < c_data.length do {
       val temp = tiny.nextDouble
       tiny = temp._1
       assert(math.abs(temp._2 - c_data(i)) < 0.00000001, i)

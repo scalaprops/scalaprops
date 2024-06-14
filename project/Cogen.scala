@@ -49,7 +49,7 @@ object Cogen {
     from$i[$t, $Z](f)($t)
 """
 
-      if (i == 1) {
+      if i == 1 then {
         tuple
       } else {
         function + tuple + from + fromN

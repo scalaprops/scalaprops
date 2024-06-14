@@ -11,8 +11,7 @@ object bindRec {
   def handleManyBinds[F[_], A](bindCount: Int)(implicit F: BindRec[F], G: Gen[F[A]]) =
     forAll { (fa: F[A]) =>
       F.tailrecM[Int, A](0) { i =>
-        if (i < bindCount)
-          F.map(fa)(_ => \/.left(i + 1))
+        if i < bindCount then F.map(fa)(_ => \/.left(i + 1))
         else
           F.map(fa)(\/.right)
       }

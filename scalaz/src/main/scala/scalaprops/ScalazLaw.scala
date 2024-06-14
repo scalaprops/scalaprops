@@ -12,7 +12,7 @@ object ScalazLaw {
 
   private[this] def law(fullName: String, simpleName: String = ""): ScalazLaw =
     set.synchronized {
-      val name = if (simpleName == "") fullName else simpleName
+      val name = if simpleName == "" then fullName else simpleName
       val l = new ScalazLaw(set.size, fullName, name)
       set += l
       l

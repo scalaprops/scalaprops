@@ -53,7 +53,7 @@ object IMapTest extends Scalaprops {
 
     Property.forAll { (a: KEY ==>> VALUE, k: KEY, v: VALUE, f: (KEY, VALUE, VALUE) => VALUE) =>
       val m = a.toList.toMap
-      val i = if (m contains k) {
+      val i = if m contains k then {
         k -> f(k, v, m(k))
       } else {
         k -> v

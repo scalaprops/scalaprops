@@ -68,7 +68,7 @@ object ScalapropsListener {
       val tree = drawTree(result.map { case (name, x) =>
         name.toString -> x.map { case (prop, param, event) =>
           val str = event2string(event)
-          if (logger.ansiCodesSupported()) {
+          if logger.ansiCodesSupported() then {
             event.result().value match {
               case Some(_: CheckResult.Proven | _: CheckResult.Passed) =>
                 Console.GREEN + str + Console.RESET
@@ -132,7 +132,7 @@ object ScalapropsListener {
     ): Unit = {
       val N = 50
       val x = param.minSuccessful / N
-      if ((x <= 1) || (count % x == 0)) {
+      if (x <= 1) || (count % x == 0) then {
         print(".")
       }
     }

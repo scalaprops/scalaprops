@@ -65,7 +65,7 @@ object RandTest extends Scalaprops {
 
   val chooseLong2 = Property.forAllG(Gen[Long], Gen.choose(0, 30), Gen[Long]) { (a, b, seed) =>
     val c = a + b
-    val max = if (c >= a) c else Long.MaxValue
+    val max = if c >= a then c else Long.MaxValue
     val x = Gen.chooseLong(a, max).samples(listSize = 1000, seed = seed).distinct.size
     x == (max - a + 1)
   }
@@ -94,7 +94,7 @@ object RandTest extends Scalaprops {
         assert(min <= a && a <= max, s"$seed $a $min $max")
       }
 
-      if (m.isValidInt && n.isValidInt) {
+      if m.isValidInt && n.isValidInt then {
         Gen.choose(m.toInt, n.toInt).samples(seed = seed, listSize = size).foreach { a =>
           assert(min <= a && a <= max, s"$seed $a $min $max")
         }
