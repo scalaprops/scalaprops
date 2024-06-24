@@ -15,7 +15,7 @@ object Eq1 {
       def eq1[A: Equal]: Equal[Free[F, A]] =
         new Equal[Free[F, A]] {
           def equal(a: Free[F, A], b: Free[F, A]) = {
-            implicit val s: Equal[F[Free[F, A]]] = F.eq1[Free[F, A]](freeEq1[F].eq1)
+            implicit val s: Equal[F[Free[F, A]]] = F.eq1[Free[F, A]](using freeEq1[F].eq1)
             Equal[F[Free[F, A]] \/ A].equal(a.resume, b.resume)
           }
         }
