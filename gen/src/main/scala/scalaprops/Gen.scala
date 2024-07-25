@@ -90,7 +90,7 @@ object Gen extends GenInstances0 {
     val array = new Array[A](n)
     @annotation.tailrec
     def loop(size: Int, i: Int, next: Rand): (Rand, Array[A]) = {
-      if (i < n) {
+      if i < n then {
         val r = g.f(size, next)
         array(i) = r._2
         loop(size, i + 1, r._1)
@@ -104,7 +104,7 @@ object Gen extends GenInstances0 {
   def sequenceNList[A](n: Int, g: Gen[A]): Gen[List[A]] = {
     @annotation.tailrec
     def loop(size: Int, i: Int, next: Rand, acc: List[A]): (Rand, List[A]) = {
-      if (i < n) {
+      if i < n then {
         val r = g.f(size, next)
         loop(size, i + 1, r._1, r._2 :: acc)
       } else {
@@ -145,7 +145,7 @@ object Gen extends GenInstances0 {
     gs match {
       case h :: t =>
         val k = h._1
-        if (n <= k) h._2
+        if n <= k then h._2
         else pick0(n - k, t)
       case _ =>
         sys.error(s"bug? $n $gs")
@@ -210,7 +210,7 @@ object Gen extends GenInstances0 {
 
   private[this] def pick[A](n: Int, as: List[A]): Gen[List[A]] = {
     val len = as.length
-    if (n < 0 || n > len) {
+    if n < 0 || n > len then {
       sys.error(s"bug $n $as")
     } else {
       sequenceNList(n, choose(0, len - 1)).map { is =>
@@ -218,7 +218,7 @@ object Gen extends GenInstances0 {
         def loop(iis: List[Int], aas: List[(A, Int)], acc: List[A]): List[A] =
           (iis, aas) match {
             case (h1 :: t1, h2 :: t2) =>
-              if (h1 == h2._2) loop(t1, t2, acc)
+              if h1 == h2._2 then loop(t1, t2, acc)
               else loop(iis, t2, h2._1 :: acc)
             case _ =>
               acc.reverse
@@ -305,7 +305,7 @@ object Gen extends GenInstances0 {
     for {
       n <- genLongAll
       d <- genLongAll
-    } yield BigDecimal(n) / (if (d == 0L) 1 else d)
+    } yield BigDecimal(n) / (if d == 0L then 1 else d)
 
   val genLargeBigDecimal: Gen[BigDecimal] =
     for {

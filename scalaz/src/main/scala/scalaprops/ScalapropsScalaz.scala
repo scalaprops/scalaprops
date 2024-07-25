@@ -689,9 +689,9 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
             for {
               sum <- State.get[Int]
               r <-
-                if (sum >= size) {
+                if sum >= size then {
                   State.state[Int, Option[Int]](None)
-                } else if ((sum + n) > size) {
+                } else if (sum + n) > size then {
                   State((s: Int) => (s + n) -> Option(size - sum))
                 } else {
                   State((s: Int) => (s + n) -> Option(n))

@@ -11,7 +11,7 @@ object UpdateReadme {
     val v = extracted get version
     val org = extracted get organization
     val modules = build.modules
-    val snapshotOrRelease = if (extracted get isSnapshot) "snapshots" else "releases"
+    val snapshotOrRelease = if extracted get isSnapshot then "snapshots" else "releases"
     val readme = "README.md"
     val readmeFile = file(readme)
     val newReadme = Predef
@@ -19,15 +19,15 @@ object UpdateReadme {
       .lines
       .map { line =>
         val matchReleaseOrSnapshot = line.contains("SNAPSHOT") == v.contains("SNAPSHOT")
-        if (line.startsWith("libraryDependencies") && matchReleaseOrSnapshot) {
+        if line.startsWith("libraryDependencies") && matchReleaseOrSnapshot then {
           val i = modules.map("\"" + _ + "\"").indexWhere(line.contains)
           s"""libraryDependencies += "$org" %% "${modules(i)}" % "$v" % "test""""
-        } else if (line.contains(sonatypeURL) && matchReleaseOrSnapshot) {
+        } else if line.contains(sonatypeURL) && matchReleaseOrSnapshot then {
           val n = extracted.get(LocalRootProject / name)
           val javadocIndexHtml = "-javadoc.jar/!/scalaprops/index.html"
           val baseURL =
             s"${sonatypeURL}${snapshotOrRelease}/archive/${org.replace('.', '/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}"
-          if (line.contains(javadocIndexHtml)) {
+          if line.contains(javadocIndexHtml) then {
             s"- [API Documentation](${baseURL}${javadocIndexHtml})"
           } else line
         } else line

@@ -27,7 +27,7 @@ final class MersenneTwister64 private (private val mt0: Array[Long], private val
     val bb = ByteBuffer.wrap(bytes)
 
     var i = 0
-    while (i < N) {
+    while i < N do {
       bb.putLong(mt0(i))
       i += 1
     }
@@ -37,10 +37,10 @@ final class MersenneTwister64 private (private val mt0: Array[Long], private val
 
   def setSeedBytes(bytes: Array[Byte]): MersenneTwister64 = {
     val mt = mt0.clone()
-    val bs = if (bytes.length < BYTES) Arrays.copyOf(bytes, BYTES) else bytes
+    val bs = if bytes.length < BYTES then Arrays.copyOf(bytes, BYTES) else bytes
     val bb = ByteBuffer.wrap(bs)
     var i = 0
-    while (i < N) {
+    while i < N do {
       mt(i) = bb.getLong()
       i += 1
     }
@@ -58,17 +58,17 @@ final class MersenneTwister64 private (private val mt0: Array[Long], private val
     var mti = mti0
     var x = 0L
 
-    val mt1 = if (mti >= N) {
+    val mt1 = if mti >= N then {
       val mt = mt0.clone()
       var kk = 0
 
-      while (kk < N_M) {
+      while kk < N_M do {
         x = (mt(kk) & UpperMask) | (mt(kk + 1) & LowerMask)
         mt(kk) = mt(kk + M) ^ (x >>> 1) ^ mag01(x)
         kk += 1
       }
 
-      while (kk < N_1) {
+      while kk < N_1 do {
         x = (mt(kk) & UpperMask) | (mt(kk + 1) & LowerMask)
         mt(kk) = mt(kk + M_N) ^ (x >>> 1) ^ mag01(x)
         kk += 1
@@ -119,7 +119,7 @@ object MersenneTwister64 {
   private final val BYTES = N * 8 + 4
 
   @inline private def mag01(x: Long) =
-    if ((x & 1) == 0) 0L else 0xb5026f5aa96619eL
+    if (x & 1) == 0 then 0L else 0xb5026f5aa96619eL
 
   def fromSeed(mt: Array[Long], mti: Int): MersenneTwister64 = {
     assert(mt.length == N)
@@ -148,7 +148,7 @@ object MersenneTwister64 {
     a(0) = seed
 
     var i = 1
-    while (i < length) {
+    while i < length do {
       val x = a(i - 1)
       a(i) = 1812433253 * (x ^ (x >>> 30)) + i
       i += 1
@@ -162,7 +162,7 @@ object MersenneTwister64 {
     a(0) = seed
 
     var i = 1
-    while (i < length) {
+    while i < length do {
       val x = a(i - 1)
       a(i) = 6364136223846793005L * (x ^ (x >>> 62)) + i
       i += 1
@@ -179,30 +179,30 @@ object MersenneTwister64 {
     var j = 0
     var k = java.lang.Math.max(length, seed.length)
 
-    while (k != 0) {
+    while k != 0 do {
       val x = a(i - 1)
       a(i) = a(i) ^ ((x ^ (x >>> 62)) * 3935559000370003845L) + seed(j) + j
       i += 1
       j += 1
 
-      if (i >= length) {
+      if i >= length then {
         a(0) = a(length_1)
         i = 1
       }
 
-      if (j >= seed.length) {
+      if j >= seed.length then {
         j = 0
       }
       k -= 1
     }
 
     k = length - 1
-    while (k != 0) {
+    while k != 0 do {
       val x = a(i - 1)
       a(i) = a(i) ^ ((x ^ (x >>> 62)) * 2862933555777941757L) - i
       i += 1
 
-      if (i >= length) {
+      if i >= length then {
         a(0) = a(length_1)
         i = 1
       }
@@ -215,11 +215,11 @@ object MersenneTwister64 {
   }
 
   private[this] def longFromByteBuffer(bb: ByteBuffer): Long =
-    if (bb.remaining >= 8) {
+    if bb.remaining >= 8 then {
       bb.getLong()
     } else {
       var n = 0L
-      while (bb.remaining > 0) n = (n << 8) | bb.get
+      while bb.remaining > 0 do n = (n << 8) | bb.get
       n
     }
 
@@ -229,11 +229,11 @@ object MersenneTwister64 {
   private[this] def longsFromByteBuffer(bb: ByteBuffer, n: Int): Array[Long] = {
     val out = new Array[Long](n)
     var i = 0
-    while (i < n && bb.remaining >= 8) {
+    while i < n && bb.remaining >= 8 do {
       out(i) = bb.getLong()
       i += 1
     }
-    if (i < n && bb.remaining > 0) out(i) = longFromByteBuffer(bb)
+    if i < n && bb.remaining > 0 then out(i) = longFromByteBuffer(bb)
     out
   }
 }

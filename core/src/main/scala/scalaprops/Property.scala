@@ -20,13 +20,13 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
   def and(p: Property): Property =
     Property.fromGen(
       Gen.from2((res1: Result, res2: Result) =>
-        if (res1.isException || res1.isFalsified) {
+        if res1.isException || res1.isFalsified then {
           res1
-        } else if (res2.isException || res2.isFalsified) {
+        } else if res2.isException || res2.isFalsified then {
           res2
-        } else if (res1.isProven || res1.isUnfalsified) {
+        } else if res1.isProven || res1.isUnfalsified then {
           res2
-        } else if (res2.isProven || res2.isUnfalsified) {
+        } else if res2.isProven || res2.isUnfalsified then {
           res1
         } else Result.NoResult
       )(gen, p.gen)
@@ -35,13 +35,13 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
   def or(p: Property): Property =
     Property.fromGen(
       Gen.from2((res1: Result, res2: Result) =>
-        if (res1.isException || res1.isFalsified) {
+        if res1.isException || res1.isFalsified then {
           res1
-        } else if (res2.isException || res2.isFalsified) {
+        } else if res2.isException || res2.isFalsified then {
           res2
-        } else if (res1.isProven || res1.isUnfalsified) {
+        } else if res1.isProven || res1.isUnfalsified then {
           res1
-        } else if (res2.isProven || res2.isUnfalsified) {
+        } else if res2.isProven || res2.isUnfalsified then {
           res2
         } else Result.NoResult
       )(gen, p.gen)
@@ -50,13 +50,13 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
   def sequence(p: Property): Property =
     Property.fromGen(
       Gen.from2((res1: Result, res2: Result) =>
-        if (res1.isException || res1.isProven || res1.isUnfalsified) {
+        if res1.isException || res1.isProven || res1.isUnfalsified then {
           res1
-        } else if (res2.isException || res2.isProven || res2.isUnfalsified) {
+        } else if res2.isException || res2.isProven || res2.isUnfalsified then {
           res2
-        } else if (res1.isFalsified) {
+        } else if res1.isFalsified then {
           res2
-        } else if (res2.isFalsified) {
+        } else if res2.isFalsified then {
           res1
         } else Result.NoResult
       )(gen, p.gen)
@@ -67,11 +67,11 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
     import param._
     @annotation.tailrec
     def loop(s: Int, discarded: Int, sz: Float, random: Rand): CheckResult =
-      if (cancel()) {
+      if cancel() then {
         CheckResult.Timeout(s, discarded, seed)
       } else {
         val size: Float = {
-          if (s == 0 && discarded == 0) minSize.toFloat
+          if s == 0 && discarded == 0 then minSize.toFloat
           else sz + (maxSize - sz) / (minSuccessful - s)
         }
 
@@ -85,7 +85,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
 
         r match {
           case Right((nextRand, Result.NoResult)) =>
-            if (discarded + 1 >= maxDiscarded) {
+            if discarded + 1 >= maxDiscarded then {
               CheckResult.Exhausted(s, discarded + 1, seed)
             } else {
               loop(s, discarded + 1, size, nextRand)
@@ -93,7 +93,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
           case Right((_, Result.Proven)) =>
             CheckResult.Proven(s + 1, discarded, seed)
           case Right((nextRand, Result.Unfalsified(_))) =>
-            if (s + 1 >= minSuccessful) {
+            if s + 1 >= minSuccessful then {
               CheckResult.Passed(s + 1, discarded, seed)
             } else {
               listener(s)
@@ -124,7 +124,7 @@ object Property {
   private[this] val noResult = propFromResult(Result.NoResult)
 
   def implies(b: => Boolean, p: => Property): Property =
-    if (b) {
+    if b then {
       p
     } else {
       noResult
@@ -141,14 +141,14 @@ object Property {
 
   val prop: Boolean => Property = b =>
     propFromResult {
-      if (b) Result.Proven
+      if b then Result.Proven
       else Result.Falsified(List.empty)
     }
 
   private[this] def propLazy(result: Lazy[Boolean]): Property =
     propFromResultLazy {
       result.map { r =>
-        if (r) Result.Proven
+        if r then Result.Proven
         else Result.Falsified(List.empty)
       }
     }

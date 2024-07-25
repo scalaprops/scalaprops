@@ -8,7 +8,7 @@ sealed abstract class OrConsInstances {}
 
 object :-: extends OrConsInstances {
   implicit def orGen[A, B <: Or](implicit A: Gen[A], B: Gen[B]): Gen[A :-: B] = {
-    if (B eq Or.Empty.orEmptyGen) {
+    if B eq Or.Empty.orEmptyGen then {
       A.map[A :-: B](Or.L(_))
     } else {
       Gen.frequency(

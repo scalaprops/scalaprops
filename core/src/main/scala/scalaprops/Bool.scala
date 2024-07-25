@@ -12,5 +12,5 @@ object Bool {
   private[this] val f = Bool(false)
 
   def bool(b: Boolean): Bool =
-    if (b) t else f
+    if b then t else f
 }

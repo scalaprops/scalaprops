@@ -272,7 +272,7 @@ final case class TinyMT32(
     setLongSeed(seed)
 
   def setLongSeed(seed: Long): TinyMT32 = {
-    if ((seed >= 0) && (seed < TinyMT32.LONG_LIMIT)) {
+    if (seed >= 0) && (seed < TinyMT32.LONG_LIMIT) then {
       setIntSeed(seed.toInt)
     } else {
       val tmp = new Array[Int](2)
@@ -285,7 +285,7 @@ final case class TinyMT32(
   def setSeed(seed: String): TinyMT32 = {
     val intSeeds = new Array[Int](seed.length)
     @tailrec def loop(i: Int): Unit = {
-      if (i < intSeeds.length) {
+      if i < intSeeds.length then {
         intSeeds(i) = seed.charAt(i)
         loop(i + 1)
       }
@@ -304,7 +304,7 @@ final case class TinyMT32(
     var r: Int = 0
     val keyLength: Int = seeds.length
     val status = Array[Int](0, parameter.mat1, parameter.mat2, parameter.tmat)
-    if (keyLength + 1 > TinyMT32.MIN_LOOP) {
+    if keyLength + 1 > TinyMT32.MIN_LOOP then {
       count = keyLength + 1
     } else {
       count = TinyMT32.MIN_LOOP
@@ -319,7 +319,7 @@ final case class TinyMT32(
     {
       i = 1
       j = 0
-      while ((j < count) && (j < keyLength)) {
+      while (j < count) && (j < keyLength) do {
         r = iniFunc1(status(i % size) ^ status((i + mid) % size) ^ status((i + size - 1) % size))
         status((i + mid) % size) += r
         r += seeds(j) + i
@@ -330,7 +330,7 @@ final case class TinyMT32(
       }
     }
 
-    while (j < count) {
+    while j < count do {
       r = iniFunc1(status(i % size) ^ status((i + mid) % size) ^ status((i + size - 1) % size))
       status((i + mid) % size) += r
       r += i
@@ -342,7 +342,7 @@ final case class TinyMT32(
 
     {
       j = 0
-      while (j < size) {
+      while j < size do {
         r = iniFunc2(status(i % size) + status((i + mid) % size) + status((i + size - 1) % size))
         status((i + mid) % size) ^= r
         r -= i
@@ -363,7 +363,7 @@ final case class TinyMT32(
 
     @tailrec
     def loop(z: TinyMT32.MutableState, i: Int): TinyMT32 =
-      if (i < TinyMT32.MIN_LOOP) {
+      if i < TinyMT32.MIN_LOOP then {
         loop(z.next(), i + 1)
       } else {
         z.asImmutable
@@ -401,7 +401,7 @@ final case class TinyMT32(
     {
       @tailrec
       def loop0(i: Int): Unit = {
-        if (i < TinyMT32.MIN_LOOP) {
+        if i < TinyMT32.MIN_LOOP then {
           status(i & counterMask) ^= i + TinyMT32.MAGIC_NUMBER3 * (status((i - 1) & counterMask) ^ (status(
             (i - 1) & counterMask
           ) >>> TinyMT32.INITIALIZE_SHIFT2))
@@ -421,7 +421,7 @@ final case class TinyMT32(
 
     @tailrec
     def loop(i: Int, z: TinyMT32.MutableState): TinyMT32 =
-      if (i < TinyMT32.MIN_LOOP) {
+      if i < TinyMT32.MIN_LOOP then {
         loop(i + 1, z.next())
       } else {
         z.asImmutable
@@ -431,7 +431,7 @@ final case class TinyMT32(
   }
 
   private def periodCertification0: TinyMT32 = {
-    if (((st0 & TinyMT32.MASK) == 0) && (st1 == 0) && (st2 == 0) && (st3 == 0)) {
+    if ((st0 & TinyMT32.MASK) == 0) && (st1 == 0) && (st2 == 0) && (st3 == 0) then {
       new TinyMT32(
         st0 = 'T',
         st1 = 'I',
@@ -514,9 +514,9 @@ final case class TinyMT32(
     // TODO avoid allocate new instance each loop
     @tailrec
     def loop(i: Int, src: TinyMT32, that: TinyMT32): TinyMT32 =
-      if (i > degree) {
+      if i > degree then {
         that
-      } else if (pol.getCoefficient(i) == 1) {
+      } else if pol.getCoefficient(i) == 1 then {
         loop(i + 1, src.nextState, that.add0(src))
       } else {
         loop(i + 1, src.nextState, that)
@@ -549,7 +549,7 @@ final case class TinyMT32(
     val pow = TinyMT32.BASIC_JUMP_STEP.multiply(BigInteger.valueOf(jump))
     val jumpPoly = F2Polynomial.X.powerMod(pow, poly)
     @tailrec def loop(i: Int): Unit = {
-      if (i < count) {
+      if i < count then {
         tiny(i) = tiny(i - 1).jump(jumpPoly)
         loop(i + 1)
       }

@@ -11,7 +11,7 @@ object Choose {
   implicit val intChoose: Choose[Int] =
     new Choose[Int] {
       override def withBoundaries(from: Int, to: Int) = {
-        if (from == to) {
+        if from == to then {
           Gen.value(from)
         } else {
           val min = math.min(from, to)
@@ -58,7 +58,7 @@ object Choose {
   implicit val longChoose: Choose[Long] =
     new Choose[Long] {
       override def withBoundaries(from: Long, to: Long) = {
-        if (from == to) {
+        if from == to then {
           Gen.value(from)
         } else {
           val min = math.min(from, to)

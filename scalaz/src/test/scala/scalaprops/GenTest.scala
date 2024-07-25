@@ -192,11 +192,11 @@ object GenTest extends Scalaprops {
 
   val functionGenTest = {
     def permutations[A](xs: IList[A], n: Int): IList[IList[A]] =
-      if (xs.isEmpty) {
+      if xs.isEmpty then {
         IList.empty
       } else {
         def f(ls: IList[A], rest: IList[A], n: Int): IList[IList[A]] =
-          if (n == 0) IList(ls) else rest.flatMap(v => f(v :: ls, rest, n - 1))
+          if n == 0 then IList(ls) else rest.flatMap(v => f(v :: ls, rest, n - 1))
         f(IList.empty, xs, n)
       }
 

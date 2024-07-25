@@ -32,12 +32,12 @@ object TreeTest extends Scalaprops {
 
   def distinctStream[A: Order](s: Stream[A]): Int \/ Stream[A] = {
     def loop(seen: ISet[A], rest: Stream[A], i: Int): Int \/ Stream[A] = {
-      if (i > (seen.size * 200)) {
+      if i > (seen.size * 200) then {
         -\/(seen.size)
       } else {
         rest match {
           case h #:: t =>
-            if (seen.contains(h)) {
+            if seen.contains(h) then {
               loop(seen, t, i + 1)
             } else {
               loop(seen insert h, t, 0).map { x => Stream.cons(h, x) }

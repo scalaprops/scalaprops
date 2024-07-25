@@ -23,7 +23,7 @@ object ChooseTest extends Scalaprops {
           val max = Order[A].max(from, to)
           assert(Foldable[ISet].maximum(values) == Some(max))
           assert(Foldable[ISet].minimum(values) == Some(min))
-          if (from != to) {
+          if from != to then {
             assert(values member Enum[A].succ(min))
             assert(values member Enum[A].pred(max))
           }

@@ -53,7 +53,7 @@ object Arguments {
   private[this] def long(string: String): Option[Long] = {
     try {
       val n = java.lang.Long.parseLong(string)
-      if (n >= 0) Some(n)
+      if n >= 0 then Some(n)
       else None
     } catch {
       case _: NumberFormatException =>
@@ -73,7 +73,7 @@ object Arguments {
   private[this] def uint(string: String): Option[Int] = {
     try {
       val n = Integer.parseInt(string)
-      if (n >= 0) Some(n)
+      if n >= 0 then Some(n)
       else None
     } catch {
       case _: NumberFormatException =>

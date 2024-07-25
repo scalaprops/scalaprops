@@ -25,7 +25,7 @@ object Shrink {
       case 0L => Stream.Empty
       case i =>
         val is = 0L #:: Stream.iterate(i)(_ / 2L).takeWhile(_ != 0L).map(i - _)
-        if (min < i && i < 0L) {
+        if min < i && i < 0L then {
           is
         } else {
           is
@@ -65,7 +65,7 @@ object Shrink {
 
   implicit def list[A](implicit A: Shrink[A]): Shrink[List[A]] = {
     def interleave[B](s1: Stream[B], s2: Stream[B]): Stream[B] =
-      if (s1.isEmpty) s2
+      if s1.isEmpty then s2
       else s1.head #:: interleave(s2, s1.tail)
 
     def removeChunks(n: Int, as: List[A]): Stream[List[A]] =
@@ -169,7 +169,7 @@ object Shrink {
       case i if i == 0 => Stream.empty
       case i =>
         val is = BigInt(0) #:: Stream.iterate(i)(_ / 2).takeWhile(_ != 0).map(i - _)
-        if (i < 0) {
+        if i < 0 then {
           -i #:: is
         } else {
           is
