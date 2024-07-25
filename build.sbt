@@ -394,19 +394,19 @@ val root = Project("root", file("."))
   )
 
 lazy val rootJS = project
-  .aggregate(jsProjects*)
+  .aggregate(jsProjects *)
   .settings(
     commonSettings,
     notPublish
   )
 lazy val rootJVM = project
-  .aggregate(jvmProjects*)
+  .aggregate(jvmProjects *)
   .settings(
     commonSettings,
     notPublish
   )
 lazy val rootNative = project
-  .aggregate(nativeProjects*)
+  .aggregate(nativeProjects *)
   .settings(
     commonSettings,
     notPublish
