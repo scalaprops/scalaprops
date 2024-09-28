@@ -69,6 +69,17 @@ def module(id: String): CrossProject =
       }
     )
     .jsSettings(
+      scalaJSLinkerConfig ~= (_.withExperimentalUseWebAssembly(true).withModuleKind(ModuleKind.ESModule)),
+      jsEnv := {
+        import org.scalajs.jsenv.nodejs.NodeJSEnv
+        val config = NodeJSEnv.Config()
+          .withArgs(List(
+            "--experimental-wasm-exnref",
+            "--experimental-wasm-imported-strings",
+            "--turboshaft-wasm",
+          ))
+        new NodeJSEnv(config)
+      },
       scalacOptions += {
         val a = (LocalRootProject / baseDirectory).value.toURI.toString
         val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + tagOrHash.value
