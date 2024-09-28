@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object MonoidCoproductTest extends Scalaprops {
   val testLaws =
     Properties.list(

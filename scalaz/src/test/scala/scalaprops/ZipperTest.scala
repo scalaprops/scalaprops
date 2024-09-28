@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object ZipperTest extends Scalaprops {
   val size = Property.forAllG(Gen.choose(1, 300), Gen[Rand]) { (size, rand) =>
     Foldable[Zipper].length(Gen[Zipper[Unit]].f(size, rand)._2) == size

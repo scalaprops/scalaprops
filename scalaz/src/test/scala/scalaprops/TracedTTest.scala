@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object TracedTTest extends Scalaprops {
   private[this] val e = new FunctionEqual(10)
   import e._

@@ -7,6 +7,7 @@ import scalaz.std.tuple._
 import FunctionEqual._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object IndexedReaderWriterStateTTest extends Scalaprops {
   private[this] implicit def equal[F[_]: Monad, R, W, S1, S2, A](implicit
     F: Equal[(R, S1) => F[(W, A, S2)]]

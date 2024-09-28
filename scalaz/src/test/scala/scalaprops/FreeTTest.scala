@@ -5,6 +5,7 @@ import scalaz.Id.Id
 import scalaz.std.AllInstances._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object FreeTTest extends Scalaprops {
   import FreeTest._
 

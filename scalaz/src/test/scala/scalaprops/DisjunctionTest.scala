@@ -4,6 +4,7 @@ import scalaz.{\/, IList}
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object DisjunctionTest extends Scalaprops {
   val bitraverse = scalazlaws.bitraverse.all[\/]
   val associative = scalazlaws.associative.all[\/]

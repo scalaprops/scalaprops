@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object EitherTTest extends Scalaprops {
   val iListBindRec =
     scalazlaws.bindRec.laws[({ type l[a] = EitherT[Byte, IList, a] })#l].andThenParam(Param.maxSize(1))

@@ -8,6 +8,7 @@ import scalaz.syntax.equal._
 import Property.forAll
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object IMapTest extends Scalaprops {
   val testLaws =
     Properties.list(

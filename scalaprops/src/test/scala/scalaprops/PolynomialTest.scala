@@ -2,6 +2,7 @@ package scalaprops
 
 import java.math.BigInteger
 
+@scalajs.js.annotation.JSExportAll
 object PolynomialTest extends Scalaprops {
   val testPolynomialString = Property.forAll {
     new F2Polynomial("1101").toString == "1101"

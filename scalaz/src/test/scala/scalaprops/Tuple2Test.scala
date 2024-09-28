@@ -5,6 +5,7 @@ import scalaz.std.tuple._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object Tuple2Test extends Scalaprops {
   val bitraverse = scalazlaws.bitraverse.all[Tuple2]
   val associative = scalazlaws.associative.all[Tuple2]

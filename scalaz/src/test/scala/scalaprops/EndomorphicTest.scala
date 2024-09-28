@@ -6,6 +6,7 @@ import KleisliTest.kleisliEqual
 import CokleisliTest.cokleisliEqual
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object EndomorphicTest extends Scalaprops {
   override val param: Param = super.param.copy(maxSize = 10)
 

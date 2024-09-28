@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object LazyTupleTest extends Scalaprops {
   private[this] type A = Int
   private[this] type B = Int

@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object MaybeTTest extends Scalaprops {
   val disjunction = {
     type E = Byte

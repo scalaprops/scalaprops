@@ -5,6 +5,7 @@ import scalaz.std.tuple._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object Tuple3Test extends Scalaprops {
   type F[A] = Tuple3[IList[Boolean], IList[Byte], A]
 

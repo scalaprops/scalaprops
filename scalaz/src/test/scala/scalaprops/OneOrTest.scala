@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object OneOrTest extends Scalaprops {
   val testIList = {
     type F[A] = OneOr[IList, A]

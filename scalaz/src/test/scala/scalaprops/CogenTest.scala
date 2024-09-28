@@ -3,6 +3,7 @@ package scalaprops
 import scalaz.IList
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object CogenTest extends Scalaprops {
   val `Cogen[Array[Byte]] instance` = Property.forAll {
     (Cogen[Array[Byte]] != null) && (Cogen[Array[Byte]] eq Cogen[Array[Byte]])

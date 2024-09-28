@@ -4,6 +4,7 @@ import scalaz.std.function._
 import scalaz.std.anyVal._
 import scalaz.std.tuple._
 
+@scalajs.js.annotation.JSExportAll
 object Function1Test extends Scalaprops {
   import FunctionEqual._
 
