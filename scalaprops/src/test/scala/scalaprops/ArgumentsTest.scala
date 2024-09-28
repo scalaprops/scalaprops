@@ -1,5 +1,6 @@
 package scalaprops
 
+@scalajs.js.annotation.JSExportAll
 object ArgumentsTest extends Scalaprops {
   val parse = Property.forAll {
     val args = List(

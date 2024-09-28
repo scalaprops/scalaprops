@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object FreeTest extends Scalaprops {
   implicit def freeEqual[F[_]: Functor, A](implicit
     E: Eq1[F],

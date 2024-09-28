@@ -4,6 +4,7 @@ import scalaz.std.option._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object OptionTest extends Scalaprops {
   val testLaws =
     Properties.list(

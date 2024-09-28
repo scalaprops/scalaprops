@@ -5,6 +5,7 @@ import scalaz.std.anyVal._
 import scalaz.std.tuple._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object LensTest extends Scalaprops {
   import FunctionEqual._
   import IndexedStoreTTest.indexedStoreTEqual

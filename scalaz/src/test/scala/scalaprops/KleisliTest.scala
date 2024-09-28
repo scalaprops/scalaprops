@@ -6,6 +6,7 @@ import scalaz.std.tuple._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object KleisliTest extends Scalaprops {
   private[this] val e = new FunctionEqual(3)
 

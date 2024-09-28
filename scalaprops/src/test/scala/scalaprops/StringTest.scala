@@ -2,6 +2,7 @@ package scalaprops
 
 import scalaprops.Property.forAllG
 
+@scalajs.js.annotation.JSExportAll
 object StringTest extends Scalaprops {
   val genString = {
     val g = for {

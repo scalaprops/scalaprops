@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object IndexedContsTTest extends Scalaprops {
   private[this] val F = new FunctionEqual(5)
   import F._

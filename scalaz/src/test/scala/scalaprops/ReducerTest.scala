@@ -6,6 +6,7 @@ import scalaz.std.AllInstances._
 import EndoTest.endoEqual
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object ReducerTest extends Scalaprops {
   private[this] implicit def tagGen[A: Gen, B]: Gen[A @@ B] =
     Tag.subst(Gen[A])

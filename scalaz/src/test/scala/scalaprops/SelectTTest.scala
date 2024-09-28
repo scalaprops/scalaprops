@@ -5,6 +5,7 @@ import scalaz.std.anyVal._
 import ScalapropsScalaz._
 import FunctionEqual._
 
+@scalajs.js.annotation.JSExportAll
 object SelectTTest extends Scalaprops {
   private[this] implicit def selectTEqual[R, M[_], A](implicit
     F: Equal[(A => M[R]) => M[A]]

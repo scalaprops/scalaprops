@@ -4,6 +4,7 @@ import scalaz.std.either._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object EitherTest extends Scalaprops {
   val bitraverse = scalazlaws.bitraverse.all[Either]
   val associative = scalazlaws.associative.all[Either]

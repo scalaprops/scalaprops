@@ -4,6 +4,7 @@ import scalaz.Equal
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object EndoTest extends Scalaprops {
   implicit def endoEqual[A: Gen: Equal]: Equal[scalaz.Endo[A]] = {
     import FunctionEqual._

@@ -5,6 +5,7 @@ import scalaz.Id.Id
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object IdTTest extends Scalaprops {
   val monadTrans = scalazlaws.monadTrans.all[IdT]
 

@@ -6,6 +6,7 @@ import scalaz.std.anyVal._
 import scalaz.std.tuple._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object GenTest extends Scalaprops {
   implicit def genGen[A](implicit A: Gen[A]): Gen[Gen[A]] = {
     val values = Gen[List[A]].sample(size = 100, seed = Random.nextLong())

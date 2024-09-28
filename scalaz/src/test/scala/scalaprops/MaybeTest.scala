@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object MaybeTest extends Scalaprops {
   val testLaws = Properties.list(
     scalazlaws.monadPlusStrong.all[Maybe],

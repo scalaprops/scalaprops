@@ -3,6 +3,7 @@ package scalaprops
 import scalaz.std.set._
 import scalaz.std.anyVal._
 
+@scalajs.js.annotation.JSExportAll
 object SetTest extends Scalaprops {
   val testLaws =
     Properties.list(

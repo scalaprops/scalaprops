@@ -1,5 +1,6 @@
 package scalaprops
 
+@scalajs.js.annotation.JSExportAll
 object TinyMT32ParameterTest extends Scalaprops {
   val testGetThreadLocalParameter = Property.forAll {
     val p0 = TinyMT32Parameter.getThreadLocalParameter(0)

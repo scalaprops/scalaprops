@@ -5,6 +5,7 @@ import scalaz.IList
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object IListTest extends Scalaprops {
   val testLaws = Properties.list(
     scalazlaws.order.all[IList[Byte]],

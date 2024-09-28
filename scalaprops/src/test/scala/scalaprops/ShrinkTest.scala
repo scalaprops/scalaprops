@@ -1,5 +1,6 @@
 package scalaprops
 
+@scalajs.js.annotation.JSExportAll
 object ShrinkTest extends Scalaprops {
   override val param: Param = super.param.copy(maxSize = 30)
 

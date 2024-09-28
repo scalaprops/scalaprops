@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object ApTest extends Scalaprops {
   val lawsMaybe = Properties.list(
     scalazlaws.equal.all[Ap[Maybe, Int]],

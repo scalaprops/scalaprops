@@ -4,6 +4,7 @@ import scalaz.std.anyVal._
 import scalaz.LazyOption
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object LazyOptionTest extends Scalaprops {
   val laws = Properties.list(
     scalazlaws.monadPlusStrong.all[LazyOption],

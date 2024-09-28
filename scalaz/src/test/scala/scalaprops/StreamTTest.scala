@@ -9,6 +9,7 @@ import Property.forAll
 import scala.util.Try
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object StreamTTest extends Scalaprops {
   private[this] def iso[F[_]: Monad]: ({ type l[a] = StreamT[F, a] })#l <~> ({ type l[a] = F[Stream[a]] })#l =
     new IsoFunctorTemplate[({ type l[a] = StreamT[F, a] })#l, ({ type l[a] = F[Stream[a]] })#l] {

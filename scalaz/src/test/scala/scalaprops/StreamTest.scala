@@ -4,6 +4,7 @@ import scalaz.std.stream._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object StreamTest extends Scalaprops {
   val bindRec = scalazlaws.bindRec.laws[Stream].andThenParam(Param.maxSize(1))
 

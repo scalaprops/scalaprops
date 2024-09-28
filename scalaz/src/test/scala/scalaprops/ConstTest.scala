@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object ConstTest extends Scalaprops {
   val testInt = {
     type F[A] = Const[Int, A]

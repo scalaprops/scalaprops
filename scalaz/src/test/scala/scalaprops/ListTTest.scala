@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.std.anyVal._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object ListTTest extends Scalaprops {
   val testMaybe =
     scalazlaws.monad.all[({ type l[a] = ListT[Maybe, a] })#l]

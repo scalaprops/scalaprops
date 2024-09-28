@@ -5,6 +5,7 @@ import scalaz.std.anyVal._
 import scalaz.std.tuple._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object CokleisliTest extends Scalaprops {
   override val param: Param = Param.withCurrentTimeSeed().copy(maxSize = 30)
 

@@ -5,6 +5,7 @@ import scalaz.std.anyVal._
 import scalaz.std.tuple._
 import ScalapropsScalaz._
 
+@scalajs.js.annotation.JSExportAll
 object TannenTest extends Scalaprops {
   val iListDisjunctionTraverse = scalazlaws.traverse.all[({ type l[a] = Tannen[IList, \/, Int, a] })#l]
   val maybeDisjunctionTraverse = scalazlaws.traverse.all[({ type l[a] = Tannen[Maybe, \/, Int, a] })#l]
