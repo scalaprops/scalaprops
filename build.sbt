@@ -225,15 +225,8 @@ val commonSettings = Def.settings(
     "-language:existentials,higherKinds,implicitConversions",
   ),
   scalacOptions ++= {
-    if (scalaBinaryVersion.value == "2.13") {
-      Seq("-Wconf:msg=method are copied from the case class constructor:silent")
-    } else {
-      Nil
-    }
-  },
-  scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((0 | 3, _)) =>
+      case Some((3, _)) =>
         Seq(
           "-Ykind-projector",
         )
