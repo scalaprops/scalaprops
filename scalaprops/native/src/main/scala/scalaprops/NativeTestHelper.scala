@@ -48,7 +48,7 @@ abstract class NativeTestHelper {
     obj: Scalaprops,
     objects: Set[String],
     args: Arguments,
-    props: (String, Properties[_])*
+    props: (String, Properties[?])*
   ): Unit = {
     val testsOpt = {
       if (objects.isEmpty || objects.contains(className)) {

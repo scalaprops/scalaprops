@@ -3,7 +3,8 @@ package scalaprops
 import java.nio.ByteBuffer
 import java.util.Arrays
 
-final class MersenneTwister64 private (private val mt0: Array[Long], private val mti0: Int = 313) extends Rand { // N + 1 = 313
+final class MersenneTwister64 private (private val mt0: Array[Long], private val mti0: Int = 313)
+  extends Rand { // N + 1 = 313
 
   import MersenneTwister64.{mag01, BYTES, LowerMask, M, M_1, M_N, N, N_1, N_M, UpperMask}
 

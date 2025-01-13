@@ -8,7 +8,7 @@ object ScalapropsRunner {
   /** call from sbt plugin
     * [[https://github.com/scalaprops/sbt-scalaprops/blob/v0.2.5/src/main/scala/scalaprops/ScalapropsPlugin.scala#L66]]
     */
-  def testFieldNames(clazz: Class[_]): Array[String] =
+  def testFieldNames(clazz: Class[?]): Array[String] =
     Scalaprops.testFieldNames(clazz)
 
   private[scalaprops] def getTestObject(
@@ -25,7 +25,7 @@ object ScalapropsRunner {
     testClassLoader: ClassLoader,
     only: List[String],
     logger: Logger
-  ): Properties[_] = {
+  ): Properties[?] = {
     ???
   }
 }
