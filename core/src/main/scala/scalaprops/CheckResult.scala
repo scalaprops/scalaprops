@@ -8,9 +8,9 @@ sealed abstract class CheckResult extends Product with Serializable {
 
 object CheckResult {
   final case class Passed(override val succeeded: Int, override val discarded: Int, override val seed: Seed)
-      extends CheckResult
+    extends CheckResult
   final case class Proven(override val succeeded: Int, override val discarded: Int, override val seed: Seed)
-      extends CheckResult
+    extends CheckResult
   final case class Falsified(
     override val succeeded: Int,
     override val discarded: Int,
@@ -18,7 +18,7 @@ object CheckResult {
     override val seed: Seed
   ) extends CheckResult
   final case class Exhausted(override val succeeded: Int, override val discarded: Int, override val seed: Seed)
-      extends CheckResult
+    extends CheckResult
   final case class PropException(
     override val succeeded: Int,
     override val discarded: Int,
@@ -33,7 +33,7 @@ object CheckResult {
     override val seed: Seed
   ) extends CheckResult
   final case class Timeout(override val succeeded: Int, override val discarded: Int, override val seed: Seed)
-      extends CheckResult
+    extends CheckResult
   final case class Ignored(
     override val succeeded: Int,
     override val discarded: Int,
