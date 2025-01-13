@@ -5,7 +5,7 @@ import sbtrelease.Git
 object UpdateReadme {
   private val sonatypeURL = "https://oss.sonatype.org/service/local/repositories/"
 
-  val updateReadmeTask = { state: State =>
+  val updateReadmeTask = { (state: State) =>
     val extracted = Project.extract(state)
     val scalaV = "2.12"
     val v = extracted get version
