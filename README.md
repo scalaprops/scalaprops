@@ -33,17 +33,17 @@ testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
 parallelExecution in Test := false // currently, does not support parallel execution
 
-libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.9.1" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.10.0" % "test"
 ```
 
 ```scala
-libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.9.1" % "test"
+libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.10.0" % "test"
 ```
 
 </details>
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.9.1/scalaprops-all_2.12-0.9.1-javadoc.jar/!/scalaprops/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.10.0/scalaprops-all_2.12-0.10.0-javadoc.jar/!/scalaprops/index.html)
 
 
 ![screencast](screencast.gif)
