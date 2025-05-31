@@ -179,7 +179,7 @@ def stripPom(filter: scala.xml.Node => Boolean): Setting[?] =
 val commonSettings = Def.settings(
   _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings,
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
-  publishTo := sonatypePublishToBundle.value,
+  publishTo := (if (isSnapshot.value) None else localStaging.value),
   scalaVersion := Scala212,
   crossScalaVersions := Scala212 :: Scala213 :: Scala3 :: Nil,
   organization := "com.github.scalaprops",
@@ -271,17 +271,12 @@ val commonSettings = Def.settings(
       enableCrossBuild = true
     ),
     releaseStepCommandAndRemaining("+ rootNative/publishSigned"),
-    releaseStepCommandAndRemaining("sonatypeBundleRelease"),
+    releaseStepCommandAndRemaining("sonaRelease"),
     setNextVersion,
     commitNextVersion,
     UpdateReadme.updateReadmeProcess,
     pushChanges
   ),
-  credentials ++= PartialFunction
-    .condOpt(sys.env.get("SONATYPE_USER") -> sys.env.get("SONATYPE_PASSWORD")) { case (Some(user), Some(pass)) =>
-      Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
-    }
-    .toList
 ) ++ Seq(Compile, Test).flatMap(c => (c / console / scalacOptions) --= unusedWarnings.value)
 
 lazy val notPublish = Seq(
