@@ -410,6 +410,17 @@ object Gen extends GenInstances0 {
   val asciiString: Gen[String] =
     genString(asciiChar)
 
+  val unicodeString: Gen[String] = {
+    val chars = Gen.choose(0, 0x10FFFF).map { cp =>
+      if (Character.isBmpCodePoint(cp)) {
+        if (cp < 0xD800) List(cp.toChar)
+        else List('?')
+      }
+      else List(Character.highSurrogate(cp), Character.lowSurrogate(cp))
+    }
+    Gen.listOf(chars).map(_.flatten.mkString)
+  }
+
   implicit val genUnit: Gen[Unit] =
     value(())
 
