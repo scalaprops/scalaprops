@@ -34,6 +34,7 @@ jobs:
         case ${{ matrix.name }} in
           "jvm")
             ./sbt -v \
+            -Dsbt.traces=true \
             -jvm-opts .github/workflows/.jvmopts \
             "++ ${{ matrix.scala }}" \
             scalafmtCheckAll \
@@ -47,6 +48,7 @@ jobs:
             ;;
           "js")
             ./sbt -v \
+            -Dsbt.traces=true \
             -jvm-opts .github/workflows/.jvmopts \
             "++ ${{ matrix.scala }}" \
             "rootJS/Test/compile" \
@@ -56,6 +58,7 @@ jobs:
             ;;
           "native")
             ./sbt -v \
+            -Dsbt.traces=true \
             -jvm-opts .github/workflows/.jvmopts \
             "++ ${{ matrix.scala }}" \
             "scalapropsNative/test" \
@@ -66,6 +69,7 @@ jobs:
             echo "unknown job-name"
             exit 1
         esac
+    - uses: xuwei-k/sbt-trace-action@v1
     - uses: mikepenz/action-junit-report@db71d41eb79864e25ab0337e395c352e84523afe # v4.3.1
       if: ${{ always() && matrix.name == 'jvm' }}
       with:
