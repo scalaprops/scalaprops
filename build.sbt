@@ -148,17 +148,16 @@ val tagOrHash = Def.setting {
 def gitHash(): String =
   sys.process.Process("git rev-parse HEAD").lineStream_!.head
 
-val unusedWarnings = Def.setting {
-  PartialFunction
-    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
-      case Some((2, v)) if v >= 12 =>
-        Seq("-Ywarn-unused:imports,locals")
-      case Some((2, 11)) =>
-        Seq("-Ywarn-unused", "-Ywarn-unused-import")
-    }
-    .toList
-    .flatten
-}
+val unusedWarnings = Def.setting(
+  scalaBinaryVersion.value match {
+    case "2.12" =>
+      Seq("-Ywarn-unused:imports,locals")
+    case "2.13" =>
+      Seq("-Wunused")
+    case "3" =>
+      Seq("-Wunused:all")
+  }
+)
 
 val Scala212 = "2.12.20"
 val Scala213 = "2.13.17"
