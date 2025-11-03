@@ -154,7 +154,6 @@ object StreamTTest extends Scalaprops {
   }
 
   val testId = {
-    import scalaz.Id.*
     type G[A] = Id[A]
     type F[A] = StreamT[G, A]
     Properties.list(
