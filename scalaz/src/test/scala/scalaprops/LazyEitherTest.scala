@@ -1,9 +1,10 @@
 package scalaprops
 
-import scalaz.{Equal, LazyEither}
-import scalaz.std.anyVal._
-import scalaz.std.either._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.Equal
+import scalaz.LazyEither
+import scalaz.std.anyVal.*
+import scalaz.std.either.*
 
 @scalajs.js.annotation.JSExportAll
 object LazyEitherTest extends Scalaprops {

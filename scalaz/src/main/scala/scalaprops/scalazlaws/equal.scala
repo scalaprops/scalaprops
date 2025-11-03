@@ -1,9 +1,9 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz._
+import scalaprops.Property.forAll
+import scalaz.*
 
 object equal {
   def commutativity[A](implicit A: Equal[A], G: Gen[A]) =

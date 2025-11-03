@@ -1,8 +1,8 @@
 package scalaprops
 
 import java.util.concurrent.TimeUnit
-import scalaprops.internal._
 import scala.concurrent.duration.Duration
+import scalaprops.internal.*
 
 final case class Param(
   seed: Seed,

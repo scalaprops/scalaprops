@@ -1,9 +1,10 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz.{Equal, MonadPlus}
+import scalaprops.Property.forAll
+import scalaz.Equal
+import scalaz.MonadPlus
 
 object monadPlusStrong {
   def rightZero[F[_], X](implicit F: MonadPlus[F], afx: Gen[F[X]], ef: Equal[F[X]]): Property =

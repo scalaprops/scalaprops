@@ -1,7 +1,7 @@
 package scalaprops
 
-import scalaz._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
 
 abstract class Cogen1[F[_]] {
   def cogen1[A: Cogen]: Cogen[F[A]]

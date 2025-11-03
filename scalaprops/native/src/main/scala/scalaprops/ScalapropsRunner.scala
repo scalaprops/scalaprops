@@ -1,6 +1,6 @@
 package scalaprops
 
-import sbt.testing._
+import sbt.testing.*
 import scala.collection.mutable.ArrayBuffer
 
 object ScalapropsRunner {

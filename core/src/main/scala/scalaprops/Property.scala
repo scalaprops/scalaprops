@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaprops.internal._
+import scalaprops.internal.*
 
 final case class Property(f: (Int, Rand) => (Rand, Result)) {
   def toCheck: Check =
@@ -64,7 +64,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
 
   // TODO remove `listener` parameter?
   def check(param: Param, cancel: () => Boolean, listener: Int => Unit): CheckResult = {
-    import param._
+    import param.*
     @annotation.tailrec
     def loop(s: Int, discarded: Int, sz: Float, random: Rand): CheckResult =
       if (cancel()) {

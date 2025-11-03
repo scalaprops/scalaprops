@@ -1,7 +1,7 @@
 package scalaprops
 
 import sbt.testing.Logger
-import scalaprops.internal._
+import scalaprops.internal.*
 
 abstract class ScalapropsListener {
   def onStart(obj: Scalaprops, name: String, property: Property, param: Param, logger: Logger): Unit = {}

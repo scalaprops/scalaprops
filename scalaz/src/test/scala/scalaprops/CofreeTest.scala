@@ -1,11 +1,11 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.stream._
-import scalaz.std.vector._
-import ScalapropsScalaz._
-import CofreeTestInstances._
+import CofreeTestInstances.*
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.stream.*
+import scalaz.std.vector.*
 
 @scalajs.js.annotation.JSExportAll
 object CofreeTest extends Scalaprops {
@@ -29,7 +29,7 @@ object CofreeTest extends Scalaprops {
   }
 
   val zipMaybe = {
-    import CofreeGenImplicit._
+    import CofreeGenImplicit.*
     cofreeZipTest[Maybe]
   }
 
@@ -41,13 +41,13 @@ object CofreeTest extends Scalaprops {
   }
 
   val zipValidation = {
-    import CofreeGenImplicit._
+    import CofreeGenImplicit.*
     type F[A] = ValidationNel[Byte, A]
     cofreeZipTest[F]
   }
 
   val zipDisjunction = {
-    import CofreeGenImplicit._
+    import CofreeGenImplicit.*
     type F[A] = Byte \/ A
     cofreeZipTest[F]
   }
@@ -98,7 +98,7 @@ object CofreeTest extends Scalaprops {
     type E[A] = Byte \/ A
     type F[A] = Cofree[E, A]
 
-    import CofreeGenImplicit._
+    import CofreeGenImplicit.*
 
     Properties.list(
       scalazlaws.bind.all[F],
@@ -112,7 +112,7 @@ object CofreeTest extends Scalaprops {
     type E[A] = ValidationNel[Byte, A]
     type F[A] = Cofree[E, A]
 
-    import CofreeGenImplicit._
+    import CofreeGenImplicit.*
 
     Properties.list(
       scalazlaws.bind.all[F],

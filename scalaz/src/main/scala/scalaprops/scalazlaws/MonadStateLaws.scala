@@ -1,7 +1,7 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
+import scalaz.*
 
 private[scalazlaws] object MonadStateLaws {
   def apply[F[_], S](implicit F: MonadState[F, S]): MonadStateLaws[F, S] = new MonadStateLaws(F)

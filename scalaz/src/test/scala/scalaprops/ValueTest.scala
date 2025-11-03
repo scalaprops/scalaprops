@@ -1,8 +1,8 @@
 package scalaprops
 
+import ScalapropsScalaz.*
 import scalaz.Value
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object ValueTest extends Scalaprops {

@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz.std.map._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.map.*
 
 @scalajs.js.annotation.JSExportAll
 object MapTest extends Scalaprops {

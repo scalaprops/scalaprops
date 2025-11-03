@@ -1,7 +1,7 @@
 package scalaprops
 
+import ScalapropsScalaz.*
 import scalaz.IList
-import ScalapropsScalaz._
 
 @scalajs.js.annotation.JSExportAll
 object CogenTest extends Scalaprops {

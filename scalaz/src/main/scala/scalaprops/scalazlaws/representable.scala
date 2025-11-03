@@ -1,9 +1,10 @@
 package scalaprops
 package scalazlaws
 
-import scalaz.{Equal, Representable}
-import scalaz.std.anyVal._
 import scalaprops.Property.forAll
+import scalaz.Equal
+import scalaz.Representable
+import scalaz.std.anyVal.*
 
 object representable {
   def repUnrep[F[_], X, A](implicit F: Representable[F, X], G: Gen[F[A]], E: Equal[F[A]]): Property =

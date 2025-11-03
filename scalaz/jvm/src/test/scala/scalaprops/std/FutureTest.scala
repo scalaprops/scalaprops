@@ -2,11 +2,13 @@ package scalaprops
 package std
 
 import _root_.java.util.concurrent.TimeUnit
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.scalaFuture._
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.scalaFuture.*
 
 object FutureTest extends Scalaprops {
   private[this] implicit def genFuture[A](implicit A: Gen[A]): Gen[Future[A]] =

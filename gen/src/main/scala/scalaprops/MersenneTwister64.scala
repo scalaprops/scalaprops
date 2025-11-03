@@ -6,7 +6,16 @@ import java.util.Arrays
 final class MersenneTwister64 private (private val mt0: Array[Long], private val mti0: Int = 313)
   extends Rand { // N + 1 = 313
 
-  import MersenneTwister64.{mag01, BYTES, LowerMask, M, M_1, M_N, N, N_1, N_M, UpperMask}
+  import MersenneTwister64.BYTES
+  import MersenneTwister64.LowerMask
+  import MersenneTwister64.M
+  import MersenneTwister64.M_1
+  import MersenneTwister64.M_N
+  import MersenneTwister64.N
+  import MersenneTwister64.N_1
+  import MersenneTwister64.N_M
+  import MersenneTwister64.UpperMask
+  import MersenneTwister64.mag01
 
   override def equals(other: Any): Boolean =
     other match {

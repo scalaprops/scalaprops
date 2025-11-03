@@ -1,10 +1,10 @@
 package scalaprops
 package scalazlaws
 
+import ScalapropsScalaz.*
 import scalaprops.Property.forAll
-import scalaz._
-import scalaz.std.tuple._
-import ScalapropsScalaz._
+import scalaz.*
+import scalaz.std.tuple.*
 
 object traverse {
   def identityTraverse[F[_], X, Y](implicit F: Traverse[F], afx: Gen[F[X]], axy: Gen[X => Y], ef: Equal[F[Y]]) =

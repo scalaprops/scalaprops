@@ -1,9 +1,9 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz._
+import scalaprops.Property.forAll
+import scalaz.*
 
 object monadPlus {
   def emptyMap[F[_], X](implicit f: MonadPlus[F], afx: Gen[X => X], ef: Equal[F[X]]): Property =

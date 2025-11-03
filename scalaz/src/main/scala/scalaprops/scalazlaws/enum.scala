@@ -1,9 +1,10 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.{forAll, forAllG}
 import scalaprops.Properties.properties
-import scalaz._
+import scalaprops.Property.forAll
+import scalaprops.Property.forAllG
+import scalaz.*
 
 object `enum` {
   def succpred[A: Gen](implicit A: Enum[A]): Property =

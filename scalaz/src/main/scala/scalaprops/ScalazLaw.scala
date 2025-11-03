@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaz._
+import scalaz.*
 
 final class ScalazLaw private (val ord: Int, val fullName: String, val simpleName: String) {
   override def hashCode = ord
@@ -266,7 +266,7 @@ object ScalazLaw {
   }
 
   implicit val scalazLawOrder: Order[ScalazLaw] = {
-    import scalaz.std.anyVal._
+    import scalaz.std.anyVal.*
     Order.orderBy(_.ord)
   }
 }

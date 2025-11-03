@@ -1,7 +1,7 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.AllInstances._
+import scalaz.*
+import scalaz.std.AllInstances.*
 
 trait Eq1[F[_]] {
   def eq1[A: Equal]: Equal[F[A]]
@@ -71,7 +71,7 @@ object Eq1 {
 
   implicit def f1Eq1[A: Gen]: Eq1[({ type l[a] = A => a })#l] =
     new Eq1[({ type l[a] = A => a })#l] {
-      import FunctionEqual._
+      import FunctionEqual.*
       def eq1[B: Equal] = Equal[A => B]
     }
 
@@ -86,7 +86,7 @@ object Eq1 {
 
   implicit def stateEq1[F[_]: Monad: Eq1, S: Cogen: Gen: Equal]: Eq1[({ type l[a] = StateT[S, F, a] })#l] =
     new Eq1[({ type l[a] = StateT[S, F, a] })#l] {
-      import FunctionEqual._
+      import FunctionEqual.*
       def eq1[A: Equal] = {
         implicit val e: Equal[F[(S, A)]] = Eq1[F].eq1[(S, A)]
         StateTTest.stateTEqual[F, S, A]

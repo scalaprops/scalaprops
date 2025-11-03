@@ -1,8 +1,8 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
-import scalaz.std.string._
+import scalaz.*
+import scalaz.std.string.*
 
 final class *^*->* private (override val toString: String) {}
 

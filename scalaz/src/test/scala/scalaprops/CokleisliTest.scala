@@ -1,9 +1,9 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.tuple._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object CokleisliTest extends Scalaprops {
@@ -12,7 +12,7 @@ object CokleisliTest extends Scalaprops {
   private[this] val e = new FunctionEqual(3)
 
   implicit def cokleisliEqual[F[_], A, B: Equal](implicit F: Gen[F[A]]): Equal[Cokleisli[F, A, B]] = {
-    import e._
+    import e.*
     Equal[F[A] => B].contramap(_.run)
   }
 

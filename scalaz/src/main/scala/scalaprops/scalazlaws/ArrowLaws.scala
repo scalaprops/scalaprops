@@ -1,16 +1,16 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
+import scalaz.*
 
 private[scalazlaws] object ArrowLaws {
   def apply[=>:[_, _]](implicit F: Arrow[=>:]) = new ArrowLaws[=>:]
 }
 
 private[scalazlaws] final class ArrowLaws[=>:[_, _]](implicit F: Arrow[=>:]) {
-  import F._
-  import F.arrowSyntax._
-  import std.function._
+  import F.*
+  import F.arrowSyntax.*
+  import std.function.*
 
   def arrowIdentity[A](implicit E: Equal[A =>: A]): Boolean =
     E.equal(arr(identity), id)

@@ -1,6 +1,6 @@
 package scalaprops
 
-import sbt.testing._
+import sbt.testing.*
 
 final class ScalapropsEvent(
   fullyQualifiedName0: String,

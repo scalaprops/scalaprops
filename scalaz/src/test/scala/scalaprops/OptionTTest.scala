@@ -1,9 +1,9 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.option._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.option.*
 
 @scalajs.js.annotation.JSExportAll
 object OptionTTest extends Scalaprops {

@@ -1,7 +1,11 @@
 package scalaprops
 
-import scalaz.{@@, Apply, Cofree, Equal, Tags}
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.@@
+import scalaz.Apply
+import scalaz.Cofree
+import scalaz.Equal
+import scalaz.Tags
 
 object CofreeTestInstances {
 

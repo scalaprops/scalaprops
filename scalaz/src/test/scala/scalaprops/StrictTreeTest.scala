@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.AllInstances._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.AllInstances.*
 
 @scalajs.js.annotation.JSExportAll
 object StrictTreeTest extends Scalaprops {

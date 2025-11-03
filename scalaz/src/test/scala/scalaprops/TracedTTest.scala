@@ -1,13 +1,13 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object TracedTTest extends Scalaprops {
   private[this] val e = new FunctionEqual(10)
-  import e._
+  import e.*
 
   override def param = super.param.copy(maxSize = 10)
 

@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object category {
   def leftIdentity[=>:[_, _], A, B](implicit ab: Gen[A =>: B], C: Category[=>:], E: Equal[A =>: B]) =

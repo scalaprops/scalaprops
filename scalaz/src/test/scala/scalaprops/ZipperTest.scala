@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object ZipperTest extends Scalaprops {
@@ -20,7 +20,7 @@ object ZipperTest extends Scalaprops {
 
   val applicative = {
     implicit def zipperEqual[A](implicit A: Equal[A]): Equal[Zipper[A]] = {
-      import scalaz.std.stream._
+      import scalaz.std.stream.*
       val n = 1000
       Equal.equal { (x, y) =>
         A.equal(x.focus, y.focus) &&

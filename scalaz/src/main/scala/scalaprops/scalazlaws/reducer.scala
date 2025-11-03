@@ -1,8 +1,8 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
 import scalaprops.Property.forAll
+import scalaz.*
 
 object reducer {
   def consCorrectness[A: Gen, B: Gen: Equal](implicit R: Reducer[A, B]) =

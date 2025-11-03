@@ -1,11 +1,11 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.partialFunction._
-import scalaz.std.option._
-import scalaz.std.anyVal._
-import scalaz.std.tuple._
-import FunctionEqual._
+import FunctionEqual.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.option.*
+import scalaz.std.partialFunction.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object PartialFunctionTest extends Scalaprops {

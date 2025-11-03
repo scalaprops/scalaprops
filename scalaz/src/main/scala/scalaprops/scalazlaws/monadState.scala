@@ -1,8 +1,8 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
 import Property.forAll
+import scalaz.*
 
 object monadState {
   def putPut[F[_], S](implicit F: MonadState[F, S], S: Gen[S], E: Equal[F[Unit]]): Property =

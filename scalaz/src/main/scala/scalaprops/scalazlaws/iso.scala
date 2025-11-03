@@ -3,7 +3,7 @@ package scalazlaws
 
 import scalaprops.Property.forAll
 import scalaz.Equal
-import scalaz.Isomorphism._
+import scalaz.Isomorphism.*
 
 object iso {
   def a2b[A: Gen, B](i: A <=> B)(implicit A: Equal[A]): Property =

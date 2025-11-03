@@ -1,11 +1,11 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.either._
-import scalaz.std.tuple._
-import FunctionEqual._
-import ScalapropsScalaz._
+import FunctionEqual.*
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.either.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object IndexedReaderWriterStateTTest extends Scalaprops {

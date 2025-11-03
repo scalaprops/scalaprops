@@ -1,7 +1,6 @@
 import build._
-import sbtrelease._
-import ReleaseStateTransformations._
 import sbtcrossproject.CrossProject
+import sbtrelease.ReleaseStateTransformations._
 
 val isScala3 = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)

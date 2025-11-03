@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object bindRec {
   def tailrecBindConsistency[F[_], A](implicit F: BindRec[F], G1: Gen[A], G2: Gen[A => F[A]], E: Equal[F[A]]) =

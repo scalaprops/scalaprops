@@ -1,12 +1,12 @@
 package scalaprops
 
-import scalaz._
+import Property.forAll
+import ScalapropsScalaz.*
+import scalaz.*
 import scalaz.Id.Id
 import scalaz.Maybe.Just
-import scalaz.std.anyVal._
-import scalaz.syntax.equal._
-import Property.forAll
-import ScalapropsScalaz._
+import scalaz.std.anyVal.*
+import scalaz.syntax.equal.*
 
 @scalajs.js.annotation.JSExportAll
 object IMapTest extends Scalaprops {
@@ -66,7 +66,7 @@ object IMapTest extends Scalaprops {
   }
 
   val insertWith = {
-    import scalaz.syntax.std.function2._
+    import scalaz.syntax.std.function2.*
     type KEY = Short
     type VALUE = Byte
 

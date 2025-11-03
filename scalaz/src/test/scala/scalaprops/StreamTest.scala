@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz.std.stream._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.stream.*
 
 @scalajs.js.annotation.JSExportAll
 object StreamTest extends Scalaprops {

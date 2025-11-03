@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz.std.function._
-import scalaz.std.anyVal._
-import FunctionEqual._
+import FunctionEqual.*
+import scalaz.std.anyVal.*
+import scalaz.std.function.*
 
 @scalajs.js.annotation.JSExportAll
 object FunctionTest extends Scalaprops {

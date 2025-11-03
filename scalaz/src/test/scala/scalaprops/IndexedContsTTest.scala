@@ -1,13 +1,13 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object IndexedContsTTest extends Scalaprops {
   private[this] val F = new FunctionEqual(5)
-  import F._
+  import F.*
 
   private[this] implicit def indexedContsTEqual[W[_], M[_], R, O, A](implicit
     F: Equal[W[A => M[O]] => M[R]]

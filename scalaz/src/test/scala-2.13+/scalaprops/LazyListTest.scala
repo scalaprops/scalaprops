@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz.std.anyVal._
-import scalaz.std.lazylist._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.lazylist.*
 
 object LazyListTest extends Scalaprops {
 

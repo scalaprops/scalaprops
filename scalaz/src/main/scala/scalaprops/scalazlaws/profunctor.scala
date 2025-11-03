@@ -1,8 +1,8 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
 import Property.forAll
+import scalaz.*
 
 object profunctor {
   def identity[F[_, _], A1, A2](implicit F: Profunctor[F], G: Gen[F[A1, A2]], E: Equal[F[A1, A2]]): Property =

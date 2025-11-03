@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object divide {
   def composition[F[_], A](implicit F: Divide[F], G: Gen[F[A]], E: Equal[F[A]]): Property =

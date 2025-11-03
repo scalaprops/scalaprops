@@ -1,9 +1,9 @@
 package scalaprops
 
-import scalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
 import scalaz.std.tuple.tuple2Equal
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
 
 @scalajs.js.annotation.JSExportAll
 object ProductTest extends Scalaprops {

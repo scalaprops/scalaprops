@@ -1,6 +1,7 @@
 package scalaprops
 
-import sbt.testing.{Fingerprint, Framework}
+import sbt.testing.Fingerprint
+import sbt.testing.Framework
 
 class ScalapropsFramework extends Framework {
   override def name() = "Scalaprops"

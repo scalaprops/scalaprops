@@ -2,7 +2,7 @@ package scalaprops
 package internal
 
 sealed abstract class Tree[A] {
-  import Tree._
+  import Tree.*
 
   def rootLabel: A
 

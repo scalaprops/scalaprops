@@ -1,7 +1,7 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
+import scalaz.*
 
 object bitraverse {
   def laws[F[_, _]](implicit

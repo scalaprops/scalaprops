@@ -2,10 +2,10 @@ package scalaprops
 
 import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicBoolean
-import sbt.testing._
+import sbt.testing.*
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.NonFatal
-import scalaprops.internal._
+import scalaprops.internal.*
 
 final class ScalapropsTaskImpl(
   taskDef0: TaskDef,

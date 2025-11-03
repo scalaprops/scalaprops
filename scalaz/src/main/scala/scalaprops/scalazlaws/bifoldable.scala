@@ -2,8 +2,8 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
-import scalaz.std.anyVal._
+import scalaz.*
+import scalaz.std.anyVal.*
 
 object bifoldable {
   def leftFMConsistent[F[_, _], A, B](implicit F: Bifoldable[F], afa: Gen[F[A, B]], ea: Equal[A], eb: Equal[B]) =

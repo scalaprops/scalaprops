@@ -1,10 +1,10 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
-import scalaz.std.anyVal._
 import Property.forAll
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
 
 object comonadTrans {
   def law1[F[_[_], _], G[_], A](implicit

@@ -1,10 +1,10 @@
 package scalaprops
 
-import scalaz._
-import scalaz.Tags._
-import scalaz.std.AllInstances._
 import EndoTest.endoEqual
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.Tags.*
+import scalaz.std.AllInstances.*
 
 @scalajs.js.annotation.JSExportAll
 object ReducerTest extends Scalaprops {

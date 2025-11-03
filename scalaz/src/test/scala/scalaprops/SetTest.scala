@@ -1,7 +1,7 @@
 package scalaprops
 
-import scalaz.std.set._
-import scalaz.std.anyVal._
+import scalaz.std.anyVal.*
+import scalaz.std.set.*
 
 @scalajs.js.annotation.JSExportAll
 object SetTest extends Scalaprops {
