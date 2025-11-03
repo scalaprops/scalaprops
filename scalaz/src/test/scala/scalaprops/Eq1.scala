@@ -84,7 +84,7 @@ object Eq1 {
       }
     }
 
-  implicit def stateEq1[F[_]: Monad: Eq1, S: Cogen: Gen: Equal]: Eq1[({ type l[a] = StateT[S, F, a] })#l] =
+  implicit def stateEq1[F[_]: Monad: Eq1, S: Gen: Equal]: Eq1[({ type l[a] = StateT[S, F, a] })#l] =
     new Eq1[({ type l[a] = StateT[S, F, a] })#l] {
       import FunctionEqual.*
       def eq1[A: Equal] = {
