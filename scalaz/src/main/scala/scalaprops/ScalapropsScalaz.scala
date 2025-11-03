@@ -648,7 +648,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def contravariantCoyonedaGen[F[_], A](implicit F: Gen[F[A]]): Gen[ContravariantCoyoneda[F, A]] =
     F.map(ContravariantCoyoneda.lift)
 
-  implicit def fingerGen[V: Monoid, A](implicit A: Gen[A], R: Reducer[A, V]): Gen[FingerTree.Finger[V, A]] =
+  implicit def fingerGen[V, A](implicit A: Gen[A], R: Reducer[A, V]): Gen[FingerTree.Finger[V, A]] =
     Gen.oneOf(
       A.map(FingerTree.one[V, A]),
       Apply[Gen].apply2(A, A)(FingerTree.two[V, A]),
@@ -768,7 +768,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   ): Gen[BijectionT[F, G, A, B]] =
     Gen[(A => F[B], B => G[A])].map { case (f, g) => BijectionT.bijection(f, g) }
 
-  implicit def freeTGen[S[_]: Functor, M[_]: Applicative, A: Gen](implicit
+  implicit def freeTGen[S[_], M[_]: Applicative, A: Gen](implicit
     G1: Gen[S[A]],
     G2: Gen[M[A]]
   ): Gen[FreeT[S, M, A]] =

@@ -5,7 +5,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object ChooseTest extends Scalaprops {
-  private[this] def test[A: Choose: Gen: Order: Enum](listSize: Int = 10000) =
+  private[this] def test[A: Choose: Gen: Enum](listSize: Int = 10000) =
     Properties
       .list(
         Property.forAll { (from: A, to: A, seed: Long) =>
