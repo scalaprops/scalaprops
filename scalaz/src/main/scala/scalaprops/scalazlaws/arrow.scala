@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object arrow {
   def identity[=>:[_, _]: Arrow, A](implicit E: Equal[A =>: A]): Property =

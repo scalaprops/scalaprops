@@ -1,7 +1,7 @@
 package scalaprops
 
+import ScalapropsScalaz.*
 import scala.util.Random
-import ScalapropsScalaz._
 
 @scalajs.js.annotation.JSExportAll
 object RandTest extends Scalaprops {

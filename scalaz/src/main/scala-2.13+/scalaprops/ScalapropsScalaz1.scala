@@ -1,6 +1,9 @@
 package scalaprops
 
-import scalaz.{@@, Cofree, Tag, Tags}
+import scalaz.@@
+import scalaz.Cofree
+import scalaz.Tag
+import scalaz.Tags
 
 abstract class ScalapropsScalaz1 {
   implicit def cofreeGen[F[_], A](implicit a: Gen[A], f: => Gen[F[Cofree[F, A]]]): Gen[Cofree[F, A]] =

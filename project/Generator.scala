@@ -1,4 +1,5 @@
-import sbt._, Keys._
+import sbt.*
+import sbt.Keys.*
 
 object Generator {
   private[this] val generateCode = TaskKey[Unit]("generateCode")

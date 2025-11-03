@@ -1,10 +1,12 @@
 package scalaprops
 
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.concurrent.duration.Duration
 import java.lang.Thread.UncaughtExceptionHandler
-import sbt.testing.Logger
 import java.util.concurrent.ForkJoinPool
+import sbt.testing.Logger
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.concurrent.duration.Duration
 
 object TestExecutorImpl {
   private[this] def newInstance(log: Logger): TestExecutor =

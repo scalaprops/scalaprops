@@ -1,9 +1,9 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz._
+import scalaprops.Property.forAll
+import scalaz.*
 
 object semigroup {
   def associative[A: Equal: Gen](implicit A: Semigroup[A]): Property =

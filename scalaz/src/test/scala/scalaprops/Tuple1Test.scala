@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz.std.tuple._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object Tuple1Test extends Scalaprops {

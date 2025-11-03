@@ -1,10 +1,10 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz._
-import scalaz.std.anyVal._
+import scalaprops.Property.forAll
+import scalaz.*
+import scalaz.std.anyVal.*
 
 object comonad {
   def cobindLeftIdentity[F[_], A](implicit F: Comonad[F], F0: Equal[F[A]], fa: Gen[F[A]]): Property =

@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object bind {
   def associativity[M[_], X, Y, Z](implicit

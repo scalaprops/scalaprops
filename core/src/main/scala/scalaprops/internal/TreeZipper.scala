@@ -1,11 +1,11 @@
 package scalaprops
 package internal
 
-import TreeZipper._
+import TreeZipper.*
 import scala.annotation.tailrec
 
 final case class TreeZipper[A](tree: Tree[A], lefts: TreeForest[A], rights: TreeForest[A], parents: Parents[A]) {
-  import Tree._
+  import Tree.*
 
   def parent: Option[TreeZipper[A]] =
     parents match {

@@ -1,9 +1,9 @@
 package scalaprops
 
-import scalaz._
+import ScalapropsScalaz.*
+import scalaz.*
 import scalaz.Id.Id
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object IdTTest extends Scalaprops {

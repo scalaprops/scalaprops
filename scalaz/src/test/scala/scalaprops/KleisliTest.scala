@@ -1,17 +1,17 @@
 package scalaprops
 
-import scalaprops.internal._
-import scalaz.{Endo => _, _}
-import scalaz.std.tuple._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaprops.internal.*
+import scalaz.std.anyVal.*
+import scalaz.std.tuple.*
+import scalaz.{Endo as _, *}
 
 @scalajs.js.annotation.JSExportAll
 object KleisliTest extends Scalaprops {
   private[this] val e = new FunctionEqual(3)
 
   implicit def kleisliEqual[F[_], A: Gen, B](implicit E: Equal[F[B]]): Equal[Kleisli[F, A, B]] = {
-    import e._
+    import e.*
     Equal[A => F[B]].contramap(_.run)
   }
 

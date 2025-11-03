@@ -1,7 +1,7 @@
 package scalaprops
 
-import scala.concurrent.duration.Duration
 import sbt.testing.Logger
+import scala.concurrent.duration.Duration
 
 object TestExecutorImpl {
   val instance = new TestExecutor {

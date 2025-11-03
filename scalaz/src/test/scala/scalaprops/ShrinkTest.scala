@@ -1,14 +1,14 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.stream._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.stream.*
 
 @scalajs.js.annotation.JSExportAll
 object ShrinkTest extends Scalaprops {
   private[this] implicit def equal[A: Gen: Equal]: Equal[Shrink[A]] = {
-    import FunctionEqual._
+    import FunctionEqual.*
     Equal[A => Stream[A]].contramap(_.f)
   }
 

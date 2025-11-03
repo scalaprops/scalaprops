@@ -1,8 +1,8 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
 import scalaprops.Property.forAll
+import scalaz.*
 
 object lens {
   def identity[A: Gen: Equal, B](l: Lens[A, B]) =

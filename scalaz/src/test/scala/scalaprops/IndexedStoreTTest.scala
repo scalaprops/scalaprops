@@ -1,14 +1,14 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.tuple._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object IndexedStoreTTest extends Scalaprops {
   private[this] val e = new FunctionEqual(10)
-  import e._
+  import e.*
 
   implicit def indexedStoreTEqual[F[_], I: Equal, A, B](implicit
     F: Equal[F[A => B]]

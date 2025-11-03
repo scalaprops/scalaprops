@@ -1,10 +1,10 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
+import scala.math.Ordering as SOrdering
 import scalaprops.Properties.properties
-import scala.math.{Ordering => SOrdering}
-import scalaz._
+import scalaprops.Property.forAll
+import scalaz.*
 
 object order {
   def antisymmetric[A](implicit A: Order[A], G: Gen[A]): Property =

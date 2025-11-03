@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object isEmpty {
   def emptyIsEmpty[F[_], X](implicit F: IsEmpty[F]) =

@@ -1,10 +1,10 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import KleisliTest.kleisliEqual
 import CokleisliTest.cokleisliEqual
-import ScalapropsScalaz._
+import KleisliTest.kleisliEqual
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object EndomorphicTest extends Scalaprops {

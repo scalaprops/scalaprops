@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object zip {
   def zipPreservation[F[_], X](implicit F: Zip[F], FF: Functor[F], afx: Gen[F[X]], ef: Equal[F[X]]) =

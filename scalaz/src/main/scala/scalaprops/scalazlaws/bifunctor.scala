@@ -1,7 +1,7 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
+import scalaz.*
 
 object bifunctor {
   def laws[F[_, _]](implicit

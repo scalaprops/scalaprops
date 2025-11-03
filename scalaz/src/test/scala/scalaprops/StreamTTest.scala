@@ -1,13 +1,13 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.AllInstances._
-import scalaz.Isomorphism._
-import scalaz.syntax.equal._
-import scalaz.Id.Id
 import Property.forAll
+import ScalapropsScalaz.*
 import scala.util.Try
-import ScalapropsScalaz._
+import scalaz.*
+import scalaz.Id.Id
+import scalaz.Isomorphism.*
+import scalaz.std.AllInstances.*
+import scalaz.syntax.equal.*
 
 @scalajs.js.annotation.JSExportAll
 object StreamTTest extends Scalaprops {
@@ -154,7 +154,7 @@ object StreamTTest extends Scalaprops {
   }
 
   val testId = {
-    import scalaz.Id._
+    import scalaz.Id.*
     type G[A] = Id[A]
     type F[A] = StreamT[G, A]
     Properties.list(

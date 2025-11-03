@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object associative {
   def leftRight[=>:[_, _], X, Y, Z](implicit

@@ -1,10 +1,10 @@
 package scalaprops
 
+import ScalapropsScalaz.*
 import scala.util.Random
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.tuple._
-import ScalapropsScalaz._
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object GenTest extends Scalaprops {
@@ -216,7 +216,7 @@ object GenTest extends Scalaprops {
       name: String,
       streamSize: Int = defaultSize
     ) = {
-      import scalaz.std.stream._
+      import scalaz.std.stream.*
       val size = List.fill(domain.length)(codomain.length).product
 
       Property.forAll { (seed: Long) =>

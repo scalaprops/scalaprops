@@ -1,7 +1,7 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
+import scalaz.*
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object ChooseTest extends Scalaprops {
@@ -10,7 +10,7 @@ object ChooseTest extends Scalaprops {
       .list(
         Property.forAll { (from: A, to: A, seed: Long) =>
           val values = Choose[A].choose(from, to).samples(seed = seed, listSize = listSize)
-          import scalaz.syntax.order._
+          import scalaz.syntax.order.*
           implicit val o: scala.Ordering[A] = Order[A].toScalaOrdering
           assert(values.max <= Order[A].max(from, to))
           assert(values.min >= Order[A].min(from, to))

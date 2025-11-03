@@ -1,9 +1,9 @@
 package scalaprops
 
+import ScalapropsScalaz.*
 import scalaprops.Property.forAllG
 import scalaz.IList
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object IListTest extends Scalaprops {

@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object contravariant {
   def identity[F[_], X](implicit F: Contravariant[F], afx: Gen[F[X]], ef: Equal[F[X]]) =

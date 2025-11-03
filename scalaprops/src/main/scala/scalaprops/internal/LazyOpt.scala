@@ -2,7 +2,7 @@ package scalaprops
 package internal
 
 sealed abstract class LazyOpt[A] extends Product with Serializable {
-  import LazyOpt._
+  import LazyOpt.*
 
   def fold[X](some: (=> A) => X, none: => X): X =
     this match {

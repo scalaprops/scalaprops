@@ -1,10 +1,12 @@
 package scalaprops
 
-import sbt.testing.{Event, EventHandler, Logger, Status}
-
+import sbt.testing.Event
+import sbt.testing.EventHandler
+import sbt.testing.Logger
+import sbt.testing.Status
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.NameTransformer
-import scalaprops.internal._
+import scalaprops.internal.*
 
 object NativeTestHelper {
 
@@ -24,7 +26,7 @@ object NativeTestHelper {
 }
 
 abstract class NativeTestHelper {
-  import NativeTestHelper._
+  import NativeTestHelper.*
 
   private[this] val events = new ArrayBuffer[Event]
 

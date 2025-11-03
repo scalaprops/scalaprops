@@ -1,13 +1,13 @@
 package scalaprops
 
-import scalaz._
+import ScalapropsScalaz.*
+import scalaz.*
 import scalaz.Id.Id
-import scalaz.std.AllInstances._
-import ScalapropsScalaz._
+import scalaz.std.AllInstances.*
 
 @scalajs.js.annotation.JSExportAll
 object FreeTTest extends Scalaprops {
-  import FreeTest._
+  import FreeTest.*
 
   implicit def freeTEqual[S[_]: Functor: Eq1, M[_]: BindRec: Applicative: Eq1, A: Equal]: Equal[FreeT[S, M, A]] =
     new Equal[FreeT[S, M, A]] {

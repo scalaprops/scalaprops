@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaprops.internal._
+import scalaprops.internal.*
 
 final case class Properties[A] private[scalaprops] (props: Tree[(A, Option[Check])]) {
   def id: A = props.rootLabel._1

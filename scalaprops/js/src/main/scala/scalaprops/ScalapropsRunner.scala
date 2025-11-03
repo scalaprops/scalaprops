@@ -1,12 +1,12 @@
 package scalaprops
 
-import scala.scalajs.reflect.Reflect
-import sbt.testing._
-import scala.reflect.NameTransformer
-import scala.scalajs._
-import scala.scalajs.js.WrappedDictionary
+import sbt.testing.*
 import scala.collection.mutable.ArrayBuffer
-import scalaprops.internal._
+import scala.reflect.NameTransformer
+import scala.scalajs.*
+import scala.scalajs.js.WrappedDictionary
+import scala.scalajs.reflect.Reflect
+import scalaprops.internal.*
 
 object ScalapropsRunner {
 

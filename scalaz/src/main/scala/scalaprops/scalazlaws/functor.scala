@@ -1,9 +1,9 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz._
+import scalaprops.Property.forAll
+import scalaz.*
 
 object functor {
   def identity[F[_], X](implicit F: Functor[F], afx: Gen[F[X]], ef: Equal[F[X]]) =

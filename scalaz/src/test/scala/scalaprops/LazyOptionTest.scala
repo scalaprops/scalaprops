@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz.std.anyVal._
+import ScalapropsScalaz.*
 import scalaz.LazyOption
-import ScalapropsScalaz._
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object LazyOptionTest extends Scalaprops {

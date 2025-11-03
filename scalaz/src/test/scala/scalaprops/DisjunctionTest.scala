@@ -1,8 +1,9 @@
 package scalaprops
 
-import scalaz.{\/, IList}
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.IList
+import scalaz.\/
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object DisjunctionTest extends Scalaprops {

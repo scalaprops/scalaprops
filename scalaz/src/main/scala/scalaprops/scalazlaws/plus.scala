@@ -1,9 +1,9 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz._
+import scalaprops.Property.forAll
+import scalaz.*
 
 object plus {
   def associative[F[_], X](implicit f: Plus[F], afx: Gen[F[X]], ef: Equal[F[X]]) =

@@ -1,7 +1,7 @@
 package scalaprops
 package scalazlaws
 
-import scalaz._
+import scalaz.*
 
 object applicativePlus {
   def all[F[_]](implicit

@@ -1,9 +1,9 @@
 package scalaprops
 
-import sbt.testing._
-import scalaprops.internal._
+import sbt.testing.*
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.NameTransformer
+import scalaprops.internal.*
 
 object ScalapropsRunner {
   def testFieldNames(clazz: Class[?]): Array[String] =

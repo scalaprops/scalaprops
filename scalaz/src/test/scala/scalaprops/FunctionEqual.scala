@@ -1,7 +1,7 @@
 package scalaprops
 
 import scala.util.Random
-import scalaz._
+import scalaz.*
 
 object FunctionEqual extends FunctionEqual(5)
 

@@ -2,7 +2,7 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
+import scalaz.*
 
 object divisible {
   def rightIdentity[F[_], A](implicit F: Divisible[F], G: Gen[F[A]], E: Equal[F[A]]): Property =

@@ -1,7 +1,6 @@
 package scalaprops
 
 import java.math.BigInteger
-
 import scala.annotation.tailrec
 
 /**

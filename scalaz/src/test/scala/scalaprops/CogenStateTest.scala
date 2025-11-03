@@ -1,9 +1,9 @@
 package scalaprops
 
+import GenTest.*
+import ScalapropsScalaz.*
 import scalaz.Equal
-import scalaz.std.anyVal._
-import GenTest._
-import ScalapropsScalaz._
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object CogenStateTest extends Scalaprops {

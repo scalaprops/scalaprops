@@ -2,8 +2,8 @@ package scalaprops
 package scalazlaws
 
 import scalaprops.Property.forAll
-import scalaz._
-import scalaz.std.anyVal._
+import scalaz.*
+import scalaz.std.anyVal.*
 
 object foldable1 {
   def leftFM1Consistent[F[_], A](implicit F: Foldable1[F], fa: Gen[F[A]], ea: Equal[A]) =

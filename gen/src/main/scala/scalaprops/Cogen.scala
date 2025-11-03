@@ -1,8 +1,10 @@
 package scalaprops
 
 import Variant.variantInt
-import scala.concurrent.{Await, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.Await
+import scala.concurrent.Future
+import scala.util.Failure
+import scala.util.Success
 
 abstract class Cogen[A] { self =>
   def cogen[B](a: A, g: CogenState[B]): CogenState[B]
@@ -153,7 +155,7 @@ object Cogen extends CogenInstances0 {
   implicit val cogenJavaDouble: Cogen[java.lang.Double] =
     Cogen[Double].contramap(_.doubleValue)
 
-  import java.{math => jm}
+  import java.math as jm
 
   implicit val cogenBigInteger: Cogen[jm.BigInteger] =
     Cogen[Array[Byte]].contramap(_.toByteArray)
@@ -218,7 +220,7 @@ object Cogen extends CogenInstances0 {
     Cogen[String].contramap(_.name)
 
   implicit def cogenFuture[A](implicit F: Cogen[A]): Cogen[Future[A]] = {
-    import scala.concurrent.duration._
+    import scala.concurrent.duration.*
     val ec = scala.concurrent.ExecutionContext.global
     cogenEither(conquer[Throwable], F).contramap(f =>
       Await.result(

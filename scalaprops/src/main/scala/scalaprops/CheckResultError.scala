@@ -1,6 +1,6 @@
 package scalaprops
 
-import CheckResultError._
+import CheckResultError.*
 
 sealed abstract class CheckResultError extends Product with Serializable {
   def value: Option[CheckResult] =

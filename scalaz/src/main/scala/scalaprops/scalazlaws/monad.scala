@@ -1,9 +1,9 @@
 package scalaprops
 package scalazlaws
 
-import scalaprops.Property.forAll
 import scalaprops.Properties.properties
-import scalaz._
+import scalaprops.Property.forAll
+import scalaz.*
 
 object monad {
   def rightIdentity[M[_], X](implicit M: Monad[M], e: Equal[M[X]], a: Gen[M[X]]) =

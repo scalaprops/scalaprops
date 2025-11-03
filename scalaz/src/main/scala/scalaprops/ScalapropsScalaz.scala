@@ -1,9 +1,9 @@
 package scalaprops
 
-import scalaz._
-import scalaz.Isomorphism._
 import Gen.gen
 import Variant.variantInt
+import scalaz.*
+import scalaz.Isomorphism.*
 
 sealed abstract class ScalapropsScalaz0 extends ScalapropsScalaz1 {
   implicit final def cogenEndomorphic[F[_, _], A](implicit F: Cogen[F[A, A]]): Cogen[Endomorphic[F, A]] =
@@ -265,7 +265,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     }
 
   implicit def cogenTreeLoc[A: Cogen]: Cogen[scalaz.TreeLoc[A]] = {
-    import scalaz.TreeLoc._
+    import scalaz.TreeLoc.*
     Cogen[(Tree[A], TreeForest[A], TreeForest[A], Parents[A])].contramap { a =>
       (a.tree, a.lefts, a.rights, a.parents)
     }
@@ -393,7 +393,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     }
 
   implicit def ilistGen[A](implicit A: Gen[A]): Gen[IList[A]] = {
-    import scalaz.std.list._
+    import scalaz.std.list.*
     Gen.listOf(A).map(IList.fromFoldable(_)) // TODO optimize
   }
 
@@ -677,7 +677,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
   implicit def strictTreeGen[A](implicit A: Gen[A]): Gen[StrictTree[A]] =
     Gen.sized(n => Gen.choose(0, n).flatMap(strictTreeGenSized[A]))
   private[this] def withSize[A](size: Int)(f: Int => Gen[A]): Gen[Stream[A]] = {
-    import scalaz.std.stream._
+    import scalaz.std.stream.*
     import scalaz.State
     Applicative[Gen]
       .sequence(

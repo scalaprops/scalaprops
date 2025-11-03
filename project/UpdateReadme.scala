@@ -1,6 +1,7 @@
-import sbt._, Keys._
-import sbtrelease.ReleasePlugin.autoImport.ReleaseStep
+import sbt.*
+import sbt.Keys.*
 import sbtrelease.Git
+import sbtrelease.ReleasePlugin.autoImport.ReleaseStep
 
 object UpdateReadme {
   private val sonatypeURL = "https://oss.sonatype.org/service/local/repositories/"

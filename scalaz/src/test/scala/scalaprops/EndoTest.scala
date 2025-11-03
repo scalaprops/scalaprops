@@ -1,13 +1,13 @@
 package scalaprops
 
+import ScalapropsScalaz.*
 import scalaz.Equal
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object EndoTest extends Scalaprops {
   implicit def endoEqual[A: Gen: Equal]: Equal[scalaz.Endo[A]] = {
-    import FunctionEqual._
+    import FunctionEqual.*
     Equal[A => A].contramap(_.run)
   }
 

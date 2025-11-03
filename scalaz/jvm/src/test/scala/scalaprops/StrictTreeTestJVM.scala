@@ -1,6 +1,6 @@
 package scalaprops
 
-import scalaz.std.anyVal._
+import scalaz.std.anyVal.*
 
 object StrictTreeTestJVM extends Scalaprops {
   val catalanNumber = TreeTest.sizeTest(

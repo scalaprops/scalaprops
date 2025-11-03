@@ -1,12 +1,12 @@
 package scalaprops
 
-import scalaz.std.function._
-import scalaz.std.anyVal._
-import scalaz.std.tuple._
+import scalaz.std.anyVal.*
+import scalaz.std.function.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object Function1Test extends Scalaprops {
-  import FunctionEqual._
+  import FunctionEqual.*
 
   val bindRec = scalazlaws.bindRec.laws[({ type l[a] = Byte => a })#l]
 

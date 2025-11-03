@@ -1,14 +1,14 @@
 package scalaprops
 
-import scalaz._
-import scalaz.std.anyVal._
-import scalaz.std.option._
-import scalaz.std.tuple._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.option.*
+import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object NullResultTest extends Scalaprops {
-  import FunctionEqual._
+  import FunctionEqual.*
 
   private[this] implicit def equal[A, B](implicit A: Equal[A => Option[B]]): Equal[NullResult[A, B]] =
     A.contramap(_.apply)

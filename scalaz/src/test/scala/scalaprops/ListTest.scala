@@ -1,8 +1,8 @@
 package scalaprops
 
-import scalaz.std.list._
-import scalaz.std.anyVal._
-import ScalapropsScalaz._
+import ScalapropsScalaz.*
+import scalaz.std.anyVal.*
+import scalaz.std.list.*
 
 @scalajs.js.annotation.JSExportAll
 object ListTest extends Scalaprops {
