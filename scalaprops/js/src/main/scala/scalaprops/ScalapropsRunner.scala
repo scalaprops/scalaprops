@@ -35,7 +35,7 @@ object ScalapropsRunner {
     }.toList
 
   private[this] def invokeProperties[A](obj: js.Dictionary[A]): List[Properties[Any]] =
-    findTestFields(obj, classOf[Properties[_]]).map { case (name, properties) =>
+    findTestFields(obj, classOf[Properties[?]]).map { case (name, properties) =>
       val props = properties.asInstanceOf[Properties[Any]].props
       Properties.noSort[Any](
         Tree.Node(
@@ -46,9 +46,9 @@ object ScalapropsRunner {
     }.toList
 
   def allProps(obj: Scalaprops, only: List[String], logger: Logger): Properties[?] = {
-    val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[_]]).map { case (name, p) =>
+    val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[?]]).map { case (name, p) =>
       p.toProperties[Any](name)
-    } ::: invokeProperties(obj.asInstanceOf[js.Dictionary[_]])
+    } ::: invokeProperties(obj.asInstanceOf[js.Dictionary[?]])
 
     val tests = only match {
       case names @ (_ :: _) =>
