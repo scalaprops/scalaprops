@@ -8,7 +8,7 @@ object TinyMT32Test extends Scalaprops {
     var tiny = TinyMT32.getDefault(1)
     val c_data = List(0x97b6d625, 0x3a86e2e1, 0xdd7305b1, 0x8e4ef1b0, 0xd60a5515, 0xe3b751f6, 0x7e073136, 0x82e5df8b,
       0xa5e6b3a8, 0x2d91deed)
-    val output = (0 until c_data.length).map { i =>
+    val output = (0 until c_data.length).map { _ =>
       val temp = tiny.nextInt
       tiny = temp._1
       temp._2
@@ -27,7 +27,7 @@ object TinyMT32Test extends Scalaprops {
     val c_data = List(0x92264019, 0x3e048b87, 0x0618bd2a, 0x0b85252c, 0xf720f342, 0x73ac4297, 0x20974815, 0x8ac7a201,
       0x7443b188, 0x0b7c6501)
 
-    val output = (0 until c_data.length).map { i =>
+    val output = (0 until c_data.length).map { _ =>
       val temp = tiny.nextInt
       tiny = temp._1
       temp._2
@@ -41,7 +41,7 @@ object TinyMT32Test extends Scalaprops {
     val c_data = List(0x7c14361a, 0x41b450a8, 0xfecc94ae, 0xd19693cd, 0x1d8b3ef7, 0xb5c88b3f, 0x45c79c71, 0xc8465811,
       0x10fcf027, 0x4e3317e5)
 
-    val output = (0 until c_data.length).map { i =>
+    val output = (0 until c_data.length).map { _ =>
       val temp = tiny.nextInt
       tiny = temp._1
       temp._2
