@@ -43,9 +43,6 @@ libraryDependencies += "com.github.scalaprops" %% "scalaprops-scalaz" % "0.10.0"
 </details>
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/scalaprops/scalaprops-all_2.12/0.10.0/scalaprops-all_2.12-0.10.0-javadoc.jar/!/scalaprops/index.html)
-
-
 ![screencast](screencast.gif)
 
 ### deterministic testing
