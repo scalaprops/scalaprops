@@ -219,6 +219,12 @@ val commonSettings = Def.settings(
       <tag>{tagOrHash.value}</tag>
     </scm>
   ),
+  javacOptions ++= Seq(
+    "-source",
+    "1.8",
+    "-target",
+    "1.8"
+  ),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
