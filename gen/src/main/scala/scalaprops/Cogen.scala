@@ -73,7 +73,7 @@ object Cogen extends CogenInstances0 {
     }
 
   def from[A1, Z](f: Z => Option[A1])(implicit A1: Cogen[A1]): Cogen[Z] =
-    from1[A1, Z](f)(A1)
+    from1[A1, Z](f)(using A1)
 
   def from1[A1, Z](f: Z => Option[A1])(implicit A1: Cogen[A1]): Cogen[Z] =
     A1.contramap(t => f(t).get)
@@ -213,7 +213,7 @@ object Cogen extends CogenInstances0 {
   implicit val cogenString: Cogen[String] =
     new Cogen[String] {
       def cogen[B](a: String, g: CogenState[B]) =
-        cogenArray(cogenChar).cogen(a.toCharArray, g)
+        cogenArray(using cogenChar).cogen(a.toCharArray, g)
     }
 
   implicit val cogenSymbol: Cogen[Symbol] =
@@ -222,16 +222,16 @@ object Cogen extends CogenInstances0 {
   implicit def cogenFuture[A](implicit F: Cogen[A]): Cogen[Future[A]] = {
     import scala.concurrent.duration.*
     val ec = scala.concurrent.ExecutionContext.global
-    cogenEither(conquer[Throwable], F).contramap(f =>
+    cogenEither(using conquer[Throwable], F).contramap(f =>
       Await.result(
-        f.map(Right(_))(ec).recover { case e => Left(e) }(ec),
+        f.map(Right(_))(using ec).recover { case e => Left(e) }(using ec),
         5.seconds
       )
     )
   }
 
   implicit def cogenTry[A](implicit F: Cogen[A]): Cogen[scala.util.Try[A]] =
-    cogenEither(conquer[Throwable], F).contramap {
+    cogenEither(using conquer[Throwable], F).contramap {
       case Success(a) => Right(a)
       case Failure(e) => Left(e)
     }

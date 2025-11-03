@@ -47,7 +47,7 @@ object TracedTTest extends Scalaprops {
     type G[A] = OneOr[NonEmptyList, A]
     type F[A] = TracedT[G, Z, A]
     Properties.list(
-      scalazlaws.comonad.all[F](
+      scalazlaws.comonad.all[F](using
         TracedT.tracedTComonad[G, Z],
         Gen[TracedT[G, Z, Int]],
         Gen[TracedT[G, Z, Int] => Int],
@@ -69,7 +69,7 @@ object TracedTTest extends Scalaprops {
     type F[A] = TracedT[G, Z, A]
     import IndexedStoreTTest.indexedStoreTEqual
 
-    scalazlaws.comonad.all[F](
+    scalazlaws.comonad.all[F](using
       TracedT.tracedTComonad[G, Z],
       Gen[TracedT[G, Z, Int]],
       Gen[TracedT[G, Z, Int] => Int],

@@ -14,7 +14,7 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
   implicit final def f2[A1, A2, Z](implicit A1: Gen[A1], A2: Gen[A2], Z: Cogen[Z]): Cogen[(A1, A2) => Z] =
     new Cogen[(A1, A2) => Z] {
       def cogen[X](f: (A1, A2) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, Z)).cogen(f.curried, g)
+        f1(using A1, f1(using A2, Z)).cogen(f.curried, g)
     }
 
   implicit final def tuple2[A1, A2](implicit A1: Cogen[A1], A2: Cogen[A2]): Cogen[Tuple2[A1, A2]] =
@@ -24,15 +24,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, Z](f: Z => Option[Tuple2[A1, A2]])(implicit A1: Cogen[A1], A2: Cogen[A2]): Cogen[Z] =
-    from2[A1, A2, Z](f)(A1, A2)
+    from2[A1, A2, Z](f)(using A1, A2)
 
   final def from2[A1, A2, Z](f: Z => Option[Tuple2[A1, A2]])(implicit A1: Cogen[A1], A2: Cogen[A2]): Cogen[Z] =
-    tuple2[A1, A2](A1, A2).contramap(t => f(t).get)
+    tuple2[A1, A2](using A1, A2).contramap(t => f(t).get)
 
   implicit final def f3[A1, A2, A3, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], Z: Cogen[Z]): Cogen[(A1, A2, A3) => Z] =
     new Cogen[(A1, A2, A3) => Z] {
       def cogen[X](f: (A1, A2, A3) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, Z))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, Z))).cogen(f.curried, g)
     }
 
   implicit final def tuple3[A1, A2, A3](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3]): Cogen[Tuple3[A1, A2, A3]] =
@@ -42,15 +42,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, Z](f: Z => Option[Tuple3[A1, A2, A3]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3]): Cogen[Z] =
-    from3[A1, A2, A3, Z](f)(A1, A2, A3)
+    from3[A1, A2, A3, Z](f)(using A1, A2, A3)
 
   final def from3[A1, A2, A3, Z](f: Z => Option[Tuple3[A1, A2, A3]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3]): Cogen[Z] =
-    tuple3[A1, A2, A3](A1, A2, A3).contramap(t => f(t).get)
+    tuple3[A1, A2, A3](using A1, A2, A3).contramap(t => f(t).get)
 
   implicit final def f4[A1, A2, A3, A4, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4) => Z] =
     new Cogen[(A1, A2, A3, A4) => Z] {
       def cogen[X](f: (A1, A2, A3, A4) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, Z)))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, Z)))).cogen(f.curried, g)
     }
 
   implicit final def tuple4[A1, A2, A3, A4](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4]): Cogen[Tuple4[A1, A2, A3, A4]] =
@@ -60,15 +60,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, Z](f: Z => Option[Tuple4[A1, A2, A3, A4]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4]): Cogen[Z] =
-    from4[A1, A2, A3, A4, Z](f)(A1, A2, A3, A4)
+    from4[A1, A2, A3, A4, Z](f)(using A1, A2, A3, A4)
 
   final def from4[A1, A2, A3, A4, Z](f: Z => Option[Tuple4[A1, A2, A3, A4]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4]): Cogen[Z] =
-    tuple4[A1, A2, A3, A4](A1, A2, A3, A4).contramap(t => f(t).get)
+    tuple4[A1, A2, A3, A4](using A1, A2, A3, A4).contramap(t => f(t).get)
 
   implicit final def f5[A1, A2, A3, A4, A5, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5) => Z] =
     new Cogen[(A1, A2, A3, A4, A5) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, Z))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, Z))))).cogen(f.curried, g)
     }
 
   implicit final def tuple5[A1, A2, A3, A4, A5](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5]): Cogen[Tuple5[A1, A2, A3, A4, A5]] =
@@ -78,15 +78,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, Z](f: Z => Option[Tuple5[A1, A2, A3, A4, A5]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5]): Cogen[Z] =
-    from5[A1, A2, A3, A4, A5, Z](f)(A1, A2, A3, A4, A5)
+    from5[A1, A2, A3, A4, A5, Z](f)(using A1, A2, A3, A4, A5)
 
   final def from5[A1, A2, A3, A4, A5, Z](f: Z => Option[Tuple5[A1, A2, A3, A4, A5]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5]): Cogen[Z] =
-    tuple5[A1, A2, A3, A4, A5](A1, A2, A3, A4, A5).contramap(t => f(t).get)
+    tuple5[A1, A2, A3, A4, A5](using A1, A2, A3, A4, A5).contramap(t => f(t).get)
 
   implicit final def f6[A1, A2, A3, A4, A5, A6, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, Z)))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, Z)))))).cogen(f.curried, g)
     }
 
   implicit final def tuple6[A1, A2, A3, A4, A5, A6](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6]): Cogen[Tuple6[A1, A2, A3, A4, A5, A6]] =
@@ -96,15 +96,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, Z](f: Z => Option[Tuple6[A1, A2, A3, A4, A5, A6]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6]): Cogen[Z] =
-    from6[A1, A2, A3, A4, A5, A6, Z](f)(A1, A2, A3, A4, A5, A6)
+    from6[A1, A2, A3, A4, A5, A6, Z](f)(using A1, A2, A3, A4, A5, A6)
 
   final def from6[A1, A2, A3, A4, A5, A6, Z](f: Z => Option[Tuple6[A1, A2, A3, A4, A5, A6]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6]): Cogen[Z] =
-    tuple6[A1, A2, A3, A4, A5, A6](A1, A2, A3, A4, A5, A6).contramap(t => f(t).get)
+    tuple6[A1, A2, A3, A4, A5, A6](using A1, A2, A3, A4, A5, A6).contramap(t => f(t).get)
 
   implicit final def f7[A1, A2, A3, A4, A5, A6, A7, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, Z))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, Z))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple7[A1, A2, A3, A4, A5, A6, A7](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7]): Cogen[Tuple7[A1, A2, A3, A4, A5, A6, A7]] =
@@ -114,15 +114,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, Z](f: Z => Option[Tuple7[A1, A2, A3, A4, A5, A6, A7]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7]): Cogen[Z] =
-    from7[A1, A2, A3, A4, A5, A6, A7, Z](f)(A1, A2, A3, A4, A5, A6, A7)
+    from7[A1, A2, A3, A4, A5, A6, A7, Z](f)(using A1, A2, A3, A4, A5, A6, A7)
 
   final def from7[A1, A2, A3, A4, A5, A6, A7, Z](f: Z => Option[Tuple7[A1, A2, A3, A4, A5, A6, A7]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7]): Cogen[Z] =
-    tuple7[A1, A2, A3, A4, A5, A6, A7](A1, A2, A3, A4, A5, A6, A7).contramap(t => f(t).get)
+    tuple7[A1, A2, A3, A4, A5, A6, A7](using A1, A2, A3, A4, A5, A6, A7).contramap(t => f(t).get)
 
   implicit final def f8[A1, A2, A3, A4, A5, A6, A7, A8, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, Z)))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, Z)))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple8[A1, A2, A3, A4, A5, A6, A7, A8](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8]): Cogen[Tuple8[A1, A2, A3, A4, A5, A6, A7, A8]] =
@@ -132,15 +132,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, Z](f: Z => Option[Tuple8[A1, A2, A3, A4, A5, A6, A7, A8]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8]): Cogen[Z] =
-    from8[A1, A2, A3, A4, A5, A6, A7, A8, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8)
+    from8[A1, A2, A3, A4, A5, A6, A7, A8, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8)
 
   final def from8[A1, A2, A3, A4, A5, A6, A7, A8, Z](f: Z => Option[Tuple8[A1, A2, A3, A4, A5, A6, A7, A8]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8]): Cogen[Z] =
-    tuple8[A1, A2, A3, A4, A5, A6, A7, A8](A1, A2, A3, A4, A5, A6, A7, A8).contramap(t => f(t).get)
+    tuple8[A1, A2, A3, A4, A5, A6, A7, A8](using A1, A2, A3, A4, A5, A6, A7, A8).contramap(t => f(t).get)
 
   implicit final def f9[A1, A2, A3, A4, A5, A6, A7, A8, A9, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, Z))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, Z))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple9[A1, A2, A3, A4, A5, A6, A7, A8, A9](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9]): Cogen[Tuple9[A1, A2, A3, A4, A5, A6, A7, A8, A9]] =
@@ -150,15 +150,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, Z](f: Z => Option[Tuple9[A1, A2, A3, A4, A5, A6, A7, A8, A9]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9]): Cogen[Z] =
-    from9[A1, A2, A3, A4, A5, A6, A7, A8, A9, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9)
+    from9[A1, A2, A3, A4, A5, A6, A7, A8, A9, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9)
 
   final def from9[A1, A2, A3, A4, A5, A6, A7, A8, A9, Z](f: Z => Option[Tuple9[A1, A2, A3, A4, A5, A6, A7, A8, A9]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9]): Cogen[Z] =
-    tuple9[A1, A2, A3, A4, A5, A6, A7, A8, A9](A1, A2, A3, A4, A5, A6, A7, A8, A9).contramap(t => f(t).get)
+    tuple9[A1, A2, A3, A4, A5, A6, A7, A8, A9](using A1, A2, A3, A4, A5, A6, A7, A8, A9).contramap(t => f(t).get)
 
   implicit final def f10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, Z)))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, Z)))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10]): Cogen[Tuple10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10]] =
@@ -168,15 +168,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, Z](f: Z => Option[Tuple10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10]): Cogen[Z] =
-    from10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
+    from10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
 
   final def from10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, Z](f: Z => Option[Tuple10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10]): Cogen[Z] =
-    tuple10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10).contramap(t => f(t).get)
+    tuple10[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10).contramap(t => f(t).get)
 
   implicit final def f11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, Z))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, Z))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11]): Cogen[Tuple11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11]] =
@@ -186,15 +186,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, Z](f: Z => Option[Tuple11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11]): Cogen[Z] =
-    from11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)
+    from11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)
 
   final def from11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, Z](f: Z => Option[Tuple11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11]): Cogen[Z] =
-    tuple11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11).contramap(t => f(t).get)
+    tuple11[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11).contramap(t => f(t).get)
 
   implicit final def f12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, Z)))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, Z)))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12]): Cogen[Tuple12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12]] =
@@ -204,15 +204,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, Z](f: Z => Option[Tuple12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12]): Cogen[Z] =
-    from12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)
+    from12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)
 
   final def from12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, Z](f: Z => Option[Tuple12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12]): Cogen[Z] =
-    tuple12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12).contramap(t => f(t).get)
+    tuple12[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12).contramap(t => f(t).get)
 
   implicit final def f13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, Z))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, Z))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13]): Cogen[Tuple13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13]] =
@@ -222,15 +222,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, Z](f: Z => Option[Tuple13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13]): Cogen[Z] =
-    from13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)
+    from13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)
 
   final def from13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, Z](f: Z => Option[Tuple13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13]): Cogen[Z] =
-    tuple13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13).contramap(t => f(t).get)
+    tuple13[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13).contramap(t => f(t).get)
 
   implicit final def f14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, Z)))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, Z)))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14]): Cogen[Tuple14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14]] =
@@ -240,15 +240,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, Z](f: Z => Option[Tuple14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14]): Cogen[Z] =
-    from14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)
+    from14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)
 
   final def from14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, Z](f: Z => Option[Tuple14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14]): Cogen[Z] =
-    tuple14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14).contramap(t => f(t).get)
+    tuple14[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14).contramap(t => f(t).get)
 
   implicit final def f15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, Z))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, Z))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15]): Cogen[Tuple15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15]] =
@@ -258,15 +258,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, Z](f: Z => Option[Tuple15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15]): Cogen[Z] =
-    from15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)
+    from15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)
 
   final def from15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, Z](f: Z => Option[Tuple15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15]): Cogen[Z] =
-    tuple15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15).contramap(t => f(t).get)
+    tuple15[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15).contramap(t => f(t).get)
 
   implicit final def f16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], A16: Gen[A16], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, f1(A16, Z)))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, f1(using A16, Z)))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16]): Cogen[Tuple16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16]] =
@@ -276,15 +276,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, Z](f: Z => Option[Tuple16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16]): Cogen[Z] =
-    from16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16)
+    from16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16)
 
   final def from16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, Z](f: Z => Option[Tuple16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16]): Cogen[Z] =
-    tuple16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16).contramap(t => f(t).get)
+    tuple16[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16).contramap(t => f(t).get)
 
   implicit final def f17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], A16: Gen[A16], A17: Gen[A17], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, f1(A16, f1(A17, Z))))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, f1(using A16, f1(using A17, Z))))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17]): Cogen[Tuple17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17]] =
@@ -294,15 +294,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, Z](f: Z => Option[Tuple17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17]): Cogen[Z] =
-    from17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17)
+    from17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17)
 
   final def from17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, Z](f: Z => Option[Tuple17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17]): Cogen[Z] =
-    tuple17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17).contramap(t => f(t).get)
+    tuple17[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17).contramap(t => f(t).get)
 
   implicit final def f18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], A16: Gen[A16], A17: Gen[A17], A18: Gen[A18], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, f1(A16, f1(A17, f1(A18, Z)))))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, f1(using A16, f1(using A17, f1(using A18, Z)))))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18]): Cogen[Tuple18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18]] =
@@ -312,15 +312,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, Z](f: Z => Option[Tuple18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18]): Cogen[Z] =
-    from18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18)
+    from18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18)
 
   final def from18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, Z](f: Z => Option[Tuple18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18]): Cogen[Z] =
-    tuple18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18).contramap(t => f(t).get)
+    tuple18[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18).contramap(t => f(t).get)
 
   implicit final def f19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], A16: Gen[A16], A17: Gen[A17], A18: Gen[A18], A19: Gen[A19], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, f1(A16, f1(A17, f1(A18, f1(A19, Z))))))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, f1(using A16, f1(using A17, f1(using A18, f1(using A19, Z))))))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19]): Cogen[Tuple19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19]] =
@@ -330,15 +330,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, Z](f: Z => Option[Tuple19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19]): Cogen[Z] =
-    from19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19)
+    from19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19)
 
   final def from19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, Z](f: Z => Option[Tuple19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19]): Cogen[Z] =
-    tuple19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19).contramap(t => f(t).get)
+    tuple19[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19).contramap(t => f(t).get)
 
   implicit final def f20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], A16: Gen[A16], A17: Gen[A17], A18: Gen[A18], A19: Gen[A19], A20: Gen[A20], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, f1(A16, f1(A17, f1(A18, f1(A19, f1(A20, Z)))))))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, f1(using A16, f1(using A17, f1(using A18, f1(using A19, f1(using A20, Z)))))))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20]): Cogen[Tuple20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20]] =
@@ -348,15 +348,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, Z](f: Z => Option[Tuple20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20]): Cogen[Z] =
-    from20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20)
+    from20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20)
 
   final def from20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, Z](f: Z => Option[Tuple20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20]): Cogen[Z] =
-    tuple20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20).contramap(t => f(t).get)
+    tuple20[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20).contramap(t => f(t).get)
 
   implicit final def f21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], A16: Gen[A16], A17: Gen[A17], A18: Gen[A18], A19: Gen[A19], A20: Gen[A20], A21: Gen[A21], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, f1(A16, f1(A17, f1(A18, f1(A19, f1(A20, f1(A21, Z))))))))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, f1(using A16, f1(using A17, f1(using A18, f1(using A19, f1(using A20, f1(using A21, Z))))))))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20], A21: Cogen[A21]): Cogen[Tuple21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21]] =
@@ -366,15 +366,15 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, Z](f: Z => Option[Tuple21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20], A21: Cogen[A21]): Cogen[Z] =
-    from21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21)
+    from21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21)
 
   final def from21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, Z](f: Z => Option[Tuple21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20], A21: Cogen[A21]): Cogen[Z] =
-    tuple21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21).contramap(t => f(t).get)
+    tuple21[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21).contramap(t => f(t).get)
 
   implicit final def f22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, Z](implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5], A6: Gen[A6], A7: Gen[A7], A8: Gen[A8], A9: Gen[A9], A10: Gen[A10], A11: Gen[A11], A12: Gen[A12], A13: Gen[A13], A14: Gen[A14], A15: Gen[A15], A16: Gen[A16], A17: Gen[A17], A18: Gen[A18], A19: Gen[A19], A20: Gen[A20], A21: Gen[A21], A22: Gen[A22], Z: Cogen[Z]): Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22) => Z] =
     new Cogen[(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22) => Z] {
       def cogen[X](f: (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22) => Z, g: CogenState[X]) =
-        f1(A1, f1(A2, f1(A3, f1(A4, f1(A5, f1(A6, f1(A7, f1(A8, f1(A9, f1(A10, f1(A11, f1(A12, f1(A13, f1(A14, f1(A15, f1(A16, f1(A17, f1(A18, f1(A19, f1(A20, f1(A21, f1(A22, Z)))))))))))))))))))))).cogen(f.curried, g)
+        f1(using A1, f1(using A2, f1(using A3, f1(using A4, f1(using A5, f1(using A6, f1(using A7, f1(using A8, f1(using A9, f1(using A10, f1(using A11, f1(using A12, f1(using A13, f1(using A14, f1(using A15, f1(using A16, f1(using A17, f1(using A18, f1(using A19, f1(using A20, f1(using A21, f1(using A22, Z)))))))))))))))))))))).cogen(f.curried, g)
     }
 
   implicit final def tuple22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22](implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20], A21: Cogen[A21], A22: Cogen[A22]): Cogen[Tuple22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22]] =
@@ -384,9 +384,9 @@ abstract class CogenInstances private[scalaprops] extends CogenInstances1 {
     }
 
   final def from[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, Z](f: Z => Option[Tuple22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20], A21: Cogen[A21], A22: Cogen[A22]): Cogen[Z] =
-    from22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, Z](f)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22)
+    from22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, Z](f)(using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22)
 
   final def from22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, Z](f: Z => Option[Tuple22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22]])(implicit A1: Cogen[A1], A2: Cogen[A2], A3: Cogen[A3], A4: Cogen[A4], A5: Cogen[A5], A6: Cogen[A6], A7: Cogen[A7], A8: Cogen[A8], A9: Cogen[A9], A10: Cogen[A10], A11: Cogen[A11], A12: Cogen[A12], A13: Cogen[A13], A14: Cogen[A14], A15: Cogen[A15], A16: Cogen[A16], A17: Cogen[A17], A18: Cogen[A18], A19: Cogen[A19], A20: Cogen[A20], A21: Cogen[A21], A22: Cogen[A22]): Cogen[Z] =
-    tuple22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22](A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22).contramap(t => f(t).get)
+    tuple22[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22](using A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22).contramap(t => f(t).get)
 
 }

@@ -19,7 +19,7 @@ object Cogen {
             .mkString(", ")}, $Z: $C[$Z]): $tpeF =
     new $tpeF {
       def cogen[$X](f: $f, g: CogenState[$X]) =
-        ${as.foldRight(Z)((a, s) => s"f1($a, $s)") + ".cogen(f.curried, g)"}
+        ${as.foldRight(Z)((a, s) => s"f1(using $a, $s)") + ".cogen(f.curried, g)"}
     }
 """
 
@@ -40,13 +40,13 @@ object Cogen {
       val fromN =
         s"""
   ${fromDef("from" + i)}
-    tuple$i[$t]($t).contramap(t => f(t).get)
+    tuple$i[$t](using $t).contramap(t => f(t).get)
 """
 
       val from =
         s"""
   ${fromDef("from")}
-    from$i[$t, $Z](f)($t)
+    from$i[$t, $Z](f)(using $t)
 """
 
       if (i == 1) {
