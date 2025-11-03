@@ -22,7 +22,11 @@ object bifoldable {
     Properties.fromProps[(ScalazLaw, *^*->*.T)](
       ScalazLaw.bifoldableAll -> *^*->*.Empty,
       bifoldable.laws[F].mapId((_, *^*->*.Empty)),
-      scalazlaws.foldable.laws[({ type l[a] = F[a, Int] })#l](implicitly, F.leftFoldable[Int]).mapId((_, *^*->*.L)),
-      scalazlaws.foldable.laws[({ type l[a] = F[Int, a] })#l](implicitly, F.rightFoldable[Int]).mapId((_, *^*->*.R))
+      scalazlaws.foldable
+        .laws[({ type l[a] = F[a, Int] })#l](using implicitly, F.leftFoldable[Int])
+        .mapId((_, *^*->*.L)),
+      scalazlaws.foldable
+        .laws[({ type l[a] = F[Int, a] })#l](using implicitly, F.rightFoldable[Int])
+        .mapId((_, *^*->*.R))
     )
 }

@@ -29,7 +29,7 @@ object TestExecutorImpl {
       }
 
       override def execute[A](timeout: Duration)(f: => A): A =
-        Await.result(Future(f)(executionContext), timeout)
+        Await.result(Future(f)(using executionContext), timeout)
 
       override def shutdown(): Unit =
         executionContext.shutdown()

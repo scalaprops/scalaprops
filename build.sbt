@@ -232,6 +232,7 @@ val commonSettings = Def.settings(
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) =>
         Seq(
+          "-Wconf:msg=Implicit parameters should be provided with:error",
           "-Ykind-projector",
         )
       case Some((2, 13)) =>

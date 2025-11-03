@@ -29,7 +29,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
         } else if (res2.isProven || res2.isUnfalsified) {
           res1
         } else Result.NoResult
-      )(gen, p.gen)
+      )(using gen, p.gen)
     )
 
   def or(p: Property): Property =
@@ -44,7 +44,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
         } else if (res2.isProven || res2.isUnfalsified) {
           res2
         } else Result.NoResult
-      )(gen, p.gen)
+      )(using gen, p.gen)
     )
 
   def sequence(p: Property): Property =
@@ -59,7 +59,7 @@ final case class Property(f: (Int, Rand) => (Rand, Result)) {
         } else if (res2.isFalsified) {
           res1
         } else Result.NoResult
-      )(gen, p.gen)
+      )(using gen, p.gen)
     )
 
   // TODO remove `listener` parameter?
@@ -195,47 +195,47 @@ object Property {
     propLazy(Lazy(result))
 
   def forAll[A1](f: A1 => Boolean)(implicit A1: Gen[A1]): Property =
-    forAllS(f)(A1, Shrink.empty)
+    forAllS(f)(using A1, Shrink.empty)
 
   def forAll[A1, A2](f: (A1, A2) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2]): Property =
-    forAllS(f)(A1, A2, Shrink.empty, Shrink.empty)
+    forAllS(f)(using A1, A2, Shrink.empty, Shrink.empty)
 
   def forAll[A1, A2, A3](f: (A1, A2, A3) => Boolean)(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3]): Property =
-    forAllS(f)(A1, A2, A3, Shrink.empty, Shrink.empty, Shrink.empty)
+    forAllS(f)(using A1, A2, A3, Shrink.empty, Shrink.empty, Shrink.empty)
 
   def forAll[A1, A2, A3, A4](
     f: (A1, A2, A3, A4) => Boolean
   )(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4]): Property =
-    forAllS(f)(A1, A2, A3, A4, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty)
+    forAllS(f)(using A1, A2, A3, A4, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty)
 
   def forAll[A1, A2, A3, A4, A5](
     f: (A1, A2, A3, A4, A5) => Boolean
   )(implicit A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5]): Property =
-    forAllS(f)(A1, A2, A3, A4, A5, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty)
+    forAllS(f)(using A1, A2, A3, A4, A5, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty, Shrink.empty)
 
   /** `forAll` with explicit `Gen` */
   def forAllG[A1](A1: Gen[A1])(f: A1 => Boolean): Property =
-    forAll[A1](f)(A1)
+    forAll[A1](f)(using A1)
 
   /** `forAll` with explicit `Gen` */
   def forAllG[A1, A2](A1: Gen[A1], A2: Gen[A2])(f: (A1, A2) => Boolean): Property =
-    forAll[A1, A2](f)(A1, A2)
+    forAll[A1, A2](f)(using A1, A2)
 
   /** `forAll` with explicit `Gen` */
   def forAllG[A1, A2, A3](A1: Gen[A1], A2: Gen[A2], A3: Gen[A3])(f: (A1, A2, A3) => Boolean): Property =
-    forAll[A1, A2, A3](f)(A1, A2, A3)
+    forAll[A1, A2, A3](f)(using A1, A2, A3)
 
   /** `forAll` with explicit `Gen` */
   def forAllG[A1, A2, A3, A4](A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4])(
     f: (A1, A2, A3, A4) => Boolean
   ): Property =
-    forAll[A1, A2, A3, A4](f)(A1, A2, A3, A4)
+    forAll[A1, A2, A3, A4](f)(using A1, A2, A3, A4)
 
   /** `forAll` with explicit `Gen` */
   def forAllG[A1, A2, A3, A4, A5](A1: Gen[A1], A2: Gen[A2], A3: Gen[A3], A4: Gen[A4], A5: Gen[A5])(
     f: (A1, A2, A3, A4, A5) => Boolean
   ): Property =
-    forAll[A1, A2, A3, A4, A5](f)(A1, A2, A3, A4, A5)
+    forAll[A1, A2, A3, A4, A5](f)(using A1, A2, A3, A4, A5)
 
   def property1[A1](f: A1 => Property)(implicit A1: Gen[A1], S1: Shrink[A1]): Property =
     forall0(A1, S1)(f)

@@ -59,7 +59,7 @@ object Gen extends GenInstances0 {
   }
 
   def from[A1, Z](f: A1 => Z)(implicit A1: Gen[A1]): Gen[Z] =
-    from1(f)(A1)
+    from1(f)(using A1)
 
   def from1[A1, Z](f: A1 => Z)(implicit A1: Gen[A1]): Gen[Z] =
     A1.map(f)

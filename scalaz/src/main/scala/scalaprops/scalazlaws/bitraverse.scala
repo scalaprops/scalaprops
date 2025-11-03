@@ -14,10 +14,10 @@ object bitraverse {
     Properties.fromProps(
       ScalazLaw.bitraverse -> *^*->*.Empty,
       traverse
-        .all[({ type l[a] = F[a, Int] })#l](F.leftTraverse[Int], implicitly, implicitly, implicitly)
+        .all[({ type l[a] = F[a, Int] })#l](using F.leftTraverse[Int], implicitly, implicitly, implicitly)
         .mapId((_, *^*->*.L)),
       traverse
-        .all[({ type l[a] = F[Int, a] })#l](F.rightTraverse[Int], implicitly, implicitly, implicitly)
+        .all[({ type l[a] = F[Int, a] })#l](using F.rightTraverse[Int], implicitly, implicitly, implicitly)
         .mapId((_, *^*->*.R)),
       bifoldable.all[F],
       bifunctor.laws[F]

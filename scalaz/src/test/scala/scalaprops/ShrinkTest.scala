@@ -27,7 +27,7 @@ object ShrinkTest extends Scalaprops {
 
       Property.forAllG(Gen.choose(1, x)) { (n: Int) =>
         val result =
-          Property.property1[Int] { i => Property.prop(i < n) }(g, implicitly).check(param0, () => false, _ => ())
+          Property.property1[Int] { i => Property.prop(i < n) }(using g, implicitly).check(param0, () => false, _ => ())
 
         result match {
           case CheckResult.Falsified(_, 0, arg :: Nil, _)
@@ -37,6 +37,6 @@ object ShrinkTest extends Scalaprops {
             sys.error(fail.toString)
         }
       }
-    }(implicitly, Shrink.empty)
+    }(using implicitly, Shrink.empty)
   }
 }

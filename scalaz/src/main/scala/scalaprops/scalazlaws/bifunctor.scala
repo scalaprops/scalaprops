@@ -13,10 +13,10 @@ object bifunctor {
     Properties.fromProps[(ScalazLaw, *^*->*.T)](
       ScalazLaw.bifunctor -> *^*->*.Empty,
       functor
-        .all[({ type l[a] = F[a, Int] })#l](F.leftFunctor[Int], implicitly, implicitly, implicitly)
+        .all[({ type l[a] = F[a, Int] })#l](using F.leftFunctor[Int], implicitly, implicitly, implicitly)
         .mapId((_, *^*->*.L)),
       functor
-        .all[({ type l[a] = F[Int, a] })#l](F.rightFunctor[Int], implicitly, implicitly, implicitly)
+        .all[({ type l[a] = F[Int, a] })#l](using F.rightFunctor[Int], implicitly, implicitly, implicitly)
         .mapId((_, *^*->*.R))
     )
 

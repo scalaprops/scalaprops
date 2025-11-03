@@ -20,13 +20,13 @@ object Gen {
       s"""  implicit final def f$i[$t, $Z](implicit ${as
           .map(a => s"$a: Cogen[$a]")
           .mkString(", ")}, $Z: Gen[$Z]): Gen[$f] =
-    ${as.foldRight(Z)((a, s) => s"f1($a, $s)")}.map(f => (${aa.mkString(", ")}) => f(${aa.mkString(")(")}))
+    ${as.foldRight(Z)((a, s) => s"f1(using $a, $s)")}.map(f => (${aa.mkString(", ")}) => f(${aa.mkString(")(")}))
 
   implicit final def tuple$i[$t](implicit ${as.map(a => s"$a: Gen[$a]").mkString(", ")}): Gen[Tuple$i[$t]] =
-    from$i[$t, Tuple$i[$t]](Tuple$i.apply)($t)
+    from$i[$t, Tuple$i[$t]](Tuple$i.apply)(using $t)
 
   ${from("from")}
-    from$i($ff)($t)
+    from$i($ff)(using $t)
 
   ${from("from" + i)}
     $applyN
