@@ -154,7 +154,7 @@ object TinyMT32 {
   def getDefault(): TinyMT32 = {
     val seed = new Array[Int](4)
     val time: Long = System.nanoTime
-    val threadId: Long = Thread.currentThread.getId
+    val threadId: Long = ThreadIdCompat.threadId()
     seed(0) = (time >>> INT_SIZE).toInt
     seed(1) = time.toInt
     seed(2) = (threadId >>> INT_SIZE).toInt
