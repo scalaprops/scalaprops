@@ -1,3 +1,4 @@
+addSbtPlugin("com.github.xuwei-k" % "sbt-root-aggregate" % "0.1.0")
 addSbtPlugin("net.virtual-void" % "sbt-hackers-digest" % "0.1.2")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")

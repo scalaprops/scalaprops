@@ -275,7 +275,6 @@ val commonSettings = Def.settings(
       },
       enableCrossBuild = true
     ),
-    releaseStepCommandAndRemaining("+ rootNative/publishSigned"),
     releaseStepCommandAndRemaining("sonaRelease"),
     setNextVersion,
     commitNextVersion,
@@ -383,7 +382,7 @@ val root = Project("root", file("."))
     ),
   )
   .aggregate(
-    jvmProjects ++ jsProjects: _* // ignore native
+    (jvmProjects ++ jsProjects ++ nativeProjects) *
   )
 
 lazy val rootJS = project
@@ -404,3 +403,13 @@ lazy val rootNative = project
     commonSettings,
     notPublish
   )
+
+ThisBuild / sbtRootAggregateExclude ++= Seq(
+  "coreRoot",
+  "genRoot",
+  "rootJS",
+  "rootJVM",
+  "rootNative",
+  "scalapropsRoot",
+  "scalazRoot",
+)
