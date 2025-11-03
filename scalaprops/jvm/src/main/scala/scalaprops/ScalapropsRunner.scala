@@ -20,7 +20,7 @@ object ScalapropsRunner {
 
   private[this] def invokeProperties(clazz: Class[?], obj: Scalaprops): List[Properties[Any]] =
     Scalaprops
-      .findTestFields(clazz, classOf[Properties[_]])
+      .findTestFields(clazz, classOf[Properties[?]])
       .map { method =>
         val methodName = NameTransformer.decode(method.getName)
         val props = method.invoke(obj).asInstanceOf[Properties[Any]].props

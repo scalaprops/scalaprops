@@ -33,7 +33,7 @@ object Scalaprops {
   private[scalaprops] def testFieldNames(clazz: Class[?]): Array[String] =
     Array(
       findTestFields(clazz, classOf[Property]),
-      findTestFields(clazz, classOf[Properties[_]])
+      findTestFields(clazz, classOf[Properties[?]])
     ).flatten.map(_.getName)
 
   private[scalaprops] def findTestFields(clazz: Class[?], fieldType: Class[?]): Array[Method] =
