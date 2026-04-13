@@ -8,7 +8,7 @@ addSbtPlugin("com.github.sbt" % "sbt-release" % "1.4.0")
 addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.1")
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.21.0")
 addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.5.2")
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.0")
 
 scalacOptions ++= Seq(
   "-deprecation",
