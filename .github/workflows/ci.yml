@@ -98,7 +98,7 @@ jobs:
     - uses: sbt/setup-sbt@v1
     - run:
        sbt -v
-       "++ 3.7.3!"
+       "++ 3.8.4!"
        rootJVM/Test/compile
        scalapropsJVM/test
        scalazJVM/test
