@@ -67,6 +67,18 @@ def module(id: String): CrossProject =
         ).map(a => s"val $a = scalaprops.$a").mkString(";") // for tab completion
       }
     )
+    .jvmSettings(
+      scalacOptions ++= {
+        if (scalaVersion.value.startsWith("3.3.")) {
+          Seq(
+            "-Yfuture-lazy-vals",
+            "-release:11"
+          )
+        } else {
+          Nil
+        }
+      },
+    )
     .jsSettings(
       scalacOptions += {
         val a = (LocalRootProject / baseDirectory).value.toURI.toString
