@@ -14,9 +14,5 @@ scalacOptions ++= Seq(
   "-deprecation",
   "-unchecked",
   "-language:existentials",
-  "-language:higherKinds",
   "-language:implicitConversions",
-  "-Yno-adapted-args",
 )
-
-fullResolvers ~= { _.filterNot(_.name == "jcenter") }
