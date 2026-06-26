@@ -194,7 +194,6 @@ val commonSettings = Def.settings(
   crossScalaVersions := Scala212 :: Scala213 :: Scala3 :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
-  fullResolvers ~= { _.filterNot(_.name == "jcenter") },
   homepage := Some(url("https://github.com/scalaprops/scalaprops")),
   licenses := Seq("MIT License" -> url("https://opensource.org/licenses/mit-license")),
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
