@@ -143,7 +143,7 @@ lazy val scalaprops = module(scalapropsName)
     }
   )
   .jsSettings(
-    libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion cross CrossVersion.for3Use2_13
+    libraryDependencies += ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
   )
   .nativeSettings(
     libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion,
