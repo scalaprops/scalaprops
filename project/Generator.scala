@@ -17,7 +17,7 @@ object Generator {
       if (file.isFile) {
         IO.read(file) == code
       } else {
-        println(red(file + " not found!"))
+        println(red(s"${file} not found!"))
         false
       }
     }
