@@ -1,6 +1,6 @@
 addSbtPlugin("com.github.xuwei-k" % "sbt-root-aggregate" % "0.1.0")
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2+24-3446737e-SNAPSHOT")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2+24-3446737e-SNAPSHOT")
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.5.12")
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.1")
 addSbtPlugin("com.github.sbt" % "sbt-release" % "1.5.0")

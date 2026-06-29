@@ -120,7 +120,7 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.9",
+    libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.3.9",
   )
   .dependsOn(
     core,
@@ -143,10 +143,10 @@ lazy val scalaprops = module(scalapropsName)
     }
   )
   .jsSettings(
-    libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion cross CrossVersion.for3Use2_13
+    libraryDependencies += ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13).platform(Platform.jvm)
   )
   .nativeSettings(
-    libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion,
+    libraryDependencies += "org.scala-native" %% "test-interface" % nativeVersion,
   )
 
 val tagName = Def.setting {
@@ -382,15 +382,11 @@ val root = Project("root", file("."))
     ScalaUnidoc / unidoc / unidocProjectFilter := {
       (jsProjects ++ nativeProjects).foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
     },
-    packagedArtifacts := Map.empty,
+    packagedArtifacts := Def.uncached(Map.empty),
     artifacts ++= Classpaths.artifactDefs(Seq(Compile / packageDoc, Compile / makePom)).value,
-    packagedArtifacts ++= Classpaths.packaged(Seq(Compile / packageDoc, Compile / makePom)).value,
+    packagedArtifacts ++= Def.uncached(Classpaths.packaged(Seq(Compile / packageDoc, Compile / makePom)).value),
     description := "scalaprops unidoc",
     stripPom { _.label == "dependencies" },
-    Defaults.packageTaskSettings(
-      (Compile / packageDoc),
-      (Compile / unidoc).map { _.flatMap(Path.allSubpaths) }
-    ),
   )
   .aggregate(
     (jvmProjects ++ jsProjects ++ nativeProjects) *
