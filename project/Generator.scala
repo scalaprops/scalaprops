@@ -2,10 +2,14 @@ import sbt.*
 import sbt.Keys.*
 
 object Generator {
-  private[this] val generateCode = TaskKey[Unit]("generateCode")
-  private[this] val generateFiles = SettingKey[Seq[GeneratedCode]]("generateFiles")
-  private[this] val checkGenerateCode = TaskKey[Boolean]("checkGenerateCode")
-  private[this] val checkGenerateCodeError = TaskKey[Unit]("checkGenerateCodeError")
+  @transient
+  private val generateCode = taskKey[Unit]("")
+  @transient
+  private val generateFiles = settingKey[Seq[GeneratedCode]]("")
+  @transient
+  private val checkGenerateCode = taskKey[Boolean]("")
+  @transient
+  private val checkGenerateCodeError = taskKey[Unit]("")
 
   private[this] final case class GeneratedCode(file: File, code: String) {
     def write(): Unit = IO.write(file, code)
