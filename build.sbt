@@ -217,8 +217,9 @@ val commonSettings = Def.settings(
     val tag = tagOrHash.value
     if (isScala3.value) {
       Seq(
-        "-siteroot",
-        baseDirectory.value.getAbsolutePath,
+        "-source-links:github://scalaprops/scalaprops",
+        "-revision",
+        tag
       )
     } else {
       Seq(
