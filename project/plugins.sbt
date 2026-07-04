@@ -1,5 +1,3 @@
-addSbtPlugin("com.github.xuwei-k" % "sbt-root-aggregate" % "0.1.0")
-addSbtPlugin("com.eed3si9n" % "sbt-projectmatrix" % "0.11.0")
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.5.12")
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.1")
 addSbtPlugin("com.github.sbt" % "sbt-release" % "1.5.0")
