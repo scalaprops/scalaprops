@@ -1,6 +1,12 @@
 import build._
-import sbtcrossproject.CrossProject
+import sbt.internal.ProjectMatrix
 import sbtrelease.ReleaseStateTransformations._
+
+val Scala212 = "2.12.21"
+val Scala213 = "2.13.18"
+val Scala3 = "3.3.8"
+
+val scalaVersions = Seq(Scala212, Scala213, Scala3)
 
 val isScala3 = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
@@ -10,38 +16,34 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / useSuperShell := false
 
-// avoid move files
-val CustomCrossType = new sbtcrossproject.CrossType {
-  override def projectDir(crossBase: File, projectType: String) =
-    crossBase / projectType
-
-  override def projectDir(crossBase: File, projectType: sbtcrossproject.Platform) = {
-    val dir = projectType match {
-      case JVMPlatform => "jvm"
-      case JSPlatform => "js"
-      case NativePlatform => "native"
-    }
-    crossBase / dir
+lazy val jvmNative = Def.settings(
+  (Compile / unmanagedSourceDirectories) += {
+    (projectMatrixBaseDirectory.value / "jvm_native/src/main/scala/").getAbsoluteFile
   }
+)
 
-  def shared(projectBase: File, conf: String) =
-    projectBase.getParentFile / "src" / conf / "scala"
+lazy val jsNative = Def.settings(
+  Compile / unmanagedSourceDirectories += {
+    (projectMatrixBaseDirectory.value / "js_native/src/main/scala").getAbsoluteFile
+  },
+)
 
-  override def sharedSrcDir(projectBase: File, conf: String) =
-    Some(shared(projectBase, conf))
-}
-
-def module(id: String): CrossProject =
-  CrossProject(id, file(id))(JSPlatform, JVMPlatform, NativePlatform)
-    .crossType(CustomCrossType)
+def module(
+  id: String,
+  jvm: SettingsDefinition = Nil,
+  js: SettingsDefinition = Nil,
+  native: SettingsDefinition = Nil
+): ProjectMatrix =
+  ProjectMatrix(id, file(id))
+    .defaultAxes()
     .settings(
       commonSettings,
       Seq(Compile, Test).map { c =>
         c / unmanagedSourceDirectories ++= {
-          val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
+          val base = projectMatrixBaseDirectory.value / "src" / Defaults.nameForSrc(c.name)
           CrossVersion.partialVersion(scalaVersion.value) match {
             case Some((v, _)) =>
-              Seq(base / s"scala-${v}")
+              Seq((base / s"scala-${v}").getAbsoluteFile)
             case _ =>
               Nil
           }
@@ -49,14 +51,14 @@ def module(id: String): CrossProject =
       },
       Seq(Compile, Test).map { c =>
         (c / unmanagedSourceDirectories) += {
-          val base = baseDirectory.value.getParentFile / "src" / Defaults.nameForSrc(c.name)
+          val base = projectMatrixBaseDirectory.value / "src" / Defaults.nameForSrc(c.name)
           val dir = CrossVersion.partialVersion(scalaVersion.value) match {
             case Some((2, v)) if v <= 12 =>
               "scala-2.13-"
             case _ =>
               "scala-2.13+"
           }
-          base / dir
+          (base / dir).getAbsoluteFile
         }
       },
       (console / initialCommands) += {
@@ -67,49 +69,72 @@ def module(id: String): CrossProject =
         ).map(a => s"val $a = scalaprops.$a").mkString(";") // for tab completion
       }
     )
-    .jvmSettings(
-      scalacOptions ++= {
-        if (scalaVersion.value.startsWith("3.3.")) {
-          Seq(
-            "-Yfuture-lazy-vals",
-            "-release:11"
-          )
-        } else {
-          Nil
-        }
-      },
-    )
-    .jsSettings(
-      scalacOptions += {
-        val a = (LocalRootProject / baseDirectory).value.toURI.toString
-        val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + tagOrHash.value
-        val key = {
-          if (isScala3.value) {
-            "-scalajs-mapSourceURI"
-          } else {
-            "-P:scalajs:mapSourceURI"
+    .jvmPlatform(
+      scalaVersions,
+      Def.settings(
+        jvm,
+        jvmNative,
+        Seq(Compile, Test).map { x =>
+          x / unmanagedSourceDirectories += {
+            (projectMatrixBaseDirectory.value / "jvm/src" / Defaults.nameForSrc(x.name) / "scala").getAbsoluteFile
           }
-        }
-        s"${key}:$a->$g/"
-      }
+        },
+        scalacOptions ++= {
+          if (scalaVersion.value.startsWith("3.3.")) {
+            Seq(
+              "-Yfuture-lazy-vals",
+              "-release:11"
+            )
+          } else {
+            Nil
+          }
+        },
+      )
     )
-    .nativeSettings(
-      scalapropsNativeSettings,
+    .jsPlatform(
+      scalaVersions,
+      Def.settings(
+        js,
+        jsNative,
+        Seq(Compile, Test).map { x =>
+          x / unmanagedSourceDirectories += {
+            (projectMatrixBaseDirectory.value / "js/src" / Defaults.nameForSrc(x.name) / "scala").getAbsoluteFile
+          }
+        },
+        scalacOptions += {
+          val a = (LocalRootProject / baseDirectory).value.toURI.toString
+          val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + tagOrHash.value
+          val key = {
+            if (isScala3.value) {
+              "-scalajs-mapSourceURI"
+            } else {
+              "-P:scalajs:mapSourceURI"
+            }
+          }
+          s"${key}:$a->$g/"
+        }
+      )
+    )
+    .nativePlatform(
+      scalaVersions,
+      Def.settings(
+        jvmNative,
+        jsNative,
+        scalapropsNativeSettings,
+        Seq(Compile, Test).map { x =>
+          x / unmanagedSourceDirectories += {
+            (projectMatrixBaseDirectory.value / "native/src" / Defaults.nameForSrc(x.name) / "scala").getAbsoluteFile
+          }
+        },
+        native,
+      )
     )
 
-lazy val gen = module("gen")
-  .settings(
-    name := genName,
-    description := "pure functional random value generator"
-  )
-  .platformsSettings(JSPlatform, NativePlatform)(
-    (Compile / unmanagedSourceDirectories) += {
-      baseDirectory.value.getParentFile / "js_native/src/main/scala/"
-    }
-  )
-  .jvmSettings(
-    Generator.settings
-  )
+lazy val gen = module("gen").settings(
+  name := genName,
+  description := "pure functional random value generator",
+  Generator.settings
+)
 
 lazy val core = module("core")
   .settings(
@@ -127,27 +152,22 @@ lazy val scalaz = module("scalaz")
     scalaprops % "test"
   )
 
-lazy val scalaprops = module(scalapropsName)
-  .settings(
-    name := scalapropsName
-  )
-  .dependsOn(
-    core
-  )
-  .jvmSettings(
-    libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
-  )
-  .platformsSettings(JVMPlatform, NativePlatform)(
-    (Compile / unmanagedSourceDirectories) += {
-      baseDirectory.value.getParentFile / "jvm_native/src/main/scala/"
-    }
-  )
-  .jsSettings(
+lazy val scalaprops = module(
+  id = scalapropsName,
+  jvm = Def.settings(
+    libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
+  ),
+  js = Def.settings(
     libraryDependencies += ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
-  )
-  .nativeSettings(
+  ),
+  native = Def.settings(
     libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion,
-  )
+  ),
+).settings(
+  name := scalapropsName
+).dependsOn(
+  core
+)
 
 val tagName = Def.setting {
   s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value
@@ -171,10 +191,6 @@ val unusedWarnings = Def.setting(
   }
 )
 
-val Scala212 = "2.12.21"
-val Scala213 = "2.13.18"
-val Scala3 = "3.3.8"
-
 def stripPom(filter: scala.xml.Node => Boolean): Setting[?] =
   pomPostProcess := { node =>
     import scala.xml._
@@ -190,8 +206,6 @@ val commonSettings = Def.settings(
   _root_.scalaprops.ScalapropsPlugin.autoImport.scalapropsCoreSettings,
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   publishTo := (if (isSnapshot.value) None else localStaging.value),
-  scalaVersion := Scala212,
-  crossScalaVersions := Scala212 :: Scala213 :: Scala3 :: Nil,
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
   homepage := Some(url("https://github.com/scalaprops/scalaprops")),
@@ -279,13 +293,7 @@ val commonSettings = Def.settings(
     commitReleaseVersion,
     UpdateReadme.updateReadmeProcess,
     tagRelease,
-    ReleaseStep(
-      action = { state =>
-        val extracted = Project extract state
-        extracted.runAggregated(extracted.get(thisProjectRef) / (Global / PgpKeys.publishSigned), state)
-      },
-      enableCrossBuild = true
-    ),
+    releaseStepCommandAndRemaining(PgpKeys.publishSigned.key.label),
     releaseStepCommandAndRemaining("sonaRelease"),
     setNextVersion,
     commitNextVersion,
@@ -294,133 +302,49 @@ val commonSettings = Def.settings(
   ),
 ) ++ Seq(Compile, Test).flatMap(c => (c / console / scalacOptions) --= unusedWarnings.value)
 
-lazy val notPublish = Seq(
-  publishArtifact := false,
-  publish := {},
-  publishLocal := {},
-  PgpKeys.publishSigned := {},
-  PgpKeys.publishLocalSigned := {}
-)
-
-lazy val jvmProjects = Seq[ProjectReference](
-  genJVM,
-  coreJVM,
-  scalapropsJVM,
-  scalazJVM
-)
-
-lazy val jsProjects = Seq[ProjectReference](
-  genJS,
-  coreJS,
-  scalapropsJS,
-  scalazJS
-)
-
-lazy val nativeProjects = Seq[ProjectReference](
-  genNative,
-  coreNative,
-  scalapropsNative,
-  scalazNative
-)
-
-lazy val genJS = gen.js
-lazy val genJVM = gen.jvm
-lazy val genNative = gen.native
-lazy val genRoot = project
-  .aggregate(genJS, genJVM, genNative)
-  .settings(
-    commonSettings,
-    notPublish
-  )
-
-lazy val coreJS = core.js
-lazy val coreJVM = core.jvm
-lazy val coreNative = core.native
-lazy val coreRoot = project
-  .aggregate(coreJS, coreJVM, genNative)
-  .settings(
-    commonSettings,
-    notPublish
-  )
-
-lazy val scalazJS = scalaz.js
-lazy val scalazJVM = scalaz.jvm
-lazy val scalazNative = scalaz.native
-lazy val scalazRoot = project
-  .aggregate(scalazJS, scalazJVM, scalazNative)
-  .settings(
-    commonSettings,
-    notPublish
-  )
-
-lazy val scalapropsJS = scalaprops.js
-lazy val scalapropsJVM = scalaprops.jvm
-lazy val scalapropsNative = scalaprops.native
-lazy val scalapropsRoot = project
-  .aggregate(scalapropsJS, scalapropsJVM, scalapropsNative)
-  .settings(
-    commonSettings,
-    notPublish
-  )
+val all = Seq(gen, core, scalaz, scalaprops)
 
 val root = Project("root", file("."))
-  .settings(
-    commonSettings,
-    (
-      coreJVM ::
-        scalapropsJVM ::
-        scalazJVM ::
-        Nil
-    ).map(p => libraryDependencies ++= (p / libraryDependencies).value)
-  )
   .enablePlugins(
     ScalaUnidocPlugin
   )
   .settings(
+    commonSettings,
     name := allName,
     artifacts := Nil,
+    scalaVersion := Scala3,
     ScalaUnidoc / unidoc / unidocProjectFilter := {
-      (jsProjects ++ nativeProjects).foldLeft(inAnyProject)((acc, a) => acc -- inProjects(a))
+      all.map(_.jvm(Scala3)).map(a => inProjects(a)).reduceLeft(_ && _)
     },
     packagedArtifacts := Map.empty,
     artifacts ++= Classpaths.artifactDefs(Seq(Compile / packageDoc, Compile / makePom)).value,
     packagedArtifacts ++= Classpaths.packaged(Seq(Compile / packageDoc, Compile / makePom)).value,
     description := "scalaprops unidoc",
     stripPom { _.label == "dependencies" },
+    Seq[(String, ProjectMatrix => Seq[Project])](
+      "JVM" -> (_.jvm.get),
+      "JS" -> (_.js.get),
+      "Native" -> (_.native.get),
+    ).map { case (suffix, function) =>
+      TaskKey[Unit]("testSequential" + suffix) := (
+        Def
+          .sequential(
+            all.flatMap(function).map { x =>
+              Def.sequential(
+                Def.task(streams.value.log.info(s"start ${(x / thisProject).value.id} test")),
+                x / Test / test,
+                Def.task(streams.value.log.info(s"end ${(x / thisProject).value.id} test"))
+              )
+            }
+          )
+          .value
+      )
+    },
     Defaults.packageTaskSettings(
       (Compile / packageDoc),
       (Compile / unidoc).map { _.flatMap(Path.allSubpaths) }
     ),
   )
   .aggregate(
-    (jvmProjects ++ jsProjects ++ nativeProjects) *
+    all.flatMap(_.allProjects()).map(_._1: ProjectReference) *
   )
-
-lazy val rootJS = project
-  .aggregate(jsProjects *)
-  .settings(
-    commonSettings,
-    notPublish
-  )
-lazy val rootJVM = project
-  .aggregate(jvmProjects *)
-  .settings(
-    commonSettings,
-    notPublish
-  )
-lazy val rootNative = project
-  .aggregate(nativeProjects *)
-  .settings(
-    commonSettings,
-    notPublish
-  )
-
-ThisBuild / sbtRootAggregateExclude ++= Seq(
-  "coreRoot",
-  "genRoot",
-  "rootJS",
-  "rootJVM",
-  "rootNative",
-  "scalapropsRoot",
-  "scalazRoot",
-)
