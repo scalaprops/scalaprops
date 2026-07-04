@@ -11,7 +11,7 @@ object Generator {
   @transient
   private val checkGenerateCodeError = taskKey[Unit]("")
 
-  private[this] final case class GeneratedCode(file: File, code: String) {
+  private final case class GeneratedCode(file: File, code: String) {
     def write(): Unit = IO.write(file, code)
     def check: Boolean = {
       if (file.isFile) {
@@ -23,7 +23,7 @@ object Generator {
     }
   }
 
-  private[this] def red(str: String) = {
+  private def red(str: String) = {
     ("\n" * 2) + scala.Console.RED + str + ("\n " * 2) + scala.Console.RESET
   }
 
