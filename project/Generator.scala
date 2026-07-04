@@ -1,5 +1,6 @@
 import sbt.*
 import sbt.Keys.*
+import sbtprojectmatrix.ProjectMatrixPlugin.autoImport.*
 
 object Generator {
   @transient
@@ -30,7 +31,7 @@ object Generator {
   val settings: Seq[Def.Setting[?]] = Seq(
     generateFiles := {
       val pack = "scalaprops"
-      val dir = baseDirectory.value / ".." / "src/main/scala" / pack
+      val dir = projectMatrixBaseDirectory.value / "src/main/scala" / pack
       def code(name: String, code: String) = GeneratedCode(dir / name, code)
       List(
         code("CogenInstances.scala", Cogen.gen),
