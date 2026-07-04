@@ -1,5 +1,4 @@
 import build._
-import sbt.internal.ProjectMatrix
 import sbtrelease.ReleaseStateTransformations._
 
 val Scala212 = "2.12.21"
@@ -34,7 +33,7 @@ def module(
   js: SettingsDefinition = Nil,
   native: SettingsDefinition = Nil
 ): ProjectMatrix =
-  ProjectMatrix(id, file(id))
+  ProjectMatrix(id, file(id), this.getClass.getClassLoader)
     .defaultAxes()
     .settings(
       commonSettings,
@@ -145,7 +144,7 @@ lazy val core = module("core")
 lazy val scalaz = module("scalaz")
   .settings(
     name := scalazName,
-    libraryDependencies += "org.scalaz" %%% "scalaz-core" % "7.3.9",
+    libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.3.9",
   )
   .dependsOn(
     core,
@@ -158,10 +157,12 @@ lazy val scalaprops = module(
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0",
   ),
   js = Def.settings(
-    libraryDependencies += ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
+    libraryDependencies += ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion)
+      .cross(CrossVersion.for3Use2_13)
+      .platform(Platform.jvm)
   ),
   native = Def.settings(
-    libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion,
+    libraryDependencies += "org.scala-native" %% "test-interface" % nativeVersion,
   ),
 ).settings(
   name := scalapropsName
@@ -178,7 +179,7 @@ val tagOrHash = Def.setting {
 }
 
 def gitHash(): String =
-  sys.process.Process("git rev-parse HEAD").lineStream_!.head
+  sys.process.Process("git rev-parse HEAD").lazyLines_!.head
 
 val unusedWarnings = Def.setting(
   scalaBinaryVersion.value match {
@@ -304,7 +305,7 @@ val commonSettings = Def.settings(
 
 val all = Seq(gen, core, scalaz, scalaprops)
 
-val root = Project("root", file("."))
+val scalapropsRoot = rootProject.autoAggregate
   .enablePlugins(
     ScalaUnidocPlugin
   )
@@ -316,9 +317,9 @@ val root = Project("root", file("."))
     ScalaUnidoc / unidoc / unidocProjectFilter := {
       all.map(_.jvm(Scala3)).map(a => inProjects(a)).reduceLeft(_ && _)
     },
-    packagedArtifacts := Map.empty,
+    packagedArtifacts := Def.uncached(Map.empty),
     artifacts ++= Classpaths.artifactDefs(Seq(Compile / packageDoc, Compile / makePom)).value,
-    packagedArtifacts ++= Classpaths.packaged(Seq(Compile / packageDoc, Compile / makePom)).value,
+    packagedArtifacts ++= Def.uncached(Classpaths.packaged(Seq(Compile / packageDoc, Compile / makePom)).value),
     description := "scalaprops unidoc",
     stripPom { _.label == "dependencies" },
     Seq[(String, ProjectMatrix => Seq[Project])](
@@ -332,7 +333,7 @@ val root = Project("root", file("."))
             all.flatMap(function).map { x =>
               Def.sequential(
                 Def.task(streams.value.log.info(s"start ${(x / thisProject).value.id} test")),
-                x / Test / test,
+                x / Test / testFull,
                 Def.task(streams.value.log.info(s"end ${(x / thisProject).value.id} test"))
               )
             }
@@ -342,9 +343,9 @@ val root = Project("root", file("."))
     },
     Defaults.packageTaskSettings(
       (Compile / packageDoc),
-      (Compile / unidoc).map { _.flatMap(Path.allSubpaths) }
+      Def.task {
+        given FileConverter = fileConverter.value
+        (Compile / unidoc).value.flatMap(Mapper.allSubpaths)
+      }
     ),
-  )
-  .aggregate(
-    all.flatMap(_.allProjects()).map(_._1: ProjectReference) *
   )

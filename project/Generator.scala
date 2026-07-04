@@ -1,6 +1,5 @@
 import sbt.*
 import sbt.Keys.*
-import sbtprojectmatrix.ProjectMatrixPlugin.autoImport.*
 
 object Generator {
   @transient
