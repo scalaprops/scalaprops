@@ -209,8 +209,8 @@ val commonSettings = Def.settings(
   publishTo := (if (isSnapshot.value) None else localStaging.value),
   organization := "com.github.scalaprops",
   description := "property based testing library for Scala",
-  homepage := Some(url("https://github.com/scalaprops/scalaprops")),
-  licenses := Seq("MIT License" -> url("https://opensource.org/licenses/mit-license")),
+  homepage := Some(uri("https://github.com/scalaprops/scalaprops")),
+  licenses := Seq("MIT License" -> uri("https://opensource.org/licenses/mit-license")),
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
   stripPom { node => node.label == "dependency" && (node \ "scope").text == "test" },
   (Compile / doc / scalacOptions) ++= {
