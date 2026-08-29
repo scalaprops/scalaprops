@@ -11,7 +11,7 @@ object Gen {
       val ff = "f"
 
       val applyN = {
-        (aa, as).zipped.map { _ + " <- " + _ }.mkString("for { ", " ; ", s" } yield $ff(${aa.mkString(", ")})")
+        aa.lazyZip(as).map { _ + " <- " + _ }.mkString("for { ", " ; ", s" } yield $ff(${aa.mkString(", ")})")
       }
 
       def from(name: String) =
