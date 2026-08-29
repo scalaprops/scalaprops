@@ -397,7 +397,7 @@ object ScalapropsScalaz extends ScalapropsScalaz0 {
     Gen.listOf(A).map(IList.fromFoldable(_)) // TODO optimize
   }
 
-  implicit val genInstance: Monad[Gen] with BindRec[Gen] =
+  implicit val genInstance: Monad[Gen] & BindRec[Gen] =
     new Monad[Gen] with BindRec[Gen] {
       override def bind[A, B](fa: Gen[A])(f: A => Gen[B]) =
         fa flatMap f
