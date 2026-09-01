@@ -162,7 +162,7 @@ lazy val scalaprops = module(
       .platform(Platform.jvm)
   ),
   native = Def.settings(
-    libraryDependencies += "org.scala-native" %% "test-interface" % nativeVersion,
+    libraryDependencies += "org.scala-native" %% "test-interface-sbt-defs" % nativeVersion,
   ),
 ).settings(
   name := scalapropsName

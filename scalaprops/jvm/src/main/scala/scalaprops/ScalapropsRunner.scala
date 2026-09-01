@@ -6,6 +6,8 @@ import scala.reflect.NameTransformer
 import scalaprops.internal.*
 
 object ScalapropsRunner {
+  type EnableReflectiveInstantiation = scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
+
   def testFieldNames(clazz: Class[?]): Array[String] =
     Scalaprops.testFieldNames(clazz)
 

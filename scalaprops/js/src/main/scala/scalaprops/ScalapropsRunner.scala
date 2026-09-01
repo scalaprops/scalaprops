@@ -9,6 +9,7 @@ import scala.scalajs.reflect.Reflect
 import scalaprops.internal.*
 
 object ScalapropsRunner {
+  type EnableReflectiveInstantiation = scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 
   /**
    * call from sbt plugin
