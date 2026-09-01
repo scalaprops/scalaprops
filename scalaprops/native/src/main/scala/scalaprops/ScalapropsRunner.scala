@@ -4,6 +4,7 @@ import sbt.testing.*
 import scala.collection.mutable.ArrayBuffer
 
 object ScalapropsRunner {
+  type EnableReflectiveInstantiation = scala.scalanative.reflect.annotation.EnableReflectiveInstantiation
 
   /** call from sbt plugin
     * [[https://github.com/scalaprops/sbt-scalaprops/blob/v0.2.5/src/main/scala/scalaprops/ScalapropsPlugin.scala#L66]]

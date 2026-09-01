@@ -2,10 +2,9 @@ package scalaprops
 
 import java.lang.reflect.Method
 import sbt.testing.Logger
-import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 import scalaprops.internal.*
 
-@EnableReflectiveInstantiation
+@ScalapropsRunner.EnableReflectiveInstantiation
 trait Scalaprops {
   def param: Param = Param.withCurrentTimeSeed()
 
