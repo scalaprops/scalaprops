@@ -62,7 +62,7 @@ jobs:
     - run:
        sbt -v
        --server
-       "++ 3.8.4!"
+       "++ 3.10.0-RC2!"
        genJVM3/test
        coreJVM3/test
        scalapropsJVM3/test
