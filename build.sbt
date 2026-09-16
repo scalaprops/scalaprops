@@ -81,8 +81,13 @@ def module(
         scalacOptions ++= {
           if (scalaVersion.value.startsWith("3.3.")) {
             Seq(
+              "-Ykind-projector",
               "-Yfuture-lazy-vals",
               "-release:11"
+            )
+          } else if (scalaBinaryVersion.value == "3") {
+            Seq(
+              "-Xkind-projector",
             )
           } else {
             Nil
@@ -260,7 +265,6 @@ val commonSettings = Def.settings(
       case Some((3, _)) =>
         Seq(
           "-Wconf:msg=Implicit parameters should be provided with:error",
-          "-Ykind-projector",
         )
       case Some((2, 13)) =>
         Seq(
