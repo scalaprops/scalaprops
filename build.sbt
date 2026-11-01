@@ -133,10 +133,9 @@ def module(
       )
     )
 
-lazy val gen = module("gen").settings(
+lazy val gen = module("gen", jvm = Generator.settings).settings(
   name := genName,
   description := "pure functional random value generator",
-  Generator.settings
 )
 
 lazy val core = module("core")

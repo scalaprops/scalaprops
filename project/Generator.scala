@@ -37,7 +37,13 @@ object Generator {
         code("GenInstances.scala", Gen.gen)
       )
     },
-    generateCode := generateFiles.value.foreach(_.write()),
+    generateCode := {
+      if (scalaBinaryVersion.value == "3") {
+        generateFiles.value.foreach(_.write())
+      } else {
+        ()
+      }
+    },
     checkGenerateCode := generateFiles.value.forall(_.check),
     checkGenerateCodeError := {
       generateCode.value
