@@ -46,7 +46,7 @@ object FutureTest extends Scalaprops {
       }
     }
 
-  val laws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.cobind.all[Future],
     scalazlaws.monadError.all[Future, Throwable],
     scalazlaws.equal.all[Future[Int]]

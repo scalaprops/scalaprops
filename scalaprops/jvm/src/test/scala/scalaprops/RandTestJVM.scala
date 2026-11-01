@@ -13,6 +13,6 @@ object RandTestJVM extends Scalaprops {
       }
     )
 
-  val chooseLong32 = chooseLong(l => MersenneTwister32.fromSeed(l.toInt))
-  val chooseLong64 = chooseLong(MersenneTwister64.standard)
+  property("chooseLong32") = chooseLong(l => MersenneTwister32.fromSeed(l.toInt))
+  property("chooseLong64") = chooseLong(MersenneTwister64.standard)
 }

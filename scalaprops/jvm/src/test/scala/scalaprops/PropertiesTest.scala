@@ -6,7 +6,7 @@ import scalaprops.internal.Tree
 object PropertiesTest extends Scalaprops {
   // https://typelevel.org/blog/2013/11/17/discipline.html
 
-  val ` "directed acyclic graph" to tree` = forAll {
+  property("`directed acyclic graph` to tree") = forAll {
     val functor = Tree.Leaf("functor")
     val cobind = Tree.Node("cobind", Stream(functor))
     val apply = Tree.Node("apply", Stream(functor))
