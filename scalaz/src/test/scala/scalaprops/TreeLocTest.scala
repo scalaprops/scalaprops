@@ -6,13 +6,13 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object TreeLocTest extends Scalaprops {
-  val laws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.order.all[TreeLoc[Byte]],
     scalazlaws.traverse1.all[TreeLoc],
     scalazlaws.comonad.all[TreeLoc]
   )
 
-  val treeLocGenSized = {
+  property("treeLocGenSized") = {
     Property.forAllG(Gen.positiveByte, Gen[Long]) { (n, seed) =>
       val size = 5
       val a = ScalapropsScalaz

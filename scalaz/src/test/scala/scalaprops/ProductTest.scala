@@ -9,7 +9,7 @@ import scalaz.std.tuple.tuple2Equal
 object ProductTest extends Scalaprops {
   private[this] type DByte[a] = Byte \/ a
 
-  val maybeMaybe = {
+  property("maybeMaybe") = {
     type F[A] = (Maybe[A], Maybe[A])
 
     implicit val instance1: MonadPlus[F] =
@@ -28,7 +28,7 @@ object ProductTest extends Scalaprops {
     )
   }
 
-  val maybeIList = {
+  property("maybeIList") = {
     type F[A] = (Maybe[A], IList[A])
 
     implicit val instance1: MonadPlus[F] =
@@ -47,7 +47,7 @@ object ProductTest extends Scalaprops {
     )
   }
 
-  val iListIList = {
+  property("iListIList") = {
     type F[A] = (IList[A], IList[A])
 
     implicit val instance1: MonadPlus[F] =
@@ -66,7 +66,7 @@ object ProductTest extends Scalaprops {
     )
   }
 
-  val disjunction2 = {
+  property("disjunction2") = {
     type F[A] = (DByte[A], DByte[A])
 
     implicit val instance1: Monad[F] =
@@ -85,7 +85,7 @@ object ProductTest extends Scalaprops {
     )
   }
 
-  val maybeDisjuction = {
+  property("maybeDisjuction") = {
     type F[A] = (Maybe[A], DByte[A])
 
     implicit val instance1: Monad[F] =
@@ -104,7 +104,7 @@ object ProductTest extends Scalaprops {
     )
   }
 
-  val nelNel = {
+  property("nelNel") = {
     type F[A] = (NonEmptyList[A], NonEmptyList[A])
 
     implicit val instance1: Monad[F] =
@@ -127,7 +127,7 @@ object ProductTest extends Scalaprops {
     )
   }
 
-  val treeNel = {
+  property("treeNel") = {
     type F[A] = (Tree[A], NonEmptyList[A])
 
     implicit val instance1: Monad[F] =

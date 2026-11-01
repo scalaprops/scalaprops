@@ -11,6 +11,6 @@ object EndoTest extends Scalaprops {
     Equal[A => A].contramap(_.run)
   }
 
-  val testInvariantFunctor = scalazlaws.invariantFunctor.all[scalaz.Endo]
-  val testMonoid = scalazlaws.monoid.all[scalaz.Endo[Int]]
+  property("invariantFunctor") = scalazlaws.invariantFunctor.all[scalaz.Endo]
+  property("monoid") = scalazlaws.monoid.all[scalaz.Endo[Int]]
 }

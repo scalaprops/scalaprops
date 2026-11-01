@@ -8,19 +8,19 @@ import scalaz.std.anyVal.*
 object TheseTTest extends Scalaprops {
   private[this] type E = IList[Byte]
 
-  val idSemigroup = {
+  property("idSemigroup") = {
     type F[A] = A
     Properties.list(
       scalazlaws.semigroup.all[TheseT[F, E, E]]
     )
   }
-  val maybeSemigroup = {
+  property("maybeSemigroup") = {
     type F[A] = Maybe[A]
     Properties.list(
       scalazlaws.semigroup.all[TheseT[F, E, E]]
     )
   }
-  val iListSemigroup = {
+  property("iListSemigroup") = {
     type F[A] = IList[A]
     Properties
       .list(
@@ -28,35 +28,35 @@ object TheseTTest extends Scalaprops {
       )
       .andThenParam(Param.maxSize(10))
   }
-  val disjunctionSemigroup = {
+  property("disjunctionSemigroup") = {
     type F[A] = E \/ A
     Properties.list(
       scalazlaws.semigroup.all[TheseT[F, E, E]]
     )
   }
 
-  val id2 = {
+  property("id2") = {
     type F[A] = A
     type G[A, B] = TheseT[F, A, B]
     scalazlaws.bitraverse.all[G]
   }
-  val maybe2 = {
+  property("maybe2") = {
     type F[A] = Maybe[A]
     type G[A, B] = TheseT[F, A, B]
     scalazlaws.bitraverse.all[G]
   }
-  val iList2 = {
+  property("iList2") = {
     type F[A] = IList[A]
     type G[A, B] = TheseT[F, A, B]
     scalazlaws.bitraverse.all[G]
   }
-  val disjunction2 = {
+  property("disjunction2") = {
     type F[A] = E \/ A
     type G[A, B] = TheseT[F, A, B]
     scalazlaws.bitraverse.all[G]
   }
 
-  val id1 = {
+  property("id1") = {
     type F[A] = A
     type G[A] = TheseT[F, E, A]
     Properties.list(
@@ -64,7 +64,7 @@ object TheseTTest extends Scalaprops {
       scalazlaws.monad.all[G]
     )
   }
-  val maybe1 = {
+  property("maybe1") = {
     type F[A] = Maybe[A]
     type G[A] = TheseT[F, E, A]
     Properties.list(
@@ -72,7 +72,7 @@ object TheseTTest extends Scalaprops {
       scalazlaws.monad.all[G]
     )
   }
-  val iList1 = {
+  property("iList1") = {
     type F[A] = IList[A]
     type G[A] = TheseT[F, E, A]
     Properties.list(
@@ -80,7 +80,7 @@ object TheseTTest extends Scalaprops {
       scalazlaws.monad.all[G]
     )
   }
-  val disjunction1 = {
+  property("disjunction1") = {
     type F[A] = E \/ A
     type G[A] = TheseT[F, E, A]
     Properties.list(
@@ -89,5 +89,5 @@ object TheseTTest extends Scalaprops {
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = TheseT[f, E, a] })#l]
+  property("monadTrans") = scalazlaws.monadTrans.all[({ type l[f[_], a] = TheseT[f, E, a] })#l]
 }

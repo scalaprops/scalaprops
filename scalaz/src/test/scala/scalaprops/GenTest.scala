@@ -35,14 +35,13 @@ object GenTest extends Scalaprops {
       }
     }
 
-  val testLaw =
-    Properties.list(
-      scalazlaws.monad.all[Gen],
-      scalazlaws.bindRec.all[Gen],
-      scalazlaws.equal.all[Gen[Int]]
-    )
+  property("law") = Properties.list(
+    scalazlaws.monad.all[Gen],
+    scalazlaws.bindRec.all[Gen],
+    scalazlaws.equal.all[Gen[Int]]
+  )
 
-  val `test Gen.elements` = {
+  property(" Gen.elements") = {
     val N = 5
 
     Property
@@ -57,7 +56,7 @@ object GenTest extends Scalaprops {
       .toProperties((), Param.rand(Rand.fromSeed()))
   }
 
-  val `test Gen.sequenceNList` = {
+  property(" Gen.sequenceNList") = {
     val min = 5
     val max = 30
     val a = -500
@@ -70,21 +69,20 @@ object GenTest extends Scalaprops {
     }
   }
 
-  val `test Gen.frequencey` =
-    Property.forAllG(
-      Gen.sequenceNList(
-        100,
-        Gen.frequency(
-          1 -> Gen.value(true),
-          5 -> Gen.value(false)
-        )
+  property(" Gen.frequencey") = Property.forAllG(
+    Gen.sequenceNList(
+      100,
+      Gen.frequency(
+        1 -> Gen.value(true),
+        5 -> Gen.value(false)
       )
-    ) { list =>
-      val (t, f) = list.partition(identity)
-      (t.size < f.size) && t.nonEmpty
-    }
+    )
+  ) { list =>
+    val (t, f) = list.partition(identity)
+    (t.size < f.size) && t.nonEmpty
+  }
 
-  val testMaybeGen = Property.forAllG(
+  property("maybeGen") = Property.forAllG(
     Gen[Int],
     Gen.choose(500, 10000),
     Gen[Int]
@@ -94,65 +92,65 @@ object GenTest extends Scalaprops {
     (values.size == listSize) && (just > (listSize / 2)) && (just < listSize)
   }
 
-  val choose = Property.forAll { (a: Int, b: Int, size: Int, seed: Long) =>
+  property("choose") = Property.forAll { (a: Int, b: Int, size: Int, seed: Long) =>
     val x = Gen.choose(a, b).sample(size = size, seed = seed)
     val max = math.max(a, b)
     val min = math.min(a, b)
     (min <= x) && (x <= max)
   }
 
-  val listOfN_1 = Property.forAll { (size0: Byte, seed: Long) =>
+  property("listOfN_1") = Property.forAll { (size0: Byte, seed: Long) =>
     val size = math.abs(size0.toInt)
     val result = Gen.listOfN(size, Gen[Unit]).map(_.size).sample(seed = seed)
     result <= size
   }
 
-  val listOfN_2 = Property.forAll { (seed: Long) =>
+  property("listOfN_2") = Property.forAll { (seed: Long) =>
     val size = 3
     Gen.listOfN(size, Gen[Unit]).map(_.size).samples(seed = seed, listSize = 100).distinct.size == (size + 1)
   }
 
-  val arrayOfN = Property.forAll { (size0: Byte, seed: Long) =>
+  property("arrayOfN") = Property.forAll { (size0: Byte, seed: Long) =>
     val size = math.abs(size0.toInt)
     val result = Gen.arrayOfN(size, Gen[Unit]).map(_.size).sample(seed = seed)
     result <= size
   }
 
-  val posLong = Property.forAllG(Gen.positiveLong) { _ > 0 }
-  val posInt = Property.forAllG(Gen.positiveInt) { _ > 0 }
-  val posShort = Property.forAllG(Gen.positiveShort) { _ > 0 }
-  val posByte = Property.forAllG(Gen.positiveByte) { _ > 0 }
-  val posFloat = Property.forAllG(Gen.positiveFloat) { _ > 0.0f }
-  val posDouble = Property.forAllG(Gen.positiveDouble) { _ > 0.0d }
-  val posFiniteFloat = Property.forAllG(Gen.positiveFiniteFloat) { f => f > 0.0f && !f.isInfinity }
-  val posFiniteDouble = Property.forAllG(Gen.positiveFiniteDouble) { d => d > 0.0d && !d.isInfinity }
+  property("posLong") = Property.forAllG(Gen.positiveLong) { _ > 0 }
+  property("posInt") = Property.forAllG(Gen.positiveInt) { _ > 0 }
+  property("posShort") = Property.forAllG(Gen.positiveShort) { _ > 0 }
+  property("posByte") = Property.forAllG(Gen.positiveByte) { _ > 0 }
+  property("posFloat") = Property.forAllG(Gen.positiveFloat) { _ > 0.0f }
+  property("posDouble") = Property.forAllG(Gen.positiveDouble) { _ > 0.0d }
+  property("posFiniteFloat") = Property.forAllG(Gen.positiveFiniteFloat) { f => f > 0.0f && !f.isInfinity }
+  property("posFiniteDouble") = Property.forAllG(Gen.positiveFiniteDouble) { d => d > 0.0d && !d.isInfinity }
 
-  val negLong = Property.forAllG(Gen.negativeLong) { _ < 0 }
-  val negInt = Property.forAllG(Gen.negativeInt) { _ < 0 }
-  val negShort = Property.forAllG(Gen.negativeShort) { _ < 0 }
-  val negByte = Property.forAllG(Gen.negativeByte) { _ < 0 }
-  val negFloat = Property.forAllG(Gen.negativeFloat) { _.compare(0.0f) < 0 }
-  val negDouble = Property.forAllG(Gen.negativeDouble) { _.compare(0.0d) < 0 }
-  val negFiniteFloat = Property.forAllG(Gen.negativeFiniteFloat) { f => f.compare(0.0f) < 0 && !f.isInfinity }
-  val negFiniteDouble = Property.forAllG(Gen.negativeFiniteDouble) { d => d.compare(0.0d) < 0 && !d.isInfinity }
+  property("negLong") = Property.forAllG(Gen.negativeLong) { _ < 0 }
+  property("negInt") = Property.forAllG(Gen.negativeInt) { _ < 0 }
+  property("negShort") = Property.forAllG(Gen.negativeShort) { _ < 0 }
+  property("negByte") = Property.forAllG(Gen.negativeByte) { _ < 0 }
+  property("negFloat") = Property.forAllG(Gen.negativeFloat) { _.compare(0.0f) < 0 }
+  property("negDouble") = Property.forAllG(Gen.negativeDouble) { _.compare(0.0d) < 0 }
+  property("negFiniteFloat") = Property.forAllG(Gen.negativeFiniteFloat) { f => f.compare(0.0f) < 0 && !f.isInfinity }
+  property("negFiniteDouble") = Property.forAllG(Gen.negativeFiniteDouble) { d => d.compare(0.0d) < 0 && !d.isInfinity }
 
-  val nonNegLong = Property.forAllG(Gen.nonNegativeLong) { 0 <= _ }
-  val nonNegInt = Property.forAllG(Gen.nonNegativeInt) { 0 <= _ }
-  val nonNegShort = Property.forAllG(Gen.nonNegativeShort) { 0 <= _ }
-  val nonNegByte = Property.forAllG(Gen.nonNegativeByte) { 0 <= _ }
-  val nonNegFloat = Property.forAllG(Gen.nonNegativeFloat) { f => f.compare(0.0f) >= 0 && !f.isNaN }
-  val nonNegDouble = Property.forAllG(Gen.nonNegativeDouble) { f => f.compare(0.0d) >= 0 && !f.isNaN }
-  val nonNegFiniteFloat = Property.forAllG(Gen.nonNegativeFiniteFloat) { f =>
+  property("nonNegLong") = Property.forAllG(Gen.nonNegativeLong) { 0 <= _ }
+  property("nonNegInt") = Property.forAllG(Gen.nonNegativeInt) { 0 <= _ }
+  property("nonNegShort") = Property.forAllG(Gen.nonNegativeShort) { 0 <= _ }
+  property("nonNegByte") = Property.forAllG(Gen.nonNegativeByte) { 0 <= _ }
+  property("nonNegFloat") = Property.forAllG(Gen.nonNegativeFloat) { f => f.compare(0.0f) >= 0 && !f.isNaN }
+  property("nonNegDouble") = Property.forAllG(Gen.nonNegativeDouble) { f => f.compare(0.0d) >= 0 && !f.isNaN }
+  property("nonNegFiniteFloat") = Property.forAllG(Gen.nonNegativeFiniteFloat) { f =>
     f.compare(0.0f) >= 0 && !f.isInfinity && !f.isNaN
   }
-  val nonNegFiniteDouble = Property.forAllG(Gen.nonNegativeFiniteDouble) { d =>
+  property("nonNegFiniteDouble") = Property.forAllG(Gen.nonNegativeFiniteDouble) { d =>
     d.compare(0.0d) >= 0 && !d.isInfinity && !d.isNaN
   }
 
-  val finiteFloat = Property.forAllG(Gen.genFiniteFloat) { f => !f.isInfinity && !f.isNaN }
-  val finiteDouble = Property.forAllG(Gen.genFiniteDouble) { d => !d.isInfinity && !d.isNaN }
+  property("finiteFloat") = Property.forAllG(Gen.genFiniteFloat) { f => !f.isInfinity && !f.isNaN }
+  property("finiteDouble") = Property.forAllG(Gen.genFiniteDouble) { d => !d.isInfinity && !d.isNaN }
 
-  val genFunction = {
+  property("genFunction") = {
     def test1[A: Gen: Cogen](name: String) =
       test[A, A](s"$name => $name")
 
@@ -191,7 +189,7 @@ object GenTest extends Scalaprops {
       .composeParam(Param.minSuccessful(20))
   }
 
-  val functionGenTest = {
+  property("functionGenTest") = {
     def permutations[A](xs: IList[A], n: Int): IList[IList[A]] =
       if (xs.isEmpty) {
         IList.empty

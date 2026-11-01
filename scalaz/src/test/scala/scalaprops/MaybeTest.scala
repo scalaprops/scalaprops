@@ -6,7 +6,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object MaybeTest extends Scalaprops {
-  val testLaws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.monadPlusStrong.all[Maybe],
     scalazlaws.bindRec.all[Maybe],
     scalazlaws.traverse.all[Maybe],
@@ -16,7 +16,7 @@ object MaybeTest extends Scalaprops {
     scalazlaws.zip.all[Maybe]
   )
 
-  val test2 = Properties.list(
+  property("test2") = Properties.list(
     scalazlaws.monoid.all[Maybe[Int]],
     scalazlaws.semilattice.all[Maybe[ISet[Int]]]
   )

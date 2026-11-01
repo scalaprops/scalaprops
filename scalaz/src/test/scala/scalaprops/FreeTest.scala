@@ -31,10 +31,9 @@ object FreeTest extends Scalaprops {
       F.map(Free.liftF(_))
     )
 
-  val bindRecIList =
-    scalazlaws.bindRec.laws[({ type l[a] = Free[IList, a] })#l].andThenParam(Param.maxSize(1))
+  property("bindRecIList") = scalazlaws.bindRec.laws[({ type l[a] = Free[IList, a] })#l].andThenParam(Param.maxSize(1))
 
-  val testMaybe = {
+  property("maybe") = {
     type F[A] = Free[Maybe, A]
 
     Properties.list(
@@ -45,7 +44,7 @@ object FreeTest extends Scalaprops {
     )
   }
 
-  val testIList = {
+  property("iList") = {
     type F[A] = Free[IList, A]
 
     Properties.list(
@@ -55,7 +54,7 @@ object FreeTest extends Scalaprops {
     )
   }
 
-  val testNel = {
+  property("nel") = {
     type F[A] = Free[NonEmptyList, A]
 
     Properties.list(
@@ -65,7 +64,7 @@ object FreeTest extends Scalaprops {
     )
   }
 
-  val testDisjunction = {
+  property("disjunction") = {
     type S[a] = Int \/ a
     type F[A] = Free[S, A]
     implicit val m = Free.freeMonad[S]

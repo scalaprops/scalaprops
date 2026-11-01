@@ -6,7 +6,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object ConstTest extends Scalaprops {
-  val testInt = {
+  property("int") = {
     type F[A] = Const[Int, A]
     Properties.list(
       scalazlaws.applicative.all[F],

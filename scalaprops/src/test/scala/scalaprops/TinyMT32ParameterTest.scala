@@ -2,7 +2,7 @@ package scalaprops
 
 @scalajs.js.annotation.JSExportAll
 object TinyMT32ParameterTest extends Scalaprops {
-  val testGetThreadLocalParameter = Property.forAll {
+  property("getThreadLocalParameter") = Property.forAll {
     val p0 = TinyMT32Parameter.getThreadLocalParameter(0)
     val p1 = TinyMT32Parameter.getThreadLocalParameter(1)
     val pm2 = TinyMT32Parameter.getThreadLocalParameter(-2)
@@ -10,7 +10,7 @@ object TinyMT32ParameterTest extends Scalaprops {
     p0.mat1 != pm2.mat1
   }
 
-  val testGetDefaultParameter = Property.forAll {
+  property("getDefaultParameter") = Property.forAll {
     val p = TinyMT32Parameter.getDefaultParameter
     // d8524022ed8dff4a8dcc50c798faba43,32,0,8f7011ee,fc78ff1f,3793fdff,63,0
     val pol = new F2Polynomial("d8524022ed8dff4a8dcc50c798faba43", 16)

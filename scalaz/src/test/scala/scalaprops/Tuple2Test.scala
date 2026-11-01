@@ -7,12 +7,12 @@ import scalaz.std.tuple.*
 
 @scalajs.js.annotation.JSExportAll
 object Tuple2Test extends Scalaprops {
-  val bitraverse = scalazlaws.bitraverse.all[Tuple2]
-  val associative = scalazlaws.associative.all[Tuple2]
+  property("bitraverse") = scalazlaws.bitraverse.all[Tuple2]
+  property("associative") = scalazlaws.associative.all[Tuple2]
 
-  val bindRec = scalazlaws.bindRec.laws[({ type l[a] = (Byte, a) })#l]
+  property("bindRec") = scalazlaws.bindRec.laws[({ type l[a] = (Byte, a) })#l]
 
-  val laws1 = {
+  property("laws1") = {
     type F[A] = (IList[Boolean], A)
     Properties.list(
       scalazlaws.monad.all[F],
@@ -21,7 +21,7 @@ object Tuple2Test extends Scalaprops {
     )
   }
 
-  val laws0 = Properties.list(
+  property("laws0") = Properties.list(
     scalazlaws.monoid.all[(IList[Boolean], IList[Boolean])],
     scalazlaws.order.all[(Byte, Byte)]
   )

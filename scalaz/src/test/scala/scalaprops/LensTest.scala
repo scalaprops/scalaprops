@@ -15,14 +15,14 @@ object LensTest extends Scalaprops {
   ): Equal[LensFamily[A, B, C, D]] =
     A.contramap[LensFamily[A, B, C, D]](_.run)
 
-  val testCategoryLaw = {
+  property("categoryLaw") = {
     implicit val l = Gen.value(Lens.lensId[Int])
     scalazlaws.category.all[Lens]
   }
 
-  val testId = scalazlaws.lens.all(Lens.lensId[Int])
-  val testTrivial = scalazlaws.lens.all(Lens.trivialLens[Int])
-  val testCodiag = scalazlaws.lens.all(Lens.codiagLens[Int])
-  val testFirst = scalazlaws.lens.all(Lens.firstLens[Int, Int])
-  val testSecond = scalazlaws.lens.all(Lens.secondLens[Int, Int])
+  property("id") = scalazlaws.lens.all(Lens.lensId[Int])
+  property("trivial") = scalazlaws.lens.all(Lens.trivialLens[Int])
+  property("codiag") = scalazlaws.lens.all(Lens.codiagLens[Int])
+  property("first") = scalazlaws.lens.all(Lens.firstLens[Int, Int])
+  property("second") = scalazlaws.lens.all(Lens.secondLens[Int, Int])
 }

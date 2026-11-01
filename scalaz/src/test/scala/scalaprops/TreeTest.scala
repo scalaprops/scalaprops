@@ -6,7 +6,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object TreeTest extends Scalaprops {
-  val laws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.traverse1.all[scalaz.Tree],
     scalazlaws.align.all[scalaz.Tree],
     scalazlaws.zip.all[scalaz.Tree],
@@ -14,9 +14,9 @@ object TreeTest extends Scalaprops {
     scalazlaws.monad.all[scalaz.Tree]
   )
 
-  val order = scalazlaws.order.all[scalaz.Tree[Int]]
+  property("order") = scalazlaws.order.all[scalaz.Tree[Int]]
 
-  val treeGenSized = Property
+  property("treeGenSized") = Property
     .forAllG(Gen.positiveByte, Gen[Long]) { (n, seed) =>
       val size = 5
       val a = ScalapropsScalaz
@@ -71,7 +71,7 @@ object TreeTest extends Scalaprops {
     Properties.list(tests.head, tests.tail*)
   }
 
-  val treeGenSize = {
+  property("treeGenSize") = {
     val F = Foldable[scalaz.Tree]
     val p = { (size: Int) =>
       Property.forAll { (tree: scalaz.Tree[Int]) =>

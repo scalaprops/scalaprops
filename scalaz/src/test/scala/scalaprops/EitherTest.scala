@@ -6,11 +6,11 @@ import scalaz.std.either.*
 
 @scalajs.js.annotation.JSExportAll
 object EitherTest extends Scalaprops {
-  val bitraverse = scalazlaws.bitraverse.all[Either]
-  val associative = scalazlaws.associative.all[Either]
-  val order = scalazlaws.order.all[Int Either Int]
+  property("bitraverse") = scalazlaws.bitraverse.all[Either]
+  property("associative") = scalazlaws.associative.all[Either]
+  property("order") = scalazlaws.order.all[Int Either Int]
 
-  val laws1 = {
+  property("laws1") = {
     type T[A] = Either[Int, A]
     Properties.list(
       scalazlaws.monadError.all[({ type l[a] = Either[Byte, a] })#l, Byte],

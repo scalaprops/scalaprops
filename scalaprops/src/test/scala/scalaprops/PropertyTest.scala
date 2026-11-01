@@ -2,7 +2,7 @@ package scalaprops
 
 @scalajs.js.annotation.JSExportAll
 object PropertyTest extends Scalaprops {
-  val `"forAll(result: => Boolean)" is lazy` = Property.forAll {
+  property(""""forAll(result: => Boolean)" is lazy""") = Property.forAll {
     var sideEffect = false
     val p = Property.forAll {
       sideEffect = true
@@ -13,7 +13,7 @@ object PropertyTest extends Scalaprops {
     sideEffect
   }
 
-  val `Bool#implies is lazy` = Property.forAll {
+  property("Bool#implies is lazy") = Property.forAll {
     val f = Bool.bool(false)
     var flag = true
     def sideEffect(): Unit = flag = false

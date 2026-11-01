@@ -7,11 +7,11 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object IdTTest extends Scalaprops {
-  val monadTrans = scalazlaws.monadTrans.all[IdT]
+  property("monadTrans") = scalazlaws.monadTrans.all[IdT]
 
-  val bindRecIList = scalazlaws.bindRec.laws[({ type l[a] = IdT[IList, a] })#l].andThenParam(Param.maxSize(1))
+  property("bindRecIList") = scalazlaws.bindRec.laws[({ type l[a] = IdT[IList, a] })#l].andThenParam(Param.maxSize(1))
 
-  val id = {
+  property("id") = {
     type F[A] = IdT[Id, A]
     Properties.list(
       scalazlaws.traverse.all[F],
@@ -21,7 +21,7 @@ object IdTTest extends Scalaprops {
     )
   }
 
-  val maybe = {
+  property("maybe") = {
     type F[A] = IdT[Maybe, A]
     Properties.list(
       scalazlaws.traverse.all[F],
@@ -31,7 +31,7 @@ object IdTTest extends Scalaprops {
     )
   }
 
-  val iList = {
+  property("iList") = {
     type F[A] = IdT[IList, A]
     Properties.list(
       scalazlaws.traverse.all[F],

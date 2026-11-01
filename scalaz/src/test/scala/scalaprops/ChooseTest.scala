@@ -33,8 +33,8 @@ object ChooseTest extends Scalaprops {
       )
       .andThenParam(Param.minSuccessful(10))
 
-  val long = test[Long](100000).andThenParam(Param.minSuccessful(3))
-  val int = test[Int]()
-  val short = test[Short]()
-  val byte = test[Byte]()
+  property("long") = test[Long](100000).andThenParam(Param.minSuccessful(3))
+  property("int") = test[Int]()
+  property("short") = test[Short]()
+  property("byte") = test[Byte]()
 }

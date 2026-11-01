@@ -6,7 +6,7 @@ import scalaz.std.AllInstances.*
 
 @scalajs.js.annotation.JSExportAll
 object StrictTreeTest extends Scalaprops {
-  val laws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.traverse1.all[StrictTree],
     scalazlaws.align.all[StrictTree],
     scalazlaws.zip.all[StrictTree],
@@ -14,9 +14,9 @@ object StrictTreeTest extends Scalaprops {
     scalazlaws.monad.all[StrictTree]
   )
 
-  val order = scalazlaws.order.all[StrictTree[Int]]
+  property("order") = scalazlaws.order.all[StrictTree[Int]]
 
-  val strictTreeGenSized = Property
+  property("strictTreeGenSized") = Property
     .forAllG(Gen.positiveByte, Gen[Long]) { (n, seed) =>
       val size = 5
       val a = ScalapropsScalaz
@@ -31,7 +31,7 @@ object StrictTreeTest extends Scalaprops {
     }
     .toProperties((), Param.minSuccessful(10))
 
-  val strictTreeGenSize = {
+  property("strictTreeGenSize") = {
     val F = Foldable[StrictTree]
     val p = { (size: Int) =>
       Property.forAll { (tree: StrictTree[Int]) =>

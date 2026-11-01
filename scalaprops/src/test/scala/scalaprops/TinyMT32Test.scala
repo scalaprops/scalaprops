@@ -4,7 +4,7 @@ import java.util.Arrays
 
 @scalajs.js.annotation.JSExportAll
 object TinyMT32Test extends Scalaprops {
-  val testGetDefault = Property.forAll {
+  property("getDefault") = Property.forAll {
     var tiny = TinyMT32.getDefault(1)
     val c_data = List(0x97b6d625, 0x3a86e2e1, 0xdd7305b1, 0x8e4ef1b0, 0xd60a5515, 0xe3b751f6, 0x7e073136, 0x82e5df8b,
       0xa5e6b3a8, 0x2d91deed)
@@ -22,7 +22,7 @@ object TinyMT32Test extends Scalaprops {
     weight == tiny.getWeight
   }
 
-  val testGetDefaultString = Property.forAll {
+  property("getDefaultString") = Property.forAll {
     var tiny = TinyMT32.getDefault("abcd")
     val c_data = List(0x92264019, 0x3e048b87, 0x0618bd2a, 0x0b85252c, 0xf720f342, 0x73ac4297, 0x20974815, 0x8ac7a201,
       0x7443b188, 0x0b7c6501)
@@ -35,7 +35,7 @@ object TinyMT32Test extends Scalaprops {
     output == c_data
   }
 
-  val testGetDefaultSeedArray = Property.forAll {
+  property("getDefaultSeedArray") = Property.forAll {
     val seeds = Array(1, 2, 3, 4, 5, 6, 7, 8, 9)
     var tiny = TinyMT32.getDefault(seeds)
     val c_data = List(0x7c14361a, 0x41b450a8, 0xfecc94ae, 0xd19693cd, 0x1d8b3ef7, 0xb5c88b3f, 0x45c79c71, 0xc8465811,
@@ -49,7 +49,7 @@ object TinyMT32Test extends Scalaprops {
     output == c_data
   }
 
-  val testGetDefaultArray = Property.forAll {
+  property("getDefaultArray") = Property.forAll {
     val tiny = TinyMT32.getDefaultArray(5, 1L, 1L)
     val c_data = Vector[Vector[Int]](
       Vector(0x97b6d625, 0x3a86e2e1, 0xdd7305b1, 0x8e4ef1b0, 0xd60a5515, 0xe3b751f6, 0x7e073136, 0x82e5df8b, 0xa5e6b3a8,
@@ -74,7 +74,7 @@ object TinyMT32Test extends Scalaprops {
     true
   }
 
-  val testGetDefaultArrayString = Property.forAll {
+  property("getDefaultArrayString") = Property.forAll {
     val tiny = TinyMT32.getDefaultArray(5, "tinyMT", 1)
     val c_data = List(
       List[Int](0xd0065635, 0x8d5e606e, 0x35292e8a, 0xf50272e0, 0x8fa1550b, 0x6aaaed21, 0xb0159b78, 0x4adbe52d,
@@ -100,7 +100,7 @@ object TinyMT32Test extends Scalaprops {
     true
   }
 
-  val testSeedArray = Property.forAll {
+  property("seedArray") = Property.forAll {
     var tiny = TinyMT32.getDefault(1)
     val ar = Array[Int](1, 2, 3, 4, 5, 6, 7, 8, 9)
     val c_data = List(0x7c14361a, 0x41b450a8, 0xfecc94ae, 0xd19693cd, 0x1d8b3ef7, 0xb5c88b3f, 0x45c79c71, 0xc8465811,
@@ -115,7 +115,7 @@ object TinyMT32Test extends Scalaprops {
     output == c_data
   }
 
-  val testSetSeedLong = Property.forAll {
+  property("setSeedLong") = Property.forAll {
     var tiny: TinyMT32 = TinyMT32.getDefault(100)
     val output = new Array[Int](10)
     val c_data = Array[Int](0xeead8165, 0x8715ef2c, 0x23598315, 0x5facb14e, 0x73e28fdf, 0x9826df55, 0x8536bb9c,
@@ -145,7 +145,7 @@ object TinyMT32Test extends Scalaprops {
     Arrays.equals(output, c_data2)
   }
 
-  val testSetSeedArray = Property.forAll {
+  property("setSeedArray") = Property.forAll {
     var tiny = TinyMT32.getDefault().setSeed("abcd")
     val output = new Array[Int](10)
     val c_data = Array[Int](0x92264019, 0x3e048b87, 0x0618bd2a, 0x0b85252c, 0xf720f342, 0x73ac4297, 0x20974815,
@@ -162,7 +162,7 @@ object TinyMT32Test extends Scalaprops {
     Arrays.equals(output, c_data)
   }
 
-  val testNextFloat = Property.forAll {
+  property("nextFloat") = Property.forAll {
     var tiny = TinyMT32.getDefault().setIntSeed(1)
     val c_data = Array[Float](0.5926336050f, 0.2286207080f, 0.8650363684f, 0.5558921099f, 0.8360951543f, 0.8895159960f,
       0.4922972322f, 0.5113201141f, 0.6480515003f, 0.1780070662f)
@@ -177,7 +177,7 @@ object TinyMT32Test extends Scalaprops {
     true
   }
 
-  val testNextDouble = Property.forAll {
+  property("nextDouble") = Property.forAll {
     var tiny = TinyMT32.getDefault().setIntSeed(1)
     val c_data = Array[Double](0.5926336137, 0.8650363501, 0.8360951594, 0.4922972448, 0.6480514799, 0.1497518912,
       0.2052537946, 0.8592087870, 0.6802024140, 0.9528347664)
@@ -192,7 +192,7 @@ object TinyMT32Test extends Scalaprops {
     true
   }
 
-  val testgetThreadLocal = Property.forAll {
+  property("getThreadLocal") = Property.forAll {
     var tiny: TinyMT32 = TinyMT32.getThreadLocal(0)
     assert("80227acb382d7b47f3714bd1223bedaf" == tiny.getCharacteristic)
     tiny = TinyMT32.getThreadLocal(1)

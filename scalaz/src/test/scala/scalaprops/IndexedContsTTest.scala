@@ -23,46 +23,46 @@ object IndexedContsTTest extends Scalaprops {
     scalazlaws.bind.all[F].andThenParam(Param.maxSize(3))
   }
 
-  val maybeMaybe = bindTest[Maybe, Maybe]
-  val iListIList = bindTest[IList, IList]
-  val maybeIList = bindTest[Maybe, IList]
-  val iListMaybe = bindTest[IList, Maybe]
+  property("maybeMaybe") = bindTest[Maybe, Maybe]
+  property("iListIList") = bindTest[IList, IList]
+  property("maybeIList") = bindTest[Maybe, IList]
+  property("iListMaybe") = bindTest[IList, Maybe]
 
-  val testContsTMaybe = {
+  property("contsTMaybe") = {
     type F[A] = ContsT[NonEmptyList, Int, Maybe, A]
     scalazlaws.monadPlus.all[F].andThenParam(Param.maxSize(4))
   }
 
-  val contsTTreeMaybe = {
+  property("contsTTreeMaybe") = {
     type F[A] = ContsT[Tree, Int, Maybe, A]
     scalazlaws.monadPlus.all[F].andThenParam(Param.maxSize(4))
   }
 
-  val testContsTIList = {
+  property("contsTIList") = {
     type F[A] = ContsT[NonEmptyList, Int, IList, A]
     scalazlaws.monadPlus.all[F]
   }
 
-  val testCont = {
+  property("cont") = {
     type F[A] = Conts[NonEmptyList, Int, A]
     scalazlaws.monad.all[F]
   }
 
-  val testBifunctorMaybeMaybe =
+  property("bifunctorMaybeMaybe") =
     scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, A, Int, Maybe, B] })#F]
 
-  val testBifunctorMaybeIList =
+  property("bifunctorMaybeIList") =
     scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[Maybe, A, Int, IList, B] })#F]
 
-  val testBifunctorIListMaybe =
+  property("bifunctorIListMaybe") =
     scalazlaws.bifunctor.all[({ type F[A, B] = IndexedContsT[IList, A, Int, Maybe, B] })#F]
 
-  val testContravariantMaybeMaybe =
+  property("contravariantMaybeMaybe") =
     scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, Int, A, Maybe, Int] })#F]
 
-  val testContravariantMaybeIList =
+  property("contravariantMaybeIList") =
     scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[Maybe, Int, A, IList, Int] })#F]
 
-  val testContravariantIListMaybe =
+  property("contravariantIListMaybe") =
     scalazlaws.contravariant.all[({ type F[A] = IndexedContsT[IList, Int, A, Maybe, Int] })#F]
 }

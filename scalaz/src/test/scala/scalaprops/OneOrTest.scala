@@ -6,7 +6,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object OneOrTest extends Scalaprops {
-  val testIList = {
+  property("iList") = {
     type F[A] = OneOr[IList, A]
 
     Properties.list(
@@ -17,7 +17,7 @@ object OneOrTest extends Scalaprops {
     )
   }
 
-  val testNel = {
+  property("nel") = {
     type F[A] = OneOr[NonEmptyList, A]
 
     Properties.list(

@@ -6,10 +6,10 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object EitherTTest extends Scalaprops {
-  val iListBindRec =
+  property("iListBindRec") =
     scalazlaws.bindRec.laws[({ type l[a] = EitherT[Byte, IList, a] })#l].andThenParam(Param.maxSize(1))
 
-  val maybe = {
+  property("maybe") = {
     type F[A] = EitherT[Int, Maybe, A]
     Properties.list(
       scalazlaws.equal.all[EitherT[Int, Maybe, Int]],
@@ -20,10 +20,9 @@ object EitherTTest extends Scalaprops {
     )
   }
 
-  val maybe2 =
-    scalazlaws.bitraverse.all[({ type l[a, b] = EitherT[a, Maybe, b] })#l]
+  property("maybe2") = scalazlaws.bitraverse.all[({ type l[a, b] = EitherT[a, Maybe, b] })#l]
 
-  val iList = {
+  property("iList") = {
     type F[A] = EitherT[Int, IList, A]
     Properties.list(
       scalazlaws.equal.all[EitherT[Int, IList, Int]],
@@ -33,7 +32,7 @@ object EitherTTest extends Scalaprops {
     )
   }
 
-  val nel = {
+  property("nel") = {
     type F[A] = EitherT[Int, NonEmptyList, A]
     Properties.list(
       scalazlaws.equal.all[EitherT[Int, NonEmptyList, Int]],
@@ -43,5 +42,5 @@ object EitherTTest extends Scalaprops {
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = EitherT[Int, f, a] })#l]
+  property("monadTrans") = scalazlaws.monadTrans.all[({ type l[f[_], a] = EitherT[Int, f, a] })#l]
 }

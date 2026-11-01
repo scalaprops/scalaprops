@@ -12,9 +12,9 @@ object ShrinkTest extends Scalaprops {
     Equal[A => Stream[A]].contramap(_.f)
   }
 
-  val law = scalazlaws.invariantFunctor.all[Shrink]
+  property("law") = scalazlaws.invariantFunctor.all[Shrink]
 
-  val int = {
+  property("int") = {
     val x = 128
 
     Property.property { (seed: Int) =>

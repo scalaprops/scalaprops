@@ -6,6 +6,6 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object ImmutableArrayTest extends Scalaprops {
-  val testEqual = scalazlaws.equal.all[ImmutableArray[Int]]
-  val testFoldable = scalazlaws.foldable.all[ImmutableArray]
+  property("equal") = scalazlaws.equal.all[ImmutableArray[Int]]
+  property("foldable") = scalazlaws.foldable.all[ImmutableArray]
 }

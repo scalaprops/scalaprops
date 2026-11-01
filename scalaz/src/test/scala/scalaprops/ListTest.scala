@@ -6,7 +6,7 @@ import scalaz.std.list.*
 
 @scalajs.js.annotation.JSExportAll
 object ListTest extends Scalaprops {
-  val testLaws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.monadPlusStrong.all[List],
     scalazlaws.align.all[List],
     scalazlaws.zip.all[List],
@@ -15,5 +15,5 @@ object ListTest extends Scalaprops {
     scalazlaws.traverse.all[List]
   )
 
-  val bindRec = scalazlaws.bindRec.laws[List].andThenParam(Param.maxSize(1))
+  property("bindRec") = scalazlaws.bindRec.laws[List].andThenParam(Param.maxSize(1))
 }

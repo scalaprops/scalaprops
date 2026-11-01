@@ -14,7 +14,7 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
   ): Equal[IndexedReaderWriterStateT[R, W, S1, S2, F, A]] =
     F.contramap(_.run)
 
-  val id = {
+  property("id") = {
     type F[A] = RWS[Byte, Short, Int, A]
     Properties.list(
       scalazlaws.bindRec.all[F],
@@ -22,11 +22,11 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
     )
   }
 
-  val bindRecIList = {
+  property("bindRecIList") = {
     scalazlaws.bindRec.laws[({ type l[a] = RWST[Byte, Byte, Byte, IList, a] })#l]
   }.andThenParam(Param.maxSize(1))
 
-  val testMaybe = {
+  property("maybe") = {
     type F[A] = IndexedReaderWriterStateT[Int, Int, Int, Int, Maybe, A]
     Properties.list(
       scalazlaws.bindRec.all[F],
@@ -34,17 +34,17 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
     )
   }
 
-  val testIList = {
+  property("iList") = {
     type F[A] = IndexedReaderWriterStateT[Int, Int, Int, Int, IList, A]
     scalazlaws.monadPlusStrong.all[F]
   }
 
-  val tree = {
+  property("tree") = {
     type F[A] = IndexedReaderWriterStateT[Int, Int, Int, Int, Tree, A]
     scalazlaws.monad.all[F]
   }.composeParam(Param.minSuccessful(10) andThen Param.maxSize(10))
 
-  val nel = {
+  property("nel") = {
     type F[A] = IndexedReaderWriterStateT[Int, Int, Int, Int, NonEmptyList, A]
     Properties.list(
       scalazlaws.monad.all[F],
@@ -52,9 +52,9 @@ object IndexedReaderWriterStateTTest extends Scalaprops {
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = ReaderWriterStateT[Int, Int, Int, f, a] })#l]
+  property("monadTrans") = scalazlaws.monadTrans.all[({ type l[f[_], a] = ReaderWriterStateT[Int, Int, Int, f, a] })#l]
 
-  val monadError = {
+  property("monadError") = {
     type F[A] = RWST[Int, Int, Int, ({ type l[a] = Either[Int, a] })#l, A]
     scalazlaws.monadError.all[F, Int]
   }

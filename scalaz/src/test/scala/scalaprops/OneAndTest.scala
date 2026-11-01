@@ -6,7 +6,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object OneAndTest extends Scalaprops {
-  val testIList = {
+  property("iList") = {
     type F[A] = OneAnd[IList, A]
 
     Properties.list(
@@ -19,7 +19,7 @@ object OneAndTest extends Scalaprops {
     )
   }
 
-  val testMaybe = {
+  property("maybe") = {
     type F[A] = OneAnd[Maybe, A]
 
     Properties.list(
@@ -32,7 +32,7 @@ object OneAndTest extends Scalaprops {
     )
   }
 
-  val testNel = {
+  property("nel") = {
     type F[A] = OneAnd[NonEmptyList, A]
 
     Properties.list(
@@ -45,7 +45,7 @@ object OneAndTest extends Scalaprops {
     )
   }
 
-  val tree = {
+  property("tree") = {
     type F[A] = OneAnd[Tree, A]
 
     Properties.list(

@@ -13,13 +13,13 @@ object TracedTTest extends Scalaprops {
 
   type Z = IList[Boolean]
 
-  val trans = scalazlaws.comonadTrans.all[({ type l[w[_], a] = TracedT[w, Z, a] })#l]
+  property("trans") = scalazlaws.comonadTrans.all[({ type l[w[_], a] = TracedT[w, Z, a] })#l]
 
-  val contravariantMaybe = scalazlaws.contravariant.all[({ type l[a] = TracedT[Maybe, a, Byte] })#l]
-  val contravariantIList = scalazlaws.contravariant.all[({ type l[a] = TracedT[IList, a, Byte] })#l]
-  val contravariantTree = scalazlaws.contravariant.all[({ type l[a] = TracedT[Tree, a, Byte] })#l]
+  property("contravariantMaybe") = scalazlaws.contravariant.all[({ type l[a] = TracedT[Maybe, a, Byte] })#l]
+  property("contravariantIList") = scalazlaws.contravariant.all[({ type l[a] = TracedT[IList, a, Byte] })#l]
+  property("contravariantTree") = scalazlaws.contravariant.all[({ type l[a] = TracedT[Tree, a, Byte] })#l]
 
-  val maybe = {
+  property("maybe") = {
     type F[A] = TracedT[Maybe, Z, A]
     Properties.list(
       scalazlaws.cobind.all[F],
@@ -27,7 +27,7 @@ object TracedTTest extends Scalaprops {
     )
   }
 
-  val iList = {
+  property("iList") = {
     type F[A] = TracedT[IList, Z, A]
     Properties.list(
       scalazlaws.cobind.all[F],
@@ -35,7 +35,7 @@ object TracedTTest extends Scalaprops {
     )
   }
 
-  val nel = {
+  property("nel") = {
     type F[A] = TracedT[NonEmptyList, Z, A]
     Properties.list(
       scalazlaws.comonad.all[F],
@@ -43,7 +43,7 @@ object TracedTTest extends Scalaprops {
     )
   }
 
-  val oneOrNel = {
+  property("oneOrNel") = {
     type G[A] = OneOr[NonEmptyList, A]
     type F[A] = TracedT[G, Z, A]
     Properties.list(
@@ -56,7 +56,7 @@ object TracedTTest extends Scalaprops {
     )
   }
 
-  val tree = {
+  property("tree") = {
     type F[A] = TracedT[Tree, Z, A]
     Properties.list(
       scalazlaws.comonad.all[F],
@@ -64,7 +64,7 @@ object TracedTTest extends Scalaprops {
     )
   }
 
-  val store = {
+  property("store") = {
     type G[A] = Store[Int, A]
     type F[A] = TracedT[G, Z, A]
     import IndexedStoreTTest.indexedStoreTEqual

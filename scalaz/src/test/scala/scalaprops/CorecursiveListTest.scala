@@ -6,7 +6,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object CorecursiveListTest extends Scalaprops {
-  val testLaws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.order.all[CorecursiveList[Byte]],
     scalazlaws.monadPlusStrong.all[CorecursiveList],
     scalazlaws.foldable.all[CorecursiveList],

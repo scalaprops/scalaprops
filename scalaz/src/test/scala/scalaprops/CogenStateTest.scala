@@ -13,6 +13,6 @@ object CogenStateTest extends Scalaprops {
   implicit def cogenStateGen[A](implicit A: Gen[Gen[A]]): Gen[CogenState[A]] =
     Gen.from2(CogenState.apply[A])
 
-  val laws = scalazlaws.functor.all[CogenState]
-  val equal = scalazlaws.equal.all[CogenState[Int]]
+  property("laws") = scalazlaws.functor.all[CogenState]
+  property("equal") = scalazlaws.equal.all[CogenState[Int]]
 }

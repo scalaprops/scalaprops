@@ -7,7 +7,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object IListTest extends Scalaprops {
-  val testLaws = Properties.list(
+  property("laws") = Properties.list(
     scalazlaws.order.all[IList[Byte]],
     scalazlaws.monadPlusStrong.all[IList],
     scalazlaws.traverse.all[IList],
@@ -17,9 +17,9 @@ object IListTest extends Scalaprops {
     scalazlaws.zip.all[IList]
   )
 
-  val bindRec = scalazlaws.bindRec.laws[IList].andThenParam(Param.maxSize(1))
+  property("bindRec") = scalazlaws.bindRec.laws[IList].andThenParam(Param.maxSize(1))
 
-  val listOf = {
+  property("listOf") = {
     val g = for {
       min <- Gen.choose(-10, 50)
       xs <- Gen.listOf(Gen[Byte], min)
@@ -31,5 +31,5 @@ object IListTest extends Scalaprops {
     p.toProperties("minimum length")
   }
 
-  val listOf1 = forAllG(Gen.listOf1(Gen[Byte]))(_.nonEmpty)
+  property("listOf1") = forAllG(Gen.listOf1(Gen[Byte]))(_.nonEmpty)
 }

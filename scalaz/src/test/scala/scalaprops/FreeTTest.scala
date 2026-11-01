@@ -17,7 +17,7 @@ object FreeTTest extends Scalaprops {
       }
     }
 
-  val isoIList = {
+  property("isoIList") = {
     type B = Byte
     type F[A] = IList[A]
     type X = FreeT[F, Id, B]
@@ -25,7 +25,7 @@ object FreeTTest extends Scalaprops {
     scalazlaws.iso.all[X, Y](FreeT.isoFree[F].unlift[B])
   }
 
-  val isoMaybe = {
+  property("isoMaybe") = {
     type B = Byte
     type F[A] = Maybe[A]
     type X = FreeT[F, Id, B]
@@ -33,7 +33,7 @@ object FreeTTest extends Scalaprops {
     scalazlaws.iso.all[X, Y](FreeT.isoFree[F].unlift[B])
   }
 
-  val isoTree = {
+  property("isoTree") = {
     type B = Byte
     type F[A] = Tree[A]
     type X = FreeT[F, Id, B]
@@ -41,7 +41,7 @@ object FreeTTest extends Scalaprops {
     scalazlaws.iso.all[X, Y](FreeT.isoFree[F].unlift[B])
   }
 
-  val isoDisjunction = {
+  property("isoDisjunction") = {
     type B = Byte
     type F[A] = Boolean \/ A
     type X = FreeT[F, Id, B]
@@ -49,7 +49,7 @@ object FreeTTest extends Scalaprops {
     scalazlaws.iso.all[X, Y](FreeT.isoFree[F].unlift[B])
   }
 
-  val kleisliMaybe_Maybe = {
+  property("kleisliMaybe_Maybe") = {
     type G[A] = Kleisli[Maybe, Byte, A]
     type F[A] = FreeT[G, Maybe, A]
     Properties.list(
@@ -58,7 +58,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val maybe_kleisliMaybe = {
+  property("maybe_kleisliMaybe") = {
     type G[A] = Kleisli[Maybe, Byte, A]
     type F[A] = FreeT[Maybe, G, A]
     Properties.list(
@@ -67,7 +67,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val f1Maybe = {
+  property("f1Maybe") = {
     type G[A] = Byte => A
     type F[A] = FreeT[G, Maybe, A]
     Properties.list(
@@ -76,7 +76,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val maybeF1 = {
+  property("maybeF1") = {
     type G[A] = Byte => A
     type F[A] = FreeT[Maybe, G, A]
     Properties.list(
@@ -87,7 +87,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
-  val maybeMaybe = {
+  property("maybeMaybe") = {
     type F[A] = FreeT[Maybe, Maybe, A]
     Properties.list(
       scalazlaws.bindRec.laws[F],
@@ -96,7 +96,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val maybeIList = {
+  property("maybeIList") = {
     type F[A] = FreeT[Maybe, IList, A]
     Properties.list(
       scalazlaws.bindRec.laws[F],
@@ -107,7 +107,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
-  val iListMaybe = {
+  property("iListMaybe") = {
     type F[A] = FreeT[IList, Maybe, A]
     Properties.list(
       scalazlaws.bindRec.laws[F],
@@ -118,7 +118,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
-  val iListIList = {
+  property("iListIList") = {
     type F[A] = FreeT[IList, IList, A]
     Properties.list(
       scalazlaws.bindRec.laws[F],
@@ -129,7 +129,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
-  val disjunctionDisjunction = {
+  property("disjunctionDisjunction") = {
     type E = Byte
     type G[A] = E \/ A
     type H[A] = Boolean \/ A
@@ -141,7 +141,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val maybeDisjunction = {
+  property("maybeDisjunction") = {
     type E = Byte
     type G[A] = E \/ A
     type F[A] = FreeT[Maybe, G, A]
@@ -152,7 +152,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val iListDisjunction = {
+  property("iListDisjunction") = {
     type E = Byte
     type G[A] = E \/ A
     type F[A] = FreeT[IList, G, A]
@@ -165,7 +165,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(20) andThen Param.minSuccessful(10)
   }
 
-  val freeMaybe_Disjunction = {
+  property("freeMaybe_Disjunction") = {
     type E = Byte
     type G[A] = E \/ A
     type H[A] = Free[Maybe, A]
@@ -177,7 +177,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val freeIList_Disjunction = {
+  property("freeIList_Disjunction") = {
     type E = Byte
     type G[A] = E \/ A
     type H[A] = Free[IList, A]
@@ -189,7 +189,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val freeDisjunction_Disjunction = {
+  property("freeDisjunction_Disjunction") = {
     type E = Byte
     type G[A] = E \/ A
     type H[A] = Free[G, A]
@@ -201,7 +201,7 @@ object FreeTTest extends Scalaprops {
     )
   }
 
-  val idState = {
+  property("idState") = {
     type S = Byte
     type G[A] = State[S, A]
     type F[A] = FreeT[Id, G, A]
@@ -213,7 +213,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
-  val idStateMaybe = {
+  property("idStateMaybe") = {
     type S = Byte
     type G[A] = StateT[S, Maybe, A]
     type F[A] = FreeT[Id, G, A]
@@ -226,7 +226,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
-  val maybeState = {
+  property("maybeState") = {
     type S = Byte
     type G[A] = State[S, A]
     type F[A] = FreeT[Maybe, G, A]
@@ -238,7 +238,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
-  val maybeStateIList = {
+  property("maybeStateIList") = {
     type S = Byte
     type G[A] = StateT[S, IList, A]
     type F[A] = FreeT[Maybe, G, A]
@@ -249,7 +249,7 @@ object FreeTTest extends Scalaprops {
     Param.maxSize(2) andThen Param.minSuccessful(10)
   }
 
-  val iListStateIList = {
+  property("iListStateIList") = {
     val laws = Set(ScalazLaw.bindAssociativity, ScalazLaw.applyComposition)
 
     type S = Byte
@@ -266,6 +266,6 @@ object FreeTTest extends Scalaprops {
       }
   }
 
-  val monadTransMaybe = scalazlaws.monadTrans.all[({ type l[a[_], b] = FreeT[Maybe, a, b] })#l]
-  val monadTransIList = scalazlaws.monadTrans.all[({ type l[a[_], b] = FreeT[IList, a, b] })#l]
+  property("monadTransMaybe") = scalazlaws.monadTrans.all[({ type l[a[_], b] = FreeT[Maybe, a, b] })#l]
+  property("monadTransIList") = scalazlaws.monadTrans.all[({ type l[a[_], b] = FreeT[IList, a, b] })#l]
 }

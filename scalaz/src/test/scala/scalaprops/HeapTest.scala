@@ -6,9 +6,9 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object HeapTest extends Scalaprops {
-  val testMonoid = scalazlaws.monoid.all[Heap[Int]]
+  property("monoid") = scalazlaws.monoid.all[Heap[Int]]
 
-  val testEqual = scalazlaws.equal.all[Heap[Int]]
+  property("equal") = scalazlaws.equal.all[Heap[Int]]
 
-  val testFoldable = scalazlaws.foldable.all[Heap]
+  property("foldable") = scalazlaws.foldable.all[Heap]
 }

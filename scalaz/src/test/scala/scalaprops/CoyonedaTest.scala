@@ -6,10 +6,10 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object CoyonedaTest extends Scalaprops {
-  val testOrderMaybe = scalazlaws.order.all[Coyoneda[Maybe, Int]]
-  val testOrderIList = scalazlaws.order.all[Coyoneda[IList, Int]]
+  property("orderMaybe") = scalazlaws.order.all[Coyoneda[Maybe, Int]]
+  property("orderIList") = scalazlaws.order.all[Coyoneda[IList, Int]]
 
-  val testNel = {
+  property("nel") = {
     type F[A] = Coyoneda[NonEmptyList, A]
 
     Properties.list(
@@ -21,7 +21,7 @@ object CoyonedaTest extends Scalaprops {
     )
   }
 
-  val testMaybe = {
+  property("maybe") = {
     type F[A] = Coyoneda[Maybe, A]
 
     Properties.list(
@@ -32,7 +32,7 @@ object CoyonedaTest extends Scalaprops {
     )
   }
 
-  val testIList = {
+  property("iList") = {
     type F[A] = Coyoneda[IList, A]
 
     Properties.list(

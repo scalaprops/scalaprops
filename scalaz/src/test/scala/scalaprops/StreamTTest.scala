@@ -22,7 +22,7 @@ object StreamTTest extends Scalaprops {
 
   private[this] type EitherByte[A] = Byte \/ A
 
-  val unconsRec = {
+  property("unconsRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -38,7 +38,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val isEmptyRec = {
+  property("isEmptyRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -54,7 +54,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val headOptionRec = {
+  property("headOptionRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -70,7 +70,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val tailMRec = {
+  property("tailMRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -86,7 +86,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val foldLeftRec = {
+  property("foldLeftRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -102,7 +102,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val foldRightRec = {
+  property("foldRightRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -121,7 +121,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val toStreamRec = {
+  property("toStreamRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -137,7 +137,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val lengthRec = {
+  property("lengthRec") = {
     type A = Byte
 
     def test[F[_]: Monad: BindRec](implicit
@@ -153,7 +153,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val testId = {
+  property("id") = {
     type G[A] = Id[A]
     type F[A] = StreamT[G, A]
     Properties.list(
@@ -164,7 +164,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val testOneOrTwo = {
+  property("oneOrTwo") = {
     type G[A] = OneAnd[Maybe, A]
     type F[A] = StreamT[G, A]
     Properties.list(
@@ -179,7 +179,7 @@ object StreamTTest extends Scalaprops {
     Param.minSuccessful(1)
   }
 
-  val testMaybe = {
+  property("maybe") = {
     type G[A] = Maybe[A]
     type F[A] = StreamT[G, A]
     Properties.list(
@@ -190,7 +190,7 @@ object StreamTTest extends Scalaprops {
     )
   }
 
-  val iList = {
+  property("iList") = {
     type G[A] = IList[A]
     type F[A] = StreamT[G, A]
     Properties.list(
@@ -204,5 +204,5 @@ object StreamTTest extends Scalaprops {
       Param.minSuccessful(1)
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[StreamT]
+  property("monadTrans") = scalazlaws.monadTrans.all[StreamT]
 }

@@ -7,7 +7,7 @@ import scalaz.std.option.*
 
 @scalajs.js.annotation.JSExportAll
 object OptionTTest extends Scalaprops {
-  val disjunction = {
+  property("disjunction") = {
     type E = Byte
     type G[A] = E \/ A
     type F[A] = OptionT[G, A]
@@ -15,7 +15,7 @@ object OptionTTest extends Scalaprops {
     scalazlaws.monadError.all[F, E]
   }
 
-  val id = {
+  property("id") = {
     type F[A] = OptionT[Id.Id, A]
 
     Properties.list(
@@ -26,9 +26,10 @@ object OptionTTest extends Scalaprops {
     )
   }
 
-  val iListBindRec = scalazlaws.bindRec.laws[({ type l[a] = OptionT[IList, a] })#l].andThenParam(Param.maxSize(1))
+  property("iListBindRec") =
+    scalazlaws.bindRec.laws[({ type l[a] = OptionT[IList, a] })#l].andThenParam(Param.maxSize(1))
 
-  val iList = {
+  property("iList") = {
     type F[A] = OptionT[IList, A]
     Properties.list(
       scalazlaws.equal.all[OptionT[IList, Int]],
@@ -37,7 +38,7 @@ object OptionTTest extends Scalaprops {
     )
   }
 
-  val maybe = {
+  property("maybe") = {
     type F[A] = OptionT[Maybe, A]
     Properties.list(
       scalazlaws.equal.all[OptionT[Maybe, Int]],
@@ -47,5 +48,5 @@ object OptionTTest extends Scalaprops {
     )
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[OptionT]
+  property("monadTrans") = scalazlaws.monadTrans.all[OptionT]
 }

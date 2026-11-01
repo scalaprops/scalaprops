@@ -6,7 +6,7 @@ import scalaz.std.map.*
 
 @scalajs.js.annotation.JSExportAll
 object MapTest extends Scalaprops {
-  val testLaws1 = {
+  property("laws1") = {
     type F[A] = Map[Int, A]
     Properties.list(
       scalazlaws.bind.all[F],
@@ -17,5 +17,5 @@ object MapTest extends Scalaprops {
     )
   }
 
-  val testLaws2 = scalazlaws.monoid.all[Map[Int, Int]]
+  property("laws2") = scalazlaws.monoid.all[Map[Int, Int]]
 }

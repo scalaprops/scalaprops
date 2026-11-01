@@ -15,13 +15,12 @@ object CodensityTest extends Scalaprops {
   private[this] val E = new CodensityEqual[Int]
   import E.*
 
-  val testMaybe =
-    scalazlaws.monadPlusStrong.all[({ type l[a] = Codensity[Maybe, a] })#l]
+  property("maybe") = scalazlaws.monadPlusStrong.all[({ type l[a] = Codensity[Maybe, a] })#l]
 
-  val testIList =
+  property("iList") =
     scalazlaws.monadPlusStrong.all[({ type l[a] = Codensity[IList, a] })#l].andThenParam(Param.maxSize(10))
 
-  val monadTrans = scalazlaws.monadTrans.all[Codensity].andThenParamPF { case ScalazLaw.monadTransLaw2IList =>
+  property("monadTrans") = scalazlaws.monadTrans.all[Codensity].andThenParamPF { case ScalazLaw.monadTransLaw2IList =>
     Param.maxSize(5)
   }
 }

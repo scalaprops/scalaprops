@@ -5,7 +5,7 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object NeedTest extends Scalaprops {
-  val test = Properties.list(
+  property("test") = Properties.list(
     scalazlaws.traverse1.all[scalaz.Need],
     scalazlaws.monad.all[scalaz.Need],
     scalazlaws.bindRec.all[scalaz.Need],

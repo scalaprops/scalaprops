@@ -40,20 +40,20 @@ object KleisliTest extends Scalaprops {
     ).map { law => { case `law` => Param.maxSize(30) }: PartialFunction[ScalazLaw, Endo[Param]] }
   )(_ orElse _)
 
-  val testMaybe = kleisliTest[Maybe]
+  property("maybe") = kleisliTest[Maybe]
 
-  val disjunctionMonadError = {
+  property("disjunctionMonadError") = {
     type E = Byte
     type G[A] = E \/ A
     type F[A] = Kleisli[G, Int, A]
     scalazlaws.monadError.laws[F, E]
   }
 
-  val testIList = kleisliTest[IList].andThenParamPF {
+  property("iList") = kleisliTest[IList].andThenParamPF {
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
-  val testNonEmptyList = {
+  property("nonEmptyList") = {
     type K1[a] = Kleisli[NonEmptyList, Byte, a]
     type K2[a, b] = Kleisli[NonEmptyList, a, b]
 
@@ -67,16 +67,16 @@ object KleisliTest extends Scalaprops {
     case Or.R(Or.L(p)) if sizeSetting.isDefinedAt(p) => sizeSetting(p)
   }
 
-  val monadTrans = scalazlaws.monadTrans.all[({ type l[f[_], a] = Kleisli[f, Int, a] })#l]
+  property("monadTrans") = scalazlaws.monadTrans.all[({ type l[f[_], a] = Kleisli[f, Int, a] })#l]
 
-  val kleisliId = {
+  property("kleisliId") = {
     type F[A] = Kleisli[Id.Id, Byte, A]
     scalazlaws.bindRec.laws[F]
   }
 
-  val maybeBindRec = scalazlaws.bindRec.laws[({ type l[a] = Kleisli[Maybe, Byte, a] })#l]
+  property("maybeBindRec") = scalazlaws.bindRec.laws[({ type l[a] = Kleisli[Maybe, Byte, a] })#l]
 
-  val ilistBindRec = {
+  property("ilistBindRec") = {
     scalazlaws.bindRec.laws[({ type l[a] = Kleisli[IList, Byte, a] })#l]
   }.andThenParam(Param.maxSize(1))
 }

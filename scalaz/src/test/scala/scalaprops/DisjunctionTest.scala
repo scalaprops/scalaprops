@@ -7,12 +7,12 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object DisjunctionTest extends Scalaprops {
-  val bitraverse = scalazlaws.bitraverse.all[\/]
-  val associative = scalazlaws.associative.all[\/]
-  val order = scalazlaws.order.all[Int \/ Int]
-  val monoid = scalazlaws.monoid.all[IList[Byte] \/ IList[Byte]]
+  property("bitraverse") = scalazlaws.bitraverse.all[\/]
+  property("associative") = scalazlaws.associative.all[\/]
+  property("order") = scalazlaws.order.all[Int \/ Int]
+  property("monoid") = scalazlaws.monoid.all[IList[Byte] \/ IList[Byte]]
 
-  val laws1 = Properties.list(
+  property("laws1") = Properties.list(
     scalazlaws.monadError.all[({ type l[a] = Int \/ a })#l, Int],
     scalazlaws.traverse.all[({ type l[a] = Int \/ a })#l],
     scalazlaws.bindRec.all[({ type l[a] = Int \/ a })#l],

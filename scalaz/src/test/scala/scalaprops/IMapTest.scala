@@ -10,22 +10,21 @@ import scalaz.syntax.equal.*
 
 @scalajs.js.annotation.JSExportAll
 object IMapTest extends Scalaprops {
-  val testLaws =
-    Properties.list(
-      scalazlaws.bind.all[({ type l[a] = Int ==>> a })#l],
-      scalazlaws.align.all[({ type l[a] = Int ==>> a })#l],
-      scalazlaws.zip.all[({ type l[a] = Int ==>> a })#l],
-      scalazlaws.traverse.all[({ type l[a] = Int ==>> a })#l]
-    )
+  property("laws") = Properties.list(
+    scalazlaws.bind.all[({ type l[a] = Int ==>> a })#l],
+    scalazlaws.align.all[({ type l[a] = Int ==>> a })#l],
+    scalazlaws.zip.all[({ type l[a] = Int ==>> a })#l],
+    scalazlaws.traverse.all[({ type l[a] = Int ==>> a })#l]
+  )
 
-  val bifoldable = scalazlaws.bifoldable.all[==>>]
-  val order = scalazlaws.order.all[Int ==>> Int]
-  val laws2 = Properties.list(
+  property("bifoldable") = scalazlaws.bifoldable.all[==>>]
+  property("order") = scalazlaws.order.all[Int ==>> Int]
+  property("laws2") = Properties.list(
     scalazlaws.monoid.all[Int ==>> Int],
     scalazlaws.semilattice.all[Int ==>> ISet[Int]]
   )
 
-  val conjunction = {
+  property("conjunction") = {
     implicit def imapConjunctionGen[A: Gen: Order, B: Gen]: Gen[((A ==>> B) @@ Tags.Conjunction)] =
       Tag.subst(Gen[A ==>> B])
 
@@ -35,20 +34,20 @@ object IMapTest extends Scalaprops {
     scalazlaws.semigroup.all[(Int ==>> Int) @@ Tags.Conjunction]
   }
 
-  val intersectionWithKey = forAll { (a: Int ==>> Int, b: Int ==>> Int, f: (Int, Int, Int) => Int) =>
+  property("intersectionWithKey") = forAll { (a: Int ==>> Int, b: Int ==>> Int, f: (Int, Int, Int) => Int) =>
     val aa = a.toList.toMap
     val bb = b.toList.toMap
     a.intersectionWithKey(b)(f).toList == scalaz.std.map.intersectWithKey(aa, bb)(f).toList.sorted
   }
 
-  val mapKeys = {
+  property("mapKeys") = {
     type KEY = Short
     type VALUE = Byte
 
     forAll { (a: KEY ==>> VALUE, f: KEY => KEY) => a.mapKeys(f) == ==>>.fromList(a.toList.map(x => (f(x._1), x._2))) }
   }
 
-  val insertWithKey = {
+  property("insertWithKey") = {
     type KEY = Short
     type VALUE = Byte
 
@@ -65,7 +64,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(2000))
   }
 
-  val insertWith = {
+  property("insertWith") = {
     import scalaz.syntax.std.function2.*
     type KEY = Short
     type VALUE = Byte
@@ -78,7 +77,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(2000))
   }
 
-  val updateWithKey = {
+  property("updateWithKey") = {
     type KEY = Byte
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
@@ -99,7 +98,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
-  val updateLookupWithKey = {
+  property("updateLookupWithKey") = {
     type KEY = Byte
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
@@ -122,7 +121,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
-  val alter = {
+  property("alter") = {
     type KEY = Byte
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
@@ -148,7 +147,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
-  val updateAt = {
+  property("updateAt") = {
     type KEY = Byte
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
@@ -172,7 +171,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
-  val updateMinWithKey = {
+  property("updateMinWithKey") = {
     type KEY = Byte
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
@@ -193,7 +192,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
-  val updateMaxWithKey = {
+  property("updateMaxWithKey") = {
     type KEY = Byte
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
@@ -214,7 +213,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
-  val unionWithKey = {
+  property("unionWithKey") = {
     type KEY = Byte
     type VAL = Byte
     val E = Equal[KEY ==>> VAL]
@@ -228,7 +227,7 @@ object IMapTest extends Scalaprops {
     }.toProperties((), Param.minSuccessful(5000))
   }
 
-  val traverseWithKey = {
+  property("traverseWithKey") = {
     type KEY = Byte
     type VAL = Int
     type C = Short
@@ -251,7 +250,7 @@ object IMapTest extends Scalaprops {
       .andThenParam(Param.minSuccessful(5000))
   }
 
-  val foldMapWithKey = {
+  property("foldMapWithKey") = {
     type KEY = Byte
     type VAL = Int
     type C = IList[Byte]

@@ -6,19 +6,18 @@ import scalaz.std.anyVal.*
 
 @scalajs.js.annotation.JSExportAll
 object ZipperTest extends Scalaprops {
-  val size = Property.forAllG(Gen.choose(1, 300), Gen[Rand]) { (size, rand) =>
+  property("size") = Property.forAllG(Gen.choose(1, 300), Gen[Rand]) { (size, rand) =>
     Foldable[Zipper].length(Gen[Zipper[Unit]].f(size, rand)._2) == size
   }
 
-  val testLaw =
-    Properties.list(
-      scalazlaws.comonad.all[Zipper],
-      scalazlaws.apply.all[Zipper],
-      scalazlaws.traverse1.all[Zipper],
-      scalazlaws.equal.all[Zipper[Int]]
-    )
+  property("law") = Properties.list(
+    scalazlaws.comonad.all[Zipper],
+    scalazlaws.apply.all[Zipper],
+    scalazlaws.traverse1.all[Zipper],
+    scalazlaws.equal.all[Zipper[Int]]
+  )
 
-  val applicative = {
+  property("applicative") = {
     implicit def zipperEqual[A](implicit A: Equal[A]): Equal[Zipper[A]] = {
       import scalaz.std.stream.*
       val n = 1000

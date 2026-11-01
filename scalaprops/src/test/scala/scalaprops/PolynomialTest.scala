@@ -4,60 +4,60 @@ import java.math.BigInteger
 
 @scalajs.js.annotation.JSExportAll
 object PolynomialTest extends Scalaprops {
-  val testPolynomialString = Property.forAll {
+  property("polynomialString") = Property.forAll {
     new F2Polynomial("1101").toString == "1101"
   }
 
-  val testPolynomialStringInt = Property.forAll {
+  property("polynomialStringInt") = Property.forAll {
     new F2Polynomial("f", 16).toString == "1111"
   }
 
-  val testDegree = Property.forAll {
+  property("degree") = Property.forAll {
     assert(new F2Polynomial("100").degree == 2)
     assert(new F2Polynomial("1").degree == 0)
     assert(new F2Polynomial("0").degree == -1)
     true
   }
 
-  val testAdd = Property.forAll {
+  property("add") = Property.forAll {
     new F2Polynomial("1101").add(new F2Polynomial("110")) == new F2Polynomial("1011")
   }
 
-  val testMul = Property.forAll {
+  property("mul") = Property.forAll {
     assert(new F2Polynomial("110") == new F2Polynomial("11").mul(new F2Polynomial("10")))
     assert(new F2Polynomial("1110") == new F2Polynomial("10").mul(new F2Polynomial("111")))
     true
   }
 
-  val testMod = Property.forAll {
+  property("mod") = Property.forAll {
     new F2Polynomial("1011").mod(new F2Polynomial("11")) == new F2Polynomial("1")
   }
 
-  val testPower = Property.forAll {
+  property("power") = Property.forAll {
     new F2Polynomial("10").power(new BigInteger("3")) == new F2Polynomial("1000")
   }
 
-  val testPowerMod = Property.forAll {
+  property("powerMod") = Property.forAll {
     new F2Polynomial("10").powerMod(new BigInteger("3"), new F2Polynomial("11")) == new F2Polynomial("1")
   }
 
-  val testGetCoefficient = Property.forAll {
+  property("getCoefficient") = Property.forAll {
     assert(1 == new F2Polynomial("10").getCoefficient(1))
     assert(0 == new F2Polynomial("10").getCoefficient(0))
     true
   }
 
-  val testToString = Property.forAll {
+  property("toString") = Property.forAll {
     assert("101" == new F2Polynomial("101").toString)
     assert("5" == new F2Polynomial("101").toString(16))
     true
   }
 
-  val testHashCode = Property.forAll {
+  property("hashCode") = Property.forAll {
     new BigInteger("1101", 2).hashCode() == new F2Polynomial("1101").hashCode()
   }
 
-  val testEquals = Property.forAll {
+  property("equals") = Property.forAll {
     assert(new F2Polynomial("11010") == new F2Polynomial("11010"))
     assert(new F2Polynomial("11010") != new F2Polynomial("11011"))
     val p = new F2Polynomial("101")
