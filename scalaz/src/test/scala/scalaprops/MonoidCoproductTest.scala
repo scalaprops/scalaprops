@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object MonoidCoproductTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.equal.all[Int :+: Int],

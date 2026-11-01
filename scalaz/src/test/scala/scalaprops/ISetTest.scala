@@ -5,7 +5,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object ISetTest extends Scalaprops {
   property("foldable") = scalazlaws.foldable.all[ISet]
 

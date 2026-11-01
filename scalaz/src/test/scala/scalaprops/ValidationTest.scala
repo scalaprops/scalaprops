@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object ValidationTest extends Scalaprops {
   property("laws1") = {
     type F[A] = ValidationNel[Int, A]

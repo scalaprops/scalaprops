@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object NonEmptyListTest extends Scalaprops {
   property("laws") = Properties
     .list(

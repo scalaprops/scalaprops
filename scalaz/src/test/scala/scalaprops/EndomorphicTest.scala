@@ -6,7 +6,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object EndomorphicTest extends Scalaprops {
   override val param: Param = super.param.copy(maxSize = 10)
 

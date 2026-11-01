@@ -5,7 +5,6 @@ import scalaz.IList
 import scalaz.\/
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object DisjunctionTest extends Scalaprops {
   property("bitraverse") = scalazlaws.bitraverse.all[\/]
   property("associative") = scalazlaws.associative.all[\/]

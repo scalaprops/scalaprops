@@ -3,7 +3,6 @@ package scalaprops
 import ScalapropsScalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object NeedTest extends Scalaprops {
   property("test") = Properties.list(
     scalazlaws.traverse1.all[scalaz.Need],

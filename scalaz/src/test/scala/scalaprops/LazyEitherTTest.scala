@@ -5,7 +5,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object LazyEitherTTest extends Scalaprops {
   private[this] implicit def lazyEitherTEqual[F[_], A, B](implicit
     F: Equal[F[LazyEither[A, B]]]

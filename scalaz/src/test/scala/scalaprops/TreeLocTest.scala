@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object TreeLocTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.order.all[TreeLoc[Byte]],

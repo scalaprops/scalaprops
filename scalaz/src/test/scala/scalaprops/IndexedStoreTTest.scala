@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object IndexedStoreTTest extends Scalaprops {
   private[this] val e = new FunctionEqual(10)
   import e.*

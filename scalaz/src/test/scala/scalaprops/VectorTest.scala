@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.vector.*
 
-@scalajs.js.annotation.JSExportAll
 object VectorTest extends Scalaprops {
   property("bindRec") = scalazlaws.bindRec.laws[Vector].andThenParam(Param.maxSize(1))
 

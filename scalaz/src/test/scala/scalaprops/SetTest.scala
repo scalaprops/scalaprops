@@ -3,7 +3,6 @@ package scalaprops
 import scalaz.std.anyVal.*
 import scalaz.std.set.*
 
-@scalajs.js.annotation.JSExportAll
 object SetTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.order.all[Set[Int]],

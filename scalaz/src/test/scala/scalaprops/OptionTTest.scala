@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.option.*
 
-@scalajs.js.annotation.JSExportAll
 object OptionTTest extends Scalaprops {
   property("disjunction") = {
     type E = Byte

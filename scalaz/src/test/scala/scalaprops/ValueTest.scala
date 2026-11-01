@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.Value
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object ValueTest extends Scalaprops {
   property("test") = Properties.list(
     scalazlaws.traverse1.all[Value],

@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object ListTTest extends Scalaprops {
   property("maybe") = scalazlaws.monad.all[({ type l[a] = ListT[Maybe, a] })#l]
 

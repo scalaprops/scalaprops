@@ -1,6 +1,5 @@
 package scalaprops
 
-@scalajs.js.annotation.JSExportAll
 object ScalazLawTest extends Scalaprops {
   property("laws") = scalazlaws.order.all[ScalazLaw]
 

@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object LazyOptionTTest extends Scalaprops {
   property("iList") = Properties.list(
     scalazlaws.equal.all[LazyOptionT[IList, Int]],

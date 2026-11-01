@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object WriterTTest extends Scalaprops {
   property("bindRecIList") =
     scalazlaws.bindRec.laws[({ type l[a] = WriterT[Byte, IList, a] })#l].andThenParam(Param.maxSize(1))

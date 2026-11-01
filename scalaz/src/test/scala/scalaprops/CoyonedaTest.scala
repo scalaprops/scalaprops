@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object CoyonedaTest extends Scalaprops {
   property("orderMaybe") = scalazlaws.order.all[Coyoneda[Maybe, Int]]
   property("orderIList") = scalazlaws.order.all[Coyoneda[IList, Int]]

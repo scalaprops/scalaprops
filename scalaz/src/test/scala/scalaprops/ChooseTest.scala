@@ -3,7 +3,6 @@ package scalaprops
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object ChooseTest extends Scalaprops {
   private[this] def test[A: Choose: Gen: Enum](listSize: Int = 10000) =
     Properties

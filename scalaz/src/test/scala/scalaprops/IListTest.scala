@@ -5,7 +5,6 @@ import scalaprops.Property.forAllG
 import scalaz.IList
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object IListTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.order.all[IList[Byte]],

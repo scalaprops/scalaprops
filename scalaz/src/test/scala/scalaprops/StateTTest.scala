@@ -7,7 +7,6 @@ import scalaz.std.anyVal.*
 import scalaz.std.either.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object StateTTest extends Scalaprops {
   implicit def stateTEqual[F[_]: Monad, A, B](implicit F: Equal[A => F[(A, B)]]): Equal[StateT[A, F, B]] =
     F.contramap(_.apply _)

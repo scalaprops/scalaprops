@@ -5,7 +5,6 @@ import ScalapropsScalaz.*
 import scalaz.Equal
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object CogenStateTest extends Scalaprops {
   implicit def cogenStateEqual[A: Equal]: Equal[CogenState[A]] =
     Equal.equal { (x, y) => Equal[Rand].equal(x.rand, y.rand) && Equal[Gen[A]].equal(x.gen, y.gen) }

@@ -4,7 +4,6 @@ import FunctionEqual.*
 import scalaz.std.anyVal.*
 import scalaz.std.function.*
 
-@scalajs.js.annotation.JSExportAll
 object FunctionTest extends Scalaprops {
   type A1 = Byte
   type A2 = Byte

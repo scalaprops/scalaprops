@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.tuple.tuple2Equal
 
-@scalajs.js.annotation.JSExportAll
 object ProductTest extends Scalaprops {
   private[this] type DByte[a] = Byte \/ a
 

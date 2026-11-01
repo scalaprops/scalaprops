@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object TannenTest extends Scalaprops {
   property("iListDisjunctionTraverse") = scalazlaws.traverse.all[({ type l[a] = Tannen[IList, \/, Int, a] })#l]
   property("maybeDisjunctionTraverse") = scalazlaws.traverse.all[({ type l[a] = Tannen[Maybe, \/, Int, a] })#l]

@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.stream.*
 
-@scalajs.js.annotation.JSExportAll
 object ShrinkTest extends Scalaprops {
   private[this] implicit def equal[A: Gen: Equal]: Equal[Shrink[A]] = {
     import FunctionEqual.*

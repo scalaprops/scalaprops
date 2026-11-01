@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object UnwriterTTest extends Scalaprops {
   property("id") = {
     type F[A] = Unwriter[Int, A]

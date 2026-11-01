@@ -2,7 +2,6 @@ package scalaprops
 
 import java.util.Arrays
 
-@scalajs.js.annotation.JSExportAll
 object TinyMT32Test extends Scalaprops {
   property("getDefault") = Property.forAll {
     var tiny = TinyMT32.getDefault(1)

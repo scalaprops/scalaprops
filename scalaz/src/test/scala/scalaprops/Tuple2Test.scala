@@ -5,7 +5,6 @@ import scalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object Tuple2Test extends Scalaprops {
   property("bitraverse") = scalazlaws.bitraverse.all[Tuple2]
   property("associative") = scalazlaws.associative.all[Tuple2]

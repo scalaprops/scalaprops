@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object CodensityTest extends Scalaprops {
   private[this] final class CodensityEqual[B] {
     import FunctionEqual.*

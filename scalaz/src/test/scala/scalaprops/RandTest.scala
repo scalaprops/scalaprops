@@ -3,7 +3,6 @@ package scalaprops
 import ScalapropsScalaz.*
 import scala.util.Random
 
-@scalajs.js.annotation.JSExportAll
 object RandTest extends Scalaprops {
   property("equalLaw") = scalazlaws.equal.all[Rand]
 

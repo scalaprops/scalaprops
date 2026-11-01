@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.option.*
 
-@scalajs.js.annotation.JSExportAll
 object OptionTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.monadPlusStrong.all[Option],

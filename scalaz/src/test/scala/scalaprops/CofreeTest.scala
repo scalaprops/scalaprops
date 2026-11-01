@@ -7,7 +7,6 @@ import scalaz.std.anyVal.*
 import scalaz.std.stream.*
 import scalaz.std.vector.*
 
-@scalajs.js.annotation.JSExportAll
 object CofreeTest extends Scalaprops {
   private[this] type CofreeZip[F[_], A] = Cofree[F, A] @@ Tags.Zip
 

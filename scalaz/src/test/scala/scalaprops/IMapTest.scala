@@ -8,7 +8,6 @@ import scalaz.Maybe.Just
 import scalaz.std.anyVal.*
 import scalaz.syntax.equal.*
 
-@scalajs.js.annotation.JSExportAll
 object IMapTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.bind.all[({ type l[a] = Int ==>> a })#l],

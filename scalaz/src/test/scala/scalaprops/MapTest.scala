@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.map.*
 
-@scalajs.js.annotation.JSExportAll
 object MapTest extends Scalaprops {
   property("laws1") = {
     type F[A] = Map[Int, A]

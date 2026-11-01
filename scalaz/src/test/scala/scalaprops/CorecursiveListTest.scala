@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.CorecursiveList
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object CorecursiveListTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.order.all[CorecursiveList[Byte]],

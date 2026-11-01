@@ -6,7 +6,6 @@ import scalaz.std.anyVal.*
 import scalaz.std.option.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object NullResultTest extends Scalaprops {
   import FunctionEqual.*
 

@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.*
 import scalaz.std.AllInstances.*
 
-@scalajs.js.annotation.JSExportAll
 object StrictTreeTest extends Scalaprops {
   property("laws") = Properties.list(
     scalazlaws.traverse1.all[StrictTree],

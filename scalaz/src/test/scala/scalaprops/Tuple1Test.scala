@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.std.anyVal.*
 import scalaz.std.tuple.*
 
-@scalajs.js.annotation.JSExportAll
 object Tuple1Test extends Scalaprops {
   property("laws0") = Properties.list(
     scalazlaws.order.all[Tuple1[Byte]],

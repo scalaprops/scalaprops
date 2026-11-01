@@ -4,7 +4,6 @@ import ScalapropsScalaz.*
 import scalaz.EphemeralStream
 import scalaz.std.anyVal.*
 
-@scalajs.js.annotation.JSExportAll
 object EphemeralStreamTest extends Scalaprops {
   property("bindRec") = scalazlaws.bindRec.laws[EphemeralStream].andThenParam(Param.maxSize(1))
 
