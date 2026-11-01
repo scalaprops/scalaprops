@@ -247,10 +247,6 @@ object Cogen extends CogenInstances0 {
   }
   def conquer[A] = empty.asInstanceOf[Cogen[A]]
 
-  @deprecated(message = "Use divide instead", since = "0.6.3")
-  def devide[A, B, C](fa: Cogen[A], fb: Cogen[B])(f: C => (A, B)): Cogen[C] =
-    divide(fa, fb)(f)
-
   def divide[A, B, C](fa: Cogen[A], fb: Cogen[B])(f: C => (A, B)): Cogen[C] =
     new Cogen[C] {
       def cogen[X](c: C, g: CogenState[X]) = {
