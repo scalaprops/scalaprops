@@ -2,6 +2,8 @@ package scalaprops
 
 import sbt.testing.*
 import scala.collection.mutable.ArrayBuffer
+import scala.scalanative.reflect.Reflect
+import scalaprops.internal.Tree
 
 object ScalapropsRunner {
   type EnableReflectiveInstantiation = scala.scalanative.reflect.annotation.EnableReflectiveInstantiation
@@ -17,7 +19,11 @@ object ScalapropsRunner {
     testClassName: String,
     testClassLoader: ClassLoader
   ): Scalaprops = {
-    ???
+    Reflect
+      .lookupLoadableModuleClass(testClassName + "$")
+      .getOrElse(throw new ClassNotFoundException(testClassName + "$"))
+      .loadModule()
+      .asInstanceOf[Scalaprops]
   }
 
   private[scalaprops] def findTests(
@@ -27,7 +33,27 @@ object ScalapropsRunner {
     only: List[String],
     logger: Logger
   ): Properties[?] = {
-    ???
+    val obj = getTestObject(fingerprint, testClassName, testClassLoader)
+    val tests0 = obj.property.getAll()
+
+    val tests = only match {
+      case names @ (_ :: _) =>
+        ScalapropsTaskImpl.filterTests(
+          objName = testClassName,
+          names = names,
+          tests = tests0,
+          logger = logger
+        )
+      case _ =>
+        tests0
+    }
+
+    Properties.noSort[Any](
+      Tree.Node(
+        testClassName -> Option.empty,
+        obj.transformProperties(tests).map(_.props).toStream
+      )
+    )
   }
 }
 

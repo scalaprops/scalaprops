@@ -43,7 +43,7 @@ object ScalapropsRunner {
   ): Properties[?] = {
     val tests0 = invokeProperty(clazz, obj).map { case (name, p) =>
       p.toProperties[Any](name)
-    } ::: invokeProperties(clazz, obj)
+    } ::: invokeProperties(clazz, obj) ::: obj.property.getAll()
 
     val tests = only match {
       case names @ (_ :: _) =>

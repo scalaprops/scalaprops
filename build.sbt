@@ -124,7 +124,6 @@ def module(
       Def.settings(
         jvmNative,
         jsNative,
-        scalapropsNativeSettings,
         Seq(Compile, Test).map { x =>
           x / unmanagedSourceDirectories += {
             (projectMatrixBaseDirectory.value / "native/src" / Defaults.nameForSrc(x.name) / "scala").getAbsoluteFile

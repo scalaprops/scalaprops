@@ -49,7 +49,7 @@ object ScalapropsRunner {
   def allProps(obj: Scalaprops, only: List[String], logger: Logger): Properties[?] = {
     val tests0 = invokeProperty(obj.asInstanceOf[js.Dictionary[?]]).map { case (name, p) =>
       p.toProperties[Any](name)
-    } ::: invokeProperties(obj.asInstanceOf[js.Dictionary[?]])
+    } ::: invokeProperties(obj.asInstanceOf[js.Dictionary[?]]) ::: obj.property.getAll()
 
     val tests = only match {
       case names @ (_ :: _) =>
