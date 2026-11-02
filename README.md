@@ -31,7 +31,7 @@ property based testing library for Scala
 ```scala
 testFrameworks += new TestFramework("scalaprops.ScalapropsFramework")
 
-parallelExecution in Test := false // currently, does not support parallel execution
+Test / parallelExecution := false // currently, does not support parallel execution
 
 libraryDependencies += "com.github.scalaprops" %% "scalaprops" % "0.12.0" % "test"
 ```
