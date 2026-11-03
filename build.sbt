@@ -126,7 +126,7 @@ def module(
             (projectMatrixBaseDirectory.value / "js/src" / Defaults.nameForSrc(x.name) / "scala").getAbsoluteFile
           }
         },
-        scalacOptions += {
+        scalacOptions += Def.uncached {
           val a = (LocalRootProject / baseDirectory).value.toURI.toString
           val g = "https://raw.githubusercontent.com/scalaprops/scalaprops/" + tagOrHash.value
           val key = {
@@ -237,7 +237,7 @@ val commonSettings = Def.settings(
   licenses := Seq("MIT License" -> uri("https://opensource.org/licenses/mit-license")),
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
   stripPom { node => node.label == "dependency" && (node \ "scope").text == "test" },
-  (Compile / doc / scalacOptions) ++= {
+  (Compile / doc / scalacOptions) ++= Def.uncached {
     val tag = tagOrHash.value
     if (isScala3.value) {
       Seq(
@@ -254,7 +254,7 @@ val commonSettings = Def.settings(
       )
     }
   },
-  pomExtra := (
+  pomExtra := Def.uncached(
     <developers>
       <developer>
         <id>xuwei-k</id>
