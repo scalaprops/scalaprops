@@ -14,7 +14,7 @@ trait Scalaprops {
   def transformProperties[A](properties: List[Properties[A]]): List[Properties[A]] =
     properties.map(Scalaprops.filterUnitEmpty).sortBy(_.id.toString)
 
-  val property: ScalapropsTest =
+  protected[scalaprops] final val property: ScalapropsTest =
     new ScalapropsTest
 }
 
