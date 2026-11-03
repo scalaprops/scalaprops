@@ -5,6 +5,9 @@ final class ScalapropsTest {
   private[this] val tests1: MapType.Type[String, Property] = MapType.empty
   private[this] val tests2: MapType.Type[String, Properties[Any]] = MapType.empty
 
+  private[scalaprops] def testNames: Array[String] =
+    (tests1.keys ++ tests2.keys).toArray.distinct
+
   private[scalaprops] def getAll(): List[Properties[Any]] =
     tests1.map { case (name, p) =>
       p.toProperties[Any](name)
