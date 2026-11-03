@@ -16,6 +16,9 @@ trait Scalaprops {
 
   protected[scalaprops] final val property: ScalapropsTest =
     new ScalapropsTest
+
+  final def testNames: Array[String] =
+    property.testNames
 }
 
 object Scalaprops {
