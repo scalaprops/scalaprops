@@ -100,6 +100,27 @@ def module(
       Def.settings(
         js,
         jsNative,
+        if (sys.props.isDefinedAt("scalaprops_wasm_test")) {
+          println("enable wasm test")
+          Def.settings(
+            scalaJSLinkerConfig ~= (_.withESFeatures(
+              _.withUseWebAssembly(true).withESVersion(org.scalajs.linker.interface.ESVersion.ES2022)
+            ).withModuleKind(ModuleKind.ESModule)),
+            jsEnv := Def.uncached {
+              import org.scalajs.jsenv.nodejs.NodeJSEnv
+              val config = NodeJSEnv
+                .Config()
+                .withArgs(
+                  List(
+                    "--experimental-wasm-exnref",
+                  )
+                )
+              new NodeJSEnv(config)
+            },
+          )
+        } else {
+          Def.settings()
+        },
         Seq(Compile, Test).map { x =>
           x / unmanagedSourceDirectories += {
             (projectMatrixBaseDirectory.value / "js/src" / Defaults.nameForSrc(x.name) / "scala").getAbsoluteFile
