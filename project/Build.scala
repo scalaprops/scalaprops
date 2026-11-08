@@ -5,12 +5,11 @@ object build {
   val scalazName = "scalaprops-scalaz"
   val scalapropsName = "scalaprops"
 
-  val modules: List[String] = (
-    genName ::
-      coreName ::
-      allName ::
-      scalazName ::
-      scalapropsName ::
-      Nil
+  val modules: List[String] = List(
+    genName,
+    coreName,
+    allName,
+    scalazName,
+    scalapropsName,
   )
 }
