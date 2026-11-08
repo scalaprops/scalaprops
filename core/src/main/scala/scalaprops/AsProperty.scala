@@ -7,9 +7,7 @@ abstract class AsProperty[A] { self =>
   def asProperty(a: A): Property
   def toFunction: A => Property = asProperty
   final def contramap[B](f: B => A): AsProperty[B] =
-    new AsProperty[B] {
-      def asProperty(b: B) = self.asProperty(f(b))
-    }
+    (b: B) => self.asProperty(f(b))
 }
 
 object AsProperty {
